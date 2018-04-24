@@ -1,0 +1,28 @@
+$red: red
+$green: #00cd00
+$gray: gray
+$change-color: background-color 1s ease-out
+.toolbar-button
+  width: 20px
+  height: 20px
+  border-radius: 50%
+  border: none
+  margin-left: 5px
+  margin-right: 5px
+  outline: none
+  cursor: pointer
+.close
+  background-color: $red
+  transition: $change-color
+  &:hover
+    background-color: darken($red, 20%)
+.full-size
+  background-color: $green
+  transition: $change-color
+  &:hover
+    background-color: darken($green, 20%)
+.shrink
+  background-color: $gray
+  transition: $change-color
+  &:hover
+    background-color: darken($gray, 20%)

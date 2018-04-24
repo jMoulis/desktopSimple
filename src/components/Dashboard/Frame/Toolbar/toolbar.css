@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  background-color: #72a7a3;
+  border-bottom: 2px solid #0a1c28; }
+  .toolbar header {
+    flex: 1; }
+  .toolbar-title {
+    display: inline-block;
+    margin-left: 5px; }
+  .toolbar-button-container {
+    display: flex;
+    align-items: center; }
+  .toolbar .unselectable {
+    user-select: none; }
