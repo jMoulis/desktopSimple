@@ -16,6 +16,7 @@ import { startAppAction, setActiveAppAction } from '../../../store/reducers/fram
 // State
 const mapStateToProps = ({ frameReducer }) => ({
   applications: frameReducer.applications,
+  activeApp: frameReducer.activeApp,
 });
 
 // Actions
@@ -23,8 +24,8 @@ const mapDispatchToProps = dispatch => ({
   startAppAction: (appId) => {
     dispatch(startAppAction(appId));
   },
-  setActiveAppAction: (appId) => {
-    dispatch(setActiveAppAction(appId));
+  setActiveAppAction: (app) => {
+    dispatch(setActiveAppAction(app));
   },
 });
 

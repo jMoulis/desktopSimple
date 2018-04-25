@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import AppLoader from '../../Applications/config/applicationsLoader';
 import './footer.css';
 
 class Footer extends React.Component {
@@ -11,9 +11,13 @@ class Footer extends React.Component {
   }
   handleStartApp = (event) => {
     const { startAppAction, setActiveAppAction } = this.props;
-    const { app } = event.target.dataset;
-    startAppAction(app);
-    setActiveAppAction(app);
+    const { appname } = event.currentTarget.dataset;
+    const appLoader = new AppLoader(appname);
+    appLoader.applicationSelector()
+      .then((appComponent) => {
+        startAppAction(appname);
+        setActiveAppAction({ appName: appname, appComponent });
+      });
   }
   render() {
     const { applications } = this.props;
@@ -22,10 +26,13 @@ class Footer extends React.Component {
         {Object.values(applications).map(application => (
           <button
             key={application.appName}
-            data-app={application.appName}
+            data-appname={application.appName}
             onClick={this.handleStartApp}
           >
-            {application.title}
+            <div className="btn-container">
+              <i className={application.icon} />
+              <span className="btn-title">{application.title}</span>
+            </div>
           </button>
         ))}
       </footer>

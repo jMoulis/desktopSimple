@@ -1,20 +1,28 @@
 @import '../../../styles/charte.sass'
 
 .frame
-  position: absolute
+  background-color: $beige
+  border: 8px solid $darkestblue
+  border-radius: 2px
+  box-shadow: 0px 0px 20px 0px $darkestblue
+  display: flex
+  flex-direction: column
   min-height: 250px
   min-width: 250px
-  background-color: $beige
-  border-radius: 2px
-  border: 8px solid $darkestblue
-  box-shadow: 0px 0px 20px 0px $darkestblue
-  resize: both
   overflow: auto
+  position: absolute
+  resize: both
+  top: 10%
+  left: 40%
   &-reset
-    resize: none
-    top: 0 !important
-    left: 0 !important
-    right: 0 !important
     bottom: 0 !important
-    width: inherit !important
     height: inherit !important
+    left: 0 !important
+    resize: none
+    right: 0 !important
+    top: 0 !important
+    width: inherit !important
+  .child-app
+    height: 100%
+    overflow: auto
+    padding: 1rem

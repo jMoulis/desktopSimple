@@ -2,56 +2,60 @@ import React from 'react';
 import classNames from 'classnames';
 
 import PropTypes from 'prop-types';
-import Draggable from './Helpers/draggable';
+// import Draggable from './Helpers/draggable';
 
 import './frame.css';
 import Toolbar from '../../../containers/Dashboard/Toolbar/toolbar';
+import Draggable from './Helpers/draggable';
 
 class Frame extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
     setActiveAppAction: PropTypes.func.isRequired,
-    // Given by the parent
+    // Given from the parent
     appName: PropTypes.string.isRequired,
     title: PropTypes.string,
-    activeApp: PropTypes.string,
+    activeApp: PropTypes.object,
+    children: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool,
+      PropTypes.array,
+    ]),
   }
   static defaultProps = {
     title: 'Application',
-    activeApp: '',
-  }
-  componentDidMount() {
-    const { activeApp } = this.props;
-    const element = document.querySelector(`#${activeApp}`);
-    const drag = new Draggable(element, activeApp);
-    const evt = window.event;
-    drag.elementDrag(evt);
+    activeApp: null,
+    children: null,
   }
   componentDidUpdate() {
     const { activeApp } = this.props;
-    const element = document.querySelector(`#${activeApp}`);
-    const drag = new Draggable(element, activeApp);
-    const evt = window.event;
-    drag.elementDrag(evt);
+    const element = document.querySelector(`#${activeApp.appName}`);
+    const drag = new Draggable(element, activeApp.appName);
+    drag.dragElement();
   }
   handleSelectApp = (event) => {
     const { setActiveAppAction } = this.props;
-    const activeApp = event.currentTarget.id;
-    setActiveAppAction(activeApp);
+    const appName = event.currentTarget.id;
+    setActiveAppAction({ appName, appComponent: null });
   }
   render() {
     const {
       applications,
       title,
       appName,
+      children,
+      activeApp,
     } = this.props;
     const frameClass = classNames({
       frame: true,
       'frame-full': applications[appName].fullSize,
       'frame-reset': applications[appName].fullSize,
     });
+    if (activeApp.appName.length === 0) {
+      return false;
+    }
     return (
-      <aside
+      <div
         className={frameClass}
         id={appName}
         onClick={this.handleSelectApp}
@@ -59,7 +63,8 @@ class Frame extends React.Component {
         style={{ zIndex: applications[appName].zIndex }}
       >
         <Toolbar title={title} appName={appName} />
-      </aside>
+        <section className="child-app">{children}</section>
+      </div>
     );
   }
 }

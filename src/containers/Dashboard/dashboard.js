@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Dashboard from '../../components/Dashboard/dashboard';
+import { setActiveAppAction } from '../../store/reducers/frameReducer';
 
 /*
  * Code
@@ -16,10 +17,15 @@ import Dashboard from '../../components/Dashboard/dashboard';
 const mapStateToProps = ({ frameReducer }) => ({
   activeApp: frameReducer.activeApp,
   applications: frameReducer.applications,
+  activeApps: frameReducer.activeApps,
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setActiveAppAction: (app) => {
+    dispatch(setActiveAppAction(app));
+  },
+});
 
 
 /*

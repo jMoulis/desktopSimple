@@ -1,7 +1,7 @@
 .toolbar-button {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 10px;
+  height: 12px;
+  border-radius: 8px;
   border: none;
   margin-left: 5px;
   margin-right: 5px;
@@ -9,16 +9,16 @@
   cursor: pointer; }
 
 .close {
-  background-color: red;
+  background-color: #ff6666;
   transition: background-color 1s ease-out; }
   .close:hover {
-    background-color: #990000; }
+    background-color: red; }
 
 .full-size {
-  background-color: #00cd00;
+  background-color: #7fbf7f;
   transition: background-color 1s ease-out; }
   .full-size:hover {
-    background-color: #006700; }
+    background-color: #489048; }
 
 .shrink {
   background-color: gray;

@@ -21,8 +21,8 @@ const mapStateToProps = ({ frameReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  setActiveAppAction: (appId) => {
-    dispatch(setActiveAppAction(appId));
+  setActiveAppAction: (app) => {
+    dispatch(setActiveAppAction(app));
   },
 });
 

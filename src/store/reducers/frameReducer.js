@@ -4,6 +4,7 @@
 /*
  * Local Import
  */
+import applications from '../../components/Applications/config/applications';
 /*
  * Types
  */
@@ -16,27 +17,15 @@ export const SET_ACTIVE_APP = 'SET_ACTIVE_APP';
 */
 const initialState = {
   // Used in frame to set the element for draggable action
-  activeApp: {},
+  activeApp: {
+    appName: '',
+    appComponent: null,
+  },
+  activeApps: [],
   // Used as a counter used to set up the z-index of the frames
   zIndex: 0,
-  applications: {
-    'text-editor': {
-      appName: 'text-editor',
-      title: 'Text Editor',
-      fullSize: false,
-      display: false,
-      zIndex: 0,
-    },
-    task: {
-      appName: 'task',
-      title: 'Task',
-      fullSize: false,
-      display: false,
-      zIndex: 0,
-    },
-  },
+  applications,
 };
-
 /*
  * Reducer
  */
@@ -79,17 +68,29 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case SET_ACTIVE_APP: {
+      let { activeApps } = state;
+      const { payload } = action;
+      if (state.activeApps.length === 0) {
+        activeApps = [...state.activeApps, action.payload];
+      }
+      else {
+        const result = activeApps.find(activeApp => activeApp.appName === payload.appName);
+        if (!result) {
+          activeApps = [...activeApps, payload];
+        }
+      }
       return {
         ...state,
         activeApp: action.payload,
         zIndex: state.zIndex + 1,
         applications: {
           ...state.applications,
-          [action.payload]: {
-            ...state.applications[action.payload],
+          [action.payload.appName]: {
+            ...state.applications[action.payload.appName],
             zIndex: state.zIndex + 1,
           },
         },
+        activeApps,
       };
     }
     default:
@@ -114,9 +115,9 @@ export const closeAppAction = appId => ({
   type: CLOSE_APP,
   payload: appId,
 });
-export const setActiveAppAction = appId => ({
+export const setActiveAppAction = app => ({
   type: SET_ACTIVE_APP,
-  payload: appId,
+  payload: app,
 });
 /*
  * Export default
