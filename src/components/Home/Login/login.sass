@@ -1,0 +1,56 @@
+@import '../home.sass'
+
+.form-container
+  display: flex
+  justify-content: center
+  padding-top: 5rem
+  align-items: flex-start
+  width: 30%
+  #login-form
+    border: 5px solid $orange
+    .form-header
+      display: flex
+      justify-content: flex-start
+      background-color: $blue
+      padding-right: 15rem
+      h1
+        margin: 0
+        padding: 1rem
+    .form-content
+      background-color: $lightblue
+      padding: .5rem
+      .form-group
+        display: flex
+        flex-direction: column
+        padding: 1rem 0.5rem
+        label
+          display: none
+        .form-control
+          background-color: $lightblue
+          border: none
+          border-bottom: 1px solid $orange
+          outline: none
+          transition: border-bottom 500ms
+          padding-bottom: .5rem
+        input::placeholder
+          color: $beige
+          font-weight: bold
+          font-size: 1rem
+          font-family: 'Nunito', sans-serif
+          &:focus
+            border-bottom: 2px solid $orange
+        .btn-form
+          border: 2px solid $orange
+          background-color: $beige
+          color: $orange
+          padding: .5rem
+          margin-top: .5rem
+          font-weight: bold
+          font-family: 'Nunito', sans-serif
+          cursor: pointer
+          &:hover
+            background-color: $orange
+            border: 2px solid transparent
+            color: $beige
+
+

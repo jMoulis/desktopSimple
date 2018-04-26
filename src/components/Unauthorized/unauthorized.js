@@ -1,15 +1,16 @@
 import React from 'react';
-import Content from '../../containers/Home/Content/content';
-import './home.css';
+import './unauthorized.css';
 import Header from '../../containers/Home/Header/header';
 import Footer from '../../containers/Home/Footer/footer';
 
-const Home = props => (
-  <div id="homepage">
+const Unauthorized = () => (
+  <div className="unauthorized">
     <Header />
-    {props.children}
+    <div>
+      <h1>Unauthorized</h1>
+    </div>
     <Footer />
   </div>
 );
 
-export default Home;
+export default Unauthorized;

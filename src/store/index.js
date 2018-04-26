@@ -6,8 +6,13 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 /*
  * Local Import
 */
+// REDUCERS
 import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
+import authReducer from './reducers/authReducer';
+
+// MIDDLEWARES
+import authAjax from './middlewares/authAjax';
 
 /*
  * Code
@@ -22,13 +27,12 @@ if (window.devToolsExtension) {
 const rootReducer = combineReducers({
   appReducer,
   frameReducer,
+  authReducer,
 });
 
 const store = createStore(
   rootReducer,
-  compose(
-    ...devTools,
-  ),
+  compose(applyMiddleware(authAjax), ...devTools),
 );
 
 /*

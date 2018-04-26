@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: inherit;
   position: relative;
   padding-top: 5rem;
   background-color: #eee9d1; }
 
-header {
+.home-header {
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -17,6 +18,15 @@ header {
   left: 0;
   right: 0;
   padding: 1rem;
-  background-color: #72a7a3; }
-  header h1 {
+  background-color: #008e8b; }
+  .home-header:after {
+    content: '';
+    height: 5px;
+    background-color: #d44c00;
+    color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0; }
+  .home-header h1 {
     margin: 0; }

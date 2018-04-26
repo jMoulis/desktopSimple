@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: inherit;
+  position: relative;
+  padding-top: 5rem;
+  background-color: #eee9d1; }
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+  align-items: flex-start;
+  width: 30%; }
+  .form-container #login-form {
+    border: 5px solid #d44c00; }
+    .form-container #login-form .form-header {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #008e8b;
+      padding-right: 15rem; }
+      .form-container #login-form .form-header h1 {
+        margin: 0;
+        padding: 1rem; }
+    .form-container #login-form .form-content {
+      background-color: #97c0b7;
+      padding: .5rem; }
+      .form-container #login-form .form-content .form-group {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0.5rem; }
+        .form-container #login-form .form-content .form-group label {
+          display: none; }
+        .form-container #login-form .form-content .form-group .form-control {
+          background-color: #97c0b7;
+          border: none;
+          border-bottom: 1px solid #d44c00;
+          outline: none;
+          transition: border-bottom 500ms;
+          padding-bottom: .5rem; }
+        .form-container #login-form .form-content .form-group input::placeholder {
+          color: #eee9d1;
+          font-weight: bold;
+          font-size: 1rem;
+          font-family: 'Nunito', sans-serif; }
+          .form-container #login-form .form-content .form-group input::placeholder:focus {
+            border-bottom: 2px solid #d44c00; }
+        .form-container #login-form .form-content .form-group .btn-form {
+          border: 2px solid #d44c00;
+          background-color: #eee9d1;
+          color: #d44c00;
+          padding: .5rem;
+          margin-top: .5rem;
+          font-weight: bold;
+          font-family: 'Nunito', sans-serif;
+          cursor: pointer; }
+          .form-container #login-form .form-content .form-group .btn-form:hover {
+            background-color: #d44c00;
+            border: 2px solid transparent;
+            color: #eee9d1; }

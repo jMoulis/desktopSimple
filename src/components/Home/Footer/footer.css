@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: inherit;
   position: relative;
   padding-top: 5rem;
@@ -11,4 +12,14 @@
 #footer {
   padding: 2rem 1rem;
   background-color: #0a1c28;
-  color: #eee9d1; }
+  color: #eee9d1;
+  position: relative; }
+  #footer:before {
+    content: '';
+    height: 5px;
+    background-color: #d44c00;
+    color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; }

@@ -15,7 +15,9 @@ import App from '../../components/App/app';
  * Code
  */
 // State
-const mapStateToProps = state => ({});
+const mapStateToProps = ({ authReducer }) => ({
+  loginProcess: authReducer.loginProcess,
+});
 
 // Actions
 const mapDispatchToProps = dispatch => ({});

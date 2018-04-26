@@ -1,6 +1,47 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: inherit;
+  position: relative;
+  padding-top: 5rem;
+  background-color: #eee9d1; }
+
+.home-header {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background-color: #008e8b; }
+  .home-header:after {
+    content: '';
+    height: 5px;
+    background-color: #d44c00;
+    color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0; }
+  .home-header h1 {
+    margin: 0; }
+
 #navbar ul {
   display: flex;
   list-style: none;
   margin: 0; }
   #navbar ul li {
-    padding: 1rem; }
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 200ms ease-out; }
+    #navbar ul li:hover {
+      background-color: #d44c00;
+      color: #eee9d1; }
+    #navbar ul li a {
+      text-decoration: none;
+      color: black; }
