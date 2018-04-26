@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import App from '../../components/App/app';
+import { rehydrateAction } from '../../store/reducers/authReducer';
 
 /*
  * Code
@@ -20,7 +21,11 @@ const mapStateToProps = ({ authReducer }) => ({
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  rehydrateAction: () => {
+    dispatch(rehydrateAction());
+  },
+});
 
 
 /*

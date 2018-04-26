@@ -14,6 +14,10 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
+export const REHYDRATE = 'REHYDRATE';
+export const REHYDRATE_SUCCESS = 'REHYDRATE_SUCCESS';
+export const REHYDRATE_FAILURE = 'REHYDRATE_FAILURE';
+
 /*
  * State
 */
@@ -55,7 +59,6 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case LOGIN_SUCCESS: {
-      console.log(action.payload)
       return {
         ...state,
         loginProcess: {
@@ -67,6 +70,39 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case LOGIN_FAILURE: {
+      return {
+        ...state,
+        loginProcess: {
+          loggedUser: {},
+          logging: false,
+          error: action.payload,
+          auth: action.payload.auth,
+        },
+      };
+    }
+    case REHYDRATE: {
+      return {
+        ...state,
+        loginProcess: {
+          loggedUser: {},
+          logging: true,
+          error: null,
+          auth: false,
+        },
+      };
+    }
+    case REHYDRATE_SUCCESS: {
+      return {
+        ...state,
+        loginProcess: {
+          loggedUser: action.payload.user,
+          logging: false,
+          error: null,
+          auth: action.payload.auth,
+        },
+      };
+    }
+    case REHYDRATE_FAILURE: {
       return {
         ...state,
         loginProcess: {
@@ -100,6 +136,18 @@ export const loginSuccessAction = user => ({
 });
 export const loginFailureAction = error => ({
   type: LOGIN_FAILURE,
+  payload: error,
+});
+export const rehydrateAction = user => ({
+  type: REHYDRATE,
+  payload: user,
+});
+export const rehydrateSuccessAction = payload => ({
+  type: REHYDRATE_SUCCESS,
+  payload,
+});
+export const rehydrateFailureAction = error => ({
+  type: REHYDRATE_FAILURE,
   payload: error,
 });
 /*

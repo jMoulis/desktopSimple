@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './login.css';
+import ButtonLogin from '../../Form/button';
+import Input from '../../Form/input';
 
 class Login extends React.Component {
   static propTypes = {
     loginAction: PropTypes.func.isRequired,
+    loginProcess: PropTypes.object.isRequired,
   }
   state = {
     form: {
@@ -29,41 +32,29 @@ class Login extends React.Component {
   }
   render() {
     const { loginProcess } = this.props;
-    const { error, login } = loginProcess;
+    const { error, logging } = loginProcess;
     return (
       <div className="form-container">
         <form id="login-form" onSubmit={this.handleSubmit}>
           <div className="form-header">
             <h1>Login</h1>
           </div>
-          
           <div className="form-content">
+            {error && <div className="error-login">{error.detail}</div>}
+            <Input
+              name="email"
+              label="email"
+              onChange={this.handleInputChange}
+              value={this.state.form.email}
+            />
+            <Input
+              name="password"
+              label="Password"
+              onChange={this.handleInputChange}
+              value={this.state.form.password}
+            />
             <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                className="form-control"
-                type="text"
-                name="email"
-                id="email"
-                value={this.state.form.email}
-                placeholder="Email"
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                id="password"
-                value={this.state.form.password}
-                placeholder="Password"
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <button className="btn btn-form" type="submit">Sign In</button>
+              {<ButtonLogin logging={logging} />}
             </div>
           </div>
         </form>

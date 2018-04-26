@@ -28,6 +28,8 @@
     .form-container #login-form .form-content {
       background-color: #97c0b7;
       padding: .5rem; }
+      .form-container #login-form .form-content .error-login {
+        text-align: center; }
       .form-container #login-form .form-content .form-group {
         display: flex;
         flex-direction: column;
@@ -40,7 +42,10 @@
           border-bottom: 1px solid #d44c00;
           outline: none;
           transition: border-bottom 500ms;
-          padding-bottom: .5rem; }
+          padding-bottom: .5rem;
+          font-size: 1rem;
+          font-weight: bold;
+          color: #eee9d1; }
         .form-container #login-form .form-content .form-group input::placeholder {
           color: #eee9d1;
           font-weight: bold;

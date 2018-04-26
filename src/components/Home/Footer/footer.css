@@ -10,10 +10,10 @@
   background-color: #eee9d1; }
 
 #footer {
-  padding: 2rem 1rem;
   background-color: #0a1c28;
   color: #eee9d1;
-  position: relative; }
+  position: relative;
+  height: 80px; }
   #footer:before {
     content: '';
     height: 5px;

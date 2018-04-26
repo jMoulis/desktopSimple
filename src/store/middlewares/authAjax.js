@@ -12,6 +12,9 @@ import {
   LOGIN,
   loginSuccessAction,
   loginFailureAction,
+  REHYDRATE,
+  rehydrateSuccessAction,
+  rehydrateFailureAction,
 } from '../reducers/authReducer';
 
 /*
@@ -39,6 +42,24 @@ export default store => next => (action) => {
           store.dispatch(loginFailureAction(data.response.data.errors));
           localStorage.removeItem('token');
         });
+      break;
+    }
+    case REHYDRATE: {
+      const rehydrate = new Promise((resolve, reject) => {
+        const token = localStorage.getItem('token');
+        const auth = new Auth(token);
+        const payload = auth.decodeToken();
+        if ('user' in payload && 'auth' in payload) {
+          resolve(payload);
+        }
+        else {
+          localStorage.removeItem('token');
+          reject(new Error(JSON.stringify({ auth: false })));
+        }
+      });
+      rehydrate
+        .then(payload => store.dispatch(rehydrateSuccessAction(payload)))
+        .catch(({ message }) => store.dispatch(rehydrateFailureAction(JSON.parse(message))));
       break;
     }
     default:

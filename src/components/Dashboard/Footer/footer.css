@@ -13,7 +13,7 @@
   background-color: #0a1c28;
   width: 100%;
   background: linear-gradient(to bottom, #22323d 5%, #0a1c28 10%);
-  padding: 1rem 2rem; }
+  height: 80px; }
   #footer button {
     margin-left: 1rem;
     cursor: pointer;
@@ -27,9 +27,9 @@
     transition: box-shadow 500ms;
     transition: background 600ms; }
     #footer button:hover {
-      color: #0a1c28;
+      color: #eee9d1;
       box-shadow: 0px 0px 10px 0px gray;
-      background-color: #eee9d1; }
+      background-color: #d44c00; }
     #footer button:active {
       color: #0a1c28;
       box-shadow: 0px 0px 10px 0px gray;
