@@ -7,14 +7,13 @@ const InputFile = ({ config }) => {
     onChange,
   } = config;
   return (
-    <div className="form-group">
+    <div className={`form-group ${field.required && 'required'}`}>
       {field.label && <label className="label-top" htmlFor={field.name}>{field.label}</label>}
       <input
         name={field.name}
         id={field.name}
         className="form-control"
         type="file"
-        aria-describedby={field.name}
         onChange={onChange}
       />
     </div>

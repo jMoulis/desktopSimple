@@ -4,7 +4,6 @@ class Auth {
   token = '';
   constructor(token) {
     this.token = token;
-    this.saveLocalStorage(this.token);
   }
   decodeToken = () => decode(this.token);
   saveLocalStorage() {

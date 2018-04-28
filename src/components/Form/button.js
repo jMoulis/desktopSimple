@@ -1,13 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const ButtonLogin = ({ name, logging }) => (
+import './button.css';
+
+const Button = ({ label, loading }) => (
   <button
     type="submit"
-    disabled={logging}
-    className="btn btn-form"
+    disabled={loading && true}
+    className={`btn btn-form ${loading && 'disabled'}`}
   >
-    {logging ? <i className="fas fa-spinner" /> : 'Sign in'}
+    {loading ? <i className="fas fa-spinner" /> : label}
   </button>
 );
 
-export default ButtonLogin;
+Button.propTypes = {
+  label: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
+
+export default Button;

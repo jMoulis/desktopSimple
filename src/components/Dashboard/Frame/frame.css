@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .frame {
-  background-color: #eee9d1;
+  background-color: #97c0b7;
   border: 8px solid #0a1c28;
   border-radius: 2px;
   box-shadow: 0px 0px 20px 0px #0a1c28;
@@ -8,11 +8,12 @@
   flex-direction: column;
   min-height: 250px;
   min-width: 250px;
-  overflow: auto;
   position: absolute;
+  overflow: auto;
   resize: both;
   top: 10%;
-  left: 40%; }
+  left: 40%;
+  max-height: 95%; }
   .frame-reset {
     bottom: 0 !important;
     height: inherit !important;
@@ -20,8 +21,21 @@
     resize: none;
     right: 0 !important;
     top: 0 !important;
-    width: inherit !important; }
+    width: inherit !important;
+    max-height: 100% !important; }
   .frame .child-app {
     height: 100%;
-    overflow: auto;
-    padding: 1rem; }
+    overflow: hidden;
+    margin-bottom: 1rem; }
+    .frame .child-app .app-toolbar {
+      background-color: #411800;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      color: #eee9d1; }
+      .frame .child-app .app-toolbar ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding-left: 1rem; }
+        .frame .child-app .app-toolbar ul li {
+          padding: 0 1rem; }

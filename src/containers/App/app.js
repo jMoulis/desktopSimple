@@ -17,7 +17,7 @@ import { rehydrateAction } from '../../store/reducers/authReducer';
  */
 // State
 const mapStateToProps = ({ authReducer }) => ({
-  loginProcess: authReducer.loginProcess,
+  auth: authReducer.auth,
 });
 
 // Actions

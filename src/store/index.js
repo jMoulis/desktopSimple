@@ -11,9 +11,12 @@ import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
 import userReducer from './reducers/userReducer';
+import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
 
 // MIDDLEWARES
 import authAjax from './middlewares/authAjax';
+import userAjax from './middlewares/userAjax';
+import profileAjax from '../components/Applications/Settings/store/middlewares/profileAjax';
 
 /*
  * Code
@@ -30,11 +33,17 @@ const rootReducer = combineReducers({
   frameReducer,
   authReducer,
   userReducer,
+  profileReducer,
 });
 
 const store = createStore(
   rootReducer,
-  compose(applyMiddleware(authAjax), ...devTools),
+  compose(
+    applyMiddleware(authAjax),
+    applyMiddleware(userAjax),
+    applyMiddleware(profileAjax),
+    ...devTools,
+  ),
 );
 
 /*

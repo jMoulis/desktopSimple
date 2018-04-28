@@ -9,6 +9,9 @@ import axios from 'axios';
 import { ROOT_URL } from '../../Utils/config';
 import Auth from '../../Utils/auth';
 import {
+  CREATE_USER,
+  createUserSuccessAction,
+  createUserFailureAction,
   LOGIN,
   loginSuccessAction,
   loginFailureAction,
@@ -16,7 +19,6 @@ import {
   rehydrateSuccessAction,
   rehydrateFailureAction,
 } from '../reducers/authReducer';
-
 /*
  * Code
  */
@@ -26,6 +28,27 @@ import {
  */
 export default store => next => (action) => {
   switch (action.type) {
+    case CREATE_USER: {
+      const formData = new FormData(action.payload);
+      axios({
+        method: 'post',
+        data: formData,
+        url: `${ROOT_URL}/api/register`,
+      })
+        .then(({ data }) => {
+          const auth = new Auth(data.token);
+          auth.saveLocalStorage();
+          const decodedToken = auth.decodeToken();
+          store.dispatch(createUserSuccessAction(decodedToken));
+        })
+        .catch((data) => {
+          if (!data.response) {
+            return console.error(data);
+          }
+          return store.dispatch(createUserFailureAction(data.response.data.errors));
+        });
+      break;
+    }
     case LOGIN: {
       const url = `${ROOT_URL}/api/login`;
       axios({
@@ -35,6 +58,7 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           const auth = new Auth(data.token);
+          auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
           store.dispatch(loginSuccessAction(decodedToken));
         })

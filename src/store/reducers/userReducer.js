@@ -8,10 +8,6 @@
 /*
  * Types
  */
-export const CREATE_USER = 'CREATE_USER';
-export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
-export const CREATE_USER_FAILURE = 'CREATE_USER_FAILURE';
-
 export const FETCH_SINGLE_USER = 'FETCH_SINGLE_USER';
 export const FETCH_SINGLE_USER_SUCCESS = 'FETCH_SINGLE_USER_SUCCESS';
 export const FETCH_SINGLE_USER_FAILURE = 'FETCH_SINGLE_USER_FAILURE';
@@ -38,16 +34,6 @@ const initialState = {
     loading: true,
     error: null,
   },
-  loggedUser: {
-    user: {},
-    loading: false,
-    error: null,
-  },
-  createUser: {
-    user: {},
-    creating: false,
-    error: null,
-  },
   editUser: {
     user: {},
     editing: false,
@@ -60,38 +46,6 @@ const initialState = {
  */
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case CREATE_USER: {
-      return {
-        ...state,
-        createUser: {
-          user: {},
-          creating: true,
-          error: null,
-        },
-      };
-    }
-    case CREATE_USER_SUCCESS: {
-      return {
-        ...state,
-        userList: {
-          ...state.userList,
-          users: [
-            ...state.userList.users,
-            action.payload,
-          ],
-        },
-      };
-    }
-    case CREATE_USER_FAILURE: {
-      return {
-        ...state,
-        createUser: {
-          user: {},
-          creating: false,
-          error: action.payload,
-        },
-      };
-    }
     case FETCH_SINGLE_USER: {
       return {
         ...state,
@@ -195,18 +149,7 @@ const reducer = (state = initialState, action = {}) => {
 /*
  *Action creators
  */
-export const createUserAction = formValues => ({
-  type: CREATE_USER,
-  payload: formValues,
-});
-export const createUserSuccessAction = data => ({
-  type: CREATE_USER_SUCCESS,
-  payload: data,
-});
-export const createUserFailureAction = error => ({
-  type: CREATE_USER_FAILURE,
-  payload: error,
-});
+
 export const fetchUsersAction = () => ({
   type: FETCH_USERS,
 });

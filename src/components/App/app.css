@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 #app {
   position: relative;
-  overflow: hidden;
   background-color: #41848f;
   display: flex;
   flex-direction: column;
-  font-family: 'Nunito', sans-serif; }
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden; }

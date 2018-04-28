@@ -8,14 +8,14 @@ import { connect } from 'react-redux';
  * Local import
  */
 import SignUp from '../../../components/User/SignUp/signup';
-import { createUserAction } from '../../../store/reducers/userReducer';
+import { createUserAction } from '../../../store/reducers/authReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ userReducer }) => ({
-  createUser: userReducer.createUser,
+const mapStateToProps = ({ authReducer }) => ({
+  createUserProcess: authReducer.createUserProcess,
 });
 
 // Actions

@@ -10,18 +10,20 @@
 
 .close {
   background-color: #ff6666;
-  transition: background-color 1s ease-out; }
+  transition: background-color 500ms ease-out; }
   .close:hover {
     background-color: red; }
+  .close:active {
+    background-color: #990000; }
 
 .full-size {
   background-color: #7fbf7f;
-  transition: background-color 1s ease-out; }
+  transition: background-color 500ms ease-out; }
   .full-size:hover {
     background-color: #489048; }
 
 .shrink {
   background-color: gray;
-  transition: background-color 1s ease-out; }
+  transition: background-color 500ms ease-out; }
   .shrink:hover {
     background-color: #4d4d4d; }

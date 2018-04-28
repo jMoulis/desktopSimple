@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
  * Local import
  */
 import NavBar from '../../../../components/Home/Header/NavBar/navbar';
-import { displayLoginFormAction } from '../../../../store/reducers/authReducer';
 /*
  * Code
  */
@@ -18,11 +17,7 @@ const mapStateToProps = ({ authReducer }) => ({
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({
-  displayLoginFormAction: () => {
-    dispatch(displayLoginFormAction());
-  },
-});
+const mapDispatchToProps = dispatch => ({});
 
 
 /*

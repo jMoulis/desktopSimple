@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
  */
 import Footer from '../../../components/Dashboard/Footer/footer';
 import { startAppAction, setActiveAppAction } from '../../../store/reducers/frameReducer';
+import { logoutAction } from '../../../store/reducers/authReducer';
 
 /*
  * Code
@@ -26,6 +27,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setActiveAppAction: (app) => {
     dispatch(setActiveAppAction(app));
+  },
+  logoutAction: () => {
+    dispatch(logoutAction());
   },
 });
 

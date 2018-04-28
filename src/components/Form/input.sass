@@ -1,0 +1,37 @@
+@import './form.sass'
+.form-group
+  display: flex
+  flex-direction: column
+  padding: 1rem 0.5rem
+  position: relative
+  label
+    display: none
+    color: $beige
+    font-weight: bold
+  .form-control
+    background-color: $lightblue
+    border: none
+    border-bottom: 2px solid $darkestblue
+    outline: none
+    transition: border-bottom 500ms
+    padding-bottom: .5rem
+    padding-top: .5rem
+    padding-left: .5rem
+    font-size: 1rem
+    font-weight: bold
+    color: $beige
+    font-family: 'Nunito', sans-serif
+  input::placeholder
+    color: $beige
+    font-weight: bold
+    font-size: 1rem
+    font-family: 'Nunito', sans-serif
+  input
+    padding-left: .8rem !important // Align with select label
+
+.required::after
+  content: "*"
+  color: $orange
+  position: absolute
+  top: 30%
+  left: 2%

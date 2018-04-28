@@ -1,0 +1,31 @@
+@import '../../../../../styles/charte.sass'
+
+#profile
+  padding-top: 0
+  overflow: auto
+  height: 90%
+  & *
+    color: $darkestblue
+    font-weight: bold
+  & input
+    transition: border-bottom 200ms
+    &:focus
+      border-bottom: 2px solid $orange
+    &::placeholder
+      color: $darkestblue
+  
+  &-form
+    width: 100%
+    border: none
+    overflow: auto
+    height: 100%
+  .profile
+    &-content-form-wrapper
+      display: flex
+      justify-content: space-around
+      flex-wrap: wrap
+      .form-content
+        flex: 1
+    &-picture
+      max-width: 50%
+

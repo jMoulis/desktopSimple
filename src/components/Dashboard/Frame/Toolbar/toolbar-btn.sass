@@ -1,7 +1,7 @@
 $red: #ff6666
 $green: #7fbf7f
 $gray: gray
-$change-color: background-color 1s ease-out
+$change-color: background-color 500ms ease-out
 .toolbar-button
   width: 10px
   height: 12px
@@ -16,6 +16,8 @@ $change-color: background-color 1s ease-out
   transition: $change-color
   &:hover
     background-color: darken($red, 20%)
+  &:active
+    background-color: darken($red, 40%)
 .full-size
   background-color: $green
   transition: $change-color

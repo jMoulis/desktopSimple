@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './login.css';
-import ButtonLogin from '../../Form/button';
+import Button from '../../Form/button';
 import Input from '../../Form/input';
 
 class Login extends React.Component {
@@ -35,26 +35,32 @@ class Login extends React.Component {
     const { error, logging } = loginProcess;
     return (
       <div className="form-container">
-        <form id="login-form" onSubmit={this.handleSubmit}>
+        <form className="form" onSubmit={this.handleSubmit}>
           <div className="form-header">
-            <h1>Login</h1>
+            <h1>Sign In</h1>
           </div>
           <div className="form-content">
             {error && <div className="error-login">{error.detail}</div>}
             <Input
-              name="email"
-              label="email"
-              onChange={this.handleInputChange}
-              value={this.state.form.email}
+              config={{
+                type: 'text',
+                name: 'email',
+                label: 'Email',
+                onChange: this.handleInputChange,
+                value: this.state.form.email,
+              }}
             />
             <Input
-              name="password"
-              label="Password"
-              onChange={this.handleInputChange}
-              value={this.state.form.password}
+              config={{
+                type: 'password',
+                name: 'password',
+                label: 'Password',
+                onChange: this.handleInputChange,
+                value: this.state.form.password,
+              }}
             />
             <div className="form-group">
-              {<ButtonLogin logging={logging} />}
+              {<Button loading={logging} label="Sign In" />}
             </div>
           </div>
         </form>

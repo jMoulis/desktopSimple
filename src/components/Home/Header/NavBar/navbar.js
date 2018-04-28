@@ -6,8 +6,8 @@ import './navbar.css';
 const NavBar = () => (
   <nav id="navbar">
     <ul>
-      <li><Link to="/signin" href="/signin">Sign in</Link></li>
-      <li><Link to="/signup" href="/signup">Sign up</Link></li>
+      <li><Link className="btn btn-form" to="/signin" href="/signin">Sign in</Link></li>
+      <li><Link className="btn btn-form" to="/signup" href="/signup">Sign up</Link></li>
     </ul>
   </nav>
 );

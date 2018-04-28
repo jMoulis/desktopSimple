@@ -8,7 +8,8 @@
   width: 100%
   background: linear-gradient(to bottom, #22323d 5%,#0a1c28 10%)
   height: 80px
-  button
+  justify-content: space-between
+  .app-btn
     margin-left: 1rem
     cursor: pointer
     background: none
@@ -17,9 +18,11 @@
     border-radius: 10%
     color: $beige
     font-size: 2.5rem
+    padding: 0 0.5rem
     transition: color 400ms
     transition: box-shadow 500ms
     transition: background 600ms
+    outline: none
     &:hover
       color: $beige
       box-shadow: 0px 0px 10px 0px gray
@@ -28,6 +31,7 @@
       color: $darkestblue
       box-shadow: 0px 0px 10px 0px gray
       border: 1px solid $darkestblue
+      background-color: $lightblue
   .btn-container
     display: flex
     flex-direction: column
@@ -35,3 +39,5 @@
     justify-content: center
     .btn-title
       display: none
+    .logout
+      margin-right: 1rem

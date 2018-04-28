@@ -15,7 +15,7 @@ class AppLoader {
   applicationSelector = async () => {
     if (this.appName) {
       try {
-        const app = await import(`../${this.appName}/index.js`);
+        const app = await import(`../${this.appName}/containers/${this.appName}/index.js`);
         return app.default;
       }
       catch (error) {

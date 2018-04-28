@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#profile {
+  padding-top: 0;
+  overflow: auto;
+  height: 90%; }
+  #profile * {
+    color: #0a1c28;
+    font-weight: bold; }
+  #profile input {
+    transition: border-bottom 200ms; }
+    #profile input:focus {
+      border-bottom: 2px solid #d44c00; }
+    #profile input::placeholder {
+      color: #0a1c28; }
+  #profile-form {
+    width: 100%;
+    border: none;
+    overflow: auto;
+    height: 100%; }
+  #profile .profile-content-form-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; }
+    #profile .profile-content-form-wrapper .form-content {
+      flex: 1; }
+  #profile .profile-picture {
+    max-width: 50%; }

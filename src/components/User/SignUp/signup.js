@@ -8,6 +8,10 @@ import Select from '../../Form/select';
 import Input from '../../Form/input';
 
 class Signup extends React.Component {
+  static propTypes = {
+    createUserAction: PropTypes.func.isRequired,
+    createUserProcess: PropTypes.object.isRequired,
+  };
   constructor(props) {
     super(props);
     let field = {};
@@ -37,59 +41,74 @@ class Signup extends React.Component {
     }));
   }
   render() {
-    const { createUser } = this.props;
-    const { error } = createUser;
+    const { createUserProcess } = this.props;
+    const { error, creating } = createUserProcess;
     return (
-      <div id="signup" className="row justify-content-center">
-        <div className="col-md-8">
-          <h1>Sign up</h1>
-          <form id="signup-form" className="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+      <div id="signup" className="form-container">
+        <form id="signup-form" className="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+          <div className="form-header">
+            <h1>Sign Up</h1>
+          </div>
+          <div className="form-content">
+            {error && <div className="error-login">{error.detail}</div>}
             <Select
               config={{
+                name: Model.typeUser.name,
                 field: Model.typeUser,
                 onChange: this.handleSelectChange,
                 value: this.state.typeUser,
                 options: ['student', 'company'],
+                required: Model.typeUser.required,
                 error: error && error.typeUser && error.typeUser.detail,
               }}
             />
             <Input
               config={{
+                label: Model.fullName.label,
+                type: 'text',
                 field: Model.fullName,
+                name: Model.fullName.name,
                 onChange: this.handleInputChange,
                 value: this.state.fullName,
+                required: Model.fullName.required,
                 error: error && error.fullName && error.fullName.detail,
               }}
             />
             <Input
               config={{
+                label: Model.email.label,
+                type: 'text',
                 field: Model.email,
+                name: Model.email.name,
                 onChange: this.handleInputChange,
                 value: this.state.email,
+                required: Model.email.required,
                 error: error && error.email && error.email.detail,
               }}
             />
             <Input
               config={{
+                label: Model.password.label,
+                type: 'password',
                 field: Model.password,
+                name: Model.password.name,
                 onChange: this.handleInputChange,
                 value: this.state.password,
+                required: Model.password.required,
                 error: error && error.password && error.password.detail,
               }}
             />
-            <Button label="Create" />
-          </form>
-          <div>
-            <p>Already have an account? <Link href="/signin" to="/signin">Sign In</Link></p>
+            <div className="form-group">
+              <Button label="Sign Up" loading={creating} />
+            </div>
           </div>
+        </form>
+        <div>
+          <p>Already have an account? <Link href="/signin" to="/signin">Sign In</Link></p>
         </div>
       </div>
     );
   }
 }
-Signup.propTypes = {
-  createUserAction: PropTypes.func.isRequired,
-  createUser: PropTypes.object.isRequired,
-};
 
 export default Signup;
