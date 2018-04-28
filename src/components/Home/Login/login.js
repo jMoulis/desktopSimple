@@ -4,29 +4,42 @@ import PropTypes from 'prop-types';
 import './login.css';
 import Button from '../../Form/button';
 import Input from '../../Form/input';
+import Model from '../../../data/models/login-model';
 
 class Login extends React.Component {
   static propTypes = {
     loginAction: PropTypes.func.isRequired,
     loginProcess: PropTypes.object.isRequired,
   }
-  state = {
-    form: {
-      email: '',
-      password: '',
-    },
+  constructor(props) {
+    super(props);
+    let field = {};
+    Object.keys(Model).map((key) => {
+      field = {
+        ...field,
+        [key]: {
+          value: '',
+          focus: false,
+          changed: false,
+        },
+      };
+      return field;
+    });
+    this.state = field;
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { loginAction } = this.props;
-    loginAction(this.state.form);
+    loginAction(this.state);
   }
   handleInputChange = (evt) => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
-      form: {
-        ...prevState.form,
-        [name]: value,
+      ...prevState,
+      [name]: {
+        value,
+        focus: true,
+        changed: true,
       },
     }));
   }
@@ -34,7 +47,7 @@ class Login extends React.Component {
     const { loginProcess } = this.props;
     const { error, logging } = loginProcess;
     return (
-      <div className="form-container">
+      <div id="signin-form" className="form-container">
         <form className="form" onSubmit={this.handleSubmit}>
           <div className="form-header">
             <h1>Sign In</h1>
@@ -43,20 +56,16 @@ class Login extends React.Component {
             {error && <div className="error-login">{error.detail}</div>}
             <Input
               config={{
-                type: 'text',
-                name: 'email',
-                label: 'Email',
+                field: Model.email,
                 onChange: this.handleInputChange,
-                value: this.state.form.email,
+                value: this.state.email.value,
               }}
             />
             <Input
               config={{
-                type: 'password',
-                name: 'password',
-                label: 'Password',
+                field: Model.password,
                 onChange: this.handleInputChange,
-                value: this.state.form.password,
+                value: this.state.password.value,
               }}
             />
             <div className="form-group">

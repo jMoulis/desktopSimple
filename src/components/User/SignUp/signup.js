@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import './signup.css';
 import Model from '../../../data/models/register-model';
 import Button from '../../Form/button';
 import Select from '../../Form/select';

@@ -11,6 +11,7 @@ import TextArea from '../../../../Form/textarea';
 class StudentForm extends React.Component {
   static propTypes = {
     loginProcess: PropTypes.object.isRequired,
+    userActive: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
     fetchSingleUserAction: PropTypes.func.isRequired,
   }
@@ -57,7 +58,9 @@ class StudentForm extends React.Component {
         this.setState(prevState => ({
           ...prevState,
           picture: {
+            ...prevState.picture,
             value: evt.target.result,
+            changed: true,
           },
         }));
       };
@@ -93,8 +96,9 @@ class StudentForm extends React.Component {
     // Save the input field
     const { name } = evt.target;
     const { editUserAction, loginProcess } = this.props;
+    const formData = document.getElementById('profile-form');
     if (this.state[name].changed) {
-      editUserAction(loginProcess.loggedUser.id, { [name]: this.state[name].value });
+      editUserAction(loginProcess.loggedUser.id, formData); /* { [name]: this.state[name].value } */
     }
     this.setState(prevState => ({
       ...prevState,
@@ -118,145 +122,148 @@ class StudentForm extends React.Component {
   }
   render() {
     const { userActive } = this.props;
-    const { user, loading, error} = userActive;
+    const { loading, error } = userActive;
     if (loading) {
-      return <span>'Loading'</span>;
+      return <span />;
     }
     return (
-      [
-        <div className="app-toolbar" key="app-toolbar">
-          <ul>
-            <li>Profile</li>
-            <li>Profile</li>
-            <li>Profile</li>
-          </ul>
-        </div>,
-        <div id="profile" className="form-container" key="app-content">
-          <form onSubmit={this.handleSubmit} id="profile-form" className="form" noValidate="true">
-            <div className="profile-content-form-wrapper">
-              <div className="form-content">
-                <img className="profile-picture" src={`${this.state.picture.value || '/img/avatar.png'}`} alt="Profile" />
-                <InputFile
-                  config={{
-                    field: Model.picture,
-                    onChange: this.handleInputFileChange,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.fullName,
-                    onChange: this.handleInputChange,
-                    value: this.state.fullName.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    // error: error && error.typeUser && error.typeUser.detail,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.email,
-                    onChange: this.handleInputChange,
-                    value: this.state.email.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.location,
-                    onChange: this.handleInputChange,
-                    value: this.state.location.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <Select
-                  config={{
-                    field: Model.school,
-                    onChange: this.handleSelectChange,
-                    value: this.state.school.value,
-                    options: ['Bem', 'O\'Clock'],
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-              </div>
-              <div className="form-content">
-                <Select
-                  config={{
-                    field: Model.diploma,
-                    onChange: this.handleSelectChange,
-                    value: this.state.diploma.value,
-                    options: ['Master', 'Bachelor'],
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <div>
-                  <ul className="ul-unstyled">
-                    {this.state.competences.value.length >= 0 &&
-                      this.state.competences.value.map((competence, index) => (
-                        <li key={index}><span>{competence}</span>X</li>
-                      ))}
-                  </ul>
-                </div>
-                <Select
-                  config={{
-                    field: Model.competences,
-                    onChange: this.handleSelectMultipleChange,
-                    options: ['PHP', 'Marketing'],
-                    multiple: true,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <TextArea
-                  config={{
-                    field: Model.description,
-                    onChange: this.handleInputChange,
-                    value: this.state.description.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.website,
-                    onChange: this.handleInputChange,
-                    value: this.state.website.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.linkedIn,
-                    onChange: this.handleInputChange,
-                    value: this.state.linkedIn.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-                <Input
-                  config={{
-                    field: Model.gitHub,
-                    onChange: this.handleInputChange,
-                    value: this.state.gitHub.value,
-                    type: 'text',
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                  }}
-                />
-              </div>
+      <div id="profile" className="form-container" key="app-content">
+        <form onSubmit={this.handleSubmit} id="profile-form" className="form" noValidate="true">
+          <div className="profile-content-form-wrapper">
+            <div className="form-content">
+              <img className="profile-picture" src={`${this.state.picture.value || '/img/avatar.png'}`} alt="Profile" />
+              <InputFile
+                config={{
+                  field: Model.picture,
+                  onChange: this.handleInputFileChange,
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.picture && error.picture.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.fullName,
+                  onChange: this.handleInputChange,
+                  value: this.state.fullName.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.fullName && error.fullName.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.email,
+                  onChange: this.handleInputChange,
+                  value: this.state.email.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.email && error.email.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.location,
+                  onChange: this.handleInputChange,
+                  value: this.state.location.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.location && error.location.detail,
+                }}
+              />
+              <Select
+                config={{
+                  field: Model.school,
+                  onChange: this.handleSelectChange,
+                  value: this.state.school.value,
+                  options: ['Bem', 'O\'Clock'],
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.school && error.school.detail,
+                }}
+              />
             </div>
-          </form>
-        </div>,
-      ]
+            <div className="form-content">
+              <Select
+                config={{
+                  field: Model.diploma,
+                  onChange: this.handleSelectChange,
+                  value: this.state.diploma.value,
+                  options: ['Master', 'Bachelor'],
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.diploma && error.diploma.detail,
+                }}
+              />
+              <div>
+                <ul className="ul-unstyled">
+                  {this.state.competences.value.length >= 0 &&
+                    this.state.competences.value.map((competence, index) => (
+                      <li key={index}><span>{competence}</span>X</li>
+                    ))}
+                </ul>
+              </div>
+              <Select
+                config={{
+                  field: Model.competences,
+                  onChange: this.handleSelectMultipleChange,
+                  options: ['PHP', 'Marketing'],
+                  multiple: true,
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.competences && error.competences.detail,
+                }}
+              />
+              <TextArea
+                config={{
+                  field: Model.description,
+                  onChange: this.handleInputChange,
+                  value: this.state.description.value,
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.description && error.description.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.website,
+                  onChange: this.handleInputChange,
+                  value: this.state.website.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.website && error.website.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.linkedIn,
+                  onChange: this.handleInputChange,
+                  value: this.state.linkedIn.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.linkedIn && error.linkedIn.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.gitHub,
+                  onChange: this.handleInputChange,
+                  value: this.state.gitHub.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.gitHub && error.gitHub.detail,
+                }}
+              />
+            </div>
+          </div>
+        </form>
+      </div>
     );
   }
 }

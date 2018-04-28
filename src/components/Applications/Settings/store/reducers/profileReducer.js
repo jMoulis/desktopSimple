@@ -25,11 +25,6 @@ const initialState = {
     loading: true,
     error: null,
   },
-  editUser: {
-    user: {},
-    editing: false,
-    error: null,
-  },
 };
 
 /*
@@ -84,8 +79,8 @@ const reducer = (state = initialState, action = {}) => {
     case EDIT_USER_FAILURE: {
       return {
         ...state,
-        createUser: {
-          user: {},
+        userActive: {
+          ...state.userActive,
           creating: false,
           error: action.payload,
         },

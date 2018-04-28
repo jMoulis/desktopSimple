@@ -6,11 +6,11 @@
   #profile * {
     color: #0a1c28;
     font-weight: bold; }
-  #profile input {
+  #profile input, #profile textarea, #profile select {
     transition: border-bottom 200ms; }
-    #profile input:focus {
+    #profile input:focus, #profile textarea:focus, #profile select:focus {
       border-bottom: 2px solid #d44c00; }
-    #profile input::placeholder {
+    #profile input::placeholder, #profile textarea::placeholder, #profile select::placeholder {
       color: #0a1c28; }
   #profile-form {
     width: 100%;
@@ -24,4 +24,14 @@
     #profile .profile-content-form-wrapper .form-content {
       flex: 1; }
   #profile .profile-picture {
-    max-width: 50%; }
+    width: 150px;
+    height: 150px;
+    padding-left: .5rem;
+    border-radius: 50%; }
+
+#picture {
+  display: none; }
+
+.input-file-label-container {
+  border-bottom: 2px solid #0a1c28;
+  padding-bottom: .5rem; }

@@ -42,10 +42,9 @@ export default store => next => (action) => {
     case EDIT_USER: {
       const formData = new FormData(action.payload);
       formData.append('id', action.id);
-      console.log(action.payload)
       axios({
         method: 'put',
-        data: { id: action.id, ...action.payload },
+        data: formData, // { id: action.id, ...action.payload },
         url: `${ROOT_URL}/api/users/${action.id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -54,9 +53,9 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(editUserSuccessAction(data));
         })
-        .catch((err) => {
-          console.error(err)
-          //store.dispatch(editUserFailureAction(response.status));
+        .catch(({ response }) => {
+          // console.error(err)
+          store.dispatch(editUserFailureAction(response.data.errors));
         });
       break;
     }

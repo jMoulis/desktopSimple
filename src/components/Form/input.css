@@ -27,7 +27,6 @@
   padding: 1rem 0.5rem;
   position: relative; }
   .form-group label {
-    display: none;
     color: #eee9d1;
     font-weight: bold; }
   .form-group .form-control {

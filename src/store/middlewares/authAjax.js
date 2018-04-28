@@ -51,10 +51,11 @@ export default store => next => (action) => {
     }
     case LOGIN: {
       const url = `${ROOT_URL}/api/login`;
+      const { email, password } = action.payload;
       axios({
         method: 'post',
         url,
-        data: action.payload,
+        data: { email: email.value, password: password.value },
       })
         .then(({ data }) => {
           const auth = new Auth(data.token);

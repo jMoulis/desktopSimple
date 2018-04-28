@@ -22,7 +22,7 @@ const Input = ({ config }) => (
 
 Input.propTypes = {
   config: PropTypes.shape({
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
   }).isRequired,
 };

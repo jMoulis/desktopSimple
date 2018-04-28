@@ -8,3 +8,6 @@
   position: relative;
   padding-top: 5rem;
   background-color: #eee9d1; }
+
+#signin-form label {
+  display: none; }

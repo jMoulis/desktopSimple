@@ -32,6 +32,8 @@
       padding-top: .5rem;
       padding-bottom: .5rem;
       color: #eee9d1; }
+      .frame .child-app .app-toolbar .btn-app-toolbar {
+        margin: 0; }
       .frame .child-app .app-toolbar ul {
         list-style: none;
         display: flex;

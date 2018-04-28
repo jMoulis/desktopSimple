@@ -10,7 +10,6 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
-import userReducer from './reducers/userReducer';
 import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
 
 // MIDDLEWARES
@@ -32,7 +31,6 @@ const rootReducer = combineReducers({
   appReducer,
   frameReducer,
   authReducer,
-  userReducer,
   profileReducer,
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './textarea.css';
 
 const Textarea = ({ config }) => (
@@ -11,9 +12,15 @@ const Textarea = ({ config }) => (
       value={config.value}
       onChange={config.onChange}
       className="form-control"
+      onBlur={config.blur}
+      onFocus={config.focus}
     />
     {config.error && <small>{config.error}</small>}
   </div>
 );
+
+Textarea.propTypes = {
+  config: PropTypes.object.isRequired,
+};
 
 export default Textarea;

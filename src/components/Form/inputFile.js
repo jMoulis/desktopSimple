@@ -8,13 +8,17 @@ const InputFile = ({ config }) => {
   } = config;
   return (
     <div className={`form-group ${field.required && 'required'}`}>
-      {field.label && <label className="label-top" htmlFor={field.name}>{field.label}</label>}
+      <div className="input-file-label-container">
+        <label className="input-file-label" htmlFor={field.name}>Choose your picture</label>
+      </div>
       <input
         name={field.name}
         id={field.name}
         className="form-control"
         type="file"
         onChange={onChange}
+        onBlur={config.blur}
+        onFocus={config.focus}
       />
     </div>
   );

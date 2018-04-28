@@ -36,7 +36,7 @@ export default {
     type: 'url',
   },
   picture: {
-    label: '',
+    label: 'Choose your picture',
     name: 'picture',
     type: 'file',
   },
