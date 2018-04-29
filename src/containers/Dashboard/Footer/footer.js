@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Footer from '../../../components/Dashboard/Footer/footer';
-import { startAppAction, setActiveAppAction } from '../../../store/reducers/frameReducer';
+import { startAppAction, setActiveAppAction, closeAppAction, reduceAppAction } from '../../../store/reducers/frameReducer';
 import { logoutAction } from '../../../store/reducers/authReducer';
 
 /*
@@ -24,6 +24,12 @@ const mapStateToProps = ({ frameReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   startAppAction: (appId) => {
     dispatch(startAppAction(appId));
+  },
+  closeAppAction: (appId) => {
+    dispatch(closeAppAction(appId));
+  },
+  reduceAppAction: (appId) => {
+    dispatch(reduceAppAction(appId));
   },
   setActiveAppAction: (app) => {
     dispatch(setActiveAppAction(app));

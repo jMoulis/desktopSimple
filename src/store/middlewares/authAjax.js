@@ -57,15 +57,22 @@ export default store => next => (action) => {
         url,
         data: { email: email.value, password: password.value },
       })
-        .then(({ data }) => {
-          const auth = new Auth(data.token);
+        .then((data) => {
+          const payload = data.data;
+          const auth = new Auth(payload.token);
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
-          store.dispatch(loginSuccessAction(decodedToken));
+          localStorage.setItem('user', JSON.stringify(payload.user));
+          store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
         })
-        .catch((data) => {
-          store.dispatch(loginFailureAction(data.response.data.errors));
-          localStorage.removeItem('token');
+        .catch((error) => {
+          if (!error.response) {
+            console.error(error);
+          }
+          else {
+            store.dispatch(loginFailureAction(error.response.data.errors));
+            localStorage.removeItem('token');
+          }
         });
       break;
     }
@@ -73,17 +80,19 @@ export default store => next => (action) => {
       const rehydrate = new Promise((resolve, reject) => {
         const token = localStorage.getItem('token');
         const auth = new Auth(token);
-        const payload = auth.decodeToken();
-        if ('user' in payload && 'auth' in payload) {
-          resolve(payload);
+        const decodedToken = auth.decodeToken();
+        if ('auth' in decodedToken) {
+          const user = JSON.parse(localStorage.getItem('user'));
+          resolve({ user, auth: decodedToken.auth });
         }
         else {
           localStorage.removeItem('token');
+          localStorage.removeItem('user');
           reject(new Error(JSON.stringify({ auth: false })));
         }
       });
       rehydrate
-        .then(payload => store.dispatch(rehydrateSuccessAction(payload)))
+        .then(user => store.dispatch(rehydrateSuccessAction(user)))
         .catch(({ message }) => store.dispatch(rehydrateFailureAction(JSON.parse(message))));
       break;
     }

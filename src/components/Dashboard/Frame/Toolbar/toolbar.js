@@ -8,6 +8,7 @@ class Toolbar extends React.Component {
   static propTypes = {
     fullSizeAction: PropTypes.func.isRequired,
     closeAppAction: PropTypes.func.isRequired,
+    reduceAppAction: PropTypes.func.isRequired,
     appName: PropTypes.string,
     title: PropTypes.string,
   }
@@ -24,6 +25,8 @@ class Toolbar extends React.Component {
     closeAppAction(appName);
   }
   handleReduce = () => {
+    const { appName, reduceAppAction } = this.props;
+    reduceAppAction(appName);
   }
   render() {
     const { title, appName } = this.props;
@@ -33,7 +36,7 @@ class Toolbar extends React.Component {
           <span className="toolbar-title unselectable">{title}</span>
         </header>
         <div className="toolbar-button-container">
-          <ToolBarButton type="shrink" onClick={this.handleReduce} />
+          <ToolBarButton type="reduce" onClick={this.handleReduce} />
           <ToolBarButton type="full-size" onClick={this.handleFullSize} />
           <ToolBarButton type="close" onClick={this.handleClose} />
         </div>

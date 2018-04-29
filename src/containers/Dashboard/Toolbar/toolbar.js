@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Toolbar from '../../../components/Dashboard/Frame/Toolbar/toolbar';
-import { fullSizeAction, closeAppAction } from '../../../store/reducers/frameReducer';
+import { fullSizeAction, closeAppAction, reduceAppAction } from '../../../store/reducers/frameReducer';
 
 /*
  * Code
@@ -23,6 +23,9 @@ const mapDispatchToProps = dispatch => ({
   },
   closeAppAction: (appId) => {
     dispatch(closeAppAction(appId));
+  },
+  reduceAppAction: (appId) => {
+    dispatch(reduceAppAction(appId));
   },
 });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SelectAuto from 'react-select';
 
 import './profile.css';
 import Model from '../../../../../data/models/student-model';
@@ -7,6 +8,7 @@ import Input from '../../../../Form/input';
 import InputFile from '../../../../Form/inputFile';
 import Select from '../../../../Form/select';
 import TextArea from '../../../../Form/textarea';
+import InputAutoComplete from '../../../../Form/inputAutoComplete';
 
 class StudentForm extends React.Component {
   static propTypes = {
@@ -27,10 +29,19 @@ class StudentForm extends React.Component {
       ...field,
     };
   }
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedCompetences: [],
+    };
+  }
   componentDidMount() {
     const { fetchSingleUserAction, loginProcess } = this.props;
     fetchSingleUserAction(loginProcess.loggedUser.id);
+  }
+  componentWillUnmount() {
+    console.log('unmount');
+    // Maybe do someting? Like save Datas or anything else
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -47,6 +58,18 @@ class StudentForm extends React.Component {
         changed: true,
       },
     }));
+  }
+  handleInputSelectCompetencesChange = (evt) => {
+    const { value } = evt.target;
+    if (evt.keyCode === 13) {
+      this.setState(prevState => ({
+        selectedCompetences: [
+          ...prevState.selectedCompetences,
+          value,
+        ],
+      }));
+      evt.target.value = '';
+    }
   }
   handleInputFileChange = (evt) => {
     this.readUrl(evt.target);
@@ -82,10 +105,10 @@ class StudentForm extends React.Component {
     const { name, value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
-      [name]: {
-        ...prevState[name],
+      selectedCompetences: {
+        ...prevState.selectedCompetences,
         value: [
-          ...prevState[name].value,
+          ...prevState.selectedCompetences.value,
           value,
         ],
         changed: true,
@@ -198,15 +221,19 @@ class StudentForm extends React.Component {
                   error: error && error.diploma && error.diploma.detail,
                 }}
               />
-              <div>
-                <ul className="ul-unstyled">
-                  {this.state.competences.value.length >= 0 &&
-                    this.state.competences.value.map((competence, index) => (
-                      <li key={index}><span>{competence}</span>X</li>
-                    ))}
-                </ul>
-              </div>
-              <Select
+              <InputAutoComplete
+                config={{
+                  field: Model.competences,
+                  onChange: this.handleInputSelectCompetencesChange,
+                  keyPress: this.handleInputSelectCompetencesChange,
+                  type: 'text',
+                  values: this.state.selectedCompetences,
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.competences && error.competences.detail,
+                }}
+              />
+              {/* <Select
                 config={{
                   field: Model.competences,
                   onChange: this.handleSelectMultipleChange,
@@ -216,7 +243,7 @@ class StudentForm extends React.Component {
                   focus: this.handleOnFocus,
                   error: error && error.competences && error.competences.detail,
                 }}
-              />
+              /> */}
               <TextArea
                 config={{
                   field: Model.description,

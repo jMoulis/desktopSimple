@@ -23,6 +23,8 @@
     top: 0 !important;
     width: inherit !important;
     max-height: 100% !important; }
+  .frame-reduce {
+    display: none; }
   .frame .child-app {
     height: 100%;
     overflow: hidden;

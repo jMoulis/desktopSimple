@@ -15,6 +15,8 @@
   background: linear-gradient(to bottom, #22323d 5%, #0a1c28 10%);
   height: 80px;
   justify-content: space-between; }
+  #footer .footer-app-icon {
+    display: flex; }
   #footer .app-btn {
     margin-left: 1rem;
     cursor: pointer;
@@ -39,10 +41,16 @@
       border: 1px solid #0a1c28;
       background-color: #97c0b7; }
   #footer .btn-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; }
+    position: relative; }
+    #footer .btn-container .active-app-circle {
+      position: absolute;
+      bottom: -10px;
+      left: 16px;
+      width: 5px;
+      height: 5px;
+      background-color: #97c0b7;
+      margin-top: .5rem;
+      border-radius: 50%; }
     #footer .btn-container .btn-title {
       display: none; }
     #footer .btn-container .logout {

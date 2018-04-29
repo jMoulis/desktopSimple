@@ -6,17 +6,19 @@
   #profile * {
     color: #0a1c28;
     font-weight: bold; }
-  #profile input, #profile textarea, #profile select {
-    transition: border-bottom 200ms; }
-    #profile input:focus, #profile textarea:focus, #profile select:focus {
-      border-bottom: 2px solid #d44c00; }
-    #profile input::placeholder, #profile textarea::placeholder, #profile select::placeholder {
-      color: #0a1c28; }
   #profile-form {
     width: 100%;
     border: none;
     overflow: auto;
     height: 100%; }
+    #profile-form .tag-list {
+      display: flex;
+      list-style: none;
+      padding: 0 1rem;
+      margin: 0; }
+      #profile-form .tag-list-item {
+        padding: 0 .3rem;
+        border: 2px solid #0a1c28; }
   #profile .profile-content-form-wrapper {
     display: flex;
     justify-content: space-around;
@@ -34,4 +36,10 @@
 
 .input-file-label-container {
   border-bottom: 2px solid #0a1c28;
-  padding-bottom: .5rem; }
+  padding-bottom: .5rem;
+  cursor: pointer;
+  transition: border-bottom 200ms; }
+  .input-file-label-container:hover {
+    border-bottom: 2px solid #d44c00; }
+  .input-file-label-container .input-file-label {
+    cursor: pointer; }

@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 5rem;
+  align-items: flex-start;
+  min-width: 30%; }
+  .form-container .form {
+    border: 5px solid #d44c00; }
+    .form-container .form .form-header {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #008e8b; }
+      .form-container .form .form-header h1 {
+        margin: 0;
+        padding: 1rem; }
+    .form-container .form .form-content {
+      background-color: #97c0b7;
+      padding: .5rem; }
+      .form-container .form .form-content .error-login {
+        text-align: center; }
+
+.input-auto {
+  display: flex;
+  border-bottom: 2px solid #0a1c28;
+  align-items: center; }
+  .input-auto-values {
+    padding: .2rem .5rem;
+    border: 2px solid #eee9d1;
+    background-color: #d44c00;
+    color: #eee9d1 !important;
+    margin-right: .5rem; }
+  .input-auto input {
+    border: none !important;
+    padding-left: 0 !important; }
+    .input-auto input:focus {
+      border-bottom: none !important; }

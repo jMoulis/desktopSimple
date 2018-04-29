@@ -27,7 +27,14 @@
     font-family: 'Nunito', sans-serif
   input
     padding-left: .8rem !important // Align with select label
-
+  input, textarea, select
+    transition: border-bottom 200ms
+    &:focus
+      border-bottom: 2px solid $orange
+    &::placeholder
+      color: $darkestblue
+      font-weight: normal
+      font-style: italic
 .required::after
   content: "*"
   color: $orange

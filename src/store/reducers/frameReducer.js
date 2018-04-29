@@ -11,6 +11,7 @@ import applications from '../../components/Applications/config/applications';
 export const FULL_SIZE = 'FULL_SIZE';
 export const CLOSE_APP = 'CLOSE_APP';
 export const START_APP = 'START_APP';
+export const REDUCE_APP = 'REDUCE_APP';
 export const SET_ACTIVE_APP = 'SET_ACTIVE_APP';
 /*
  * State
@@ -51,6 +52,18 @@ const reducer = (state = initialState, action = {}) => {
           [action.payload]: {
             ...state.applications[action.payload],
             fullSize: !state.applications[action.payload].fullSize,
+          },
+        },
+      };
+    }
+    case REDUCE_APP: {
+      return {
+        ...state,
+        applications: {
+          ...state.applications,
+          [action.payload]: {
+            ...state.applications[action.payload],
+            reduce: !state.applications[action.payload].reduce,
           },
         },
       };
@@ -117,6 +130,10 @@ export const closeAppAction = appId => ({
 });
 export const setActiveAppAction = app => ({
   type: SET_ACTIVE_APP,
+  payload: app,
+});
+export const reduceAppAction = app => ({
+  type: REDUCE_APP,
   payload: app,
 });
 /*

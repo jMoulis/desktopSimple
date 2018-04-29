@@ -15,6 +15,7 @@ const Input = ({ config }) => (
       className="form-control"
       onBlur={config.blur}
       onFocus={config.focus}
+      onKeyUp={config.keyPress}
     />
     {config.error && <small>{config.error}</small>}
   </div>

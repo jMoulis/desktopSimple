@@ -33,9 +33,10 @@ export default {
   Settings: {
     appName: 'Settings',
     title: 'Settings',
-    fullSize: false,
+    fullSize: true,
     display: false,
     zIndex: 0,
     icon: 'fas fa-cog',
+    reduce: false,
   },
 };

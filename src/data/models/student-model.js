@@ -47,7 +47,8 @@ export default {
   competences: {
     label: 'Your Competences',
     name: 'competences',
-    defaultOption: 'Select your competences',
+    type: 'text',
+    unlinked: true,
   },
   school: {
     label: 'Your school',

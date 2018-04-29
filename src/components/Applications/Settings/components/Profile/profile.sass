@@ -7,17 +7,19 @@
   & *
     color: $darkestblue
     font-weight: bold
-  & input, textarea, select
-    transition: border-bottom 200ms
-    &:focus
-      border-bottom: 2px solid $orange
-    &::placeholder
-      color: $darkestblue
   &-form
     width: 100%
     border: none
     overflow: auto
     height: 100%
+    .tag-list
+      display: flex
+      list-style: none
+      padding: 0 1rem
+      margin: 0
+      &-item
+        padding: 0 .3rem
+        border: 2px solid $darkestblue
   .profile
     &-content-form-wrapper
       display: flex
@@ -35,5 +37,9 @@
 .input-file-label-container
   border-bottom: 2px solid $darkestblue
   padding-bottom: .5rem
-    
-
+  cursor: pointer
+  transition: border-bottom 200ms
+  &:hover
+    border-bottom: 2px solid $orange
+  .input-file-label
+    cursor: pointer

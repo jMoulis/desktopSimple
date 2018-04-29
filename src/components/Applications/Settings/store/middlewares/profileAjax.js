@@ -35,8 +35,11 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchSingleUserSuccessAction(data));
         })
-        .catch(({ response }) => {
-          store.dispatch(fetchSingleUserFailureAction(response.statusText));
+        .catch((data) => {
+          if (!data.response) {
+            return console.log(data);
+          }
+          return store.dispatch(fetchSingleUserFailureAction(data.response.data.errors));
         });
       break;
     case EDIT_USER: {

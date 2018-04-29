@@ -46,7 +46,7 @@ class Frame extends React.Component {
       children,
       activeApp,
     } = this.props;
-    const frameClass = classNames({
+    const frameFullSizeClass = classNames({
       frame: true,
       'frame-full': applications[appName].fullSize,
       'frame-reset': applications[appName].fullSize,
@@ -56,7 +56,7 @@ class Frame extends React.Component {
     }
     return (
       <div
-        className={frameClass}
+        className={`${frameFullSizeClass} ${applications[appName].reduce && 'frame-reduce'}`}
         id={appName}
         onClick={this.handleSelectApp}
         onKeyPress={this.handleSelectApp}

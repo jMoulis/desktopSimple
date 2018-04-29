@@ -9,6 +9,8 @@
   background: linear-gradient(to bottom, #22323d 5%,#0a1c28 10%)
   height: 80px
   justify-content: space-between
+  .footer-app-icon
+    display: flex
   .app-btn
     margin-left: 1rem
     cursor: pointer
@@ -33,10 +35,16 @@
       border: 1px solid $darkestblue
       background-color: $lightblue
   .btn-container
-    display: flex
-    flex-direction: column
-    align-items: center
-    justify-content: center
+    position: relative
+    .active-app-circle
+      position: absolute
+      bottom: -10px
+      left: 16px
+      width: 5px
+      height: 5px
+      background-color: $lightblue
+      margin-top: .5rem
+      border-radius: 50%
     .btn-title
       display: none
     .logout
