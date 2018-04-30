@@ -24,7 +24,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  padding: 1rem 0.5rem;
+  padding: 1rem 0;
   position: relative; }
   .form-group label {
     color: #eee9d1;
@@ -37,18 +37,9 @@
     transition: border-bottom 500ms;
     padding-bottom: .5rem;
     padding-top: .5rem;
-    padding-left: .5rem;
     font-size: 1rem;
-    font-weight: bold;
     color: #eee9d1;
     font-family: 'Nunito', sans-serif; }
-  .form-group input::placeholder {
-    color: #eee9d1;
-    font-weight: bold;
-    font-size: 1rem;
-    font-family: 'Nunito', sans-serif; }
-  .form-group input {
-    padding-left: .8rem !important; }
   .form-group input, .form-group textarea, .form-group select {
     transition: border-bottom 200ms; }
     .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
@@ -56,7 +47,8 @@
     .form-group input::placeholder, .form-group textarea::placeholder, .form-group select::placeholder {
       color: #0a1c28;
       font-weight: normal;
-      font-style: italic; }
+      font-size: .8rem;
+      font-family: 'Nunito', sans-serif; }
 
 .required::after {
   content: "*";

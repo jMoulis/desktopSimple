@@ -9,7 +9,11 @@ const Thumbnail = ({ picture }) => (
 );
 
 Thumbnail.propTypes = {
-  picture: PropTypes.string.isRequired,
+  picture: PropTypes.string,
+};
+
+Thumbnail.defaultProps = {
+  picture: '/img/avatar.png',
 };
 
 export default Thumbnail;

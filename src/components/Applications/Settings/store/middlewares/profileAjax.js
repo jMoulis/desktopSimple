@@ -18,7 +18,7 @@ import {
 /*
  * Code
  */
-
+const toObject = arr => ({ [arr[0]]: arr[1].value });
 /*
  * Middleware
  */
@@ -43,11 +43,15 @@ export default store => next => (action) => {
         });
       break;
     case EDIT_USER: {
-      const formData = new FormData(action.payload);
-      formData.append('id', action.id);
+      // 1- the action.payload is the state with all fields.
+      // I filter to get only those who changed
+      const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
+      // 2- I transform my array to an object
+      const formData = toObject(filteredArray[0]);
+
       axios({
         method: 'put',
-        data: formData, // { id: action.id, ...action.payload },
+        data: { id: action.id, ...formData },
         url: `${ROOT_URL}/api/users/${action.id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -55,6 +59,11 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           store.dispatch(editUserSuccessAction(data));
+          const user = {
+            id: data._id,
+            picture: data.picture,
+          };
+          localStorage.setItem('user', JSON.stringify(user));
         })
         .catch(({ response }) => {
           // console.error(err)

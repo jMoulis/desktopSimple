@@ -36,7 +36,7 @@ class Footer extends React.Component {
           setActiveAppAction({ appName: appname, appComponent });
         });
     }
-    else if (applications[appname].reduce) {
+    else if (applications[appname].reduce || applications[appname].display) {
       reduceAppAction(appname);
     }
     else {

@@ -71,8 +71,9 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         userActive: {
-          ...state.userActive,
           user: action.payload,
+          loading: false,
+          error: null,
         },
       };
     }

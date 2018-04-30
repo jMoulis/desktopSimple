@@ -2,7 +2,7 @@
 .form-group
   display: flex
   flex-direction: column
-  padding: 1rem 0.5rem
+  padding: 1rem 0
   position: relative
   label
     color: $beige
@@ -15,18 +15,9 @@
     transition: border-bottom 500ms
     padding-bottom: .5rem
     padding-top: .5rem
-    padding-left: .5rem
     font-size: 1rem
-    font-weight: bold
     color: $beige
     font-family: 'Nunito', sans-serif
-  input::placeholder
-    color: $beige
-    font-weight: bold
-    font-size: 1rem
-    font-family: 'Nunito', sans-serif
-  input
-    padding-left: .8rem !important // Align with select label
   input, textarea, select
     transition: border-bottom 200ms
     &:focus
@@ -34,7 +25,8 @@
     &::placeholder
       color: $darkestblue
       font-weight: normal
-      font-style: italic
+      font-size: .8rem
+      font-family: 'Nunito', sans-serif
 .required::after
   content: "*"
   color: $orange

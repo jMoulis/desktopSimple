@@ -147,6 +147,7 @@ const reducer = (state = initialState, action = {}) => {
     }
     case LOGOUT: {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
       return {
         ...state,
         loginProcess: {

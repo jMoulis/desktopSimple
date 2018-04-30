@@ -21,7 +21,22 @@
       .form-container .form .form-content .error-login {
         text-align: center; }
 
-textarea {
-  resize: none;
-  box-sizing: border-box;
-  overflow: hidden; }
+.picture-upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1; }
+
+.input-file-label-container {
+  border-bottom: 2px solid #0a1c28;
+  padding-bottom: .5rem;
+  cursor: pointer;
+  transition: border-bottom 200ms; }
+  .input-file-label-container:hover {
+    border-bottom: 2px solid #d44c00; }
+  .input-file-label-container .input-file-label {
+    cursor: pointer;
+    display: inline-block;
+    width: 100%; }

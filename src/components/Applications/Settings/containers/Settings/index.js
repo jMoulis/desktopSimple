@@ -8,15 +8,23 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Settings from '../../components/Settings';
+import { fetchSingleUserAction } from '../../store/reducers/profileReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = state => ({});
+const mapStateToProps = ({ authReducer, profileReducer }) => ({
+  loginProcess: authReducer.loginProcess,
+  userActive: profileReducer.userActive,
+});
 
 // Actions
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  fetchSingleUserAction: (userId) => {
+    dispatch(fetchSingleUserAction(userId));
+  },
+});
 
 
 /*

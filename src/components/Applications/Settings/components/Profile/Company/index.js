@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './profile.css';
-import Model from '../../../../../data/models/student-model';
-import Input from '../../../../Form/input';
-import InputFile from '../../../../Form/inputFile';
-import Select from '../../../../Form/select';
-import TextArea from '../../../../Form/textarea';
-import InputAutoComplete from '../../../../Form/inputAutoComplete';
-import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
+import './company.css';
+import Model from '../../../../../../data/models/company-model';
+import Input from '../../../../../Form/input';
+import InputFile from '../../../../../Form/inputFile';
+import Select from '../../../../../Form/select';
+import TextArea from '../../../../../Form/textarea';
+import InputAutoComplete from '../../../../../Form/inputAutoComplete';
+import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
 
-class Profile extends React.Component {
+class CompanyProfile extends React.Component {
   static propTypes = {
     userActive: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
@@ -58,27 +58,6 @@ class Profile extends React.Component {
       },
     }));
   }
-  handleInputSelectCompetencesChange = (evt) => {
-    const { value } = evt.target;
-    const { editUserAction, userActive } = this.props;
-
-    if (evt.keyCode === 13) {
-      const { state } = this;
-      const newCompetences = {
-        ...state,
-        competences: {
-          ...state.competences,
-          value: [
-            ...state.competences.value,
-            value,
-          ],
-          changed: true,
-        },
-      };
-      editUserAction(userActive.user.id, newCompetences);
-      evt.target.value = '';
-    }
-  }
   handleInputFileChange = (evt) => {
     this.readUrl(evt.target);
   }
@@ -88,29 +67,18 @@ class Profile extends React.Component {
       const { state } = this;
       const reader = new FileReader();
       reader.onload = (evt) => {
-        const newPicture = {
+        const newLogo = {
           ...state,
-          picture: {
-            ...state.picture,
+          logo: {
+            ...state.logo,
             value: evt.target.result,
             changed: true,
           },
         };
-        editUserAction(userActive.user.id, newPicture);
+        editUserAction(userActive.user._id, newLogo);
       };
       reader.readAsDataURL(input.files[0]);
     }
-  }
-  handleSelectChange = (evt) => {
-    const { name, value } = evt.target;
-    this.setState(prevState => ({
-      ...prevState,
-      [name]: {
-        ...prevState[name],
-        value,
-        changed: true,
-      },
-    }));
   }
   handleOnBlur = (evt) => {
     // Save the input field
@@ -118,7 +86,7 @@ class Profile extends React.Component {
     const { editUserAction, userActive } = this.props;
     // const fromData = document.getElementById('profile-form')
     if (this.state[name].changed) {
-      editUserAction(userActive.user.id, this.state);
+      editUserAction(userActive.user._id, this.state);
     }
     this.setState(prevState => ({
       ...prevState,
@@ -129,33 +97,43 @@ class Profile extends React.Component {
       },
     }));
   }
-  handleOnFocus = (evt) => {
-    // Save the input field
-    const { name } = evt.target;
-    this.setState(prevState => ({
-      ...prevState,
-      [name]: {
-        ...prevState[name],
-        focus: true,
-      },
-    }));
+  handleInputSelectTagsChange = (evt) => {
+    const { value } = evt.target;
+    const { editUserAction, userActive } = this.props;
+
+    if (evt.keyCode === 13) {
+      const { state } = this;
+      const newTags = {
+        ...state,
+        tags: {
+          ...state.tags,
+          value: [
+            ...state.tags.value,
+            value,
+          ],
+          changed: true,
+        },
+      };
+      editUserAction(userActive.user._id, newTags);
+      evt.target.value = '';
+    }
   }
   handleRemove = (evt) => {
     evt.preventDefault();
     const { editUserAction, userActive } = this.props;
     const { state } = this;
-    const values = state.competences.value.filter((value, index) => (
+    const values = state.tags.value.filter((value, index) => (
       index !== Number(evt.target.id)
     ));
-    const newCompetences = {
+    const newTags = {
       ...state,
-      competences: {
-        ...state.competences,
+      tags: {
+        ...state.tags,
         value: values,
         changed: true,
       },
     };
-    editUserAction(userActive.user.id, newCompetences);
+    editUserAction(userActive.user._id, newTags);
   }
   render() {
     const { userActive } = this.props;
@@ -168,83 +146,83 @@ class Profile extends React.Component {
         <form id="profile-form" className="form" noValidate="true">
           <div className="profile-content-form-wrapper">
             <div className="form-content">
-              <img className="profile-picture" src={`${this.state.picture.value || '/img/avatar.png'}`} alt="Profile" />
+              <img className="profile-picture" src={`${this.state.logo.value || '/img/avatar.png'}`} alt="Profile" />
               <InputFile
                 config={{
-                  field: Model.picture,
+                  field: Model.logo,
                   onChange: this.handleInputFileChange,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   typeFileAccepted: 'image/*',
-                  error: error && error.picture && error.picture.detail,
+                  error: error && error.logo && error.logo.detail,
                 }}
               />
               <Input
                 config={{
-                  field: Model.fullName,
+                  field: Model.companyName,
                   onChange: this.handleInputChange,
-                  value: this.state.fullName.value,
+                  value: this.state.companyName.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.fullName && error.fullName.detail,
+                  error: error && error.companyName && error.companyName.detail,
                 }}
               />
               <Input
                 config={{
-                  field: Model.email,
+                  field: Model.street,
                   onChange: this.handleInputChange,
-                  value: this.state.email.value,
+                  value: this.state.street.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.email && error.email.detail,
+                  error: error && error.street && error.street.detail,
                 }}
               />
               <Input
                 config={{
-                  field: Model.location,
+                  field: Model.postalCode,
                   onChange: this.handleInputChange,
-                  value: this.state.location.value,
+                  value: this.state.postalCode.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.location && error.location.detail,
+                  error: error && error.postalCode && error.postalCode.detail,
                 }}
               />
-              <Select
+              <Input
                 config={{
-                  field: Model.school,
-                  onChange: this.handleSelectChange,
-                  value: this.state.school.value,
-                  options: ['Bem', 'O\'Clock'],
+                  field: Model.town,
+                  onChange: this.handleInputChange,
+                  value: this.state.town.value,
+                  type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.school && error.school.detail,
+                  error: error && error.town && error.town.detail,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.industry,
+                  onChange: this.handleInputChange,
+                  value: this.state.industry.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.industry && error.industry.detail,
                 }}
               />
             </div>
             <div className="form-content">
-              <Select
-                config={{
-                  field: Model.diploma,
-                  onChange: this.handleSelectChange,
-                  value: this.state.diploma.value,
-                  options: ['Master', 'Bachelor'],
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  error: error && error.diploma && error.diploma.detail,
-                }}
-              />
               <InputAutoComplete
                 config={{
-                  field: Model.competences,
-                  onChange: this.handleInputSelectCompetencesChange,
-                  keyPress: this.handleInputSelectCompetencesChange,
+                  field: Model.tags,
+                  onChange: this.handleInputSelectTagsChange,
+                  keyPress: this.handleInputSelectTagsChange,
                   type: 'text',
-                  values: this.state.competences.value,
+                  values: this.state.tags.value,
                   focus: this.handleOnFocus,
-                  error: error && error.competences && error.competences.detail,
+                  error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
                 }}
               />
@@ -280,17 +258,6 @@ class Profile extends React.Component {
                   error: error && error.linkedIn && error.linkedIn.detail,
                 }}
               />
-              <Input
-                config={{
-                  field: Model.gitHub,
-                  onChange: this.handleInputChange,
-                  value: this.state.gitHub.value,
-                  type: 'text',
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  error: error && error.gitHub && error.gitHub.detail,
-                }}
-              />
             </div>
           </div>
         </form>
@@ -299,4 +266,4 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+export default CompanyProfile;

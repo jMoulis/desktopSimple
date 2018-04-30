@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './inputFile.css';
 
 const InputFile = ({ config }) => {
   const {
@@ -7,19 +8,21 @@ const InputFile = ({ config }) => {
     onChange,
   } = config;
   return (
-    <div className={`form-group ${field.required && 'required'}`}>
+    <div className="form-group">
       <div className="input-file-label-container">
         <label className="input-file-label" htmlFor={field.name}>Choose your picture</label>
       </div>
       <input
         name={field.name}
         id={field.name}
-        className="form-control"
+        className="form-control picture-upload"
         type="file"
         onChange={onChange}
         onBlur={config.blur}
         onFocus={config.focus}
+        accept={config.typeFileAccepted}
       />
+      {config.error && <small>{config.error}</small>}
     </div>
   );
 };

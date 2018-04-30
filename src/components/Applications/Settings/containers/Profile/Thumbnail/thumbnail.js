@@ -13,9 +13,16 @@ import Thumbnail from '../../../components/Profile/Thumbnail/thumbnail';
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer }) => ({
-  picture: authReducer.loginProcess.loggedUser.picture,
-});
+const mapStateToProps = ({ authReducer }) => {
+  if (localStorage.getItem('user')) {
+    return {
+      picture: JSON.parse(localStorage.getItem('user')).picture,
+    };
+  }
+  return {
+    picture: authReducer.loginProcess.loggedUser.picture,
+  };
+};
 
 // Actions
 const mapDispatchToProps = dispatch => ({});

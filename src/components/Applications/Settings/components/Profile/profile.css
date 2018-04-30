@@ -4,8 +4,7 @@
   overflow: auto;
   height: 90%; }
   #profile * {
-    color: #0a1c28;
-    font-weight: bold; }
+    color: #0a1c28; }
   #profile-form {
     width: 100%;
     border: none;
@@ -30,16 +29,3 @@
     height: 150px;
     padding-left: .5rem;
     border-radius: 50%; }
-
-#picture {
-  display: none; }
-
-.input-file-label-container {
-  border-bottom: 2px solid #0a1c28;
-  padding-bottom: .5rem;
-  cursor: pointer;
-  transition: border-bottom 200ms; }
-  .input-file-label-container:hover {
-    border-bottom: 2px solid #d44c00; }
-  .input-file-label-container .input-file-label {
-    cursor: pointer; }

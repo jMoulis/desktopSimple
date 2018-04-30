@@ -3,12 +3,34 @@
   display: flex
   border-bottom: 2px solid $darkestblue
   align-items: center
+  transition: border-bottom 500ms
+  flex-wrap: wrap
+  &:hover
+    border-bottom: 2px solid $orange
   &-values
-    padding: .2rem .5rem
+    display: flex
+    align-items: center
     border: 2px solid $beige
-    background-color: $orange
-    color: $beige !important
+    background-color: $blue
     margin-right: .5rem
+    cursor: pointer
+    button
+      display: block
+      border: none
+      background-color: #b20000
+      font-weight: bold
+      cursor: pointer
+      padding: .4rem .5rem
+      color: $beige !important
+      transition: background-color 500ms
+      &:hover
+        background-color: #cc0000
+  &-value
+    display: block
+    padding: .2rem .5rem
+    border-right: 2px solid $beige
+    color: $beige !important
+    font-weight: bold
   input
     border: none !important
     padding-left: 0 !important 

@@ -46,6 +46,7 @@ export default {
   },
   competences: {
     label: 'Your Competences',
+    placeholder: 'Write a competence and click enter...',
     name: 'competences',
     type: 'text',
     unlinked: true,

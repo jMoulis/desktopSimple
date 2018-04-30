@@ -1,0 +1,19 @@
+@import './form.sass'
+.picture-upload
+  width: 0.1px
+  height: 0.1px
+  opacity: 0
+  overflow: hidden
+  position: absolute
+  z-index: -1
+.input-file-label-container
+  border-bottom: 2px solid $darkestblue
+  padding-bottom: .5rem
+  cursor: pointer
+  transition: border-bottom 200ms
+  &:hover
+    border-bottom: 2px solid $orange
+  .input-file-label
+    cursor: pointer
+    display: inline-block
+    width: 100%
