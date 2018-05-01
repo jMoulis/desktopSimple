@@ -1,3 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
-#signup label {
-  display: none; }
+#signup {
+  align-items: stretch; }
+  #signup label {
+    color: #0a1c28; }
+  #signup #typeUser {
+    color: #0a1c28; }

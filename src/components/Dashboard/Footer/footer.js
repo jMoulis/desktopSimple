@@ -21,6 +21,7 @@ class Footer extends React.Component {
       closeAppAction,
       applications,
       reduceAppAction,
+      activeApp,
     } = this.props;
     // Fetch appName from button toolbar clicked
     const { appname } = event.currentTarget.dataset;
@@ -36,11 +37,8 @@ class Footer extends React.Component {
           setActiveAppAction({ appName: appname, appComponent });
         });
     }
-    else if (applications[appname].reduce || applications[appname].display) {
-      reduceAppAction(appname);
-    }
     else {
-      closeAppAction(appname);
+      setActiveAppAction({ appName: appname, appComponent: null });
     }
   }
   handleLogout = () => {
@@ -64,8 +62,8 @@ class Footer extends React.Component {
                 {
                   application.appName === 'Settings' ? <Thumbnail /> :
                   [
-                    <i className={application.icon} />,
-                    <span className="btn-title">{application.title}</span>,
+                    <i key={`${application.appName}-1`} className={application.icon} />,
+                    <span key={`${application.appName}-2`} className="btn-title">{application.title}</span>,
                   ]
                 }
                 {applications[activeApp.appName] && applications[activeApp.appName].reduce && <span className="active-app-circle" />}

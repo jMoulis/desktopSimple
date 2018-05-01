@@ -63,7 +63,7 @@ const reducer = (state = initialState, action = {}) => {
           ...state.applications,
           [action.payload]: {
             ...state.applications[action.payload],
-            reduce: !state.applications[action.payload].reduce,
+            reduce: true,
           },
         },
       };
@@ -101,6 +101,7 @@ const reducer = (state = initialState, action = {}) => {
           [action.payload.appName]: {
             ...state.applications[action.payload.appName],
             zIndex: state.zIndex + 1,
+            reduce: false,
           },
         },
         activeApps,

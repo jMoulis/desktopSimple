@@ -34,9 +34,11 @@ class Frame extends React.Component {
     drag.dragElement();
   }
   handleSelectApp = (event) => {
-    const { setActiveAppAction } = this.props;
+    const { setActiveAppAction, activeApp } = this.props;
     const appName = event.currentTarget.id;
-    setActiveAppAction({ appName, appComponent: null });
+    if (activeApp.appName !== appName) {
+      setActiveAppAction({ appName, appComponent: null });
+    }
   }
   render() {
     const {

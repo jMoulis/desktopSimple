@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import './button.css';
 
-const Button = ({ label, loading }) => (
+const Button = ({ label, loading, disabled }) => (
   <button
     type="submit"
-    disabled={loading && true}
-    className={`btn btn-form ${loading && 'disabled'}`}
+    disabled={disabled && true}
+    className={`btn btn-form ${disabled && 'disabled'}`}
   >
     {loading ? <i className="fas fa-spinner" /> : label}
   </button>
@@ -16,6 +16,10 @@ const Button = ({ label, loading }) => (
 Button.propTypes = {
   label: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
+};
+Button.defaultProps = {
+  disabled: false,
 };
 
 export default Button;

@@ -6,8 +6,8 @@ const InputAutoComplete = ({ config }) => (
   <div className={`form-group ${config.field.required ? 'required' : ''}`}>
     <label htmlFor={config.field.name}>{config.field.label}</label>
     <div className="input-auto">
-      {config.values.map((value, index) => (
-        <div id={index} className="input-auto-values" key={index}>
+      {config.values && config.values.map((value, index) => (
+        <div className="input-auto-values" key={index}>
           <span className="input-auto-value">{value}</span>
           <button id={index} type="button" onClick={config.remove}>X</button>
         </div>

@@ -5,6 +5,7 @@
   align-items: center
   transition: border-bottom 500ms
   flex-wrap: wrap
+  padding-bottom: .5rem
   &:hover
     border-bottom: 2px solid $orange
   &-values
@@ -22,17 +23,18 @@
       cursor: pointer
       padding: .4rem .5rem
       color: $beige !important
+      border-left: 2px solid $beige
       transition: background-color 500ms
       &:hover
         background-color: #cc0000
   &-value
     display: block
     padding: .2rem .5rem
-    border-right: 2px solid $beige
     color: $beige !important
     font-weight: bold
   input
     border: none !important
     padding-left: 0 !important 
+    flex: 1
     &:focus
       border-bottom: none !important

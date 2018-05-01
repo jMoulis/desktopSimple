@@ -49,7 +49,6 @@ export default {
     placeholder: 'Write a competence and click enter...',
     name: 'competences',
     type: 'text',
-    unlinked: true,
   },
   school: {
     label: 'Your school',

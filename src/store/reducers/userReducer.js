@@ -8,10 +8,6 @@
 /*
  * Types
  */
-export const FETCH_SINGLE_USER = 'FETCH_SINGLE_USER';
-export const FETCH_SINGLE_USER_SUCCESS = 'FETCH_SINGLE_USER_SUCCESS';
-export const FETCH_SINGLE_USER_FAILURE = 'FETCH_SINGLE_USER_FAILURE';
-
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
@@ -46,36 +42,6 @@ const initialState = {
  */
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case FETCH_SINGLE_USER: {
-      return {
-        ...state,
-        userActive: {
-          user: {},
-          loading: true,
-          error: null,
-        },
-      };
-    }
-    case FETCH_SINGLE_USER_SUCCESS: {
-      return {
-        ...state,
-        userActive: {
-          user: action.payload,
-          loading: false,
-          error: null,
-        },
-      };
-    }
-    case FETCH_SINGLE_USER_FAILURE: {
-      return {
-        ...state,
-        userActive: {
-          user: {},
-          loading: false,
-          error: action.payload,
-        },
-      };
-    }
     case FETCH_USERS: {
       return {
         ...state,
@@ -159,18 +125,6 @@ export const fetchUsersSuccessAction = data => ({
 });
 export const fetchUsersFailureAction = error => ({
   type: FETCH_USERS_FAILURE,
-  payload: error,
-});
-export const fetchSingleUserAction = id => ({
-  type: FETCH_SINGLE_USER,
-  id,
-});
-export const fetchSingleUserSuccessAction = data => ({
-  type: FETCH_SINGLE_USER_SUCCESS,
-  payload: data,
-});
-export const fetchSingleUserFailureAction = error => ({
-  type: FETCH_SINGLE_USER_FAILURE,
   payload: error,
 });
 export const editUserAction = (id, updates) => ({

@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './company.css';
-import Model from '../../../../../../data/models/company-model';
+import Model from './company-model';
 import Input from '../../../../../Form/input';
 import InputFile from '../../../../../Form/inputFile';
-import Select from '../../../../../Form/select';
 import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
@@ -34,6 +33,13 @@ class CompanyProfile extends React.Component {
   componentWillUnmount() {
     console.log('unmount');
     // Maybe do someting? Like save Datas or anything else
+  }
+  handleFormKeyPress = (evt) => {
+    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
   }
   handleInputChange = (evt) => {
     const { value, name } = evt.target;
@@ -143,7 +149,12 @@ class CompanyProfile extends React.Component {
     }
     return (
       <div id="profile" className="form-container" key="app-content" >
-        <form id="profile-form" className="form" noValidate="true">
+        <form
+          id="profile-form"
+          className="form"
+          noValidate="true"
+          onKeyPress={this.handleFormKeyPress}
+        >
           <div className="profile-content-form-wrapper">
             <div className="form-content">
               <img className="profile-picture" src={`${this.state.logo.value || '/img/avatar.png'}`} alt="Profile" />

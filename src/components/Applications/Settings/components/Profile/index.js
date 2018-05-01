@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './profile.css';
-import Model from '../../../../../data/models/student-model';
+import Model from './student-model';
 import Input from '../../../../Form/input';
 import InputFile from '../../../../Form/inputFile';
 import Select from '../../../../Form/select';
@@ -34,6 +34,13 @@ class Profile extends React.Component {
   componentWillUnmount() {
     console.log('unmount');
     // Maybe do someting? Like save Datas or anything else
+  }
+  handleFormKeyPress = (evt) => {
+    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
   }
   handleInputChange = (evt) => {
     const { value, name } = evt.target;
@@ -75,7 +82,7 @@ class Profile extends React.Component {
           changed: true,
         },
       };
-      editUserAction(userActive.user.id, newCompetences);
+      editUserAction(userActive.user._id, newCompetences);
       evt.target.value = '';
     }
   }
@@ -96,7 +103,7 @@ class Profile extends React.Component {
             changed: true,
           },
         };
-        editUserAction(userActive.user.id, newPicture);
+        editUserAction(userActive.user._id, newPicture);
       };
       reader.readAsDataURL(input.files[0]);
     }
@@ -118,7 +125,7 @@ class Profile extends React.Component {
     const { editUserAction, userActive } = this.props;
     // const fromData = document.getElementById('profile-form')
     if (this.state[name].changed) {
-      editUserAction(userActive.user.id, this.state);
+      editUserAction(userActive.user._id, this.state);
     }
     this.setState(prevState => ({
       ...prevState,
@@ -155,18 +162,20 @@ class Profile extends React.Component {
         changed: true,
       },
     };
-    editUserAction(userActive.user.id, newCompetences);
+    editUserAction(userActive.user._id, newCompetences);
   }
   render() {
     const { userActive } = this.props;
     const { loading, error } = userActive;
-    if (loading) {
-      return <span />;
-    }
     return (
       <div id="profile" className="form-container" key="app-content" >
-        <form id="profile-form" className="form" noValidate="true">
-          <div className="profile-content-form-wrapper">
+        <form
+          id="profile-form"
+          className="form"
+          noValidate="true"
+          onKeyPress={this.handleFormKeyPress}
+        >
+          <div className="form-content-wrapper">
             <div className="form-content">
               <img className="profile-picture" src={`${this.state.picture.value || '/img/avatar.png'}`} alt="Profile" />
               <InputFile

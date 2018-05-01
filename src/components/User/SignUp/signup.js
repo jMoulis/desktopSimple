@@ -29,6 +29,13 @@ class Signup extends React.Component {
     const { createUserAction } = this.props;
     createUserAction(evt.target);
   }
+  handleFormKeyPress = (evt) => {
+    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
+  }
   handleInputChange = (evt) => {
     const { value, name } = evt.target;
     this.setState(() => ({
@@ -46,7 +53,13 @@ class Signup extends React.Component {
     const { error, creating } = createUserProcess;
     return (
       <div id="signup" className="form-container">
-        <form id="signup-form" className="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+        <form
+          id="signup-form"
+          className="form"
+          onSubmit={this.handleSubmit}
+          encType="multipart/form-data"
+          onKeyPress={this.handleFormKeyPress}
+        >
           <div className="form-header">
             <h1>Sign Up</h1>
           </div>

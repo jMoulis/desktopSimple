@@ -36,10 +36,13 @@ export default store => next => (action) => {
         url: `${ROOT_URL}/api/register`,
       })
         .then(({ data }) => {
+          const payload = data;
           const auth = new Auth(data.token);
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
-          store.dispatch(createUserSuccessAction(decodedToken));
+          localStorage.setItem('user', JSON.stringify(payload.user));
+          store.dispatch(createUserSuccessAction({ user: payload.user, auth: decodedToken.auth }));
+          store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
         })
         .catch((data) => {
           if (!data.response) {

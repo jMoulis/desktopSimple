@@ -1,15 +1,19 @@
 import React from 'react';
-import Content from '../../containers/Home/Content/content';
+import PropTypes from 'prop-types';
 import './home.css';
 import Header from '../../containers/Home/Header/header';
 import Footer from '../../containers/Home/Footer/footer';
 
-const Home = props => (
+const Home = ({ children }) => (
   <div id="homepage">
     <Header />
-    {props.children}
+    {children}
     <Footer />
   </div>
 );
+
+Home.propTypes = {
+  children: PropTypes.object.isRequired,
+};
 
 export default Home;

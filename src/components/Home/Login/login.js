@@ -32,6 +32,13 @@ class Login extends React.Component {
     const { loginAction } = this.props;
     loginAction(this.state);
   }
+  handleFormKeyPress = (evt) => {
+    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
+  }
   handleInputChange = (evt) => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
@@ -48,12 +55,16 @@ class Login extends React.Component {
     const { error, logging } = loginProcess;
     return (
       <div id="signin-form" className="form-container">
-        <form className="form" onSubmit={this.handleSubmit}>
+        <form
+          className="form"
+          onSubmit={this.handleSubmit}
+          onKeyPress={this.handleFormKeyPress}
+        >
           <div className="form-header">
             <h1>Sign In</h1>
           </div>
           <div className="form-content">
-            {error && <div className="error-login">{error.detail}</div>}
+            {error && <div className="error-login">{error.login.detail}</div>}
             <Input
               config={{
                 field: Model.email,

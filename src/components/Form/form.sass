@@ -5,10 +5,16 @@
   flex-direction: column
   justify-content: center
   padding-top: 5rem
-  align-items: flex-start
+  align-items: stretch
   min-width: 30%
+  padding-top: 0
+  overflow: auto
+  height: 90%
   .form
-    border: 5px solid $orange
+    width: 100%
+    border: none
+    overflow: auto
+    height: 100%
     .form-header
       display: flex
       justify-content: flex-start
@@ -16,8 +22,16 @@
       h1
         margin: 0
         padding: 1rem
+    .form-content-wrapper
+      display: flex
+      justify-content: space-around
+      flex-wrap: wrap
     .form-content
       background-color: $lightblue
       padding: .5rem
+      width: 100%
       .error-login
         text-align: center
+      label
+        color: $darkestblue
+        font-weight: bold

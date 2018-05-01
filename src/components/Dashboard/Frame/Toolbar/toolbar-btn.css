@@ -11,7 +11,7 @@
 .close {
   background-color: #ff6666;
   transition: background-color 500ms ease-out; }
-  .close:hover {
+  .close:hover, .close:focus {
     background-color: red; }
   .close:active {
     background-color: #990000; }
@@ -19,11 +19,15 @@
 .full-size {
   background-color: #7fbf7f;
   transition: background-color 500ms ease-out; }
-  .full-size:hover {
+  .full-size:hover, .full-size:focus {
     background-color: #489048; }
+  .full-size:active {
+    background-color: #264c26; }
 
-.shrink {
+.reduce {
   background-color: gray;
   transition: background-color 500ms ease-out; }
-  .shrink:hover {
+  .reduce:hover, .reduce:focus {
     background-color: #4d4d4d; }
+  .reduce:active {
+    background-color: #1a1a1a; }

@@ -14,7 +14,10 @@ import {
   EDIT_USER,
   editUserSuccessAction,
   editUserFailureAction,
-} from '../reducers/settingsReducer';
+  CHANGE_PASSWORD,
+  changePasswordSuccessAction,
+  changePasswordFailureAction,
+} from '../reducers/profileReducer';
 /*
  * Code
  */
@@ -60,14 +63,35 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(editUserSuccessAction(data));
           const user = {
-            id: data._id,
-            picture: data.picture,
+            id: data.user._id,
+            picture: data.user.picture,
           };
           localStorage.setItem('user', JSON.stringify(user));
         })
         .catch(({ response }) => {
           // console.error(err)
           store.dispatch(editUserFailureAction(response.data.errors));
+        });
+      break;
+    }
+    case CHANGE_PASSWORD: {
+      axios({
+        method: 'post',
+        data: { id: action.id, ...action.payload },
+        url: `${ROOT_URL}/api/security`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(changePasswordSuccessAction(data));
+        })
+        .catch((error) => {
+          // console.error(err)
+          if (!error.response) {
+            return console.log(error.message);
+          }
+          return store.dispatch(changePasswordFailureAction(error.response.data.errors));
         });
       break;
     }

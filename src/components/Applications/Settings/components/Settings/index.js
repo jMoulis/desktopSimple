@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Profile from '../../containers/Profile';
 import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
+import AccountProfile from '../../containers/Profile/Account';
 
 class Settings extends React.Component {
   static propTypes = {
@@ -36,11 +37,12 @@ class Settings extends React.Component {
           <ul>
             <li><button className="btn-form btn-app-toolbar" name="profile" onClick={this.handleTabSelect}>Profile</button></li>
             {userActive.user.typeUser !== 'student' && <li><button className="btn-form btn-app-toolbar" name="company" onClick={this.handleTabSelect}>Company</button></li>}
-            <li><button className="btn-form btn-app-toolbar" name="account" onClick={this.handleTabSelect}>Account</button></li>
+            <li><button className="btn-form btn-app-toolbar" name="account" onClick={this.handleTabSelect}>Touchy Info</button></li>
           </ul>
         </div>
         {this.state.tab === 'profile' && <Profile key="profile" />}
         {this.state.tab === 'company' && <CompanyProfile key="profile" />}
+        {this.state.tab === 'account' && <AccountProfile key="account" />}
       </div>
     );
   }

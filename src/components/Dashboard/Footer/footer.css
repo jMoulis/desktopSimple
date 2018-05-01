@@ -31,7 +31,7 @@
     transition: box-shadow 500ms;
     transition: background 600ms;
     outline: none; }
-    #footer .app-btn:hover {
+    #footer .app-btn:hover, #footer .app-btn:focus {
       color: #eee9d1;
       box-shadow: 0px 0px 10px 0px gray;
       background-color: #d44c00; }

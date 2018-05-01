@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#project {
+  padding-top: 0;
+  overflow: auto;
+  height: 90%; }
+  #project-form {
+    width: 100%;
+    border: none;
+    overflow: auto;
+    height: 100%; }
+    #project-form .tag-list {
+      display: flex;
+      list-style: none;
+      padding: 0 1rem;
+      margin: 0; }
+      #project-form .tag-list-item {
+        padding: 0 .3rem;
+        border: 2px solid #0a1c28; }
+  #project .profile-content-form-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; }
+    #project .profile-content-form-wrapper .form-content {
+      flex: 1; }
+  #project .profile-picture {
+    width: 150px;
+    height: 150px;
+    padding-left: .5rem;
+    border-radius: 50%; }
