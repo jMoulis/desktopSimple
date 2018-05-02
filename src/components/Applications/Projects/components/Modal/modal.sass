@@ -1,0 +1,26 @@
+@import '../project.sass'
+
+.modal
+  &-overlay
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    background-color: rgba(10, 28, 40, 0.7)
+    display: flex
+    justify-content: center
+  &-container
+    border: 5px solid $darkestblue
+    background-color: $lightblue
+    width: 60%
+    height: auto
+    overflow: auto
+  &-header
+    display: flex
+    justify-content: space-between
+    padding: .5rem
+  &-content
+    .form-container
+      height: auto
+      width: 100%

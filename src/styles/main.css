@@ -54,3 +54,6 @@ input {
 h1 {
   font-size: 1.5rem;
   font-weight: bold; }
+
+.unselectable {
+  user-select: none; }

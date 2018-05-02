@@ -12,8 +12,8 @@
   .form-container .form {
     width: 100%;
     border: none;
-    overflow: auto;
-    height: 100%; }
+    overflow-x: auto;
+    white-space: nowrap; }
     .form-container .form .form-header {
       display: flex;
       justify-content: flex-start;
@@ -29,6 +29,8 @@
       background-color: #97c0b7;
       padding: .5rem;
       width: 100%; }
+      .form-container .form .form-content .form-group {
+        padding: 0.5rem 0; }
       .form-container .form .form-content .error-login {
         text-align: center; }
       .form-container .form .form-content label {

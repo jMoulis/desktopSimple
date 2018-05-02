@@ -120,7 +120,7 @@ class Profile extends React.Component {
     }));
   }
   handleOnBlur = (evt) => {
-    // Save the input field
+    // Save the input field 
     const { name } = evt.target;
     const { editUserAction, userActive } = this.props;
     // const fromData = document.getElementById('profile-form')

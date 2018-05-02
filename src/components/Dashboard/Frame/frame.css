@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .frame {
-  background-color: #97c0b7;
+  background-color: #008e8b;
   border: 8px solid #0a1c28;
   border-radius: 2px;
   box-shadow: 0px 0px 20px 0px #0a1c28;
@@ -11,9 +11,7 @@
   position: absolute;
   overflow: auto;
   resize: both;
-  top: 10%;
-  left: 40%;
-  max-height: 95%; }
+  max-height: 98%; }
   .frame-reset {
     bottom: 0 !important;
     height: inherit !important;
@@ -28,7 +26,10 @@
   .frame .child-app {
     height: 100%;
     overflow: hidden;
-    margin-bottom: 1rem; }
+    margin-bottom: 1rem;
+    position: relative;
+    background-color: #97c0b7;
+    border-bottom: 2px solid #0a1c28; }
     .frame .child-app .app-toolbar {
       background-color: #411800;
       padding-top: .5rem;

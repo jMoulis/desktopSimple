@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.project-container {
+  height: 100%; }
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(10, 28, 40, 0.7);
+  display: flex;
+  justify-content: center; }
+
+.modal-container {
+  border: 5px solid #0a1c28;
+  background-color: #97c0b7;
+  width: 60%;
+  height: auto;
+  overflow: auto; }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem; }
+
+.modal-content .form-container {
+  height: auto;
+  width: 100%; }

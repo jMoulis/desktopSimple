@@ -1,7 +1,7 @@
 @import '../../../styles/charte.sass'
 
 .frame
-  background-color: $lightblue
+  background-color: $blue
   border: 8px solid $darkestblue
   border-radius: 2px
   box-shadow: 0px 0px 20px 0px $darkestblue
@@ -12,9 +12,7 @@
   position: absolute
   overflow: auto // Must be kept for the resize attribute
   resize: both
-  top: 10%
-  left: 40%
-  max-height: 95%
+  max-height: 98%
   &-reset
     bottom: 0 !important
     height: inherit !important
@@ -30,6 +28,9 @@
     height: 100%
     overflow: hidden
     margin-bottom: 1rem
+    position: relative
+    background-color: $lightblue
+    border-bottom: 2px solid $darkestblue
     .app-toolbar
       background-color: $brown
       padding-top: .5rem

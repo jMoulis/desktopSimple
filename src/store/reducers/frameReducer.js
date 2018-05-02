@@ -76,6 +76,7 @@ const reducer = (state = initialState, action = {}) => {
           [action.payload]: {
             ...state.applications[action.payload],
             display: false,
+            fullSize: true,
           },
         },
       };

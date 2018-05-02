@@ -8,9 +8,7 @@ class Footer extends React.Component {
   static propTypes = {
     startAppAction: PropTypes.func.isRequired,
     setActiveAppAction: PropTypes.func.isRequired,
-    reduceAppAction: PropTypes.func.isRequired,
     logoutAction: PropTypes.func.isRequired,
-    closeAppAction: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
     activeApp: PropTypes.object.isRequired,
   }
@@ -18,28 +16,19 @@ class Footer extends React.Component {
     const {
       startAppAction,
       setActiveAppAction,
-      closeAppAction,
-      applications,
-      reduceAppAction,
-      activeApp,
     } = this.props;
     // Fetch appName from button toolbar clicked
     const { appname } = event.currentTarget.dataset;
     // Fetch appLoader class
     const appLoader = new AppLoader(appname);
     // See applicationLoader.js
-    if (!applications[appname].display) {
-      appLoader.applicationSelector()
-        .then((appComponent) => {
-          // Load for the first time the app
-          startAppAction(appname);
-          // See frameReducer
-          setActiveAppAction({ appName: appname, appComponent });
-        });
-    }
-    else {
-      setActiveAppAction({ appName: appname, appComponent: null });
-    }
+    appLoader.applicationSelector()
+      .then((appComponent) => {
+        // Load for the first time the app
+        startAppAction(appname);
+        // See frameReducer
+        setActiveAppAction({ appName: appname, appComponent });
+      });
   }
   handleLogout = () => {
     const { logoutAction } = this.props;

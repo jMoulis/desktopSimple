@@ -3,5 +3,10 @@
   align-items: stretch; }
   #signup label {
     color: #0a1c28; }
+  #signup .form {
+    width: inherit;
+    border: 5px solid #d44c00; }
+  #signup .form-content {
+    width: inherit; }
   #signup #typeUser {
     color: #0a1c28; }

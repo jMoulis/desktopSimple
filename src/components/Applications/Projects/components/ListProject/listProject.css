@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.project-container {
+  height: 100%; }
+
+.project-list-container {
+  padding-top: 0;
+  overflow: auto;
+  height: 90%; }
+  .project-list-container > div {
+    display: flex;
+    flex-wrap: wrap; }
+  .project-list-container .project-list {
+    margin: .5rem;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    transition: box-shadow 200ms; }
+    .project-list-container .project-list:hover {
+      box-shadow: 0 0 10px 0 #0a1c28; }
+    .project-list-container .project-list-item {
+      background-color: #41848f;
+      padding: .5rem;
+      border: 3px solid #0a1c28;
+      height: 100%;
+      display: flex;
+      flex-direction: column; }
+      .project-list-container .project-list-item .content {
+        background-color: #97c0b7;
+        padding: .5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; }
+      .project-list-container .project-list-item h2 {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 1rem; }
+      .project-list-container .project-list-item .tags-list {
+        display: flex;
+        flex-wrap: wrap; }
+        .project-list-container .project-list-item .tags-list li {
+          margin-right: .5rem; }

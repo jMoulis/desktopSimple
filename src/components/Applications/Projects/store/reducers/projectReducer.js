@@ -24,6 +24,8 @@ export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const EDIT_PROJECT_SUCCESS = 'EDIT_PROJECT_SUCCESS';
 export const EDIT_PROJECT_FAILURE = 'EDIT_PROJECT_FAILURE';
 
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+
 
 /*
  * State
@@ -35,7 +37,7 @@ const initialState = {
     loading: true,
     error: null,
   },
-  projectsProcess: {
+  projectListProcess: {
     projects: [],
     success: null,
     loading: true,
@@ -90,7 +92,7 @@ const reducer = (state = initialState, action = {}) => {
     case FETCH_PROJECTS: {
       return {
         ...state,
-        projectsProcess: {
+        projectListProcess: {
           projects: [],
           success: null,
           loading: true,
@@ -101,7 +103,7 @@ const reducer = (state = initialState, action = {}) => {
     case FETCH_PROJECTS_SUCCESS: {
       return {
         ...state,
-        projectsProcess: {
+        projectListProcess: {
           projects: action.payload.projects,
           success: action.payload.success,
           loading: false,
@@ -112,7 +114,7 @@ const reducer = (state = initialState, action = {}) => {
     case FETCH_PROJECTS_FAILURE: {
       return {
         ...state,
-        projectsProcess: {
+        projectListProcess: {
           projects: [],
           success: null,
           loading: false,
@@ -185,6 +187,17 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
+        projectCreation: {
+          project: {},
+          success: null,
+          loading: true,
+          error: null,
+        },
+      };
+    }
     default:
       return {
         ...state,
@@ -196,9 +209,9 @@ const reducer = (state = initialState, action = {}) => {
  *Action creators
  */
 
-export const fetchSingleProjectAction = id => ({
+export const fetchSingleProjectAction = projectId => ({
   type: FETCH_SINGLE_PROJECT,
-  id,
+  projectId,
 });
 export const fetchSingleProjectSuccessAction = data => ({
   type: FETCH_SINGLE_PROJECT_SUCCESS,
@@ -220,9 +233,8 @@ export const fetchProjectsFailureAction = error => ({
   type: FETCH_PROJECTS_FAILURE,
   payload: error,
 });
-export const editProjectAction = (id, updates) => ({
+export const editProjectAction = updates => ({
   type: EDIT_PROJECT,
-  id,
   payload: updates,
 });
 export const editProjectSuccessAction = data => ({
@@ -244,6 +256,9 @@ export const createProjectSuccessAction = data => ({
 export const createProjectFailureAction = error => ({
   type: CREATE_PROJECT_FAILURE,
   payload: error,
+});
+export const clearMessageAction = () => ({
+  type: CLEAR_MESSAGE,
 });
 /*
  * Export default

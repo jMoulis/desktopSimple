@@ -27,6 +27,23 @@ class Frame extends React.Component {
     activeApp: null,
     children: null,
   }
+  constructor(props) {
+    super(props);
+    const { innerHeight, innerWidth } = window;
+    const footerHeight = document.getElementById('footer').clientHeight;
+    const topBottomPosition = innerHeight * 0.10;
+    const leftRightPosition = innerWidth * 0.10;
+    const width = innerWidth - (leftRightPosition * 2);
+    const height = innerHeight - (topBottomPosition * 2) - footerHeight;
+    this.state = {
+      right: leftRightPosition,
+      left: leftRightPosition,
+      top: topBottomPosition,
+      bottom: topBottomPosition,
+      width,
+      height,
+    };
+  }
   componentDidUpdate() {
     const { activeApp } = this.props;
     const element = document.querySelector(`#${activeApp.appName}`);
@@ -62,7 +79,15 @@ class Frame extends React.Component {
         id={appName}
         onClick={this.handleSelectApp}
         onKeyPress={this.handleSelectApp}
-        style={{ zIndex: applications[appName].zIndex }}
+        style={{
+          zIndex: applications[appName].zIndex,
+          top: `${this.state.top}px`,
+          bottom: `${this.state.bottom}px`,
+          left: `${this.state.left}px`,
+          right: `${this.state.right}px`,
+          width: `${this.state.width}px`,
+          height: `${this.state.height}px`,
+        }}
       >
         <Toolbar title={title} appName={appName} />
         <section className="child-app">{children}</section>

@@ -11,5 +11,10 @@
 
 #signin-form {
   align-items: stretch; }
+  #signin-form .form {
+    width: inherit;
+    border: 5px solid #d44c00; }
   #signin-form label {
     color: #0a1c28; }
+  #signin-form .form-content {
+    width: inherit; }

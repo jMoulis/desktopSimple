@@ -9,7 +9,7 @@ const Input = ({ config }) => (
       type={config.field.type}
       name={config.field.name}
       id={config.field.name}
-      value={config.value}
+      value={config.value || ''}
       placeholder={config.field.label}
       onChange={config.onChange}
       className="form-control"
@@ -23,7 +23,10 @@ const Input = ({ config }) => (
 
 Input.propTypes = {
   config: PropTypes.shape({
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     onChange: PropTypes.func.isRequired,
   }).isRequired,
 };

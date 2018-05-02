@@ -13,8 +13,8 @@
   .form
     width: 100%
     border: none
-    overflow: auto
-    height: 100%
+    overflow-x: auto
+    white-space: nowrap
     .form-header
       display: flex
       justify-content: flex-start
@@ -30,6 +30,8 @@
       background-color: $lightblue
       padding: .5rem
       width: 100%
+      .form-group
+        padding: 0.5rem 0
       .error-login
         text-align: center
       label

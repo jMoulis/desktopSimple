@@ -1,0 +1,23 @@
+@import '../project.sass'
+.table
+  width: 100%
+  &, tr
+    border: 1px solid $darkestblue
+  td, th
+    padding: 1rem
+  thead
+    tr
+      th
+        font-weight: bold
+        text-align: center
+        &:first-child
+          text-align: left
+  tbody
+    tr
+      transition: background-color 200ms
+      &:hover
+        background-color: $darkblue
+      td
+        text-align: center
+        &:first-child
+          text-align: left

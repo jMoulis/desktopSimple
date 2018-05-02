@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.project-container {
+  height: 100%; }
+
+.table {
+  width: 100%; }
+  .table, .table tr {
+    border: 1px solid #0a1c28; }
+  .table td, .table th {
+    padding: 1rem; }
+  .table thead tr th {
+    font-weight: bold;
+    text-align: center; }
+    .table thead tr th:first-child {
+      text-align: left; }
+  .table tbody tr {
+    transition: background-color 200ms; }
+    .table tbody tr:hover {
+      background-color: #41848f; }
+    .table tbody tr td {
+      text-align: center; }
+      .table tbody tr td:first-child {
+        text-align: left; }

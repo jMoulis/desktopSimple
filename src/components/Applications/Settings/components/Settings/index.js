@@ -35,9 +35,9 @@ class Settings extends React.Component {
       <div className="settings-container">
         <div className="app-toolbar" key="app-toolbar">
           <ul>
-            <li><button className="btn-form btn-app-toolbar" name="profile" onClick={this.handleTabSelect}>Profile</button></li>
-            {userActive.user.typeUser !== 'student' && <li><button className="btn-form btn-app-toolbar" name="company" onClick={this.handleTabSelect}>Company</button></li>}
-            <li><button className="btn-form btn-app-toolbar" name="account" onClick={this.handleTabSelect}>Touchy Info</button></li>
+            <li><button className="btn-form btn-app-toolbar unselectable" name="profile" onClick={this.handleTabSelect}>Profile</button></li>
+            {userActive.user.typeUser !== 'student' && <li><button className="btn-form btn-app-toolbar unselectable" name="company" onClick={this.handleTabSelect}>Company</button></li>}
+            <li><button className="btn-form btn-app-toolbar unselectable" name="account" onClick={this.handleTabSelect}>Touchy Info</button></li>
           </ul>
         </div>
         {this.state.tab === 'profile' && <Profile key="profile" />}

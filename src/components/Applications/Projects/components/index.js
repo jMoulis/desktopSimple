@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './project.css';
 import NewProject from '../containers/Projects/NewProject/newProject';
+import ListProject from '../containers/Projects/ListProject';
 
-class Settings extends React.Component {
+class Projects extends React.Component {
   static propTypes = {
     fetchProjectsAction: PropTypes.func.isRequired,
   }
@@ -27,17 +28,18 @@ class Settings extends React.Component {
         <div className="app-toolbar" key="app-toolbar">
           <ul>
             <li>
-              <button className="btn-form btn-app-toolbar" name="newProject" onClick={this.handleTabSelect}>New Project</button>
+              <button className="btn-form btn-app-toolbar unselectable" name="projects" onClick={this.handleTabSelect}>Projects</button>
             </li>
             <li>
-              <button className="btn-form btn-app-toolbar" name="account" onClick={this.handleTabSelect}>Touchy Info</button>
+              <button className="btn-form btn-app-toolbar unselectable" name="newProject" onClick={this.handleTabSelect}>New Project</button>
             </li>
           </ul>
         </div>
-        {this.state.tab === 'newProject' && <NewProject key="profile" /> }
+        {this.state.tab === 'projects' && <ListProject key="newProject" /> }
+        {this.state.tab === 'newProject' && <NewProject key="projects" /> }
       </div>
     );
   }
 }
 
-export default Settings;
+export default Projects;

@@ -14,17 +14,22 @@ import {
   FETCH_PROJECTS,
   fetchProjectsSuccessAction,
   fetchProjectsFailureAction,
+  FETCH_SINGLE_PROJECT,
+  fetchSingleProjectSuccessAction,
+  fetchSingleProjectFailureAction,
   EDIT_PROJECT,
   editProjectSuccessAction,
   editProjectFailureAction,
 } from '../reducers/projectReducer';
+
+import { logoutAction } from '../../../../../store/reducers/authReducer';
 /*
  * Code
  */
 const toObject = (arr) => {
   let obj = {};
   arr.forEach((element) => {
-    obj = { ...obj, [element[0]]: element[1].value }
+    obj = { ...obj, [element[0]]: element[1].value };
   });
   return obj;
 };
@@ -34,24 +39,7 @@ const toObject = (arr) => {
 export default store => next => (action) => {
   switch (action.type) {
     case CREATE_PROJECT: {
-      const { loggedUser } = store.getState().authReducer.loginProcess;
       const formData = toObject(Object.entries(action.payload).filter(field => field));
-      // const formData = {
-      //   title: 'Test Project',
-      //   description: 'qsqds adqaaze eaze',
-      //   dueDate: '12/12/2015',
-      //   spec: 'sdfsdfsdf',
-      //   isContest: true,
-      //   isPrice: true,
-      //   maxTeam: 3,
-      //   price: 'iPhone',
-      //   status: '',
-      //   needs: ['php', 'nodeJS'],
-      //   createdAt: '12/12/2015',
-      //   updatedAt: '12/12/2015',
-      //   company: loggedUser.id,
-      //   teams: [],
-      // };
       axios({
         method: 'post',
         data: formData,
@@ -63,11 +51,14 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(createProjectSuccessAction(data));
         })
-        .catch((data) => {
-          if (!data.response) {
-            return console.log(data);
+        .catch((error) => {
+          if (!error.response) {
+            return console.log(error);
           }
-          return store.dispatch(createProjectFailureAction(data.response.data.errors));
+          if (error.response.data.auth === false) {
+            return store.dispatch(logoutAction());
+          }
+          return store.dispatch(createProjectFailureAction(error.response.data.errors));
         });
       break;
     }
@@ -76,27 +67,28 @@ export default store => next => (action) => {
       // I filter to get only those who changed
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
       // 2- I transform my array to an object
-      const formData = toObject(filteredArray[0]);
-
+      const formData = toObject(filteredArray);
+      console.log()
       axios({
         method: 'put',
-        data: { id: action.id, ...formData },
-        url: `${ROOT_URL}/api/users/${action.id}`,
+        data: formData,
+        url: `${ROOT_URL}/api/projects/${store.getState().projectReducer.activeProjectProcess.project._id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
           store.dispatch(editProjectSuccessAction(data));
-          const user = {
-            id: data.user._id,
-            picture: data.user.picture,
-          };
-          localStorage.setItem('user', JSON.stringify(user));
+          console.log(data)
         })
-        .catch(({ response }) => {
-          // console.error(err)
-          store.dispatch(editProjectFailureAction(response.data.errors));
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error);
+          }
+          if (error.response.data.auth === false) {
+            return store.dispatch(logoutAction());
+          }
+          return store.dispatch(editProjectFailureAction(error.response.data.errors));
         });
       break;
     }
@@ -111,9 +103,36 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchProjectsSuccessAction(data));
         })
-        .catch(({ response }) => {
-          // console.error(err)
-          store.dispatch(fetchProjectsFailureAction(response.data.errors));
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error);
+          }
+          if (error.response.data.auth === false) {
+            return store.dispatch(logoutAction());
+          }
+          return store.dispatch(fetchProjectsFailureAction(error.response.data.errors));
+        });
+      break;
+    }
+    case FETCH_SINGLE_PROJECT: {
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/projects/${action.projectId}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(fetchSingleProjectSuccessAction(data));
+        })
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error);
+          }
+          if (error.response.data.auth === false) {
+            return store.dispatch(logoutAction());
+          }
+          return store.dispatch(fetchSingleProjectFailureAction(error.response.data.errors));
         });
       break;
     }

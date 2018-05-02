@@ -7,6 +7,8 @@ export default class Draggable {
     this.pos2 = 0;
     this.pos3 = 0;
     this.pos4 = 0;
+    this.bottomLimit = window.innerHeight - 100; // Height of the footer
+    this.headerHeight = document.querySelector(`.toolbar-header-${this.appName}`).clientHeight;
   }
   dragElement = () => {
     if (this.elmnt) {
@@ -36,6 +38,12 @@ export default class Draggable {
     this.pos2 = this.pos4 - evt.clientY;
     this.pos3 = evt.clientX;
     this.pos4 = evt.clientY;
+    if (this.elmnt.offsetTop <= 0) {
+      this.elmnt.style.top = '0';
+    }
+    if (evt.clientY >= this.bottomLimit) {
+      this.elmnt.style.top = `${this.bottomLimit - this.headerHeight}px`;
+    }
     // set the element's new position:
     this.elmnt.style.top = `${(this.elmnt.offsetTop - this.pos2)}px`;
     this.elmnt.style.left = `${(this.elmnt.offsetLeft - this.pos1)}px`;

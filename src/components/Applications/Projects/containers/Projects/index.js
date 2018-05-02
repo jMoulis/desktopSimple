@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Project from '../../components/index';
-import { createProjectAction, fetchProjectsAction } from '../../store/reducers/projectReducer';
+import { fetchProjectsAction } from '../../store/reducers/projectReducer';
 /*
  * Code
  */
@@ -19,9 +19,6 @@ const mapStateToProps = ({ authReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  createProjectAction: (values) => {
-    dispatch(createProjectAction(values));
-  },
   fetchProjectsAction: (values) => {
     dispatch(fetchProjectsAction(values));
   },

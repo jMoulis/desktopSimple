@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './newProject.css';
-import Model from './project-model';
+import Model from '../../components/NewProject/project-model';
 import Input from '../../../../Form/input';
 import Button from '../../../../Form/button';
 import Textarea from '../../../../Form/textarea';
@@ -10,33 +9,34 @@ import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
 
-class NewProject extends React.Component {
+class DetailProject extends React.Component {
   static propTypes = {
-    projectCreation: PropTypes.object.isRequired,
-    createProjectAction: PropTypes.func.isRequired,
+    activeProjectProcess: PropTypes.object.isRequired,
+    editProjectAction: PropTypes.func.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
   }
-  constructor(props) {
-    super(props);
+  static getDerivedStateFromProps(nextProps) {
+    const { activeProjectProcess } = nextProps;
+    const { project } = activeProjectProcess;
     let field = {};
     Object.keys(Model).map((key) => {
-      field = { ...field, [key]: { value: '', focus: false, changed: false } };
+      field = { ...field, [key]: project ? { value: project[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
       return field;
     });
-    this.state = {
+    return {
       ...field,
-      isContest: false,
-      isPrice: false,
     };
   }
-  componentDidUpdate() {
-    const { projectCreation, close } = this.props;
-    if (projectCreation.success && projectCreation.success.status) {
-      close();
-    }
-    return true;
-  }
+  state = {}
+  // componentDidUpdate() {
+  //   const { activeProjectProcess, close } = this.props;
+  //   if (activeProjectProcess.success && activeProjectProcess.success.status) {
+  //     close();
+  //   }
+  //   return true;
+  // }
+
   componentWillUnmount() {
     console.log('unmount');
     const { clearMessageAction } = this.props;
@@ -45,8 +45,8 @@ class NewProject extends React.Component {
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { createProjectAction } = this.props;
-    return createProjectAction(this.state);
+    const { editProjectAction } = this.props;
+    return editProjectAction(this.state);
   }
   handleFormKeyPress = (evt) => {
     if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
@@ -89,6 +89,23 @@ class NewProject extends React.Component {
       },
     }));
   }
+  handleRemove = (evt) => {
+    evt.preventDefault();
+    const { editProjectAction } = this.props;
+    const { state } = this;
+    const values = state.tags.value.filter((value, index) => (
+      index !== Number(evt.target.id)
+    ));
+    const newTags = {
+      ...state,
+      tags: {
+        ...state.tags,
+        value: values,
+        changed: true,
+      },
+    };
+    editProjectAction(newTags);
+  }
   handleInputSelectCompetencesChange = (evt) => {
     const { value } = evt.target;
     if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
@@ -107,9 +124,38 @@ class NewProject extends React.Component {
       evt.target.value = '';
     }
   }
+  handleOnBlur = (evt) => {
+    // Save the input field
+    const { name } = evt.target;
+    const { editProjectAction } = this.props;
+    // const fromData = document.getElementById('profile-form')
+    if (this.state[name].changed) {
+      editProjectAction(this.state);
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      [name]: {
+        ...prevState[name],
+        focus: false,
+        changed: false,
+      },
+    }));
+  }
+  handleOnFocus = (evt) => {
+    // Save the input field
+    const { name } = evt.target;
+    this.setState(prevState => ({
+      ...prevState,
+      [name]: {
+        ...prevState[name],
+        focus: true,
+      },
+    }));
+  }
   render() {
-    const { projectCreation } = this.props;
-    const { error, success } = projectCreation;
+    const { activeProjectProcess } = this.props;
+    const { error, success } = activeProjectProcess;
+    console.log(this.state)
     return (
       <div id="newProject" className="form-container" key="app-content" >
         {success && <p className="success">{success.message}</p>}
@@ -205,6 +251,7 @@ class NewProject extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.tags && error.tags.detail,
+                  remove: this.handleRemove,
                 }}
               />
               <Button label="Create" loading={false} />
@@ -216,4 +263,4 @@ class NewProject extends React.Component {
   }
 }
 
-export default NewProject;
+export default DetailProject;
