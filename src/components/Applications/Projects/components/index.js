@@ -9,7 +9,7 @@ class Projects extends React.Component {
     fetchProjectsAction: PropTypes.func.isRequired,
   }
   state = {
-    tab: 'profile',
+    tab: 'projects',
   }
   componentDidMount() {
     const { fetchProjectsAction } = this.props;
@@ -29,9 +29,6 @@ class Projects extends React.Component {
           <ul>
             <li>
               <button className="btn-form btn-app-toolbar unselectable" name="projects" onClick={this.handleTabSelect}>Projects</button>
-            </li>
-            <li>
-              <button className="btn-form btn-app-toolbar unselectable" name="newProject" onClick={this.handleTabSelect}>New Project</button>
             </li>
           </ul>
         </div>

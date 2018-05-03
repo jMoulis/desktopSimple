@@ -8,7 +8,11 @@ export default class Draggable {
     this.pos3 = 0;
     this.pos4 = 0;
     this.bottomLimit = window.innerHeight - 100; // Height of the footer
-    this.headerHeight = document.querySelector(`.toolbar-header-${this.appName}`).clientHeight;
+    this.headerHeight = 45;
+
+    if (document.querySelector(`.toolbar-header-${this.appName}`)) {
+      this.headerHeight = document.querySelector(`.toolbar-header-${this.appName}`).clientHeight;
+    }
   }
   dragElement = () => {
     if (this.elmnt) {

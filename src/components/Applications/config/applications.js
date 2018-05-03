@@ -20,6 +20,7 @@ export default {
     zIndex: 0,
     icon: 'fas fa-tasks',
     reduce: false,
+    typeUser: ['company', 'admin'],
   },
   // Chat: {
   //   appName: 'Chat',
@@ -38,5 +39,6 @@ export default {
     zIndex: 0,
     icon: 'fas fa-cog',
     reduce: false,
+    typeUser: ['all'],
   },
 };

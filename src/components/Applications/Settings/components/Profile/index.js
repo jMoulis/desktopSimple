@@ -16,6 +16,7 @@ class Profile extends React.Component {
     editUserAction: PropTypes.func.isRequired,
   }
   static getDerivedStateFromProps(nextProps) {
+    console.log('update?')
     const { userActive } = nextProps;
     const { user } = userActive; // Datas user
     let field = {};
@@ -120,7 +121,7 @@ class Profile extends React.Component {
     }));
   }
   handleOnBlur = (evt) => {
-    // Save the input field 
+    // Save the input field
     const { name } = evt.target;
     const { editUserAction, userActive } = this.props;
     // const fromData = document.getElementById('profile-form')
@@ -166,7 +167,7 @@ class Profile extends React.Component {
   }
   render() {
     const { userActive } = this.props;
-    const { loading, error } = userActive;
+    const { error } = userActive;
     return (
       <div id="profile" className="form-container" key="app-content" >
         <form
@@ -250,9 +251,9 @@ class Profile extends React.Component {
                   field: Model.competences,
                   onChange: this.handleInputSelectCompetencesChange,
                   keyPress: this.handleInputSelectCompetencesChange,
-                  type: 'text',
                   values: this.state.competences.value,
                   focus: this.handleOnFocus,
+                  blur: this.handleOnBlur,
                   error: error && error.competences && error.competences.detail,
                   remove: this.handleRemove,
                 }}

@@ -16,15 +16,34 @@
       &-item
         padding: 0 .3rem
         border: 2px solid $darkestblue
-  .profile
-    &-content-form-wrapper
+  .thumbnail-wrapper
+    display: flex
+    margin-top: 1rem
+    .add-thumbnail
+      min-width: 80px
+      min-height: 112px
+      border: 2px dotted $darkestblue
       display: flex
-      justify-content: space-around
-      flex-wrap: wrap
-      .form-content
-        flex: 1
-    &-picture
-      width: 150px
-      height: 150px
-      padding-left: .5rem
-      border-radius: 50%
+      justify-content: center
+      align-items: center
+      margin-right: 1rem
+      cursor: pointer
+      transition: all 500ms
+      &:hover
+        box-shadow: 0 0 10px 0 $darkestblue
+        color: $orange
+    .thumbnail
+      position: relative
+      width: 10%
+      height: 100%
+      margin-right: 1rem
+      cursor: pointer
+      transition: box-shadow 200ms
+      &:hover
+        box-shadow: 0 0 10px 0 $darkestblue
+      .delete-thumbnail
+        position: absolute
+        top: 0
+        right: 0
+      canvas
+        width: 100%

@@ -1,0 +1,20 @@
+@import './form.sass'
+.checkbox-group
+  label
+    display: flex
+    align-items: center
+    .custom-checkbox
+      width: 20px
+      height: 20px
+      border: 2px solid $darkestblue
+      margin-right: .5rem
+      cursor: pointer
+      text-align: center
+      transition: all 500ms 
+      &:hover
+        border-color: $orange
+        color: $orange
+  input
+    position: absolute
+    opacity: 0
+    left: -1050px

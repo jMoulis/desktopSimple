@@ -15,9 +15,10 @@ import { logoutAction } from '../../../store/reducers/authReducer';
  * Code
  */
 // State
-const mapStateToProps = ({ frameReducer }) => ({
+const mapStateToProps = ({ frameReducer, authReducer }) => ({
   applications: frameReducer.applications,
   activeApp: frameReducer.activeApp,
+  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 // Actions

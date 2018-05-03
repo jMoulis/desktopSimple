@@ -24,7 +24,7 @@ export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const EDIT_PROJECT_SUCCESS = 'EDIT_PROJECT_SUCCESS';
 export const EDIT_PROJECT_FAILURE = 'EDIT_PROJECT_FAILURE';
 
-export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+export const CLEAR_PROJECT_MESSAGE = 'CLEAR_PROJECT_MESSAGE';
 
 
 /*
@@ -75,6 +75,13 @@ const reducer = (state = initialState, action = {}) => {
           loading: false,
           error: null,
           success: action.payload.success,
+        },
+        projectListProcess: {
+          ...state.projectListProcess,
+          projects: [
+            action.payload.project,
+            ...state.projectListProcess.projects,
+          ],
         },
       };
     }
@@ -158,36 +165,61 @@ const reducer = (state = initialState, action = {}) => {
     case EDIT_PROJECT: {
       return {
         ...state,
-        projectCreation: {
-          ...state.projectCreation,
-          loading: false,
-          error: null,
-          success: null,
-        },
+        // activeProjectProcess: {
+        //   ...state.activeProjectProcess,
+        //   loading: false,
+        //   error: null,
+        //   success: null,
+        // },
       };
     }
     case EDIT_PROJECT_SUCCESS: {
+      /**
+       * The response is only the field modify
+       */
+      const { field, value, id } = action.payload.project;
+      const { projects } = state.projectListProcess;
+      // Update the project in the projects list
+      // to update the projects list page
+      const projectsUpdated = projects.map((project) => {
+        if (project._id === id) {
+          return {
+            ...project,
+            [field]: value,
+          };
+        }
+        return project;
+      });
       return {
         ...state,
-        projectCreation: {
-          user: action.payload.user,
+        // activeProjectProcess: {
+        //   project: {
+        //     ...state.activeProjectProcess.project,
+        //     [field]: value,
+        //   },
+        //   loading: false,
+        //   error: null,
+        //   success: action.payload.success,
+        // },
+        projectListProcess: {
+          projects: projectsUpdated,
+          success: null,
           loading: false,
           error: null,
-          success: action.payload.success,
         },
       };
     }
     case EDIT_PROJECT_FAILURE: {
       return {
         ...state,
-        projectCreation: {
-          ...state.projectCreation,
-          loading: false,
-          error: action.payload,
-        },
+        // activeProjectProcess: {
+        //   ...state.activeProjectProcess,
+        //   loading: false,
+        //   error: action.payload,
+        // },
       };
     }
-    case CLEAR_MESSAGE: {
+    case CLEAR_PROJECT_MESSAGE: {
       return {
         ...state,
         projectCreation: {
@@ -257,8 +289,8 @@ export const createProjectFailureAction = error => ({
   type: CREATE_PROJECT_FAILURE,
   payload: error,
 });
-export const clearMessageAction = () => ({
-  type: CLEAR_MESSAGE,
+export const clearProjectMessageAction = () => ({
+  type: CLEAR_PROJECT_MESSAGE,
 });
 /*
  * Export default

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import DetailProject from '../../../components/DetailProject';
-import { editProjectAction, clearMessageAction } from '../../../store/reducers/projectReducer';
+import { editProjectAction, clearProjectMessageAction, fetchSingleProjectAction } from '../../../store/reducers/projectReducer';
 /*
  * Code
  */
@@ -19,11 +19,14 @@ const mapStateToProps = ({ projectReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  clearMessageAction: () => {
-    dispatch(clearMessageAction());
+  clearProjectMessageAction: () => {
+    dispatch(clearProjectMessageAction());
   },
   editProjectAction: (values) => {
     dispatch(editProjectAction(values));
+  },
+  fetchSingleProjectAction: (projectId) => {
+    dispatch(fetchSingleProjectAction(projectId));
   },
 });
 

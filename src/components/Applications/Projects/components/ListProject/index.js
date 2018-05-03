@@ -13,6 +13,7 @@ class ListProject extends React.Component {
   state = {
     showNewProjectForm: false,
     detailProjectModal: false,
+    projectId: null,
   }
   handleShowNewProjectForm = () => {
     this.setState(prevState => ({
@@ -21,7 +22,6 @@ class ListProject extends React.Component {
     }));
   }
   handleShowDetailModal = (evt) => {
-    const { fetchSingleProjectAction } = this.props;
     if (evt.target) {
       const btnName = evt.target.name;
       if (btnName) {
@@ -31,9 +31,11 @@ class ListProject extends React.Component {
       }
     }
     const { projectid } = evt.currentTarget.dataset;
+    const { fetchSingleProjectAction } = this.props;
     fetchSingleProjectAction(projectid);
     return this.setState(() => ({
       detailProjectModal: true,
+      projectId: projectid,
     }));
   }
   render() {
@@ -43,9 +45,9 @@ class ListProject extends React.Component {
         <div>
           <ul className="project-list">
             <li className="project-list-item">
-              <h2>New Project</h2>
-              <div className="content">
-                <button type="button" onClick={this.handleModal}>New</button>
+              <h2>Add a Project</h2>
+              <div className="content add-project">
+                <i onKeyPress={this.handleShowNewProjectForm} onClick={this.handleShowNewProjectForm} className="fas fa-plus-circle fa-3x" />
               </div>
             </li>
           </ul>
@@ -71,8 +73,22 @@ class ListProject extends React.Component {
             </ul>
           ))}
         </div>
-        {this.state.showNewProjectForm && <Modal name="showNewProjectForm" close={this.handleShowNewProjectForm}><NewProject close={this.handleShowNewProjectForm} /></Modal>}
-        {this.state.detailProjectModal && <Modal name="detailProjectModal" close={this.handleShowDetailModal}><DetailProject close={this.handleShowDetailModal} /></Modal>}
+        {this.state.showNewProjectForm &&
+          <Modal
+            name="showNewProjectForm"
+            close={this.handleShowNewProjectForm}
+            title="New Project"
+          >
+            <NewProject close={this.handleShowNewProjectForm} />
+          </Modal>}
+        {this.state.detailProjectModal &&
+          <Modal
+            name="detailProjectModal"
+            close={this.handleShowDetailModal}
+            title="Edit Project"
+          >
+            <DetailProject close={this.handleShowDetailModal} projectId={this.state.projectId} />
+          </Modal>}
       </div>
     );
   }

@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './input.css';
+import './checkbox.css';
 
 const Checkbox = ({ config }) => (
-  <div className={`form-group ${config.field.required ? 'required' : ''}`}>
-    <label htmlFor={config.field.name}>{config.field.label}</label>
+  <div className={`form-group checkbox-group ${config.field.required ? 'required' : ''}`}>
+    <label className="custom-checkbox-label" htmlFor={config.field.name}>
+      <div className="custom-checkbox">
+        {config.value && <i className="fas fa-check" />}
+      </div>
+      <div>{config.field.label}</div>
+    </label>
     <input
       type={config.field.type}
       name={config.field.name}

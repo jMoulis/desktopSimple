@@ -2,7 +2,7 @@
 .form-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding-top: 5rem;
   align-items: stretch;
   min-width: 30%;
@@ -28,7 +28,7 @@
     .form-container .form .form-content {
       background-color: #97c0b7;
       padding: .5rem;
-      width: 100%; }
+      flex: 1; }
       .form-container .form .form-content .form-group {
         padding: 0.5rem 0; }
       .form-container .form .form-content .error-login {

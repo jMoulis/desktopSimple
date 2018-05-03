@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Model from '../../components/NewProject/project-model';
+import Model from '../Model/project-model';
 import Input from '../../../../Form/input';
-import Button from '../../../../Form/button';
 import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
@@ -13,8 +12,6 @@ class DetailProject extends React.Component {
   static propTypes = {
     activeProjectProcess: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
-    clearMessageAction: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired,
   }
   static getDerivedStateFromProps(nextProps) {
     const { activeProjectProcess } = nextProps;
@@ -29,18 +26,8 @@ class DetailProject extends React.Component {
     };
   }
   state = {}
-  // componentDidUpdate() {
-  //   const { activeProjectProcess, close } = this.props;
-  //   if (activeProjectProcess.success && activeProjectProcess.success.status) {
-  //     close();
-  //   }
-  //   return true;
-  // }
-
   componentWillUnmount() {
     console.log('unmount');
-    const { clearMessageAction } = this.props;
-    clearMessageAction();
     // Maybe do someting? Like save Datas or anything else
   }
   handleSubmit = (evt) => {
@@ -104,23 +91,44 @@ class DetailProject extends React.Component {
         changed: true,
       },
     };
+    this.setState(prevState => ({
+      ...prevState,
+      tags: {
+        ...state.tags,
+        value: values,
+        changed: true,
+      },
+    }));
     editProjectAction(newTags);
   }
-  handleInputSelectCompetencesChange = (evt) => {
-    const { value } = evt.target;
+  handleInputSelectTagsChange = (evt) => {
+    const inputValue = evt.target.value;
+    const { editProjectAction } = this.props;
     if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
       const { state } = this;
-      this.setState(() => ({
+      const newTags = {
         ...state,
         tags: {
           ...state.tags,
           value: [
             ...state.tags.value,
-            value,
+            inputValue,
+          ],
+          changed: true,
+        },
+      };
+      this.setState(prevState => ({
+        ...prevState,
+        tags: {
+          ...state.tags,
+          value: [
+            ...state.tags.value,
+            inputValue,
           ],
           changed: true,
         },
       }));
+      editProjectAction(newTags);
       evt.target.value = '';
     }
   }
@@ -154,13 +162,14 @@ class DetailProject extends React.Component {
   }
   render() {
     const { activeProjectProcess } = this.props;
-    const { error, success } = activeProjectProcess;
-    console.log(this.state)
+    const { error, loading } = activeProjectProcess;
+    if (loading) {
+      return <span>Waiting</span>;
+    }
     return (
-      <div id="newProject" className="form-container" key="app-content" >
-        {success && <p className="success">{success.message}</p>}
+      <div id="edit-project" className="form-container" key="app-content" >
         <form
-          id="newProject-form"
+          id="edit-project-form"
           className="form"
           onKeyPress={this.handleFormKeyPress}
           onSubmit={this.handleSubmit}
@@ -245,8 +254,8 @@ class DetailProject extends React.Component {
               <InputAutoComplete
                 config={{
                   field: Model.tags,
-                  onChange: this.handleInputSelectCompetencesChange,
-                  keyPress: this.handleInputSelectCompetencesChange,
+                  onChange: this.handleInputSelectTagsChange,
+                  keyPress: this.handleInputSelectTagsChange,
                   values: this.state.tags.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -254,7 +263,6 @@ class DetailProject extends React.Component {
                   remove: this.handleRemove,
                 }}
               />
-              <Button label="Create" loading={false} />
             </div>
           </div>
         </form>

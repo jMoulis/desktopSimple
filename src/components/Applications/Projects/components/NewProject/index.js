@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import PdfJs from 'pdfjs-dist';
+import PdfWorker from 'pdfjs-dist/build/pdf.worker';
 
 import './newProject.css';
-import Model from './project-model';
+import Model from '../Model/project-model';
 import Input from '../../../../Form/input';
 import Button from '../../../../Form/button';
 import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
+import InputFile from '../../../../Form/inputFile';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
+import AddFilesInput from '../Form/addFilesInput';
 
 class NewProject extends React.Component {
   static propTypes = {
     projectCreation: PropTypes.object.isRequired,
     createProjectAction: PropTypes.func.isRequired,
-    clearMessageAction: PropTypes.func.isRequired,
+    clearProjectMessageAction: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired,
   }
   constructor(props) {
@@ -26,11 +30,15 @@ class NewProject extends React.Component {
     });
     this.state = {
       ...field,
+      docs: [],
       isContest: false,
       isPrice: false,
     };
   }
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.docs.length !== this.state.docs.length) {
+      this.displayPdfThumbnail();
+    }
     const { projectCreation, close } = this.props;
     if (projectCreation.success && projectCreation.success.status) {
       close();
@@ -39,8 +47,8 @@ class NewProject extends React.Component {
   }
   componentWillUnmount() {
     console.log('unmount');
-    const { clearMessageAction } = this.props;
-    clearMessageAction();
+    const { clearProjectMessageAction } = this.props;
+    clearProjectMessageAction();
     // Maybe do someting? Like save Datas or anything else
   }
   handleSubmit = (evt) => {
@@ -80,6 +88,7 @@ class NewProject extends React.Component {
   }
   handleCheckBoxChange = (evt) => {
     const { name, checked } = evt.target;
+    console.log(checked)
     this.setState(prevState => ({
       ...prevState,
       [name]: {
@@ -107,9 +116,85 @@ class NewProject extends React.Component {
       evt.target.value = '';
     }
   }
+  displayPdfThumbnail = () => {
+    const trimBase64 = doc => (
+      new Promise((resolve) => {
+        resolve(doc.value.replace('data:application/pdf;base64,', ''));
+      }));
+    this.state.docs.map((doc, index) => (
+      trimBase64(doc)
+        .then((newEncodedString) => {
+          const pdfData = atob(newEncodedString);
+          const canvas = document.getElementById(`canvas-${index}`);
+          const context = canvas.getContext('2d');
+          PdfJs.getDocument({ data: pdfData }).then((pdf) => {
+            pdf.getPage(1)
+              .then((page) => {
+                const scale = 1.5;
+                const viewport = page.getViewport(scale);
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                const renderContext = {
+                  canvasContext: context,
+                  viewport,
+                };
+                page.render(renderContext);
+              });
+          });
+        })
+    ));
+  }
+  handleInputFileChange = (evt) => {
+    this.readUrl(evt.target);
+  }
+  handleRemove = (evt) => {
+    evt.preventDefault();
+    const { state } = this;
+    const values = state.tags.value.filter((value, index) => (
+      index !== Number(evt.target.id)
+    ));
+    this.setState(prevState => ({
+      ...prevState,
+      tags: {
+        ...state.tags,
+        value: values,
+        changed: true,
+      },
+    }));
+  }
+  readUrl = (input) => {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        this.setState(prevState => ({
+          ...prevState,
+          docs: [
+            ...prevState.docs,
+            {
+              value: evt.target.result,
+              changed: true,
+            },
+          ],
+        }));
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  handleRemoveThumbnail = (evt) => {
+    const { id } = evt.target;
+    const { state } = this;
+    const newDocs = state.docs.filter((value, index) => (
+      index !== Number(id)
+    ));
+    this.setState(prevState => ({
+      ...prevState,
+      docs: newDocs,
+    }));
+  }
   render() {
     const { projectCreation } = this.props;
     const { error, success } = projectCreation;
+    console.log(this.state.isContest)
     return (
       <div id="newProject" className="form-container" key="app-content" >
         {success && <p className="success">{success.message}</p>}
@@ -154,17 +239,6 @@ class NewProject extends React.Component {
                   error: error && error.dueDate && error.dueDate.detail,
                 }}
               />
-              <Input
-                config={{
-                  field: Model.maxTeam,
-                  onChange: this.handleInputChange,
-                  value: this.state.maxTeam.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  error: error && error.maxTeam && error.maxTeam.detail,
-                }}
-              />
               <Checkbox
                 config={{
                   field: Model.isPrice,
@@ -175,17 +249,19 @@ class NewProject extends React.Component {
                   error: error && error.isPrice && error.isPrice.detail,
                 }}
               />
-              <Input
-                config={{
-                  field: Model.price,
-                  onChange: this.handleInputChange,
-                  value: this.state.price.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  error: error && error.price && error.price.detail,
-                }}
-              />
+              {this.state.isPrice.value &&
+                <Input
+                  config={{
+                    field: Model.price,
+                    onChange: this.handleInputChange,
+                    value: this.state.price.value,
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    keyPress: this.handleInputChange,
+                    error: error && error.price && error.price.detail,
+                  }}
+                />
+              }
               <Checkbox
                 config={{
                   field: Model.isContest,
@@ -196,6 +272,19 @@ class NewProject extends React.Component {
                   error: error && error.isContest && error.isContest.detail,
                 }}
               />
+              {this.state.isContest.value &&
+                <Input
+                  config={{
+                    field: Model.maxTeam,
+                    onChange: this.handleInputChange,
+                    value: this.state.maxTeam.value,
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    keyPress: this.handleInputChange,
+                    error: error && error.maxTeam && error.maxTeam.detail,
+                  }}
+                />
+              }
               <InputAutoComplete
                 config={{
                   field: Model.tags,
@@ -204,8 +293,15 @@ class NewProject extends React.Component {
                   values: this.state.tags.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
+                  remove: this.handleRemove,
                   error: error && error.tags && error.tags.detail,
                 }}
+              />
+              <AddFilesInput
+                error={error}
+                docs={this.state.docs}
+                onRemove={this.handleRemoveThumbnail}
+                onFileChange={this.handleInputFileChange}
               />
               <Button label="Create" loading={false} />
             </div>

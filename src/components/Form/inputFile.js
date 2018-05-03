@@ -10,7 +10,7 @@ const InputFile = ({ config }) => {
   return (
     <div className="form-group">
       <div className="input-file-label-container">
-        <label className="input-file-label" htmlFor={field.name}>Choose your picture</label>
+        <label className="input-file-label" htmlFor={field.name}>{field.label}</label>
       </div>
       <input
         name={field.name}

@@ -40,6 +40,7 @@ export default store => next => (action) => {
   switch (action.type) {
     case CREATE_PROJECT: {
       const formData = toObject(Object.entries(action.payload).filter(field => field));
+      formData.docs = action.payload.docs;
       axios({
         method: 'post',
         data: formData,
@@ -68,7 +69,6 @@ export default store => next => (action) => {
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
       // 2- I transform my array to an object
       const formData = toObject(filteredArray);
-      console.log()
       axios({
         method: 'put',
         data: formData,
@@ -79,7 +79,6 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           store.dispatch(editProjectSuccessAction(data));
-          console.log(data)
         })
         .catch((error) => {
           if (!error.response) {

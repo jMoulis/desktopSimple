@@ -19,12 +19,12 @@ export default {
   },
   isContest: {
     type: 'checkbox',
-    label: 'Contest',
+    label: 'Do you planned to open a contest?',
     name: 'isContest',
   },
   isPrice: {
     type: 'checkbox',
-    label: 'Price',
+    label: 'Do you planned to give a price?',
     name: 'isPrice',
   },
   price: {
@@ -50,5 +50,11 @@ export default {
     label: 'Tags',
     placeholder: 'Tags',
     name: 'tags',
+  },
+  docs: {
+    type: 'file',
+    label: 'Choose your docs',
+    name: 'docs',
+    placeholder: 'Add Docs',
   },
 };

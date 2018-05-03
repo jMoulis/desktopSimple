@@ -11,6 +11,7 @@ class Footer extends React.Component {
     logoutAction: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
     activeApp: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   }
   handleStartApp = (event) => {
     const {
@@ -35,30 +36,35 @@ class Footer extends React.Component {
     logoutAction();
   }
   render() {
-    const { applications, activeApp } = this.props;
+    const { applications, activeApp, loggedUser } = this.props;
     return (
       <footer id="footer">
         <div className="footer-app-icon">
           {/* Loop over the applications and load icons */}
-          {Object.values(applications).map(application => (
-            <button
-              key={application.appName}
-              data-appname={application.appName}
-              onClick={this.handleStartApp}
-              className="app-btn"
-            >
-              <div className="btn-container">
-                {
-                  application.appName === 'Settings' ? <Thumbnail /> :
-                  [
-                    <i key={`${application.appName}-1`} className={application.icon} />,
-                    <span key={`${application.appName}-2`} className="btn-title">{application.title}</span>,
-                  ]
-                }
-                {applications[activeApp.appName] && applications[activeApp.appName].reduce && <span className="active-app-circle" />}
-              </div>
-            </button>
-          ))}
+          {Object.values(applications).map((application) => {
+            if (!application.typeUser.includes(loggedUser.typeUser) && !application.typeUser.includes('all')) {
+              return '';
+            }
+            return (
+              <button
+                key={application.appName}
+                data-appname={application.appName}
+                onClick={this.handleStartApp}
+                className="app-btn"
+              >
+                <div className="btn-container">
+                  {
+                    application.appName === 'Settings' ? <Thumbnail /> :
+                    [
+                      <i key={`${application.appName}-1`} className={application.icon} />,
+                      <span key={`${application.appName}-2`} className="btn-title">{application.title}</span>,
+                    ]
+                  }
+                  {applications[activeApp.appName] && applications[activeApp.appName].reduce && <span className="active-app-circle" />}
+                </div>
+              </button>
+            );
+          })}
         </div>
         <div className="btn-container">
           <button className="app-btn logout" onClick={this.handleLogout}>
