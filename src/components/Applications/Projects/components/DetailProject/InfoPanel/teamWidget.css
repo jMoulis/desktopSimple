@@ -1,0 +1,6 @@
+.team-widget {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem; }
+  .team-widget h2, .team-widget div {
+    margin-left: .5rem; }

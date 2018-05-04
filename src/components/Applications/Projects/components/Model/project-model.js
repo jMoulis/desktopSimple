@@ -12,7 +12,7 @@ export default {
     name: 'description',
   },
   dueDate: {
-    type: 'text',
+    type: 'date',
     label: 'Due Date',
     placeholder: 'Due date',
     name: 'dueDate',

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
+
 import './listProject.css';
 import Modal from '../Modal/modal';
 import NewProject from '../../containers/Projects/NewProject/newProject';
@@ -23,7 +25,7 @@ class ListProject extends React.Component {
   }
   handleShowDetailModal = (evt) => {
     if (evt.target) {
-      const btnName = evt.target.name;
+      const btnName = evt.currentTarget.name;
       if (btnName) {
         return this.setState(() => ({
           [btnName]: false,
@@ -47,7 +49,11 @@ class ListProject extends React.Component {
             <li className="project-list-item">
               <h2>Add a Project</h2>
               <div className="content add-project">
-                <i onKeyPress={this.handleShowNewProjectForm} onClick={this.handleShowNewProjectForm} className="fas fa-plus-circle fa-3x" />
+                <i
+                  onKeyPress={this.handleShowNewProjectForm}
+                  onClick={this.handleShowNewProjectForm}
+                  className="fas fa-plus-circle fa-3x"
+                />
               </div>
             </li>
           </ul>
@@ -62,7 +68,7 @@ class ListProject extends React.Component {
               <li className="project-list-item">
                 <h2>{project.title}</h2>
                 <div className="content">
-                  <p>Due Date: {project.dueDate}</p>
+                  <p>Due Date: <Moment format="DD/MM/YYYY">{project.dueDate}</Moment></p>
                   <p>Teams: {project.teams.length}</p>
                   <p>Description: {project.description}</p>
                   <ul className="tags-list">

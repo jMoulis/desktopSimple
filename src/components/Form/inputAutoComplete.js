@@ -24,8 +24,8 @@ const InputAutoComplete = ({ config }) => (
         onKeyUp={config.keyPress}
         placeholder={config.field.placeholder}
       />
-      {config.error && <small>{config.error}</small>}
     </div>
+    {config.error && <small className="error-message">{config.error}</small>}
   </div>
 );
 

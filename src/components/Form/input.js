@@ -18,9 +18,9 @@ const Input = ({ config }) => {
         onFocus={config.focus}
         onKeyUp={config.keyPress}
       />
-      {config.error && <small>{config.error}</small>}
+      {config.error && <small className="error-message">{config.error}</small>}
     </div>
-  )
+  );
 };
 
 Input.propTypes = {

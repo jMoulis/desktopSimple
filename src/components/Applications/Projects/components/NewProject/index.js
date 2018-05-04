@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PdfJs from 'pdfjs-dist';
-import PdfWorker from 'pdfjs-dist/build/pdf.worker';
 
 import './newProject.css';
 import Model from '../Model/project-model';
@@ -9,7 +7,6 @@ import Input from '../../../../Form/input';
 import Button from '../../../../Form/button';
 import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
-import InputFile from '../../../../Form/inputFile';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
 import AddFilesInput from '../Form/addFilesInput';
@@ -31,14 +28,12 @@ class NewProject extends React.Component {
     this.state = {
       ...field,
       docs: [],
+      tags: [],
       isContest: false,
       isPrice: false,
     };
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.docs.length !== this.state.docs.length) {
-      this.displayPdfThumbnail();
-    }
+  componentDidUpdate() {
     const { projectCreation, close } = this.props;
     if (projectCreation.success && projectCreation.success.status) {
       close();
@@ -46,7 +41,6 @@ class NewProject extends React.Component {
     return true;
   }
   componentWillUnmount() {
-    console.log('unmount');
     const { clearProjectMessageAction } = this.props;
     clearProjectMessageAction();
     // Maybe do someting? Like save Datas or anything else
@@ -88,7 +82,6 @@ class NewProject extends React.Component {
   }
   handleCheckBoxChange = (evt) => {
     const { name, checked } = evt.target;
-    console.log(checked)
     this.setState(prevState => ({
       ...prevState,
       [name]: {
@@ -116,36 +109,11 @@ class NewProject extends React.Component {
       evt.target.value = '';
     }
   }
-  displayPdfThumbnail = () => {
-    const trimBase64 = doc => (
-      new Promise((resolve) => {
-        resolve(doc.value.replace('data:application/pdf;base64,', ''));
-      }));
-    this.state.docs.map((doc, index) => (
-      trimBase64(doc)
-        .then((newEncodedString) => {
-          const pdfData = atob(newEncodedString);
-          const canvas = document.getElementById(`canvas-${index}`);
-          const context = canvas.getContext('2d');
-          PdfJs.getDocument({ data: pdfData }).then((pdf) => {
-            pdf.getPage(1)
-              .then((page) => {
-                const scale = 1.5;
-                const viewport = page.getViewport(scale);
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                const renderContext = {
-                  canvasContext: context,
-                  viewport,
-                };
-                page.render(renderContext);
-              });
-          });
-        })
-    ));
-  }
-  handleInputFileChange = (evt) => {
-    this.readUrl(evt.target);
+  handleInputFileChange = (docs) => {
+    this.setState(prevState => ({
+      ...prevState,
+      docs,
+    }));
   }
   handleRemove = (evt) => {
     evt.preventDefault();
@@ -162,39 +130,9 @@ class NewProject extends React.Component {
       },
     }));
   }
-  readUrl = (input) => {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        this.setState(prevState => ({
-          ...prevState,
-          docs: [
-            ...prevState.docs,
-            {
-              value: evt.target.result,
-              changed: true,
-            },
-          ],
-        }));
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-  handleRemoveThumbnail = (evt) => {
-    const { id } = evt.target;
-    const { state } = this;
-    const newDocs = state.docs.filter((value, index) => (
-      index !== Number(id)
-    ));
-    this.setState(prevState => ({
-      ...prevState,
-      docs: newDocs,
-    }));
-  }
   render() {
     const { projectCreation } = this.props;
     const { error, success } = projectCreation;
-    console.log(this.state.isContest)
     return (
       <div id="newProject" className="form-container" key="app-content" >
         {success && <p className="success">{success.message}</p>}
@@ -298,7 +236,7 @@ class NewProject extends React.Component {
                 }}
               />
               <AddFilesInput
-                error={error}
+                error={error && error.docs && error.docs.detail}
                 docs={this.state.docs}
                 onRemove={this.handleRemoveThumbnail}
                 onFileChange={this.handleInputFileChange}

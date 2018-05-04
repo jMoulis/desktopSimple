@@ -13,13 +13,13 @@ $change-color: background-color 500ms ease-out
     display: flex
     justify-content: center
   &-container
-    margin-top: 1rem
-    margin-bottom: 1rem
+    margin: 1rem
     border: 5px solid $darkestblue
     background-color: $lightblue
-    width: 60%
+    min-width: 60%
     height: auto
     overflow: auto
+    transition: width 1000ms
   &-header
     display: flex
     justify-content: space-between
@@ -29,17 +29,14 @@ $change-color: background-color 500ms ease-out
       height: auto
       width: 100%
   &-btn
-    width: 10px
-    height: 12px
-    border-radius: 8px
-    border: none
-    margin-left: 5px
-    margin-right: 5px
     outline: none
     cursor: pointer
-    background-color: $red
-    transition: $change-color
+    background: none
+    border: none
+    color: $red
+    right: 14rem
+    transition: color 500ms
     &:hover, &:focus
-      background-color: darken($red, 20%)
+      color: darken($red, 20%)
     &:active
-      background-color: darken($red, 40%)
+      color: darken($red, 40%)

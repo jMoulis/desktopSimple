@@ -12,7 +12,7 @@
   .form-container .form {
     width: 100%;
     border: none;
-    overflow-x: auto;
+    overflow: hidden;
     white-space: nowrap; }
     .form-container .form .form-header {
       display: flex;

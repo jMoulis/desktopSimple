@@ -22,7 +22,7 @@ const InputFile = ({ config }) => {
         onFocus={config.focus}
         accept={config.typeFileAccepted}
       />
-      {config.error && <small>{config.error}</small>}
+      {config.error && <small className="error-message">{config.error}</small>}
     </div>
   );
 };

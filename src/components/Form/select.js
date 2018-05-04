@@ -29,7 +29,7 @@ const Select = ({ config }) => {
         <option value="">{field.defaultOption}</option>
         {options.map((option, index) => <option key={index} value={option}>{option}</option>)}
       </select>
-      {error && <small>{error}</small>}
+      {error && <small className="error-message">{error}</small>}
     </div>
   );
 };

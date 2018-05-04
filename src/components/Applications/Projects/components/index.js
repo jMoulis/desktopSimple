@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './project.css';
-import NewProject from '../containers/Projects/NewProject/newProject';
 import ListProject from '../containers/Projects/ListProject';
+import DetailProject from '../containers/Projects/DetailProject/detailProject';
 
 class Projects extends React.Component {
   static propTypes = {
@@ -28,12 +28,17 @@ class Projects extends React.Component {
         <div className="app-toolbar" key="app-toolbar">
           <ul>
             <li>
-              <button className="btn-form btn-app-toolbar unselectable" name="projects" onClick={this.handleTabSelect}>Projects</button>
+              <button
+                className="btn-form btn-app-toolbar unselectable"
+                name="projects"
+                onClick={this.handleTabSelect}
+              >
+              Projects
+              </button>
             </li>
           </ul>
         </div>
         {this.state.tab === 'projects' && <ListProject key="newProject" /> }
-        {this.state.tab === 'newProject' && <NewProject key="projects" /> }
       </div>
     );
   }

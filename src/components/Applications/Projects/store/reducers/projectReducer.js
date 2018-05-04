@@ -212,11 +212,11 @@ const reducer = (state = initialState, action = {}) => {
     case EDIT_PROJECT_FAILURE: {
       return {
         ...state,
-        // activeProjectProcess: {
-        //   ...state.activeProjectProcess,
-        //   loading: false,
-        //   error: action.payload,
-        // },
+        activeProjectProcess: {
+          ...state.activeProjectProcess,
+          loading: false,
+          error: action.payload,
+        },
       };
     }
     case CLEAR_PROJECT_MESSAGE: {

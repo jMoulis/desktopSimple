@@ -15,34 +15,3 @@
       #newProject-form .tag-list-item {
         padding: 0 .3rem;
         border: 2px solid #0a1c28; }
-  #newProject .thumbnail-wrapper {
-    display: flex;
-    margin-top: 1rem; }
-    #newProject .thumbnail-wrapper .add-thumbnail {
-      min-width: 80px;
-      min-height: 112px;
-      border: 2px dotted #0a1c28;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: 1rem;
-      cursor: pointer;
-      transition: all 500ms; }
-      #newProject .thumbnail-wrapper .add-thumbnail:hover {
-        box-shadow: 0 0 10px 0 #0a1c28;
-        color: #d44c00; }
-    #newProject .thumbnail-wrapper .thumbnail {
-      position: relative;
-      width: 10%;
-      height: 100%;
-      margin-right: 1rem;
-      cursor: pointer;
-      transition: box-shadow 200ms; }
-      #newProject .thumbnail-wrapper .thumbnail:hover {
-        box-shadow: 0 0 10px 0 #0a1c28; }
-      #newProject .thumbnail-wrapper .thumbnail .delete-thumbnail {
-        position: absolute;
-        top: 0;
-        right: 0; }
-      #newProject .thumbnail-wrapper .thumbnail canvas {
-        width: 100%; }

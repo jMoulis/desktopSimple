@@ -7,6 +7,8 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
+import InfoPanel from '../../containers/Projects/DetailProject/InfoPanel';
+import AddFilesInput from '../Form/addFilesInput';
 
 class DetailProject extends React.Component {
   static propTypes = {
@@ -26,6 +28,15 @@ class DetailProject extends React.Component {
     };
   }
   state = {}
+  componentDidUpdate(prevProps, prevState) {
+    const { editProjectAction } = prevProps;
+    // Dealing with documents
+    if (prevState.docs.value) {
+      if (prevState.docs.value.length !== this.state.docs.value.length) {
+        editProjectAction(this.state);
+      }
+    }
+  }
   componentWillUnmount() {
     console.log('unmount');
     // Maybe do someting? Like save Datas or anything else
@@ -136,7 +147,6 @@ class DetailProject extends React.Component {
     // Save the input field
     const { name } = evt.target;
     const { editProjectAction } = this.props;
-    // const fromData = document.getElementById('profile-form')
     if (this.state[name].changed) {
       editProjectAction(this.state);
     }
@@ -160,11 +170,20 @@ class DetailProject extends React.Component {
       },
     }));
   }
+  handleInputFileChange = (docs) => {
+    this.setState(prevState => ({
+      ...prevState,
+      docs: {
+        value: docs,
+        changed: true,
+      },
+    }));
+  }
   render() {
     const { activeProjectProcess } = this.props;
     const { error, loading } = activeProjectProcess;
     if (loading) {
-      return <span>Waiting</span>;
+      return <span />;
     }
     return (
       <div id="edit-project" className="form-container" key="app-content" >
@@ -202,22 +221,11 @@ class DetailProject extends React.Component {
                 config={{
                   field: Model.dueDate,
                   onChange: this.handleInputChange,
-                  value: this.state.dueDate.value,
+                  value: new Date(this.state.dueDate.value).toISOString().substring(0, 10),
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   keyPress: this.handleInputChange,
                   error: error && error.dueDate && error.dueDate.detail,
-                }}
-              />
-              <Input
-                config={{
-                  field: Model.maxTeam,
-                  onChange: this.handleInputChange,
-                  value: this.state.maxTeam.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  error: error && error.maxTeam && error.maxTeam.detail,
                 }}
               />
               <Checkbox
@@ -230,17 +238,19 @@ class DetailProject extends React.Component {
                   error: error && error.isPrice && error.isPrice.detail,
                 }}
               />
-              <Input
-                config={{
-                  field: Model.price,
-                  onChange: this.handleInputChange,
-                  value: this.state.price.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  error: error && error.price && error.price.detail,
-                }}
-              />
+              {this.state.isPrice.value &&
+                <Input
+                  config={{
+                    field: Model.price,
+                    onChange: this.handleInputChange,
+                    value: this.state.price.value,
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    keyPress: this.handleInputChange,
+                    error: error && error.price && error.price.detail,
+                  }}
+                />
+              }
               <Checkbox
                 config={{
                   field: Model.isContest,
@@ -251,6 +261,19 @@ class DetailProject extends React.Component {
                   error: error && error.isContest && error.isContest.detail,
                 }}
               />
+              {this.state.isContest.value &&
+                <Input
+                  config={{
+                    field: Model.maxTeam,
+                    onChange: this.handleInputChange,
+                    value: this.state.maxTeam.value,
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    keyPress: this.handleInputChange,
+                    error: error && error.maxTeam && error.maxTeam.detail,
+                  }}
+                />
+              }
               <InputAutoComplete
                 config={{
                   field: Model.tags,
@@ -263,6 +286,15 @@ class DetailProject extends React.Component {
                   remove: this.handleRemove,
                 }}
               />
+              <AddFilesInput
+                error={error && error.docs && error.docs.detail}
+                docs={this.state.docs.value}
+                onFileChange={this.handleInputFileChange}
+                blur={this.handleOnBlur}
+              />
+            </div>
+            <div className="form-content">
+              <InfoPanel />
             </div>
           </div>
         </form>
