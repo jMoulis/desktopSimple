@@ -17,9 +17,15 @@ class Projects extends React.Component {
   }
   handleTabSelect = (evt) => {
     // Save the input field
-    const { name } = evt.target;
+    const { dataset } = evt.currentTarget;
+    let dataSetToState = {};
+
+    Object.keys(dataset).map((key) => {
+      dataSetToState = { ...dataSetToState, [key]: dataset[key] };
+      return dataSetToState;
+    });
     this.setState(() => ({
-      tab: name,
+      ...dataSetToState,
     }));
   }
   render() {
@@ -31,6 +37,7 @@ class Projects extends React.Component {
               <button
                 className="btn-form btn-app-toolbar unselectable"
                 name="projects"
+                data-tab="projects"
                 onClick={this.handleTabSelect}
               >
               Projects
@@ -38,7 +45,8 @@ class Projects extends React.Component {
             </li>
           </ul>
         </div>
-        {this.state.tab === 'projects' && <ListProject key="newProject" /> }
+        {this.state.tab === 'projects' && <ListProject key="newProject" clickTab={this.handleTabSelect} /> }
+        {this.state.tab === 'project-detail' && <DetailProject key="detailProject" projectid={this.state.projectid} />}
       </div>
     );
   }

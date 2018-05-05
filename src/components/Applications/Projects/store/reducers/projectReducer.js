@@ -11,6 +11,7 @@
 export const FETCH_SINGLE_PROJECT = 'FETCH_SINGLE_PROJECT';
 export const FETCH_SINGLE_PROJECT_SUCCESS = 'FETCH_SINGLE_PROJECT_SUCCESS';
 export const FETCH_SINGLE_PROJECT_FAILURE = 'FETCH_SINGLE_PROJECT_FAILURE';
+export const PURGE_ACTIVE_PROJECT = 'PURGE_ACTIVE_PROJECT';
 
 export const FETCH_PROJECTS = 'FETCH_PROJECTS';
 export const FETCH_PROJECTS_SUCCESS = 'FETCH_PROJECTS_SUCCESS';
@@ -162,6 +163,17 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case PURGE_ACTIVE_PROJECT: {
+      return {
+        ...state,
+        activeProjectProcess: {
+          project: {},
+          success: null,
+          loading: false,
+          error: null,
+        },
+      };
+    }
     case EDIT_PROJECT: {
       return {
         ...state,
@@ -252,6 +264,9 @@ export const fetchSingleProjectSuccessAction = data => ({
 export const fetchSingleProjectFailureAction = error => ({
   type: FETCH_SINGLE_PROJECT_FAILURE,
   payload: error,
+});
+export const purgeActiveProjectAction = () => ({
+  type: PURGE_ACTIVE_PROJECT,
 });
 export const fetchProjectsAction = id => ({
   type: FETCH_PROJECTS,

@@ -28,6 +28,10 @@ class DetailProject extends React.Component {
     };
   }
   state = {}
+  componentDidMount() {
+    const { fetchSingleProjectAction, projectid } = this.props;
+    fetchSingleProjectAction(projectid);
+  }
   componentDidUpdate(prevProps, prevState) {
     const { editProjectAction } = prevProps;
     // Dealing with documents
@@ -38,8 +42,11 @@ class DetailProject extends React.Component {
     }
   }
   componentWillUnmount() {
-    console.log('unmount');
+    console.log('Detail unmount');
+    // Empty the active
     // Maybe do someting? Like save Datas or anything else
+    const { purgeActiveProjectAction } = this.props;
+    purgeActiveProjectAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -181,9 +188,10 @@ class DetailProject extends React.Component {
   }
   render() {
     const { activeProjectProcess } = this.props;
-    const { error, loading } = activeProjectProcess;
-    if (loading) {
-      return <span />;
+    const { error, loading, project } = activeProjectProcess;
+    if (loading || Object.keys(project).length === 0) {
+
+      return <span>loading</span>;
     }
     return (
       <div id="edit-project" className="form-container" key="app-content" >

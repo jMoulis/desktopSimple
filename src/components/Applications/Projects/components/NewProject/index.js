@@ -28,7 +28,6 @@ class NewProject extends React.Component {
     this.state = {
       ...field,
       docs: [],
-      tags: [],
       isContest: false,
       isPrice: false,
     };
@@ -92,7 +91,7 @@ class NewProject extends React.Component {
     }));
   }
   handleInputSelectCompetencesChange = (evt) => {
-    const { value } = evt.target;
+    const inputValue = evt.target.value;
     if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
       const { state } = this;
       this.setState(() => ({
@@ -101,7 +100,7 @@ class NewProject extends React.Component {
           ...state.tags,
           value: [
             ...state.tags.value,
-            value,
+            inputValue,
           ],
           changed: true,
         },

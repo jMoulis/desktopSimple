@@ -41,7 +41,7 @@ class ListProject extends React.Component {
     }));
   }
   render() {
-    const { projectListProcess } = this.props;
+    const { projectListProcess, clickTab } = this.props;
     return (
       <div className="project-list-container">
         <div>
@@ -60,10 +60,7 @@ class ListProject extends React.Component {
           {projectListProcess.projects.map(project => (
             <ul
               className="project-list"
-              data-projectid={project._id}
               key={project._id}
-              onKeyPress={this.handleShowDetailModal}
-              onClick={this.handleShowDetailModal}
             >
               <li className="project-list-item">
                 <h2>{project.title}</h2>
@@ -74,6 +71,15 @@ class ListProject extends React.Component {
                   <ul className="tags-list">
                     {project.tags.map((tag, index) => <li key={index}>{tag}</li>)}
                   </ul>
+                  <button
+                    type="button"
+                    data-projectid={project._id}
+                    data-tab="project-detail"
+                    onClick={this.handleShowDetailModal}
+                  >
+                    {/* if want to display in app parent use //clickTab */}
+                    Check me out
+                  </button>
                 </div>
               </li>
             </ul>
