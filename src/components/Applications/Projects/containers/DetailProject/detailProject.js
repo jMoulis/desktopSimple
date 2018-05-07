@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import DetailProject from '../../../components/DetailProject';
-import { editProjectAction, clearProjectMessageAction, fetchSingleProjectAction, purgeActiveProjectAction } from '../../../store/reducers/projectReducer';
+import DetailProject from '../../components/DetailProject';
+import { editProjectAction, clearProjectMessageAction, fetchSingleProjectAction } from '../../store/reducers/projectReducer';
 /*
  * Code
  */
@@ -28,9 +28,6 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchSingleProjectAction: (projectId) => {
     dispatch(fetchSingleProjectAction(projectId));
-  },
-  purgeActiveProjectAction: (projectId) => {
-    dispatch(purgeActiveProjectAction(projectId));
   },
 });
 

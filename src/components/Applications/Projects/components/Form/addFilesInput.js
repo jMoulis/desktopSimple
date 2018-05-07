@@ -79,7 +79,6 @@ class AddFilesInput extends React.Component {
   render() {
     const {
       error,
-      blur,
     } = this.props;
     return (
       <div className="form-group">

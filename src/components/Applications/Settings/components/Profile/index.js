@@ -16,7 +16,6 @@ class Profile extends React.Component {
     editUserAction: PropTypes.func.isRequired,
   }
   static getDerivedStateFromProps(nextProps) {
-    console.log('update?')
     const { userActive } = nextProps;
     const { user } = userActive; // Datas user
     let field = {};
@@ -74,10 +73,10 @@ class Profile extends React.Component {
       const { state } = this;
       const newCompetences = {
         ...state,
-        competences: {
-          ...state.competences,
+        tags: {
+          ...state.tags,
           value: [
-            ...state.competences.value,
+            ...state.tags.value,
             value,
           ],
           changed: true,
@@ -248,13 +247,13 @@ class Profile extends React.Component {
               />
               <InputAutoComplete
                 config={{
-                  field: Model.competences,
+                  field: Model.tags,
                   onChange: this.handleInputSelectCompetencesChange,
                   keyPress: this.handleInputSelectCompetencesChange,
-                  values: this.state.competences.value,
+                  values: this.state.tags.value,
                   focus: this.handleOnFocus,
                   blur: this.handleOnBlur,
-                  error: error && error.competences && error.competences.detail,
+                  error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
                 }}
               />

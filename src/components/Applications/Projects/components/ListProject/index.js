@@ -4,13 +4,15 @@ import Moment from 'react-moment';
 
 import './listProject.css';
 import Modal from '../Modal/modal';
-import NewProject from '../../containers/Projects/NewProject/newProject';
-import DetailProject from '../../containers/Projects/DetailProject/detailProject';
+import NewProject from '../../containers/NewProject/newProject';
+import DetailProject from '../../containers/DetailProject/detailProject';
 
 class ListProject extends React.Component {
   static propTypes = {
     projectListProcess: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
+    selectTab: PropTypes.func.isRequired,
   }
   state = {
     showNewProjectForm: false,
@@ -41,10 +43,11 @@ class ListProject extends React.Component {
     }));
   }
   render() {
-    const { projectListProcess, clickTab } = this.props;
+    const { projectListProcess, loggedUser, selectTab } = this.props;
     return (
       <div className="project-list-container">
         <div>
+          {loggedUser.user.typeUser !== 'student' &&
           <ul className="project-list">
             <li className="project-list-item">
               <h2>Add a Project</h2>
@@ -56,7 +59,7 @@ class ListProject extends React.Component {
                 />
               </div>
             </li>
-          </ul>
+          </ul>}
           {projectListProcess.projects.map(project => (
             <ul
               className="project-list"
@@ -99,7 +102,11 @@ class ListProject extends React.Component {
             close={this.handleShowDetailModal}
             title="Edit Project"
           >
-            <DetailProject close={this.handleShowDetailModal} projectId={this.state.projectId} />
+            <DetailProject
+              close={this.handleShowDetailModal}
+              projectId={this.state.projectId}
+              selectTab={selectTab}
+            />
           </Modal>}
       </div>
     );

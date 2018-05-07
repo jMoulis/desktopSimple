@@ -7,13 +7,14 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
-import InfoPanel from '../../containers/Projects/DetailProject/InfoPanel';
+import InfoPanel from '../../containers/DetailProject/InfoPanel';
 import AddFilesInput from '../Form/addFilesInput';
 
 class DetailProject extends React.Component {
   static propTypes = {
     activeProjectProcess: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
+    selectTab: PropTypes.func.isRequired,
   }
   static getDerivedStateFromProps(nextProps) {
     const { activeProjectProcess } = nextProps;
@@ -28,10 +29,7 @@ class DetailProject extends React.Component {
     };
   }
   state = {}
-  componentDidMount() {
-    const { fetchSingleProjectAction, projectid } = this.props;
-    fetchSingleProjectAction(projectid);
-  }
+
   componentDidUpdate(prevProps, prevState) {
     const { editProjectAction } = prevProps;
     // Dealing with documents
@@ -40,13 +38,6 @@ class DetailProject extends React.Component {
         editProjectAction(this.state);
       }
     }
-  }
-  componentWillUnmount() {
-    console.log('Detail unmount');
-    // Empty the active
-    // Maybe do someting? Like save Datas or anything else
-    const { purgeActiveProjectAction } = this.props;
-    purgeActiveProjectAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -187,10 +178,9 @@ class DetailProject extends React.Component {
     }));
   }
   render() {
-    const { activeProjectProcess } = this.props;
+    const { activeProjectProcess, selectTab } = this.props;
     const { error, loading, project } = activeProjectProcess;
     if (loading || Object.keys(project).length === 0) {
-
       return <span>loading</span>;
     }
     return (
@@ -302,7 +292,7 @@ class DetailProject extends React.Component {
               />
             </div>
             <div className="form-content">
-              <InfoPanel />
+              <InfoPanel selectTab={selectTab} />
             </div>
           </div>
         </form>

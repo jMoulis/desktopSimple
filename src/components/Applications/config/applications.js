@@ -15,12 +15,12 @@ export default {
   Projects: {
     appName: 'Projects',
     title: 'Project Manager',
-    fullSize: true,
+    fullSize: false,
     display: false,
     zIndex: 0,
     icon: 'fas fa-tasks',
     reduce: false,
-    typeUser: ['company', 'admin'],
+    typeUser: ['all'],
   },
   // Chat: {
   //   appName: 'Chat',
@@ -34,7 +34,7 @@ export default {
   Settings: {
     appName: 'Settings',
     title: 'Settings',
-    fullSize: true,
+    fullSize: false,
     display: false,
     zIndex: 0,
     icon: 'fas fa-cog',

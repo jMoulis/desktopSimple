@@ -8,9 +8,8 @@ class Modal extends React.Component {
     this.state = {
       width: null,
     };
-    this.myRef = React.createRef();
   }
-  
+
   render() {
     const {
       children,

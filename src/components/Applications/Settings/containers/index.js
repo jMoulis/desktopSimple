@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import Settings from '../../components/Settings';
-import { fetchSingleUserAction } from '../../store/reducers/profileReducer';
+import Settings from '../components/Settings';
+import { fetchSingleUserAction } from '../store/reducers/profileReducer';
 
 /*
  * Code

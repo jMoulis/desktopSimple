@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import NewProject from '../../../components/NewProject/index';
-import { createProjectAction, clearProjectMessageAction } from '../../../store/reducers/projectReducer';
+import NewProject from '../../components/NewProject/index';
+import { createProjectAction, clearProjectMessageAction } from '../../store/reducers/projectReducer';
 /*
  * Code
  */

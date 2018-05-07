@@ -7,24 +7,22 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import InfoPanel from '../../../../components/DetailProject/InfoPanel';
-
+import ProjectInfo from '../../components/Team/projectInfo';
 /*
  * Code
  */
 // State
 const mapStateToProps = ({ projectReducer }) => ({
-  activeProjectProcess: projectReducer.activeProjectProcess,
+  project: projectReducer.activeProjectProcess.project,
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = dispatch => ({});
 
 
 /*
  * Export default
  */
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const InfoPanelContainer = createContainer(InfoPanel);
-export default InfoPanelContainer;
+const ProjectInfoContainer = createContainer(ProjectInfo);
+export default ProjectInfoContainer;

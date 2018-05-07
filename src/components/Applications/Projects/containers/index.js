@@ -7,14 +7,13 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import Project from '../../components/index';
-import { fetchProjectsAction } from '../../store/reducers/projectReducer';
+import Project from '../components/index';
+import { fetchProjectsAction } from '../store/reducers/projectReducer';
 /*
  * Code
  */
 // State
 const mapStateToProps = ({ authReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 // Actions

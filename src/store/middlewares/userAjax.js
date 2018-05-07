@@ -11,6 +11,8 @@ import {
   FETCH_USERS,
   fetchUsersSuccessAction,
   fetchUsersFailureAction,
+  FETCH_USERS_COUNT,
+  fetchUsersCountSuccessAction,
 } from '../reducers/userReducer';
 /*
  * Code
@@ -24,7 +26,7 @@ export default store => next => (action) => {
     case FETCH_USERS:
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users`,
+        url: `${ROOT_URL}/api/users?filter=${action.payload}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -34,6 +36,21 @@ export default store => next => (action) => {
         })
         .catch(({ response }) => {
           store.dispatch(fetchUsersFailureAction(response.statusText));
+        });
+      break;
+    case FETCH_USERS_COUNT:
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/users?filter=${action.payload}&count=true`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(fetchUsersCountSuccessAction(data));
+        })
+        .catch(({ response }) => {
+          console.error(response.statusText);
         });
       break;
     default:

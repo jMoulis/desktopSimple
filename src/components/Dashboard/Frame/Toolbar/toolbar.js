@@ -11,6 +11,8 @@ class Toolbar extends React.Component {
     reduceAppAction: PropTypes.func.isRequired,
     appName: PropTypes.string,
     title: PropTypes.string,
+    handleTransition: PropTypes.func.isRequired,
+    exitTimeOut: PropTypes.number.isRequired,
   }
   static defaultProps = {
     appName: null,
@@ -21,8 +23,18 @@ class Toolbar extends React.Component {
     fullSizeAction(appName);
   }
   handleClose = () => {
-    const { appName, closeAppAction } = this.props;
-    closeAppAction(appName);
+    const {
+      appName,
+      closeAppAction,
+      handleTransition,
+      exitTimeOut,
+    } = this.props;
+
+    handleTransition();
+    // Give time to finish transition then set false to display prop in the reducer
+    window.setTimeout(() => {
+      closeAppAction(appName);
+    }, exitTimeOut * 1.5);
   }
   handleReduce = () => {
     const { appName, reduceAppAction } = this.props;

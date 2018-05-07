@@ -1,9 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-
 import PropTypes from 'prop-types';
-// import Draggable from './Helpers/draggable';
-
+import { CSSTransition } from 'react-transition-group';
 import './frame.css';
 import Toolbar from '../../../containers/Dashboard/Toolbar/toolbar';
 import Draggable from './Helpers/draggable';
@@ -30,7 +28,10 @@ class Frame extends React.Component {
   constructor(props) {
     super(props);
     const { innerHeight, innerWidth } = window;
-    const footerHeight = document.getElementById('footer').clientHeight;
+    let footerHeight = 65;
+    if (document.getElementById('footer')) {
+      footerHeight = document.getElementById('footer').clientHeight;
+    }
     const topBottomPosition = innerHeight * 0.10;
     const leftRightPosition = innerWidth * 0.10;
     const width = innerWidth - (leftRightPosition * 2);
@@ -42,6 +43,7 @@ class Frame extends React.Component {
       bottom: topBottomPosition,
       width,
       height,
+      display: true,
     };
   }
   componentDidUpdate() {
@@ -50,12 +52,20 @@ class Frame extends React.Component {
     const drag = new Draggable(element, activeApp.appName);
     drag.dragElement();
   }
+  ENTER_TIMEOUT = 150
+  EXIT_TIMEOUT = 100
   handleSelectApp = (event) => {
     const { setActiveAppAction, activeApp } = this.props;
     const appName = event.currentTarget.id;
     if (activeApp.appName !== appName) {
       setActiveAppAction({ appName, appComponent: null });
     }
+  }
+  handleTransition = () => {
+    this.setState(() => ({
+      display: false,
+    }));
+    return true;
   }
   render() {
     const {
@@ -74,24 +84,40 @@ class Frame extends React.Component {
       return false;
     }
     return (
-      <div
-        className={`${frameFullSizeClass} ${applications[appName].reduce && 'frame-reduce'}`}
-        id={appName}
-        onClick={this.handleSelectApp}
-        onKeyPress={this.handleSelectApp}
-        style={{
-          zIndex: applications[appName].zIndex,
-          top: `${this.state.top}px`,
-          bottom: `${this.state.bottom}px`,
-          left: `${this.state.left}px`,
-          right: `${this.state.right}px`,
-          width: `${this.state.width}px`,
-          height: `${this.state.height}px`,
+      <CSSTransition
+        in={this.state.display}
+        timeout={{
+          enter: this.ENTER_TIMEOUT,
+          exit: this.EXIT_TIMEOUT,
         }}
+        classNames="frame"
+        appear
+        unmountOnExit
       >
-        <Toolbar title={title} appName={appName} />
-        <section className="child-app">{children}</section>
-      </div>
+        <div
+          className={`${frameFullSizeClass} ${applications[appName].reduce && 'frame-reduce'}`}
+          id={appName}
+          onClick={this.handleSelectApp}
+          onKeyPress={this.handleSelectApp}
+          style={{
+            zIndex: applications[appName].zIndex,
+            top: `${this.state.top}px`,
+            bottom: `${this.state.bottom}px`,
+            left: `${this.state.left}px`,
+            right: `${this.state.right}px`,
+            width: `${this.state.width}px`,
+            height: `${this.state.height}px`,
+          }}
+        >
+          <Toolbar
+            title={title}
+            appName={appName}
+            handleTransition={this.handleTransition}
+            exitTimeOut={this.EXIT_TIMEOUT}
+          />
+          <section className="child-app">{children}</section>
+        </div>
+      </CSSTransition>
     );
   }
 }

@@ -19,7 +19,6 @@ $change-color: background-color 500ms ease-out
     min-width: 60%
     height: auto
     overflow: auto
-    transition: width 1000ms
   &-header
     display: flex
     justify-content: space-between
@@ -28,6 +27,9 @@ $change-color: background-color 500ms ease-out
     .form-container
       height: auto
       width: 100%
+    .form
+      overflow: hidden
+      overflow-x: auto
   &-btn
     outline: none
     cursor: pointer

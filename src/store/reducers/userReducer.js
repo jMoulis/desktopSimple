@@ -12,6 +12,9 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
 
+export const FETCH_USERS_COUNT = 'FETCH_USERS_COUNT';
+export const FETCH_USERS_COUNT_SUCCESS = 'FETCH_USERS_COUNT_SUCCESS';
+
 export const EDIT_USER = 'EDIT_USER';
 export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
 export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
@@ -24,6 +27,7 @@ const initialState = {
     users: [],
     loading: false,
     error: null,
+    page: {},
   },
   userActive: {
     user: {},
@@ -35,6 +39,7 @@ const initialState = {
     editing: false,
     error: null,
   },
+  usersCount: {},
 };
 
 /*
@@ -56,9 +61,10 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         userList: {
-          users: action.payload,
+          users: action.payload.users,
           loading: false,
           error: null,
+          pagination: action.payload.pagination,
         },
       };
     }
@@ -70,6 +76,17 @@ const reducer = (state = initialState, action = {}) => {
           loading: false,
           error: action.payload,
         },
+      };
+    }
+    case FETCH_USERS_COUNT: {
+      return {
+        ...state,
+      };
+    }
+    case FETCH_USERS_COUNT_SUCCESS: {
+      return {
+        ...state,
+        usersCount: action.payload,
       };
     }
     case EDIT_USER: {
@@ -116,8 +133,17 @@ const reducer = (state = initialState, action = {}) => {
  *Action creators
  */
 
-export const fetchUsersAction = () => ({
+export const fetchUsersCountAction = filter => ({
+  type: FETCH_USERS_COUNT,
+  payload: filter,
+});
+export const fetchUsersCountSuccessAction = count => ({
+  type: FETCH_USERS_COUNT_SUCCESS,
+  payload: count,
+});
+export const fetchUsersAction = filter => ({
   type: FETCH_USERS,
+  payload: filter,
 });
 export const fetchUsersSuccessAction = data => ({
   type: FETCH_USERS_SUCCESS,

@@ -18,8 +18,7 @@
   background-color: #97c0b7;
   min-width: 60%;
   height: auto;
-  overflow: auto;
-  transition: width 1000ms; }
+  overflow: auto; }
 
 .modal-header {
   display: flex;
@@ -29,6 +28,10 @@
 .modal-content .form-container {
   height: auto;
   width: 100%; }
+
+.modal-content .form {
+  overflow: hidden;
+  overflow-x: auto; }
 
 .modal-btn {
   outline: none;

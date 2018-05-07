@@ -7,14 +7,13 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import ListProject from '../../../components/ListProject/index';
-import { fetchSingleProjectAction } from '../../../store/reducers/projectReducer';
+import ListProject from '../../components/ListProject/index';
+import { fetchSingleProjectAction } from '../../store/reducers/projectReducer';
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer, projectReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
+const mapStateToProps = ({ projectReducer }) => ({
   projectListProcess: projectReducer.projectListProcess,
 });
 

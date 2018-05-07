@@ -5,7 +5,6 @@
   border: 8px solid $darkestblue
   border-radius: 2px
   box-shadow: 0px 0px 20px 0px $darkestblue
-  display: flex
   flex-direction: column
   min-height: 250px
   min-width: 250px
@@ -13,6 +12,17 @@
   overflow: auto // Must be kept for the resize attribute
   resize: both
   max-height: 98%
+  display: flex
+  &-appear
+    opacity: 0.01
+  &-appear.frame-appear-active
+    opacity: 1
+    transition: opacity 300ms ease-in
+  &-exit
+    opacity: 1
+  &-exit.frame-exit-active
+    opacity: 0.01
+    transition: opacity 300ms ease-in
   &-reset
     bottom: 0 !important
     height: inherit !important
@@ -32,12 +42,19 @@
     background-color: $lightblue
     border-bottom: 2px solid $darkestblue
     .app-toolbar
-      background-color: $brown
+      background-color: rgba($blue, 0.5)
+      border-bottom: 1px solid $darkestblue
       padding-top: .5rem
       padding-bottom: .5rem
       color: $beige
       .btn-app-toolbar
         margin: 0
+        border: 1px solid transparent
+        background-color: transparent
+        cursor: pointer
+        transition: border 500ms
+        &:hover
+          border: 1px solid $darkestblue
       ul
         list-style: none
         display: flex

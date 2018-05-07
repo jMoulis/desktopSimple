@@ -44,10 +44,10 @@ export default {
     label: 'What about you',
     name: 'description',
   },
-  competences: {
+  tags: {
     label: 'Your Competences',
     placeholder: 'Write a competence and click enter...',
-    name: 'competences',
+    name: 'tags',
     type: 'text',
   },
   school: {

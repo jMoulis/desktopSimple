@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './project.css';
-import ListProject from '../containers/Projects/ListProject';
-import DetailProject from '../containers/Projects/DetailProject/detailProject';
+import ListProject from '../containers/ListProject';
+import Team from '../containers/Team';
 
 class Projects extends React.Component {
   static propTypes = {
     fetchProjectsAction: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   }
   state = {
     tab: 'projects',
@@ -19,7 +20,6 @@ class Projects extends React.Component {
     // Save the input field
     const { dataset } = evt.currentTarget;
     let dataSetToState = {};
-
     Object.keys(dataset).map((key) => {
       dataSetToState = { ...dataSetToState, [key]: dataset[key] };
       return dataSetToState;
@@ -35,7 +35,7 @@ class Projects extends React.Component {
           <ul>
             <li>
               <button
-                className="btn-form btn-app-toolbar unselectable"
+                className="btn-app-toolbar unselectable"
                 name="projects"
                 data-tab="projects"
                 onClick={this.handleTabSelect}
@@ -45,8 +45,19 @@ class Projects extends React.Component {
             </li>
           </ul>
         </div>
-        {this.state.tab === 'projects' && <ListProject key="newProject" clickTab={this.handleTabSelect} /> }
-        {this.state.tab === 'project-detail' && <DetailProject key="detailProject" projectid={this.state.projectid} />}
+        {this.state.tab === 'projects' &&
+          <ListProject
+            key="newProject"
+            selectTab={this.handleTabSelect}
+            loggedUser={this.props.loggedUser}
+          />
+        }
+        {this.state.tab === 'create-team' &&
+          <Team
+            key="createTeam"
+            projectid={this.state.projectid}
+          />
+        }
       </div>
     );
   }
