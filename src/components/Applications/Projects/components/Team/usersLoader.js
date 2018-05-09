@@ -9,6 +9,8 @@ class UsersLoader extends React.Component {
       error: PropTypes.object,
       loading: PropTypes.bool,
     }).isRequired,
+    filter: PropTypes.string.isRequired,
+    select: PropTypes.func.isRequired,
   }
   componentDidMount() {
     const { fetchUsersAction, filter } = this.props;
@@ -21,49 +23,63 @@ class UsersLoader extends React.Component {
     fetchUsersAction(`${filter}${pagination}`);
   }
   render() {
-    const { userList } = this.props;
+    const { userList, select, filter } = this.props;
     const {
       loading,
       error,
       users,
-      pagination
+      pagination,
     } = userList;
     if (loading) {
       return <span>Loading</span>;
     }
     return (
       <div>Users
+        {error && <span>Error</span>}
+        {pagination &&
+          <div>
+            {pagination.prevPage &&
+              <button
+                key="prev"
+                type="button"
+                onClick={this.handlePagination}
+                data-pagination={pagination.prevPage}
+              >prev
+              </button>
+            }
+            {pagination.nextPage &&
+              <button
+                key="next"
+                type="button"
+                onClick={this.handlePagination}
+                data-pagination={pagination.nextPage}
+              >next
+              </button>
+            }
+          </div>}
         <ul className="ul-unstyled">
           {users.map(user => (
             <li key={user._id} className="users-list-item">
               <div className="thumbnail-container">
                 <img className="thumbnail" src={user.picture} alt={user.fullName} />
                 <span>{user.fullName}</span>
+                <button
+                  data-user={
+                    JSON.stringify({
+                      key: filter,
+                      value: {
+                        picture: user.picture,
+                        fullName: user.fullName,
+                        id: user._id,
+                      },
+                    })}
+                  onClick={select}
+                >Select
+                </button>
               </div>
             </li>
             ))}
         </ul>
-        {pagination &&
-          <div>
-            {pagination.prev &&
-              <button
-                key="prev"
-                type="button"
-                onClick={this.handlePagination}
-                data-pagination={pagination.prev}
-              >prev
-              </button>
-            }
-            {pagination.next &&
-              <button
-                key="next"
-                type="button"
-                onClick={this.handlePagination}
-                data-pagination={pagination.next}
-              >next
-              </button>
-            }
-          </div>}
       </div>
     );
   }

@@ -4,6 +4,7 @@ import Profile from '../../containers/Profile';
 import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
 import AccountProfile from '../../containers/Profile/Account';
+import TeamProfile from '../Profile/Teams';
 
 class Settings extends React.Component {
   static propTypes = {
@@ -16,7 +17,7 @@ class Settings extends React.Component {
   }
   componentDidMount() {
     const { fetchSingleUserAction, loginProcess } = this.props;
-    fetchSingleUserAction(loginProcess.loggedUser.id);
+    fetchSingleUserAction(loginProcess.loggedUser._id);
   }
   handleTabSelect = (evt) => {
     // Save the input field
@@ -35,12 +36,43 @@ class Settings extends React.Component {
       <div className="settings-container">
         <div className="app-toolbar" key="app-toolbar">
           <ul>
-            <li><button className="btn-form btn-app-toolbar unselectable" name="profile" onClick={this.handleTabSelect}>Profile</button></li>
-            {userActive.user.typeUser !== 'student' && <li><button className="btn-form btn-app-toolbar unselectable" name="company" onClick={this.handleTabSelect}>Company</button></li>}
-            <li><button className="btn-form btn-app-toolbar unselectable" name="account" onClick={this.handleTabSelect}>Touchy Info</button></li>
+            <li>
+              <button
+                className="btn-form btn-app-toolbar unselectable"
+                name="profile"
+                onClick={this.handleTabSelect}
+              >Profile
+              </button>
+            </li>
+            {userActive.user.typeUser !== 'student' &&
+              <li>
+                <button
+                  className="btn-form btn-app-toolbar unselectable"
+                  name="company"
+                  onClick={this.handleTabSelect}
+                >Company
+                </button>
+              </li>}
+            <li>
+              <button
+                className="btn-form btn-app-toolbar unselectable"
+                name="teams"
+                onClick={this.handleTabSelect}
+              >Teams
+              </button>
+            </li>
+            <li>
+              <button
+                className="btn-form btn-app-toolbar unselectable"
+                name="account"
+                onClick={this.handleTabSelect}
+              >Touchy Info
+              </button>
+            </li>
           </ul>
         </div>
         {this.state.tab === 'profile' && <Profile key="profile" />}
+        {this.state.tab === 'teams' && <TeamProfile key="teams" teams={userActive.user.teams} />}
         {this.state.tab === 'company' && <CompanyProfile key="profile" />}
         {this.state.tab === 'account' && <AccountProfile key="account" />}
       </div>

@@ -47,7 +47,8 @@ class ListProject extends React.Component {
     return (
       <div className="project-list-container">
         <div>
-          {loggedUser.user.typeUser !== 'student' &&
+          {loggedUser.user.typeUser &&
+          loggedUser.user.typeUser !== 'student' &&
           <ul className="project-list">
             <li className="project-list-item">
               <h2>Add a Project</h2>

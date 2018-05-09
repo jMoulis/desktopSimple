@@ -237,7 +237,6 @@ class NewProject extends React.Component {
               <AddFilesInput
                 error={error && error.docs && error.docs.detail}
                 docs={this.state.docs}
-                onRemove={this.handleRemoveThumbnail}
                 onFileChange={this.handleInputFileChange}
               />
               <Button label="Create" loading={false} />

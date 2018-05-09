@@ -8,6 +8,9 @@ import UsersLoader from '../../containers/Team/usersLoader';
 class Team extends React.Component {
   static propTypes = {
     fetchUsersCountAction: PropTypes.func.isRequired,
+    createTeamAction: PropTypes.func.isRequired,
+    project: PropTypes.object.isRequired,
+    teamCreation: PropTypes.object.isRequired,
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     const { usersCount } = nextProps;
@@ -27,9 +30,17 @@ class Team extends React.Component {
   state = {
     teamname: '',
     ressources: '',
-    selectedRessources: [],
+    selectedTags: [],
     modal: false,
     counters: {},
+    selectedUsers: {},
+  }
+  handleFormKeyPress = (evt) => {
+    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
   }
   handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -37,7 +48,7 @@ class Team extends React.Component {
       [name]: value,
     }));
   }
-  handleSelectRessource = (evt) => {
+  handleSelectedTags = (evt) => {
     const { fetchUsersCountAction } = this.props;
     // const { count, key } = usersCount;
     const { value } = evt.target;
@@ -45,9 +56,12 @@ class Team extends React.Component {
       fetchUsersCountAction(this.state.ressources.toLowerCase());
       this.setState(prevState => ({
         ressources: '',
-        selectedRessources: [
-          ...prevState.selectedRessources,
-          value.toLowerCase(),
+        selectedTags: [
+          ...prevState.selectedTags,
+          {
+            value: value.toLowerCase(),
+            selected: false,
+          },
         ],
         counters: {
           ...prevState.counters,
@@ -57,6 +71,13 @@ class Team extends React.Component {
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
+    const { createTeamAction, project } = this.props;
+    const values = {
+      users: Object.values(this.state.selectedUsers),
+      name: this.state.teamname,
+      projects: [project._id],
+    };
+    createTeamAction(values);
   }
   handleNext = () => {
     console.log('next');
@@ -73,20 +94,64 @@ class Team extends React.Component {
       modal: false,
     }));
   }
+  handleRemove = ({ target }) => {
+    const { tagname } = target.dataset;
+    this.setState((prevState) => {
+      const selectedTagsFiltered = prevState.selectedTags.filter(tag => tag.value !== tagname);
+      delete prevState.selectedUsers[tagname];
+      return ({
+        ...prevState,
+        selectedTags: selectedTagsFiltered,
+      });
+    });
+  }
+  handleSelectUser = ({ target }) => {
+    const { user } = target.dataset;
+    const userParsed = JSON.parse(user);
+    this.setState((prevState) => {
+      const filteredselectedTags = prevState.selectedTags.map((ressource) => {
+        if (ressource.value === userParsed.key) {
+          return {
+            ...ressource,
+            selected: true,
+          };
+        }
+        return ressource;
+      });
+      return ({
+        modal: false,
+        selectedUsers: {
+          ...prevState.selectedUsers,
+          [userParsed.key]: userParsed.value,
+        },
+        selectedTags: filteredselectedTags,
+      });
+    });
+  }
   render() {
+    const {
+      counters,
+      selectedUsers,
+      ressources,
+      teamname,
+      selectedTags,
+    } = this.state;
+    const { teamCreation } = this.props;
+    const { error } = teamCreation;
     return (
       <div className="team">
         <div className="content">
           <ProjectInfo />
         </div>
         <div className="content">
-          {/* 1- Create ressource
-          2- Choose students from a list
-          3- Send message to student */}
           <div>
             <p>Give explanations</p>
             <h1>First: Give a team's name</h1>
-            <form onSubmit={this.handleSubmit}>
+            <form
+              onSubmit={this.handleSubmit}
+              noValidate="true"
+              onKeyPress={this.handleFormKeyPress}
+            >
               <div className="teamname">
                 <label htmlFor="teamname">
                   Choose a name:
@@ -94,8 +159,9 @@ class Team extends React.Component {
                 <input
                   name="teamname"
                   onChange={this.handleInputChange}
-                  value={this.state.teamname}
+                  value={teamname}
                 />
+                {error && error.name && <span>{error.name.detail}</span>}
               </div>
               <div name="ressources">
                 <label htmlFor="ressources">
@@ -103,22 +169,35 @@ class Team extends React.Component {
                 </label>
                 <input
                   name="ressources"
-                  onKeyPress={this.handleSelectRessource}
+                  onKeyPress={this.handleSelectedTags}
                   onChange={this.handleInputChange}
-                  value={this.state.ressources}
+                  value={ressources}
                 />
                 <ul className="ul-nav">
-                  {this.state.selectedRessources.map((ressource, index) => (
+                  {selectedTags.map(({ value, selected }, index) => (
                     <li key={index}>
                       <div className="ressourceItem">
-                        <img src="/img/anonymous.png" alt="Expert" />
-                        <span className="ressource-label">{ressource}</span>
-                        {<span>{this.state.counters[ressource]}</span>}
+                        <button
+                          data-tagname={value}
+                          onClick={this.handleRemove}
+                          type="button"
+                        >
+                          Remove
+                        </button>
+                        <img
+                          src={selectedUsers[value] ?
+                          selectedUsers[value].picture :
+                          '/img/anonymous.png'}
+                          alt="Expert"
+                        />
+                        <span className="ressource-label">{value}</span>
+                        {<span>{selected ? selectedUsers[value].fullName : counters[value]}</span>}
                         <button
                           type="button"
-                          data-filter={ressource}
+                          data-filter={value}
                           onClick={this.handleSearch}
-                        >Search
+                        >
+                          {selected ? 'Change' : 'Search'}
                         </button>
                       </div>
                     </li>
@@ -126,11 +205,12 @@ class Team extends React.Component {
                 </ul>
               </div>
               <button onClick={this.handleNext} type="button">next</button>
+              <button type="submit">Create</button>
             </form>
           </div>
           {this.state.modal &&
             <Modal close={this.handleClose} title="Pick your expert" name="close">
-              <UsersLoader filter={this.state.filter} />
+              <UsersLoader filter={this.state.filter} select={this.handleSelectUser} />
             </Modal>
           }
         </div>

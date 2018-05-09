@@ -74,12 +74,6 @@ const reducer = (state = initialState, action = {}) => {
     case EDIT_USER: {
       return {
         ...state,
-        userActive: {
-          ...state.userActive,
-          loading: false,
-          error: null,
-          success: null,
-        },
       };
     }
     case EDIT_USER_SUCCESS: {
@@ -89,7 +83,6 @@ const reducer = (state = initialState, action = {}) => {
           user: action.payload.user,
           loading: false,
           error: null,
-          success: action.payload.success,
         },
       };
     }

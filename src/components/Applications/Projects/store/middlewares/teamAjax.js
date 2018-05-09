@@ -8,19 +8,19 @@ import axios from 'axios';
  */
 import { ROOT_URL } from '../../../../../Utils/config';
 import {
-  CREATE_PROJECT,
-  createProjectSuccessAction,
-  createProjectFailureAction,
-  FETCH_PROJECTS,
-  fetchProjectsSuccessAction,
-  fetchProjectsFailureAction,
-  FETCH_SINGLE_PROJECT,
-  fetchSingleProjectSuccessAction,
-  fetchSingleProjectFailureAction,
-  EDIT_PROJECT,
-  editProjectSuccessAction,
-  editProjectFailureAction,
-} from '../reducers/projectReducer';
+  CREATE_TEAM,
+  createTeamSuccessAction,
+  createTeamFailureAction,
+  FETCH_TEAMS,
+  fetchTeamsSuccessAction,
+  fetchTeamsFailureAction,
+  FETCH_SINGLE_TEAM,
+  fetchSingleTeamSuccessAction,
+  fetchSingleTeamFailureAction,
+  EDIT_TEAM,
+  editTeamSuccessAction,
+  editTeamFailureAction,
+} from '../reducers/teamReducer';
 
 import { logoutAction } from '../../../../../store/reducers/authReducer';
 /*
@@ -37,20 +37,25 @@ const toObject = (arr) => {
  * Middleware
  */
 export default store => next => (action) => {
+  const { authReducer } = store.getState();
   switch (action.type) {
-    case CREATE_PROJECT: {
-      const formData = toObject(Object.entries(action.payload).filter(field => field));
-      formData.docs = action.payload.docs;
+    case CREATE_TEAM: {
+      const formData = action.payload;
+      formData.users = [...formData.users, {
+        fullName: authReducer.loginProcess.loggedUser.fullName,
+        picture: authReducer.loginProcess.loggedUser.picture,
+        id: authReducer.loginProcess.loggedUser._id,
+      }];
       axios({
         method: 'post',
         data: formData,
-        url: `${ROOT_URL}/api/projects`,
+        url: `${ROOT_URL}/api/teams`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(createProjectSuccessAction(data));
+          store.dispatch(createTeamSuccessAction(data));
         })
         .catch((error) => {
           if (!error.response) {
@@ -59,28 +64,26 @@ export default store => next => (action) => {
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(createProjectFailureAction(error.response.data.errors));
+          return store.dispatch(createTeamFailureAction(error.response.data.errors));
         });
       break;
     }
-    case EDIT_PROJECT: {
+    case EDIT_TEAM: {
       // 1- the action.payload is the state with all fields.
       // I filter to get only those who changed
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      
       // 2- I transform my array to an object
       const formData = toObject(filteredArray);
-      console.log(formData)
       axios({
         method: 'put',
         data: formData,
-        url: `${ROOT_URL}/api/projects/${store.getState().projectReducer.activeProjectProcess.project._id}`,
+        url: `${ROOT_URL}/api/teams/${store.getState().teamReducer.activeTeamProcess.team._id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(editProjectSuccessAction(data));
+          store.dispatch(editTeamSuccessAction(data));
         })
         .catch((error) => {
           if (!error.response) {
@@ -89,20 +92,20 @@ export default store => next => (action) => {
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(editProjectFailureAction(error.response.data.errors));
+          return store.dispatch(editTeamFailureAction(error.response.data.errors));
         });
       break;
     }
-    case FETCH_PROJECTS: {
+    case FETCH_TEAMS: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects`,
+        url: `${ROOT_URL}/api/teams`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(fetchProjectsSuccessAction(data));
+          store.dispatch(fetchTeamsSuccessAction(data));
         })
         .catch((error) => {
           if (!error.response) {
@@ -111,20 +114,20 @@ export default store => next => (action) => {
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchProjectsFailureAction(error.response.data.errors));
+          return store.dispatch(fetchTeamsFailureAction(error.response.data.errors));
         });
       break;
     }
-    case FETCH_SINGLE_PROJECT: {
+    case FETCH_SINGLE_TEAM: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects/${action.projectId}`,
+        url: `${ROOT_URL}/api/teams/${action.projectId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(fetchSingleProjectSuccessAction(data));
+          store.dispatch(fetchSingleTeamSuccessAction(data));
         })
         .catch((error) => {
           if (!error.response) {
@@ -133,7 +136,7 @@ export default store => next => (action) => {
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchSingleProjectFailureAction(error.response.data.errors));
+          return store.dispatch(fetchSingleTeamFailureAction(error.response.data.errors));
         });
       break;
     }

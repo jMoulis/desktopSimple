@@ -21,7 +21,13 @@ import {
 /*
  * Code
  */
-const toObject = arr => ({ [arr[0]]: arr[1].value });
+const toObject = (arr) => {
+  let obj = {};
+  arr.forEach((element) => {
+    obj = { ...obj, [element[0]]: element[1].value };
+  });
+  return obj;
+};
 /*
  * Middleware
  */
@@ -38,23 +44,29 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchSingleUserSuccessAction(data));
         })
-        .catch((data) => {
-          if (!data.response) {
-            return console.log(data);
+        .catch((error) => {
+          if (!error.response) {
+            return console.log(error);
           }
-          return store.dispatch(fetchSingleUserFailureAction(data.response.data.errors));
+          return store.dispatch(fetchSingleUserFailureAction(error.response.error.errors));
         });
       break;
     case EDIT_USER: {
-      // 1- the action.payload is the state with all fields.
-      // I filter to get only those who changed
-      const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      // 2- I transform my array to an object
-      const formData = toObject(filteredArray[0]);
-
+      let formData = {};
+      const hasCompanyProperty = Object.prototype.hasOwnProperty.call(action.payload, 'company');
+      if (hasCompanyProperty) {
+        formData = {
+          company: toObject(Object.entries(action.payload.company)
+            .filter(field => field[1].changed)),
+        };
+      }
+      else {
+        formData = toObject(Object.entries(action.payload)
+          .filter(field => field[1].changed));
+      }
       axios({
         method: 'put',
-        data: { id: action.id, ...formData },
+        data: { ...formData },
         url: `${ROOT_URL}/api/users/${action.id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -62,14 +74,10 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           store.dispatch(editUserSuccessAction(data));
-          const user = {
-            id: data.user._id,
-            picture: data.user.picture,
-          };
+          const { user } = data;
           localStorage.setItem('user', JSON.stringify(user));
         })
         .catch(({ response }) => {
-          // console.error(err)
           store.dispatch(editUserFailureAction(response.data.errors));
         });
       break;

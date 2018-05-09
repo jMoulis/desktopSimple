@@ -8,31 +8,37 @@ import InputFile from '../../../../../Form/inputFile';
 import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
+import AddFilesInput from '../../Form/addFilesInput';
 
 class CompanyProfile extends React.Component {
   static propTypes = {
     userActive: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
   }
-  static getDerivedStateFromProps(nextProps) {
-    const { userActive } = nextProps;
-    const { user } = userActive; // Datas user
-    let field = {};
-    Object.keys(Model).map((key) => {
-      field = { ...field, [key]: user ? { value: user[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
-      return field;
-    });
-    return {
-      ...field,
-    };
-  }
   constructor(props) {
     super(props);
     this.state = {};
+    const { userActive } = this.props;
+    const { user } = userActive; // Datas user
+    let field = {};
+    Object.keys(Model).map((key) => {
+      field = { ...field, [key]: user.company ? { value: user.company[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
+      return field;
+    });
+    this.state = {
+      company: {
+        ...field,
+      },
+    };
   }
-  componentWillUnmount() {
-    console.log('unmount');
-    // Maybe do someting? Like save Datas or anything else
+  componentDidUpdate(prevProps, prevState) {
+    const { editUserAction, userActive } = prevProps;
+    // Dealing with documents
+    if (prevState.company.legalDocs.value) {
+      if (prevState.company.legalDocs.value.length !== this.state.company.legalDocs.value.length) {
+        editUserAction(userActive.user._id, this.state);
+      }
+    }
   }
   handleFormKeyPress = (evt) => {
     if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
@@ -45,10 +51,13 @@ class CompanyProfile extends React.Component {
     const { value, name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
-      [name]: {
-        ...prevState[name],
-        value,
-        changed: true,
+      company: {
+        ...prevState.company,
+        [name]: {
+          ...prevState.company[name],
+          value,
+          changed: true,
+        },
       },
     }));
   }
@@ -57,14 +66,17 @@ class CompanyProfile extends React.Component {
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
       ...prevState,
-      [name]: {
-        ...prevState[name],
-        value,
-        changed: true,
+      company: {
+        ...prevState.company,
+        [name]: {
+          ...prevState.company[name],
+          value,
+          changed: true,
+        },
       },
     }));
   }
-  handleInputFileChange = (evt) => {
+  handlePictureChange = (evt) => {
     this.readUrl(evt.target);
   }
   readUrl = (input) => {
@@ -75,12 +87,16 @@ class CompanyProfile extends React.Component {
       reader.onload = (evt) => {
         const newLogo = {
           ...state,
-          logo: {
-            ...state.logo,
-            value: evt.target.result,
-            changed: true,
+          company: {
+            ...state.company,
+            logo: {
+              ...state.company.logo,
+              value: evt.target.result,
+              changed: true,
+            },
           },
         };
+        this.setState(() => (newLogo));
         editUserAction(userActive.user._id, newLogo);
       };
       reader.readAsDataURL(input.files[0]);
@@ -91,15 +107,18 @@ class CompanyProfile extends React.Component {
     const { name } = evt.target;
     const { editUserAction, userActive } = this.props;
     // const fromData = document.getElementById('profile-form')
-    if (this.state[name].changed) {
+    if (this.state.company[name].changed) {
       editUserAction(userActive.user._id, this.state);
     }
     this.setState(prevState => ({
       ...prevState,
-      [name]: {
-        ...prevState[name],
-        focus: false,
-        changed: false,
+      company: {
+        ...prevState.company,
+        [name]: {
+          ...prevState.company[name],
+          focus: false,
+          changed: false,
+        },
       },
     }));
   }
@@ -111,15 +130,19 @@ class CompanyProfile extends React.Component {
       const { state } = this;
       const newTags = {
         ...state,
-        tags: {
-          ...state.tags,
-          value: [
-            ...state.tags.value,
-            value,
-          ],
-          changed: true,
+        company: {
+          ...state.company,
+          tags: {
+            ...state.company.tags,
+            value: [
+              ...state.company.tags.value,
+              value.toLowerCase(),
+            ],
+            changed: true,
+          },
         },
       };
+      this.setState(() => newTags);
       editUserAction(userActive.user._id, newTags);
       evt.target.value = '';
     }
@@ -128,22 +151,39 @@ class CompanyProfile extends React.Component {
     evt.preventDefault();
     const { editUserAction, userActive } = this.props;
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => (
+    const values = state.company.tags.value.filter((value, index) => (
       index !== Number(evt.target.id)
     ));
     const newTags = {
       ...state,
-      tags: {
-        ...state.tags,
-        value: values,
-        changed: true,
+      company: {
+        ...state.company,
+        tags: {
+          ...state.company.tags,
+          value: values,
+          changed: true,
+        },
       },
     };
+    this.setState(() => newTags);
     editUserAction(userActive.user._id, newTags);
+  }
+  handleDocsChange = (docs) => {
+    this.setState(prevState => ({
+      ...prevState,
+      company: {
+        ...prevState.company,
+        legalDocs: {
+          value: docs,
+          changed: true,
+        },
+      },
+    }));
   }
   render() {
     const { userActive } = this.props;
     const { loading, error } = userActive;
+    const { company } = this.state;
     if (loading) {
       return <span />;
     }
@@ -157,11 +197,11 @@ class CompanyProfile extends React.Component {
         >
           <div className="profile-content-form-wrapper">
             <div className="form-content">
-              <img className="profile-picture" src={`${this.state.logo.value || '/img/avatar.png'}`} alt="Profile" />
+              <img className="profile-picture" src={`${company.logo.value || '/img/avatar.png'}`} alt="Profile" />
               <InputFile
                 config={{
                   field: Model.logo,
-                  onChange: this.handleInputFileChange,
+                  onChange: this.handlePictureChange,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   typeFileAccepted: 'image/*',
@@ -172,7 +212,7 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.companyName,
                   onChange: this.handleInputChange,
-                  value: this.state.companyName.value,
+                  value: company.companyName.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -183,7 +223,7 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.street,
                   onChange: this.handleInputChange,
-                  value: this.state.street.value,
+                  value: company.street.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -194,7 +234,7 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.postalCode,
                   onChange: this.handleInputChange,
-                  value: this.state.postalCode.value,
+                  value: company.postalCode.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -205,33 +245,33 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.town,
                   onChange: this.handleInputChange,
-                  value: this.state.town.value,
+                  value: company.town.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.town && error.town.detail,
                 }}
               />
+            </div>
+            <div className="form-content">
               <Input
                 config={{
                   field: Model.industry,
                   onChange: this.handleInputChange,
-                  value: this.state.industry.value,
+                  value: company.industry.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.industry && error.industry.detail,
                 }}
               />
-            </div>
-            <div className="form-content">
               <InputAutoComplete
                 config={{
                   field: Model.tags,
                   onChange: this.handleInputSelectTagsChange,
                   keyPress: this.handleInputSelectTagsChange,
                   type: 'text',
-                  values: this.state.tags.value,
+                  values: company.tags.value,
                   focus: this.handleOnFocus,
                   error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
@@ -241,7 +281,7 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.description,
                   onChange: this.handleTextAreaChange,
-                  value: this.state.description.value,
+                  value: company.description.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.description && error.description.detail,
@@ -251,7 +291,7 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.website,
                   onChange: this.handleInputChange,
-                  value: this.state.website.value,
+                  value: company.website.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -262,12 +302,18 @@ class CompanyProfile extends React.Component {
                 config={{
                   field: Model.linkedIn,
                   onChange: this.handleInputChange,
-                  value: this.state.linkedIn.value,
+                  value: company.linkedIn.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.linkedIn && error.linkedIn.detail,
                 }}
+              />
+              <AddFilesInput
+                error={error && error.legalDocs && error.legalDocs.detail}
+                docs={company.legalDocs.value}
+                onFileChange={this.handleDocsChange}
+                onBlur={this.handleOnBlur}
               />
             </div>
           </div>

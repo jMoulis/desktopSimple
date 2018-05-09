@@ -89,39 +89,6 @@ const reducer = (state = initialState, action = {}) => {
         usersCount: action.payload,
       };
     }
-    case EDIT_USER: {
-      return {
-        ...state,
-      };
-    }
-    case EDIT_USER_SUCCESS: {
-      const newUsers = state.userList.users.map((user) => {
-        if (user.id === action.payload.id) {
-          return {
-            ...user,
-            ...action.payload.updates,
-          };
-        }
-        return user;
-      });
-      return {
-        ...state,
-        userList: {
-          ...state.userList,
-          users: newUsers,
-        },
-      };
-    }
-    case EDIT_USER_FAILURE: {
-      return {
-        ...state,
-        createUser: {
-          user: {},
-          creating: false,
-          error: action.payload,
-        },
-      };
-    }
     default:
       return {
         ...state,

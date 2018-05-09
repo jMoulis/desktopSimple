@@ -39,9 +39,9 @@ export default {
     name: 'description',
   },
   tags: {
-    label: 'Your Competences',
+    label: 'Tags',
     placeholder: 'Write a competence and click enter...',
-    name: 'competences',
+    name: 'tags',
     type: 'text',
   },
   website: {
@@ -55,5 +55,10 @@ export default {
     placeholder: 'LinkedIn',
     name: 'linkedIn',
     type: 'url',
+  },
+  legalDocs: {
+    label: 'legalDocs',
+    placeholder: 'legalDocs',
+    name: 'legalDocs',
   },
 };

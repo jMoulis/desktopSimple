@@ -15,21 +15,18 @@ class Profile extends React.Component {
     userActive: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
   }
-  static getDerivedStateFromProps(nextProps) {
-    const { userActive } = nextProps;
+  constructor(props) {
+    super(props);
+    const { userActive } = this.props;
     const { user } = userActive; // Datas user
     let field = {};
     Object.keys(Model).map((key) => {
       field = { ...field, [key]: user ? { value: user[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
       return field;
     });
-    return {
+    this.state = {
       ...field,
     };
-  }
-  constructor(props) {
-    super(props);
-    this.state = {};
   }
   componentWillUnmount() {
     console.log('unmount');
@@ -71,18 +68,19 @@ class Profile extends React.Component {
 
     if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
       const { state } = this;
-      const newCompetences = {
+      const newTags = {
         ...state,
         tags: {
           ...state.tags,
           value: [
             ...state.tags.value,
-            value,
+            value.toLowerCase(),
           ],
           changed: true,
         },
       };
-      editUserAction(userActive.user._id, newCompetences);
+      this.setState(() => newTags);
+      editUserAction(userActive.user._id, newTags);
       evt.target.value = '';
     }
   }
@@ -103,6 +101,7 @@ class Profile extends React.Component {
             changed: true,
           },
         };
+        this.setState(() => (newPicture));
         editUserAction(userActive.user._id, newPicture);
       };
       reader.readAsDataURL(input.files[0]);
@@ -151,18 +150,19 @@ class Profile extends React.Component {
     evt.preventDefault();
     const { editUserAction, userActive } = this.props;
     const { state } = this;
-    const values = state.competences.value.filter((value, index) => (
+    const values = state.tags.value.filter((value, index) => (
       index !== Number(evt.target.id)
     ));
-    const newCompetences = {
+    const newtags = {
       ...state,
-      competences: {
-        ...state.competences,
+      tags: {
+        ...state.tags,
         value: values,
         changed: true,
       },
     };
-    editUserAction(userActive.user._id, newCompetences);
+    this.setState(() => newtags);
+    editUserAction(userActive.user._id, newtags);
   }
   render() {
     const { userActive } = this.props;

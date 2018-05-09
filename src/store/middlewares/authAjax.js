@@ -70,7 +70,16 @@ export default store => next => (action) => {
         })
         .catch((error) => {
           if (!error.response) {
-            console.error(error);
+            console.error(error.message);
+            if (error.message === 'Network Error') {
+              store.dispatch(loginFailureAction({
+                login: {
+                  status: 500,
+                  detail: 'Serveur Error, contact customer services',
+                },
+                auth: false,
+              }));
+            }
           }
           else {
             store.dispatch(loginFailureAction(error.response.data.errors));

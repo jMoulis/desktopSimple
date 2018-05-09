@@ -12,6 +12,7 @@ import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
 import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
+import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
 import userReducer from './/reducers/userReducer';
 
 // MIDDLEWARES
@@ -19,6 +20,7 @@ import authAjax from './middlewares/authAjax';
 import userAjax from './middlewares/userAjax';
 import profileAjax from '../components/Applications/Settings/store/middlewares/profileAjax';
 import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
+import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
 
 /*
  * Code
@@ -37,6 +39,7 @@ const rootReducer = combineReducers({
   profileReducer,
   projectReducer,
   userReducer,
+  teamReducer,
 });
 
 const store = createStore(
@@ -46,6 +49,7 @@ const store = createStore(
     applyMiddleware(userAjax),
     applyMiddleware(profileAjax),
     applyMiddleware(projectAjax),
+    applyMiddleware(teamAjax),
     ...devTools,
   ),
 );

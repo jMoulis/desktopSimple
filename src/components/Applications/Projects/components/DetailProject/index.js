@@ -42,7 +42,7 @@ class DetailProject extends React.Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { editProjectAction } = this.props;
-    return editProjectAction(this.state);
+    editProjectAction(this.state);
   }
   handleFormKeyPress = (evt) => {
     if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {

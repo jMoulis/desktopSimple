@@ -15,8 +15,9 @@ import Thumbnail from '../../../components/Profile/Thumbnail/thumbnail';
 // State
 const mapStateToProps = ({ authReducer }) => {
   if (localStorage.getItem('user')) {
+    const user = JSON.parse(localStorage.getItem('user'));
     return {
-      picture: JSON.parse(localStorage.getItem('user')).picture,
+      picture: user.picture,
     };
   }
   return {
