@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.viewer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center; }
+  .viewer-appear {
+    opacity: 0.01; }
+  .viewer-appear.viewer-appear-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in; }
+  .viewer-exit {
+    opacity: 1; }
+  .viewer-exit.viewer-exit-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in; }
+  .viewer-content {
+    background-color: #eee9d1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%; }
+    .viewer-content .canvas-container {
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%; }
+    .viewer-content #canvas-viewer {
+      border: 1px solid #0a1c28;
+      margin: auto; }
+    .viewer-content .btn-container {
+      position: absolute;
+      top: 0; }

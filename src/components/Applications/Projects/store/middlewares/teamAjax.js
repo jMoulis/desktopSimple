@@ -41,10 +41,9 @@ export default store => next => (action) => {
   switch (action.type) {
     case CREATE_TEAM: {
       const formData = action.payload;
+      console.log(formData.users)
       formData.users = [...formData.users, {
-        fullName: authReducer.loginProcess.loggedUser.fullName,
-        picture: authReducer.loginProcess.loggedUser.picture,
-        id: authReducer.loginProcess.loggedUser._id,
+        _id: authReducer.loginProcess.loggedUser._id,
       }];
       axios({
         method: 'post',

@@ -1,6 +1,28 @@
+$height: 30px
+$heightDouble: calc(#{$height} * 2)
+$heightHalf: calc(#{$height} / 2)
 .team-widget
   display: flex
   align-items: center
-  margin-top: 1rem
+  margin-top: .5rem
   h2, div
     margin-left: .5rem
+  .mini-container
+    position: relative
+    height: $heightDouble
+    display: flex
+    align-items: center
+    & .mini-thumbnail:nth-of-type(even)
+      position: absolute
+      top: 0px
+      left: $heightHalf
+    & .mini-thumbnail:nth-of-type(even)
+      &:last-child
+        position: absolute
+        bottom: 0px
+        left: $heightHalf
+        top: $height
+  .mini-thumbnail
+    width: $height
+    height: $height
+    border-radius: 50%

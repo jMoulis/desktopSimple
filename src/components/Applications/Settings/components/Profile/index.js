@@ -9,6 +9,8 @@ import Select from '../../../../Form/select';
 import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
+import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
+
 
 class Profile extends React.Component {
   static propTypes = {
@@ -28,9 +30,14 @@ class Profile extends React.Component {
       ...field,
     };
   }
-  componentWillUnmount() {
-    console.log('unmount');
-    // Maybe do someting? Like save Datas or anything else
+  componentDidUpdate(prevProps, prevState) {
+    const { editUserAction, userActive } = prevProps;
+    // Dealing with documents
+    if (prevState.docs.value) {
+      if (prevState.docs.value.length !== this.state.docs.value.length) {
+        editUserAction(userActive.user._id, this.state);
+      }
+    }
   }
   handleFormKeyPress = (evt) => {
     if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
@@ -163,6 +170,15 @@ class Profile extends React.Component {
     };
     this.setState(() => newtags);
     editUserAction(userActive.user._id, newtags);
+  }
+  handleDocsChange = (docs) => {
+    this.setState(prevState => ({
+      ...prevState,
+      docs: {
+        value: docs,
+        changed: true,
+      },
+    }));
   }
   render() {
     const { userActive } = this.props;
@@ -299,6 +315,11 @@ class Profile extends React.Component {
                   focus: this.handleOnFocus,
                   error: error && error.gitHub && error.gitHub.detail,
                 }}
+              />
+              <AddFilesInput
+                error={error && error.docs && error.docs.detail}
+                docs={this.state.docs.value}
+                onFileChange={this.handleDocsChange}
               />
             </div>
           </div>

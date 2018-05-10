@@ -1,0 +1,39 @@
+@import '../../styles/charte.sass'
+
+.viewer
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, .5)
+  display: flex
+  justify-content: center
+  &-appear
+    opacity: 0.01
+  &-appear.viewer-appear-active
+    opacity: 1
+    transition: opacity 300ms ease-in
+  &-exit
+    opacity: 1
+  &-exit.viewer-exit-active
+    opacity: 0.01
+    transition: opacity 300ms ease-in
+  &-content
+    background-color: $beige
+    display: flex
+    justify-content: center
+    align-items: center
+    max-width: 90%
+    .canvas-container
+      overflow: auto
+      display: flex
+      align-items: center
+      justify-content: center
+      height: 100%
+    #canvas-viewer
+      border: 1px solid $darkestblue
+      margin: auto
+    .btn-container
+      position: absolute
+      top: 0

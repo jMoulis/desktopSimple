@@ -70,7 +70,7 @@ class UsersLoader extends React.Component {
                       value: {
                         picture: user.picture,
                         fullName: user.fullName,
-                        id: user._id,
+                        _id: user._id,
                       },
                     })}
                   onClick={select}

@@ -32,7 +32,7 @@ let devTools = [];
 if (window.devToolsExtension) {
   devTools = [window.devToolsExtension()];
 }
-const rootReducer = combineReducers({
+const mainReducer = combineReducers({
   appReducer,
   frameReducer,
   authReducer,
@@ -41,6 +41,13 @@ const rootReducer = combineReducers({
   userReducer,
   teamReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'LOGOUT') {
+    state = undefined;
+  }
+  return mainReducer(state, action);
+};
 
 const store = createStore(
   rootReducer,

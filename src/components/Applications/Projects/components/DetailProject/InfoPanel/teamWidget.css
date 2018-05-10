@@ -1,6 +1,24 @@
 .team-widget {
   display: flex;
   align-items: center;
-  margin-top: 1rem; }
+  margin-top: .5rem; }
   .team-widget h2, .team-widget div {
     margin-left: .5rem; }
+  .team-widget .mini-container {
+    position: relative;
+    height: calc(30px * 2);
+    display: flex;
+    align-items: center; }
+    .team-widget .mini-container .mini-thumbnail:nth-of-type(even) {
+      position: absolute;
+      top: 0px;
+      left: calc(30px / 2); }
+    .team-widget .mini-container .mini-thumbnail:nth-of-type(even):last-child {
+      position: absolute;
+      bottom: 0px;
+      left: calc(30px / 2);
+      top: 30px; }
+  .team-widget .mini-thumbnail {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; }

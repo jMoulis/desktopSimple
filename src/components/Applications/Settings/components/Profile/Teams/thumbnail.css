@@ -1,8 +1,51 @@
-.thumbnail-container {
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#profile-form .tag-list {
   display: flex;
-  align-items: center; }
-  .thumbnail-container .thumbnail {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: .5rem; }
+  list-style: none;
+  padding: 0 1rem;
+  margin: 0; }
+  #profile-form .tag-list-item {
+    padding: 0 .3rem;
+    border: 2px solid #0a1c28; }
+
+#profile .profile-content-form-wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; }
+  #profile .profile-content-form-wrapper .form-content {
+    flex: 1; }
+
+#profile .profile-picture {
+  width: 150px;
+  height: 150px;
+  padding-left: .5rem;
+  border-radius: 50%; }
+
+.teams {
+  flex-wrap: wrap;
+  overflow: auto;
+  height: 90%; }
+  .teams .team-container {
+    padding: .5rem;
+    border: 2px solid #0a1c28;
+    width: 150px;
+    min-height: 200px;
+    transition: all 200ms; }
+    .teams .team-container:hover {
+      box-shadow: 0 0 10px 0 #0a1c28; }
+    .teams .team-container .thumbnail-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: .3rem;
+      transition: all 200ms; }
+      .teams .team-container .thumbnail-container:hover {
+        box-shadow: 0 0 10px 0 #0a1c28; }
+      .teams .team-container .thumbnail-container .thumbnail {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: .5rem; }
+      .teams .team-container .thumbnail-container span {
+        font-size: .8rem; }

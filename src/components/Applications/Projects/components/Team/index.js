@@ -75,12 +75,9 @@ class Team extends React.Component {
     const values = {
       users: Object.values(this.state.selectedUsers),
       name: this.state.teamname,
-      projects: [project._id],
+      projects: [{ _id: project._id, title: project.title }],
     };
     createTeamAction(values);
-  }
-  handleNext = () => {
-    console.log('next');
   }
   handleSearch = (evt) => {
     const { filter } = evt.target.dataset;

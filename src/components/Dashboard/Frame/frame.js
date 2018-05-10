@@ -44,6 +44,8 @@ class Frame extends React.Component {
       width,
       height,
       display: true,
+      enterTimeout: 150,
+      exitTimeout: 100,
     };
   }
   componentDidUpdate() {
@@ -52,8 +54,6 @@ class Frame extends React.Component {
     const drag = new Draggable(element, activeApp.appName);
     drag.dragElement();
   }
-  ENTER_TIMEOUT = 150
-  EXIT_TIMEOUT = 100
   handleSelectApp = (event) => {
     const { setActiveAppAction, activeApp } = this.props;
     const appName = event.currentTarget.id;
@@ -87,8 +87,8 @@ class Frame extends React.Component {
       <CSSTransition
         in={this.state.display}
         timeout={{
-          enter: this.ENTER_TIMEOUT,
-          exit: this.EXIT_TIMEOUT,
+          enter: this.state.enterTimeout,
+          exit: this.state.exitTimeout,
         }}
         classNames="frame"
         appear
@@ -113,7 +113,7 @@ class Frame extends React.Component {
             title={title}
             appName={appName}
             handleTransition={this.handleTransition}
-            exitTimeOut={this.EXIT_TIMEOUT}
+            exitTimeOut={this.state.exitTimeout}
           />
           <section className="child-app">{children}</section>
         </div>

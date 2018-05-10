@@ -44,6 +44,11 @@ class ListProject extends React.Component {
   }
   render() {
     const { projectListProcess, loggedUser, selectTab } = this.props;
+    const { error, loading } = projectListProcess;
+
+    if (loading) {
+      return <span>Loading</span>;
+    }
     return (
       <div className="project-list-container">
         <div>
@@ -61,6 +66,7 @@ class ListProject extends React.Component {
               </div>
             </li>
           </ul>}
+          {error && <span>{error.detail}</span>}
           {projectListProcess.projects.map(project => (
             <ul
               className="project-list"

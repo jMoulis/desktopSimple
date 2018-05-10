@@ -8,7 +8,7 @@ import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
 import InfoPanel from '../../containers/DetailProject/InfoPanel';
-import AddFilesInput from '../Form/addFilesInput';
+import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 
 class DetailProject extends React.Component {
   static propTypes = {

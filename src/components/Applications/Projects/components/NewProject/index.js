@@ -100,7 +100,7 @@ class NewProject extends React.Component {
           ...state.tags,
           value: [
             ...state.tags.value,
-            inputValue,
+            inputValue.toLowerCase(),
           ],
           changed: true,
         },

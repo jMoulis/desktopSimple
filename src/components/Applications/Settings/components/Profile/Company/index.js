@@ -8,7 +8,7 @@ import InputFile from '../../../../../Form/inputFile';
 import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
-import AddFilesInput from '../../Form/addFilesInput';
+import AddFilesInput from '../../../../../../Modules/filesHandler/addFilesInput';
 
 class CompanyProfile extends React.Component {
   static propTypes = {

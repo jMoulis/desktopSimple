@@ -30,7 +30,7 @@ class Settings extends React.Component {
     const { userActive } = this.props;
     const { loading } = userActive;
     if (loading) {
-      return <span />;
+      return <span>Loading</span>;
     }
     return (
       <div className="settings-container">
@@ -72,7 +72,7 @@ class Settings extends React.Component {
           </ul>
         </div>
         {this.state.tab === 'profile' && <Profile key="profile" />}
-        {this.state.tab === 'teams' && <TeamProfile key="teams" teams={userActive.user.teams} />}
+        {this.state.tab === 'teams' && <TeamProfile key="teams" user={userActive.user} />}
         {this.state.tab === 'company' && <CompanyProfile key="profile" />}
         {this.state.tab === 'account' && <AccountProfile key="account" />}
       </div>

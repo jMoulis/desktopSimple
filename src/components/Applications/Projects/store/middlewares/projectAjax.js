@@ -67,10 +67,8 @@ export default store => next => (action) => {
       // 1- the action.payload is the state with all fields.
       // I filter to get only those who changed
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      
       // 2- I transform my array to an object
       const formData = toObject(filteredArray);
-      console.log(formData)
       axios({
         method: 'put',
         data: formData,

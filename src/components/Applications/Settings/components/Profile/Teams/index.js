@@ -2,24 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './thumbnail.css';
 
-const TeamProfile = ({ teams }) => {
+const TeamProfile = ({ user }) => {
   return (
-    <ul className="ul-nav">
-      {teams.map(team => (
-        <li key={team._id}>
+    <ul className="ul-nav teams">
+      {user.teams.map(team => (
+        <li key={team._id} className="team-container">
           <div>
-            <span>{team.name}</span>
+            <span>Team: {team.name}</span>
             <ul>
-              {team.users.map(user => (
-                <li key={user.id}>
+              {team.users.map((teamMate, index) => (
+                <li key={index}>
                   <div className="thumbnail-container">
-                    <img className="thumbnail" src={user.picture} alt="expert" />
-                    <span>{user.fullName}</span>
+                    <img className="thumbnail" src={teamMate.picture} alt="expert" />
+                    <span>{teamMate.fullName}</span>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
+          {team.manager === user._id && <button type="button">Modify</button>}
         </li>
       ))}
     </ul>
@@ -27,11 +28,7 @@ const TeamProfile = ({ teams }) => {
 };
 
 TeamProfile.propTypes = {
-  teams: PropTypes.array,
-};
-
-TeamProfile.defaultProps = {
-  teams: [],
+  user: PropTypes.object.isRequired,
 };
 
 export default TeamProfile;

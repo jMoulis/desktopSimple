@@ -18,20 +18,22 @@
   background-color: #97c0b7;
   min-width: 60%;
   height: auto;
-  overflow: auto; }
+  overflow: hidden; }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   padding: .5rem; }
 
-.modal-content .form-container {
-  height: auto;
-  width: 100%; }
-
-.modal-content .form {
-  overflow: hidden;
-  overflow-x: auto; }
+.modal-content {
+  height: 90%;
+  overflow: auto; }
+  .modal-content .form-container {
+    height: auto;
+    width: 100%; }
+  .modal-content .form {
+    overflow: hidden;
+    overflow-x: auto; }
 
 .modal-btn {
   outline: none;
