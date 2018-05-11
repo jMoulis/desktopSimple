@@ -16,6 +16,10 @@ export const EDIT_USER = 'EDIT_USER';
 export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
 export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
 
+export const DELETE_USER = 'DELETE_USER';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const DELETE_USER_FAILURE = 'DELETE_USER_FAILURE';
+
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
 export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
@@ -127,6 +131,38 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case DELETE_USER: {
+      return {
+        ...state,
+        userActive: {
+          ...state.userActive,
+          loading: true,
+          error: null,
+        },
+      };
+    }
+    case DELETE_USER_SUCCESS: {
+      return {
+        ...state,
+        userActive: {
+          user: {},
+          success: null,
+          loading: false,
+          error: null,
+        },
+      };
+    }
+    case DELETE_USER_FAILURE: {
+      return {
+        ...state,
+        userActive: {
+          ...state.userActive,
+          loading: false,
+          error: action.payload.error,
+          success: null,
+        },
+      };
+    }
     case CLEAR_MESSAGE: {
       return {
         ...state,
@@ -185,6 +221,18 @@ export const changePasswordSuccessAction = data => ({
 });
 export const changePasswordFailureAction = error => ({
   type: CHANGE_PASSWORD_FAILURE,
+  payload: error,
+});
+export const deleteUserAction = userId => ({
+  type: DELETE_USER,
+  userId,
+});
+export const deleteUserSuccessAction = response => ({
+  type: DELETE_USER_SUCCESS,
+  payload: response,
+});
+export const deleteUserFailureAction = error => ({
+  type: DELETE_USER_FAILURE,
   payload: error,
 });
 export const clearMessageAction = () => ({

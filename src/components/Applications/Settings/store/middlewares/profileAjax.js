@@ -17,7 +17,11 @@ import {
   CHANGE_PASSWORD,
   changePasswordSuccessAction,
   changePasswordFailureAction,
+  DELETE_USER,
+  deleteUserSuccessAction,
+  deleteUserFailureAction,
 } from '../reducers/profileReducer';
+import { logoutAction } from '../../../../../store/reducers/authReducer';
 /*
  * Code
  */
@@ -32,6 +36,7 @@ const toObject = (arr) => {
  * Middleware
  */
 export default store => next => (action) => {
+  const { authReducer } = store.getState();
   switch (action.type) {
     case FETCH_SINGLE_USER:
       axios({
@@ -100,6 +105,27 @@ export default store => next => (action) => {
             return console.log(error.message);
           }
           return store.dispatch(changePasswordFailureAction(error.response.data.errors));
+        });
+      break;
+    }
+    case DELETE_USER: {
+      axios({
+        method: 'delete',
+        url: `${ROOT_URL}/api/users/${action.userId}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(deleteUserSuccessAction(data));
+          store.dispatch(logoutAction());
+        })
+        .catch((error) => {
+          // console.error(err)
+          if (!error.response) {
+            return console.log(error.message);
+          }
+          return store.dispatch(deleteUserFailureAction(error.response.data.errors));
         });
       break;
     }

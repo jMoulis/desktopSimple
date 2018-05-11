@@ -84,6 +84,10 @@ class AccountProfile extends React.Component {
       }
     }
   }
+  handleDeleteAccount = () => {
+    const { deleteUserAction, userActive } = this.props;
+    deleteUserAction(userActive.user._id);
+  }
   render() {
     const { userActive } = this.props;
     const { loading, error, success } = userActive;
@@ -133,6 +137,7 @@ class AccountProfile extends React.Component {
               {this.state.error && <span className="error">{this.state.error}</span>}
               <Button label="Change" loading={loading} disabled={this.state.disabled} />
             </div>
+            <button type="button" onClick={this.handleDeleteAccount}>Delete My Account</button>
             <div className="form-content">
               <h1>Other info</h1>
             </div>

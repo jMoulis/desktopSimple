@@ -8,14 +8,12 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Account from '../../../components/Profile/Account';
-import { changePasswordAction, clearMessageAction } from '../../../store/reducers/profileReducer';
+import { changePasswordAction, clearMessageAction, deleteUserAction } from '../../../store/reducers/profileReducer';
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ profileReducer }) => ({
-  userActive: profileReducer.userActive,
-});
+const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({

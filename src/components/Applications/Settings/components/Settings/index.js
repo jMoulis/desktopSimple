@@ -27,7 +27,7 @@ class Settings extends React.Component {
     }));
   }
   render() {
-    const { userActive } = this.props;
+    const { userActive, deleteUserAction } = this.props;
     const { loading } = userActive;
     if (loading) {
       return <span>Loading</span>;
@@ -73,8 +73,8 @@ class Settings extends React.Component {
         </div>
         {this.state.tab === 'profile' && <Profile key="profile" />}
         {this.state.tab === 'teams' && <TeamProfile key="teams" user={userActive.user} />}
-        {this.state.tab === 'company' && <CompanyProfile key="profile" />}
-        {this.state.tab === 'account' && <AccountProfile key="account" />}
+        {this.state.tab === 'company' && <CompanyProfile key="profile" userActive={userActive} />}
+        {this.state.tab === 'account' && <AccountProfile key="account" deleteUserAction={deleteUserAction} userActive={userActive} />}
       </div>
     );
   }

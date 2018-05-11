@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Settings from '../components/Settings';
-import { fetchSingleUserAction } from '../store/reducers/profileReducer';
+import { fetchSingleUserAction, deleteUserAction } from '../store/reducers/profileReducer';
 
 /*
  * Code
@@ -23,6 +23,9 @@ const mapStateToProps = ({ authReducer, profileReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   fetchSingleUserAction: (userId) => {
     dispatch(fetchSingleUserAction(userId));
+  },
+  deleteUserAction: (userId) => {
+    dispatch(deleteUserAction(userId));
   },
 });
 

@@ -9,7 +9,7 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
-import AddFilesInput from '../Form/addFilesInput';
+import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 
 class NewProject extends React.Component {
   static propTypes = {
