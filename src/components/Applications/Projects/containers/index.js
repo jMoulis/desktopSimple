@@ -12,8 +12,16 @@ import { fetchProjectsAction } from '../store/reducers/projectReducer';
 /*
  * Code
  */
+const getLoggedUser = () => {
+  if (localStorage.getItem('user')) {
+    const loggedUser = JSON.parse(localStorage.getItem('user'));
+    return loggedUser;
+  }
+  return null;
+};
 // State
-const mapStateToProps = ({ authReducer }) => ({
+const mapStateToProps =  state => ({
+  loggedUserId: getLoggedUser(),
 });
 
 // Actions

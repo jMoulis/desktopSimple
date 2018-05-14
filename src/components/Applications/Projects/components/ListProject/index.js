@@ -6,18 +6,19 @@ import './listProject.css';
 import Modal from '../Modal/modal';
 import NewProject from '../../containers/NewProject/newProject';
 import DetailProject from '../../containers/DetailProject/detailProject';
+import Team from '../../containers/Team';
 
 class ListProject extends React.Component {
   static propTypes = {
     projectListProcess: PropTypes.object.isRequired,
+    activeProjectProcess: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
   }
   state = {
     showNewProjectForm: false,
     detailProjectModal: false,
-    projectId: null,
+    createTeamModal: false,
   }
   handleShowNewProjectForm = () => {
     this.setState(prevState => ({
@@ -26,24 +27,38 @@ class ListProject extends React.Component {
     }));
   }
   handleShowDetailModal = (evt) => {
-    if (evt.target) {
-      const btnName = evt.currentTarget.name;
-      if (btnName) {
-        return this.setState(() => ({
-          [btnName]: false,
-        }));
-      }
-    }
     const { projectid } = evt.currentTarget.dataset;
     const { fetchSingleProjectAction } = this.props;
     fetchSingleProjectAction(projectid);
-    return this.setState(() => ({
+    this.setState(() => ({
       detailProjectModal: true,
       projectId: projectid,
     }));
   }
+  handleShowCreateTeamModal = (evt) => {
+    this.setState(prevState => ({
+      ...prevState,
+      createTeamModal: true,
+      detailProjectModal: false,
+    }));
+  }
+  handleCloseModal = (target) => {
+    // This function is called form it self with his own evt
+    // or from a child. Then the evt is directly the currentTarget
+    let modalName;
+    if (target.currentTarget) {
+      modalName = target.currentTarget.name;
+    }
+    else {
+      modalName = target.name;
+    }
+    return (
+      this.setState(() => ({
+        [modalName]: false,
+      })));
+  };
   render() {
-    const { projectListProcess, loggedUser, selectTab } = this.props;
+    const { projectListProcess, loggedUser, activeProjectProcess } = this.props;
     const { error, loading } = projectListProcess;
 
     if (loading) {
@@ -66,7 +81,7 @@ class ListProject extends React.Component {
               </div>
             </li>
           </ul>}
-          {error && <span>{error.detail}</span>}
+          {error && <span>{error}</span>}
           {projectListProcess.projects.map(project => (
             <ul
               className="project-list"
@@ -75,7 +90,7 @@ class ListProject extends React.Component {
               <li className="project-list-item">
                 <h2>{project.title}</h2>
                 <div className="content">
-                  <p>Due Date: <Moment format="DD/MM/YYYY">{project.dueDate}</Moment></p>
+                  <p>Due Date: {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}</p>
                   <p>Teams: {project.teams.length}</p>
                   <p>Description: {project.description}</p>
                   <ul className="tags-list">
@@ -101,20 +116,34 @@ class ListProject extends React.Component {
             close={this.handleShowNewProjectForm}
             title="New Project"
           >
-            <NewProject close={this.handleShowNewProjectForm} />
-          </Modal>}
-        {this.state.detailProjectModal &&
-          <Modal
-            name="detailProjectModal"
-            close={this.handleShowDetailModal}
-            title="Edit Project"
-          >
-            <DetailProject
-              close={this.handleShowDetailModal}
-              projectId={this.state.projectId}
-              selectTab={selectTab}
+            <NewProject
+              close={this.handleShowNewProjectForm}
+              loggedUser={this.props.loggedUser}
             />
           </Modal>}
+        {this.state.createTeamModal &&
+          <Modal
+            name="createTeamModal"
+            close={this.handleCloseModal}
+            title="Create Team"
+          >
+            <Team
+              close={this.handleCloseModal}
+              loggedUser={this.props.loggedUser}
+            />
+          </Modal>}
+        {this.state.detailProjectModal && activeProjectProcess.loading === false ?
+          <Modal
+            name="detailProjectModal"
+            close={this.handleCloseModal}
+            title="Project"
+          >
+            <DetailProject
+              loggedUser={this.props.loggedUser}
+              close={this.handleCloseModal}
+              openNewTeamModal={this.handleShowCreateTeamModal}
+            />
+          </Modal> : ''}
       </div>
     );
   }

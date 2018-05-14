@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Croppr from 'croppr';
 
 import './profile.css';
 import Model from './student-model';
@@ -11,7 +12,6 @@ import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 
-
 class Profile extends React.Component {
   static propTypes = {
     userActive: PropTypes.object.isRequired,
@@ -20,7 +20,7 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     const { userActive } = this.props;
-    const { user } = userActive; // Datas user
+    const { user } = userActive;
     let field = {};
     Object.keys(Model).map((key) => {
       field = { ...field, [key]: user ? { value: user[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
@@ -193,7 +193,11 @@ class Profile extends React.Component {
         >
           <div className="form-content-wrapper">
             <div className="form-content">
-              <img className="profile-picture" src={`${this.state.picture.value || '/img/avatar.png'}`} alt="Profile" />
+              <img
+                className="profile-picture"
+                src={`${this.state.picture.value || '/img/avatar.png'}`}
+                alt="Profile"
+              />
               <InputFile
                 config={{
                   field: Model.picture,

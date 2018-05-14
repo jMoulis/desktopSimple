@@ -5,6 +5,18 @@ import './addFilesInput.css';
 import ViewerPdf from './viewerPdf';
 
 class AddFilesInput extends React.Component {
+  static propTypes = {
+    docs: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.object,
+    ]).isRequired,
+    onFileChange: PropTypes.func,
+    readOnly: PropTypes.bool,
+  };
+  static defaultProps = {
+    readOnly: false,
+    onFileChange: null,
+  };
   state = {
     docs: this.props.docs,
     viewer: {
@@ -15,6 +27,7 @@ class AddFilesInput extends React.Component {
 
   componentDidMount() {
     this.displayPdfThumbnail(this.state.docs);
+    PdfJs.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.js';
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.docs.length !== this.state.docs.length) {
@@ -123,28 +136,33 @@ class AddFilesInput extends React.Component {
       <div key="docs" className="form-group">
         <label>Documents</label>
         <div className="thumbnail-wrapper">
-          <label htmlFor="docs">
-            <div className="add-thumbnail">
-              <i className="fas fa-plus-circle fa-3x" />
-            </div>
-          </label>
-          <input
-            type="file"
-            name="docs"
-            id="docs"
-            accept=".pdf"
-            onChange={this.handleInputFileChange}
-          />
+          {!this.props.readOnly && [
+            <label key="label-docs" htmlFor="docs">
+              <div className="add-thumbnail">
+                <i className="fas fa-plus-circle fa-3x" />
+              </div>
+            </label>,
+            <input
+              key="input-docs"
+              type="file"
+              name="docs"
+              id="docs"
+              accept=".pdf"
+              onChange={this.handleInputFileChange}
+            />,
+          ]}
           <div className="thumbnail-container">
             {this.state.docs.map((doc, index) => (
               <div key={index} className="thumbnail-content">
-                <button
-                  id={index}
-                  type="button"
-                  className="delete-thumbnail"
-                  onClick={this.handleRemoveThumbnail}
-                >X
-                </button>
+                {!this.props.readOnly &&
+                  <button
+                    id={index}
+                    type="button"
+                    className="delete-thumbnail"
+                    onClick={this.handleRemoveThumbnail}
+                  >X
+                  </button>
+                }
                 <div>
                   <canvas
                     data-b64={doc.value}
@@ -165,13 +183,5 @@ class AddFilesInput extends React.Component {
     ]);
   }
 }
-
-AddFilesInput.propTypes = {
-  docs: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]).isRequired,
-  onFileChange: PropTypes.func.isRequired,
-};
 
 export default AddFilesInput;

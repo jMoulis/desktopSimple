@@ -41,7 +41,6 @@ export default store => next => (action) => {
   switch (action.type) {
     case CREATE_TEAM: {
       const formData = action.payload;
-      console.log(formData.users)
       formData.users = [...formData.users, {
         _id: authReducer.loginProcess.loggedUser._id,
       }];

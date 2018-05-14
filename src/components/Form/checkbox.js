@@ -5,7 +5,7 @@ import './checkbox.css';
 
 const Checkbox = ({ config }) => (
   <div className={`form-group checkbox-group ${config.field.required ? 'required' : ''}`}>
-    <label className="custom-checkbox-label" htmlFor={config.field.name}>
+    <label className="custom-checkbox-label" htmlFor={!config.readOnly ? config.field.name : null}>
       <div className="custom-checkbox">
         {config.value && <i className="fas fa-check" />}
       </div>
@@ -22,6 +22,7 @@ const Checkbox = ({ config }) => (
       onBlur={config.blur}
       onFocus={config.focus}
       onKeyUp={config.keyPress}
+      readOnly={config.readOnly}
     />
     {config.error && <small className="error-message">{config.error}</small>}
   </div>

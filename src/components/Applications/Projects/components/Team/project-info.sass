@@ -1,0 +1,28 @@
+@import './index.sass'
+
+.project-info-list
+  margin-top: .3rem
+  li
+    display: flex
+    flex-direction: column
+    padding-bottom: .5rem
+    label
+      display: inline-block
+      font-weight: bold
+  .input-tag
+    display: flex
+    align-items: center
+    transition: border-bottom 500ms
+    flex-wrap: wrap
+    padding-bottom: .5rem
+    &-values
+      display: flex
+      align-items: center
+      border: 2px solid $beige
+      background-color: $blue
+      margin-right: .5rem
+    &-value
+      display: block
+      padding: .2rem .5rem
+      color: $beige !important
+      font-weight: bold

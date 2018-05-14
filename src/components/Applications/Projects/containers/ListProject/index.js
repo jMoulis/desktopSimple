@@ -15,6 +15,7 @@ import { fetchSingleProjectAction } from '../../store/reducers/projectReducer';
 // State
 const mapStateToProps = ({ projectReducer }) => ({
   projectListProcess: projectReducer.projectListProcess,
+  activeProjectProcess: projectReducer.activeProjectProcess,
 });
 
 // Actions

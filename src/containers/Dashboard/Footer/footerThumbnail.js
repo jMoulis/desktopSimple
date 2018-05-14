@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import Thumbnail from '../../../components/Profile/Thumbnail/thumbnail';
+import FooterThumbnail from '../../../components/Dashboard/Footer/footerThumbnail';
 
 /*
  * Code
@@ -33,5 +33,5 @@ const mapDispatchToProps = dispatch => ({});
  * Export default
  */
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const ThumbnailContainer = createContainer(Thumbnail);
-export default ThumbnailContainer;
+const FooterThumbnailContainer = createContainer(FooterThumbnail);
+export default FooterThumbnailContainer;

@@ -11,13 +11,16 @@ const Input = ({ config }) => {
         name={config.field.name}
         id={config.field.name}
         value={config.value || ''}
-        placeholder={config.field.label}
+        placeholder={config.field.placeholder ? config.field.placeholder : config.field.label}
         onChange={config.onChange}
-        className="form-control"
+        className={`form-control ${config.error && 'form-control-error'}`}
         onBlur={config.blur}
         onFocus={config.focus}
-        onKeyUp={config.keyPress}
+        onKeyUp={config.keyUp}
+        readOnly={config.readOnly}
+        onKeyPress={config.keyPress}
       />
+      {config.small && <small className="tips">{config.small}</small>}
       {config.error && <small className="error-message">{config.error}</small>}
     </div>
   );

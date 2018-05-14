@@ -15,9 +15,10 @@ class Dashboard extends React.Component {
   }
   render() {
     const { applications, activeApps, loggedUser } = this.props;
+    const objectValues = Object.keys(applications).map(itm => applications[itm]);
     return (
       <main id="dashboard">
-        {Object.values(applications).map((application) => {
+        {objectValues.map((application) => {
           if (application.display) {
             return (
               <Frame

@@ -17,6 +17,9 @@ class Modal extends React.Component {
       name,
       title,
     } = this.props;
+    const childrenWithProps = React.Children.map(children, child =>
+      React.cloneElement(child, { close }));
+
     return (
       <div className="modal-overlay">
         <div className="modal-container" style={{ width: this.state.width && this.state.width }}>
@@ -27,7 +30,7 @@ class Modal extends React.Component {
             </button>
           </header>
           <div className="modal-content">
-            {children}
+            {childrenWithProps}
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AppLoader from '../../Applications/config/applicationsLoader';
 import './footer.css';
-import Thumbnail from '../../Applications/Settings/containers/Profile/Thumbnail/thumbnail';
+import Thumbnail from '../../../containers/Dashboard/Footer/footerThumbnail';
 
 class Footer extends React.Component {
   static propTypes = {
@@ -37,11 +37,12 @@ class Footer extends React.Component {
   }
   render() {
     const { applications, activeApp, loggedUser } = this.props;
+    const objectValues = Object.keys(applications).map(itm => applications[itm]);
     return (
       <footer id="footer">
         <div className="footer-app-icon">
           {/* Loop over the applications and load icons */}
-          {Object.values(applications).map((application) => {
+          {objectValues.map((application) => {
             if (!application.typeUser.includes(loggedUser.typeUser) && !application.typeUser.includes('all')) {
               return '';
             }

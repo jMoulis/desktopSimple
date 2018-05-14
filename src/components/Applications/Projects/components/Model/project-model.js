@@ -12,7 +12,7 @@ export default {
     name: 'description',
   },
   dueDate: {
-    type: 'date',
+    type: 'text',
     label: 'Due Date',
     placeholder: 'Due date',
     name: 'dueDate',
@@ -50,11 +50,20 @@ export default {
     label: 'Tags',
     placeholder: 'Tags',
     name: 'tags',
+    isArray: true,
   },
   docs: {
     type: 'file',
     label: 'Choose your docs',
     name: 'docs',
     placeholder: 'Add Docs',
+    isArray: true,
+  },
+  subscribers: {
+    type: 'text',
+    label: null,
+    name: 'subscribers',
+    placeholder: null,
+    isArray: true,
   },
 };

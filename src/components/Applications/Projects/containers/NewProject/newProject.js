@@ -13,8 +13,7 @@ import { createProjectAction, clearProjectMessageAction } from '../../store/redu
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer, projectReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
+const mapStateToProps = ({ projectReducer }) => ({
   projectCreation: projectReducer.projectCreation,
 });
 

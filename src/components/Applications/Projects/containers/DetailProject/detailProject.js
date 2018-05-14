@@ -8,14 +8,13 @@ import { connect } from 'react-redux';
  * Local import
  */
 import DetailProject from '../../components/DetailProject';
-import { editProjectAction, clearProjectMessageAction, fetchSingleProjectAction } from '../../store/reducers/projectReducer';
+import { editProjectAction, clearProjectMessageAction, deleteProjectAction } from '../../store/reducers/projectReducer';
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ projectReducer, authReducer }) => ({
+const mapStateToProps = ({ projectReducer }) => ({
   activeProjectProcess: projectReducer.activeProjectProcess,
-  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 // Actions
@@ -26,8 +25,8 @@ const mapDispatchToProps = dispatch => ({
   editProjectAction: (values) => {
     dispatch(editProjectAction(values));
   },
-  fetchSingleProjectAction: (projectId) => {
-    dispatch(fetchSingleProjectAction(projectId));
+  deleteProjectAction: (projectId) => {
+    dispatch(deleteProjectAction(projectId));
   },
 });
 

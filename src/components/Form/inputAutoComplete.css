@@ -30,11 +30,23 @@
       flex: 1; }
       .form-container .form .form-content .form-group {
         padding: 0.5rem 0; }
+        .form-container .form .form-content .form-group .form-control-error {
+          border-bottom: 2px solid #f8d7da; }
       .form-container .form .form-content .error-login {
         text-align: center; }
       .form-container .form .form-content label {
         color: #0a1c28;
         font-weight: bold; }
+
+.error-message {
+  padding-top: .3rem;
+  color: #721c24;
+  font-size: .7rem; }
+
+.tips {
+  font-size: .7rem;
+  font-style: italic;
+  padding-top: .4rem; }
 
 .input-auto {
   display: flex;

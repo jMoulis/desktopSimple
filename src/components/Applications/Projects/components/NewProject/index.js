@@ -22,7 +22,7 @@ class NewProject extends React.Component {
     super(props);
     let field = {};
     Object.keys(Model).map((key) => {
-      field = { ...field, [key]: { value: '', focus: false, changed: false } };
+      field = { ...field, [key]: { value: Model[key].isArray ? [] : '', focus: false, changed: false } };
       return field;
     });
     this.state = {
@@ -132,6 +132,7 @@ class NewProject extends React.Component {
   render() {
     const { projectCreation } = this.props;
     const { error, success } = projectCreation;
+
     return (
       <div id="newProject" className="form-container" key="app-content" >
         {success && <p className="success">{success.message}</p>}

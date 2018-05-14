@@ -25,6 +25,7 @@ const Select = ({ config }) => {
         multiple={multiple}
         onBlur={blur}
         onFocus={focus}
+        readOnly={config.readOnly}
       >
         <option value="">{field.defaultOption}</option>
         {options.map((option, index) => <option key={index} value={option}>{option}</option>)}

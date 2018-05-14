@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './thumbnail.css';
+import Thumbnail from '../../../../../../Modules/Thumbnail/thumbnail';
 
 const TeamProfile = ({ user }) => {
   return (
@@ -12,15 +12,11 @@ const TeamProfile = ({ user }) => {
             <ul>
               {team.users.map((teamMate, index) => (
                 <li key={index}>
-                  <div className="thumbnail-container">
-                    <img className="thumbnail" src={teamMate.picture} alt="expert" />
-                    <span>{teamMate.fullName}</span>
-                  </div>
+                  <Thumbnail user={teamMate} />
                 </li>
               ))}
             </ul>
           </div>
-          {team.manager === user._id && <button type="button">Modify</button>}
         </li>
       ))}
     </ul>

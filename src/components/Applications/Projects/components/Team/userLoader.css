@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.team {
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap; }
+
+.full-width {
+  width: 100%; }
+
+.users-list-item {
+  margin-bottom: .5rem; }
+  .users-list-item .thumbnail-container {
+    display: flex;
+    align-items: center; }
+  .users-list-item .thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: .5rem; }

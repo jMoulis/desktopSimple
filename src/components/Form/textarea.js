@@ -33,6 +33,7 @@ class Textarea extends React.Component {
           onBlur={config.blur}
           onFocus={config.focus}
           style={{ height: this.state.scrollHeight }}
+          readOnly={config.readOnly}
         />
         {config.error && <small className="error-message">{config.error}</small>}
       </div>

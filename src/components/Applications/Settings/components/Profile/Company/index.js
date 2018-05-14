@@ -311,7 +311,7 @@ class CompanyProfile extends React.Component {
               />
               <AddFilesInput
                 error={error && error.legalDocs && error.legalDocs.detail}
-                docs={company.legalDocs.value}
+                docs={company.legalDocs.value || []}
                 onFileChange={this.handleDocsChange}
                 onBlur={this.handleOnBlur}
               />

@@ -24,6 +24,10 @@ export const EDIT_PROJECT = 'EDIT_PROJECT';
 export const EDIT_PROJECT_SUCCESS = 'EDIT_PROJECT_SUCCESS';
 export const EDIT_PROJECT_FAILURE = 'EDIT_PROJECT_FAILURE';
 
+export const DELETE_PROJECT = 'DELETE_PROJECT';
+export const DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS';
+export const DELETE_PROJECT_FAILURE = 'DELETE_PROJECT_FAILURE';
+
 export const CLEAR_PROJECT_MESSAGE = 'CLEAR_PROJECT_MESSAGE';
 
 
@@ -78,6 +82,7 @@ const reducer = (state = initialState, action = {}) => {
         },
         projectListProcess: {
           ...state.projectListProcess,
+          error: null,
           projects: [
             action.payload.project,
             ...state.projectListProcess.projects,
@@ -165,12 +170,6 @@ const reducer = (state = initialState, action = {}) => {
     case EDIT_PROJECT: {
       return {
         ...state,
-        // activeProjectProcess: {
-        //   ...state.activeProjectProcess,
-        //   loading: false,
-        //   error: null,
-        //   success: null,
-        // },
       };
     }
     case EDIT_PROJECT_SUCCESS: {
@@ -192,15 +191,15 @@ const reducer = (state = initialState, action = {}) => {
       });
       return {
         ...state,
-        // activeProjectProcess: {
-        //   project: {
-        //     ...state.activeProjectProcess.project,
-        //     [field]: value,
-        //   },
-        //   loading: false,
-        //   error: null,
-        //   success: action.payload.success,
-        // },
+        activeProjectProcess: {
+          project: {
+            ...state.activeProjectProcess.project,
+            [field]: value,
+          },
+          loading: false,
+          error: null,
+          success: action.payload.success,
+        },
         projectListProcess: {
           projects: projectsUpdated,
           success: null,
@@ -216,6 +215,26 @@ const reducer = (state = initialState, action = {}) => {
           ...state.activeProjectProcess,
           loading: false,
           error: action.payload,
+        },
+      };
+    }
+    case DELETE_PROJECT: {
+      const { projects } = state.projectListProcess;
+      // Update the project in the projects list
+      // to update the projects list page
+      const projectsUpdated = projects.filter(project => project._id !== action.projectId);
+      return {
+        ...state,
+        activeProjectProcess: {
+          project: {},
+          loading: false,
+          error: null,
+        },
+        projectListProcess: {
+          projects: projectsUpdated,
+          success: null,
+          loading: false,
+          error: null,
         },
       };
     }
@@ -291,6 +310,10 @@ export const createProjectFailureAction = error => ({
 });
 export const clearProjectMessageAction = () => ({
   type: CLEAR_PROJECT_MESSAGE,
+});
+export const deleteProjectAction = projectId => ({
+  type: DELETE_PROJECT,
+  projectId,
 });
 /*
  * Export default

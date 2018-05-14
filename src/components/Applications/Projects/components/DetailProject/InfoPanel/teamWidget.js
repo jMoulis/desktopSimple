@@ -7,7 +7,13 @@ const TeamWidget = ({ team }) => {
   return (
     <div className="team-widget">
       <div className="mini-container">
-        {team.users.map(user => <img key={user._id} className="mini-thumbnail" src={user.picture} alt="Student" />)}
+        {team.users.map(user => (
+          <img
+            key={user._id}
+            className="mini-thumbnail"
+            src={user.picture || '/img/avatar.png'}
+            alt="Student"
+          />))}
       </div>
       <h2>{team.name}</h2>
       <div>Notation</div>

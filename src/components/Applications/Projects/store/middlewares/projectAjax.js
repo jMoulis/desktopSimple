@@ -20,6 +20,7 @@ import {
   EDIT_PROJECT,
   editProjectSuccessAction,
   editProjectFailureAction,
+  DELETE_PROJECT,
 } from '../reducers/projectReducer';
 
 import { logoutAction } from '../../../../../store/reducers/authReducer';
@@ -132,6 +133,26 @@ export default store => next => (action) => {
             return store.dispatch(logoutAction());
           }
           return store.dispatch(fetchSingleProjectFailureAction(error.response.data.errors));
+        });
+      break;
+    }
+    case DELETE_PROJECT: {
+      axios({
+        method: 'delete',
+        url: `${ROOT_URL}/api/projects/${action.projectId}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          // store.dispatch(fetchSingleProjectSuccessAction(data));
+          console.log('success', data)
+        })
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error);
+          }
+          return console.error('Error While Deleting', error);
         });
       break;
     }

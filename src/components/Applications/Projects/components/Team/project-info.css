@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.team {
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap; }
+
+.full-width {
+  width: 100%; }
+
+.project-info-list {
+  margin-top: .3rem; }
+  .project-info-list li {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: .5rem; }
+    .project-info-list li label {
+      display: inline-block;
+      font-weight: bold; }
+  .project-info-list .input-tag {
+    display: flex;
+    align-items: center;
+    transition: border-bottom 500ms;
+    flex-wrap: wrap;
+    padding-bottom: .5rem; }
+    .project-info-list .input-tag-values {
+      display: flex;
+      align-items: center;
+      border: 2px solid #eee9d1;
+      background-color: #008e8b;
+      margin-right: .5rem; }
+    .project-info-list .input-tag-value {
+      display: block;
+      padding: .2rem .5rem;
+      color: #eee9d1 !important;
+      font-weight: bold; }

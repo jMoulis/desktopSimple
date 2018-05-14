@@ -22,6 +22,7 @@ class ViewerPdf extends React.Component {
       enterTimeout: 150,
       exitTimeout: 100,
     };
+    PdfJs.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.js';
   }
   componentDidMount() {
     this.renderPage({ value: this.state.viewer.pdfRaw });
@@ -111,6 +112,7 @@ class ViewerPdf extends React.Component {
         const pdfData = atob(newEncodedString);
         const canvas = document.getElementById('canvas-viewer');
         const context = canvas.getContext('2d');
+        
         PdfJs.getDocument({ data: pdfData }).then((pdf) => {
           pdf.getPage(this.state.viewer.page)
             .then((page) => {
