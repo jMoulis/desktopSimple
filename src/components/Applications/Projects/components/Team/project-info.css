@@ -4,6 +4,10 @@
   padding: 1rem;
   justify-content: space-between;
   flex-wrap: wrap; }
+  .team .content {
+    flex: 1; }
+    .team .content-newteam {
+      flex: 2; }
 
 .full-width {
   width: 100%; }

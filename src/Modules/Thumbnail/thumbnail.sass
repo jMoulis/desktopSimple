@@ -3,12 +3,13 @@
 .thumbnail-container
   display: flex
   align-items: center
-  cursor: pointer
   border: 2px solid transparent
   padding: .3rem
   transition: all 200ms
   &:hover
     box-shadow: 0 0 10px 0 $darkestblue
+  &--selected
+    opacity: .5
   .thumbnail
     width: 40px
     height: 40px
@@ -16,3 +17,27 @@
     margin-right: .5rem
   span
     font-size: .8rem
+  .tag-list
+    .tag-item
+      border: 2px solid $beige
+      padding: .2rem .5rem
+      background-color: $blue
+      color: $beige
+      font-weight: bold
+      font-size: .7rem
+      cursor: pointer
+      outline: none
+      transition: background-color 300ms
+      &:disabled
+        &:hover
+          background-color: $blue
+          color: $beige
+      &:hover
+        background-color: $orange
+      &:active
+        background-color: $darkestblue
+      &--selected
+        background-color: black
+        &:disabled
+          &:hover
+            background-color: black

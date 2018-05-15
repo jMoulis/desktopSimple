@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransition } from 'react-transition-group';
+
 import './modal.css';
 
 class Modal extends React.Component {
@@ -7,39 +9,67 @@ class Modal extends React.Component {
     super(props);
     this.state = {
       width: null,
+      enterTimeout: 150,
+      exitTimeout: 150,
+      display: true,
     };
   }
-
+  handleTransition = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      display: false,
+    }));
+    return true;
+  }
+  handleClose = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      display: false,
+    }));
+  }
   render() {
     const {
       children,
       close,
       name,
       title,
+      zIndex,
     } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, { close }));
 
     return (
-      <div className="modal-overlay">
-        <div className="modal-container" style={{ width: this.state.width && this.state.width }}>
-          <header className="modal-header">
-            <h1>{title}</h1>
-            <button name={name} type="button" className="modal-btn" onClick={close}>
-              <i className="fas fa-times-circle fa-2x" />
-            </button>
-          </header>
-          <div className="modal-content">
-            {childrenWithProps}
+      <CSSTransition
+        in={this.state.display}
+        timeout={{
+          enter: this.state.enterTimeout,
+          exit: this.state.exitTimeout,
+        }}
+        classNames="modal-overlay"
+        appear
+        unmountOnExit
+      >
+        <div className="modal-overlay" style={{ zIndex }}>
+          <div className="modal-container" style={{ width: this.state.width && this.state.width }}>
+            <header className="modal-header">
+              <h1>{title}</h1>
+              <button name={name} type="button" className="modal-btn" onClick={this.handleClose}>
+                <i className="fas fa-times-circle fa-2x" />
+              </button>
+            </header>
+            <div className="modal-content">
+              {childrenWithProps}
+            </div>
           </div>
         </div>
-      </div>
+      </CSSTransition>
     );
   }
 }
 
 Modal.propTypes = {
   close: PropTypes.func.isRequired,
+  zIndex: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([

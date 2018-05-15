@@ -4,6 +4,10 @@
   padding: 1rem;
   justify-content: space-between;
   flex-wrap: wrap; }
+  .team .content {
+    flex: 1; }
+    .team .content-newteam {
+      flex: 2; }
 
 .full-width {
   width: 100%; }
@@ -40,7 +44,8 @@
       color: white;
       font-weight: bold;
       outline: none;
-      transition: background-color 200ms; }
+      transition: background-color 200ms;
+      z-index: 1; }
       .ressource-container .ressourceItem .btn-delete:hover, .ressource-container .ressourceItem .btn-delete:focus {
         background-color: red; }
       .ressource-container .ressourceItem .btn-delete:active {

@@ -45,7 +45,7 @@ class Frame extends React.Component {
       height,
       display: true,
       enterTimeout: 150,
-      exitTimeout: 100,
+      exitTimeout: 150,
     };
   }
   componentDidUpdate() {

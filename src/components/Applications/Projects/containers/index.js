@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
  */
 import Project from '../components/index';
 import { fetchProjectsAction } from '../store/reducers/projectReducer';
+import { fetchTeamsAction } from '../store/reducers/teamReducer';
 /*
  * Code
  */
@@ -28,6 +29,9 @@ const mapStateToProps =  state => ({
 const mapDispatchToProps = dispatch => ({
   fetchProjectsAction: (values) => {
     dispatch(fetchProjectsAction(values));
+  },
+  fetchTeamsAction: () => {
+    dispatch(fetchTeamsAction());
   },
 });
 

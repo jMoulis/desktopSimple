@@ -4,20 +4,21 @@ import ProjectInfo from '../../containers/Team/projectInfo';
 import './index.css';
 import NewTeam from '../../containers/Team/newTeam';
 
-const Team = () => {
+const Team = ({ loggedUser, close }) => {
   return (
     <div className="team">
-      <div className="content">
+      <div className="content content-projectinfo">
         <ProjectInfo />
       </div>
-      <div className="content">
-        <NewTeam />
-      </div>
-      <div className="content">
-        <h1>List of subscribers</h1>
+      <div className="content content-newteam">
+        <NewTeam loggedUser={loggedUser} close={close} />
       </div>
     </div>
   );
+};
+
+Team.propTypes = {
+  loggedUser: PropTypes.object.isRequired,
 };
 
 export default Team;

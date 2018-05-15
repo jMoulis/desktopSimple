@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './project.css';
 import ListProject from '../containers/ListProject';
 import Team from '../containers/Team';
+import MyProject from '../containers/MyProject';
 
 class Projects extends React.Component {
   static propTypes = {
@@ -13,7 +14,8 @@ class Projects extends React.Component {
     tab: 'projects',
   }
   componentDidMount() {
-    const { fetchProjectsAction } = this.props;
+    const { fetchProjectsAction, fetchTeamsAction } = this.props;
+    fetchTeamsAction();
     fetchProjectsAction();
   }
   handleTabSelect = (evt) => {
@@ -43,6 +45,16 @@ class Projects extends React.Component {
               Projects
               </button>
             </li>
+            <li>
+              <button
+                className="btn-app-toolbar unselectable"
+                name="myProjects"
+                data-tab="myProjects"
+                onClick={this.handleTabSelect}
+              >
+              My Projects
+              </button>
+            </li>
           </ul>
         </div>
         {this.state.tab === 'projects' &&
@@ -56,6 +68,13 @@ class Projects extends React.Component {
           <Team
             key="createTeam"
             projectid={this.state.projectid}
+            loggedUser={this.props.loggedUser}
+          />
+        }
+        {this.state.tab === 'myProjects' &&
+          <MyProject
+            key="myProjects"
+            loggedUser={this.props.loggedUser}
           />
         }
       </div>

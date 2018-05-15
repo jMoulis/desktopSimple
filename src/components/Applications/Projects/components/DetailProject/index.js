@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
+import './index.css';
 import Model from '../Model/project-model';
 import Input from '../../../../Form/input';
 import Textarea from '../../../../Form/textarea';
@@ -202,26 +203,6 @@ class DetailProject extends React.Component {
       },
     }));
   }
-  handleInputDateChange = (evt) => {
-    const date = new Date(evt.target.value);
-    console.log(date.toString())
-    if (date.toString() !== 'Invalid Date') {
-      this.setState(prevState => ({
-        ...prevState,
-        form: {
-          ...prevState.form,
-          dueDate: {
-            value: date,
-            changed: true,
-          },
-        },
-      }));
-      console.log('Good')
-    }
-    else {
-      console.log('invalid date')
-    }
-  }
   handleDeleteProject = (evt) => {
     const { deleteProjectAction, activeProjectProcess, close } = this.props;
     deleteProjectAction(activeProjectProcess.project._id);
@@ -231,6 +212,7 @@ class DetailProject extends React.Component {
       delete: true,
       evtTargetChild,
     }), () => {
+      // The setTimeOut is used to let the time to display confirmation message
       setTimeout(() => {
         this.setState(prevState => ({
           ...prevState,
@@ -239,32 +221,54 @@ class DetailProject extends React.Component {
         close(evtTargetChild);
       }, 1000);
     });
-    // close(evt);
   }
   handleSubscribe = (evt) => {
-    const { name } = evt.target;
-    let subscribers = [];
+    const { name } = evt.currentTarget;
     const { editProjectAction, loggedUser } = this.props;
-    if (name === 'unsubscribe') {
-      subscribers = this.state.form.subscribers.value.filter(subscriber => (
-        subscriber !== loggedUser.user._id));
+    const stateSubscribers = this.state.form.subscribers.value;
+
+    let subscribers = [];
+    const userAlreadySubscribed = stateSubscribers.find(subscriber => (
+      subscriber._id === loggedUser.user._id
+    ));
+
+    switch (name) {
+      case 'subscribe':
+        if (userAlreadySubscribed) {
+          // do not add the user if already subscribed
+          // in case of corrupted db
+          subscribers = stateSubscribers;
+          return subscribers;
+        }
+        return this.setState(prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            subscribers: {
+              value: [
+                ...stateSubscribers,
+                { _id: loggedUser.user._id },
+              ],
+              changed: true,
+            },
+          },
+        }), () => editProjectAction(this.state.form));
+      case 'unsubscribe':
+        subscribers = stateSubscribers.filter(subscriber => (
+          subscriber._id !== loggedUser.user._id));
+        return this.setState(prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            subscribers: {
+              value: subscribers,
+              changed: true,
+            },
+          },
+        }), () => editProjectAction(this.state.form));
+      default:
+        break;
     }
-    else {
-      subscribers = [
-        ...this.state.form.subscribers.value,
-        loggedUser.user._id,
-      ];
-    }
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        subscribers: {
-          value: subscribers,
-          changed: true,
-        },
-      },
-    }), () => editProjectAction(this.state.form));
   }
   render() {
     const { activeProjectProcess, openNewTeamModal, loggedUser } = this.props;
@@ -399,15 +403,18 @@ class DetailProject extends React.Component {
                 </button>
               </div>
             }
-            <div className="form-content">
+            <div className="subscribe">
               {project.author._id !== user._id &&
                 project.subscribers &&
                   <button
-                    name={project.subscribers.includes(user._id) ? 'unsubscribe' : 'subscribe'}
-                    className="btn-subscribe"
+                    name={project.subscribers.find(subscriber => subscriber._id === user._id) ? 'unsubscribe' : 'subscribe'}
+                    className={`btn-subscribe ${project.subscribers.find(subscriber => subscriber._id === user._id) && 'subscribed'}`}
                     type="button"
                     onClick={this.handleSubscribe}
-                  >{project.subscribers.includes(user._id) ? 'Unsubscribe' : 'Subscribe'}
+                  >
+                    {project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                      <i className="fas fa-thumbs-up fa-2x" /> :
+                      <i className="fas fa-thumbs-up fa-2x" />}
                   </button>}
             </div>
           </div>

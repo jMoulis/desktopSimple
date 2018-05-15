@@ -34,7 +34,7 @@ class Toolbar extends React.Component {
     // Give time to finish transition then set false to display prop in the reducer
     window.setTimeout(() => {
       closeAppAction(appName);
-    }, exitTimeOut * 1.5);
+    }, exitTimeOut);
   }
   handleReduce = () => {
     const { appName, reduceAppAction } = this.props;

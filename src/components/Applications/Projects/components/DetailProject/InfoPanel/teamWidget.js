@@ -16,7 +16,6 @@ const TeamWidget = ({ team }) => {
           />))}
       </div>
       <h2>{team.name}</h2>
-      <div>Notation</div>
     </div>
   );
 };

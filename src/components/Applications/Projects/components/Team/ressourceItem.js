@@ -3,6 +3,17 @@ import PropTypes from 'prop-types';
 
 import './ressourceItem.css';
 
+const hasPicture = (user) => {
+  if (!user) {
+    return '/img/anonymous.png';
+  }
+  if (user.picture) {
+    if (user.picture.length > 0) {
+      return user.picture;
+    }
+  }
+  return '/img/avatar.png';
+};
 const RessourceItem = ({ config }) => {
   return (
     <li>
@@ -16,9 +27,7 @@ const RessourceItem = ({ config }) => {
           X
         </button>
         <img
-          src={config.selectedUsers[config.value] ?
-            config.selectedUsers[config.value].picture :
-          '/img/anonymous.png'}
+          src={hasPicture(config.selectedUsers[config.value])}
           alt="Expert"
         />
         <span className="ressource-label">{config.value}</span>

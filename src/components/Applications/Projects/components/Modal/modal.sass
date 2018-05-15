@@ -12,6 +12,17 @@ $change-color: background-color 500ms ease-out
     background-color: rgba(10, 28, 40, 0.7)
     display: flex
     justify-content: center
+    z-index: 1
+    &-appear
+      opacity: 0.01
+    &-appear.modal-overlay-appear-active
+      opacity: 1
+      transition: opacity 200ms
+    &-exit
+      opacity: 1
+    &-exit.modal-overlay-exit-active
+      opacity: 0.01
+      transition: opacity 200ms
   &-container
     margin: 1rem
     border: 5px solid $darkestblue
@@ -19,6 +30,7 @@ $change-color: background-color 500ms ease-out
     min-width: 90%
     height: 95%
     overflow: hidden
+    position: relative
   &-header
     display: flex
     justify-content: space-between

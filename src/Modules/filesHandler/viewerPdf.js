@@ -112,7 +112,6 @@ class ViewerPdf extends React.Component {
         const pdfData = atob(newEncodedString);
         const canvas = document.getElementById('canvas-viewer');
         const context = canvas.getContext('2d');
-        
         PdfJs.getDocument({ data: pdfData }).then((pdf) => {
           pdf.getPage(this.state.viewer.page)
             .then((page) => {

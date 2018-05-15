@@ -133,9 +133,9 @@ class AddFilesInput extends React.Component {
       error,
     } = this.state;
     return ([
-      <div key="docs" className="form-group">
+      <div key="docs" className="addfilesinput form-group">
         <label>Documents</label>
-        <div className="thumbnail-wrapper">
+        <div className="addfilesinput-thumbnail-wrapper">
           {!this.props.readOnly && [
             <label key="label-docs" htmlFor="docs">
               <div className="add-thumbnail">
@@ -151,9 +151,9 @@ class AddFilesInput extends React.Component {
               onChange={this.handleInputFileChange}
             />,
           ]}
-          <div className="thumbnail-container">
+          <div className="addfilesinput-thumbnail-container">
             {this.state.docs.map((doc, index) => (
-              <div key={index} className="thumbnail-content">
+              <div key={index} className="addfilesinput-thumbnail-content">
                 {!this.props.readOnly &&
                   <button
                     id={index}
