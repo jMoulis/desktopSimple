@@ -108,6 +108,20 @@ class ListProject extends React.Component {
     }
     return (
       <div className="project-list-container">
+        <ul>
+          <li>
+            <form>
+              <label>Criteria 1</label>
+              <input />
+              <label>Criteria 2</label>
+              <input />
+              <label>Criteria 3</label>
+              <input />
+              <label>Criteria 4</label>
+              <input />
+            </form>
+          </li>
+        </ul>
         <div>
           {loggedUser.user.typeUser &&
           loggedUser.user.typeUser !== 'student' &&
@@ -129,7 +143,13 @@ class ListProject extends React.Component {
               className="project-list"
               key={project._id}
             >
-              <li className="project-list-item">
+              <li
+                className="project-list-item"
+                data-projectid={project._id}
+                data-tab="project-detail"
+                onClick={this.handleShowDetailModal}
+                onKeyPress={this.handleShowDetailModal}
+              >
                 <h2>{project.title}</h2>
                 <div className="content">
                   <p>Due Date: {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}</p>
@@ -144,7 +164,6 @@ class ListProject extends React.Component {
                     data-tab="project-detail"
                     onClick={this.handleShowDetailModal}
                   >
-                    {/* if want to display in app parent use //clickTab */}
                     Check me out
                   </button>
                 </div>
@@ -155,7 +174,7 @@ class ListProject extends React.Component {
         {this.state.showNewProjectForm.display &&
           <Modal
             name="showNewProjectForm"
-            close={this.handleShowNewProjectForm}
+            closeFromParent={this.handleShowNewProjectForm}
             title="New Project"
             zIndex={this.state.showNewProjectForm.zIndex}
           >
@@ -166,7 +185,7 @@ class ListProject extends React.Component {
         {this.state.createTeamModal.display &&
           <Modal
             name="createTeamModal"
-            close={this.handleCloseModal}
+            closeFromParent={this.handleCloseModal}
             title="Create Team"
             zIndex={this.state.createTeamModal.zIndex}
           >
@@ -177,7 +196,7 @@ class ListProject extends React.Component {
         {this.state.detailProjectModal.display && activeProjectProcess.loading === false ?
           <Modal
             name="detailProjectModal"
-            close={this.handleCloseModal}
+            closeFromParent={this.handleCloseModal}
             title="Project"
             zIndex={this.state.detailProjectModal.zIndex}
           >

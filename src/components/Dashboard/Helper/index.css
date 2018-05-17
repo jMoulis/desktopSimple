@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.helper {
+  position: relative;
+  padding: 2rem;
+  margin: 1rem;
+  border: 5px solid #0a1c28;
+  background-color: #97c0b7;
+  min-width: 70%;
+  height: 70%;
+  box-shadow: 0px 0px 20px 0px #0a1c28; }
+  .helper-close {
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    outline: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #ff6666;
+    transition: color 500ms; }
+    .helper-close:hover, .helper-close:focus {
+      color: red; }
+    .helper-close:active {
+      color: #990000; }

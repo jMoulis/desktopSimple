@@ -92,7 +92,6 @@ class Frame extends React.Component {
         }}
         classNames="frame"
         appear
-        unmountOnExit
       >
         <div
           className={`${frameFullSizeClass} ${applications[appName].reduce && 'frame-reduce'}`}

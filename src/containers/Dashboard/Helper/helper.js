@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import Dashboard from '../../components/MyProject/dashboard';
+import Helper from '../../../components/Dashboard/Helper';
 
 /*
  * Code
@@ -16,13 +16,12 @@ import Dashboard from '../../components/MyProject/dashboard';
 const mapStateToProps = state => ({});
 
 // Actions
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = dispatch => ({});
 
 
 /*
  * Export default
  */
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const DashboardContainer = createContainer(Dashboard);
-export default DashboardContainer;
+const HelperContainer = createContainer(Helper);
+export default HelperContainer;

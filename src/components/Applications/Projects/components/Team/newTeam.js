@@ -12,9 +12,14 @@ class NewTeam extends React.Component {
   static propTypes = {
     fetchUsersCountAction: PropTypes.func.isRequired,
     createTeamAction: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func,
     project: PropTypes.object.isRequired,
     teamCreation: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    clearTeamMessageAction: PropTypes.func.isRequired,
+  }
+  static defaultProps = {
+    closeFromParent: null,
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     const { usersCount } = nextProps;
@@ -40,11 +45,11 @@ class NewTeam extends React.Component {
     modal: false,
   }
   componentDidUpdate() {
-    const { teamCreation, close } = this.props;
+    const { teamCreation, closeFromParent } = this.props;
     const { success } = teamCreation;
     if (success && success.status) {
       setTimeout(() => {
-        close('createTeamModal');
+        closeFromParent('createTeamModal');
       }, 300);
     }
     return true;
@@ -148,7 +153,6 @@ class NewTeam extends React.Component {
       selectedUsers,
       selectedTags,
     } = this.state;
-
     const { teamCreation, loggedUser } = this.props;
     const { error, success } = teamCreation;
     return (
@@ -225,8 +229,16 @@ class NewTeam extends React.Component {
             </form>
           }
           {this.state.modal &&
-            <Modal close={this.handleClose} title="Pick your expert" name="close">
-              <UsersLoader filter={this.state.filter} select={this.handleSelectUser} />
+            <Modal
+              zIndex={6000}
+              title="Pick your expert"
+              name="close"
+              closeFromParent={this.handleClose}
+            >
+              <UsersLoader
+                filter={this.state.filter}
+                select={this.handleSelectUser}
+              />
             </Modal>
           }
         </div>

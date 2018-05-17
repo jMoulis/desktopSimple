@@ -7,14 +7,14 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import MyProject from '../../components/MyProject';
+import LeftPanel from '../../components/MyTeams/leftPanel';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ projectReducer }) => ({
-  projectListProcess: projectReducer.projectListProcess,
+const mapStateToProps = ({ teamReducer }) => ({
+  teamListProcess: teamReducer.teamListProcess,
 });
 
 // Actions
@@ -26,5 +26,5 @@ const mapDispatchToProps = dispatch => ({
  * Export default
  */
 const createContainer = connect(mapStateToProps, mapDispatchToProps);
-const MyProjectContainer = createContainer(MyProject);
-export default MyProjectContainer;
+const LeftPanelContainer = createContainer(LeftPanel);
+export default LeftPanelContainer;

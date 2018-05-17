@@ -13,10 +13,14 @@ class UsersLoader extends React.Component {
     }).isRequired,
     filter: PropTypes.string.isRequired,
     select: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func.isRequired,
   }
   componentDidMount() {
     const { fetchUsersAction, filter } = this.props;
     fetchUsersAction(filter);
+  }
+  componentWillUnmount() {
+    this.props.closeFromParent();
   }
   handlePagination = (evt) => {
     const { filter, fetchUsersAction } = this.props;

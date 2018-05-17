@@ -119,7 +119,7 @@ export default store => next => (action) => {
     case FETCH_SINGLE_TEAM: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/teams/${action.projectId}`,
+        url: `${ROOT_URL}/api/teams/${action.teamId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

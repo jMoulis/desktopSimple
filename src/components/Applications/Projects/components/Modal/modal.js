@@ -14,29 +14,23 @@ class Modal extends React.Component {
       display: true,
     };
   }
-  handleTransition = () => {
+  handleClose = () => {
     this.setState(prevState => ({
       ...prevState,
       display: false,
     }));
     return true;
   }
-  handleClose = () => {
-    this.setState(prevState => ({
-      ...prevState,
-      display: false,
-    }));
-  }
   render() {
     const {
       children,
-      close,
+      closeFromParent,
       name,
       title,
       zIndex,
     } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { close }));
+      React.cloneElement(child, { closeFromParent }));
 
     return (
       <CSSTransition
@@ -68,7 +62,7 @@ class Modal extends React.Component {
 }
 
 Modal.propTypes = {
-  close: PropTypes.func.isRequired,
+  closeFromParent: PropTypes.func,
   zIndex: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -81,6 +75,7 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
   children: null,
+  closeFromParent: null,
 };
 
 export default Modal;

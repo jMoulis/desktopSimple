@@ -19,7 +19,7 @@ class DetailProject extends React.Component {
     editProjectAction: PropTypes.func.isRequired,
     openNewTeamModal: PropTypes.func.isRequired,
     deleteProjectAction: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
@@ -204,7 +204,7 @@ class DetailProject extends React.Component {
     }));
   }
   handleDeleteProject = (evt) => {
-    const { deleteProjectAction, activeProjectProcess, close } = this.props;
+    const { deleteProjectAction, activeProjectProcess, closeFromParent } = this.props;
     deleteProjectAction(activeProjectProcess.project._id);
     const evtTargetChild = evt.currentTarget;
     this.setState(prevState => ({
@@ -218,7 +218,7 @@ class DetailProject extends React.Component {
           ...prevState,
           delete: false,
         }));
-        close(evtTargetChild);
+        closeFromParent(evtTargetChild);
       }, 1000);
     });
   }
