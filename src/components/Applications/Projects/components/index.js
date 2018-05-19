@@ -45,7 +45,7 @@ class Projects extends React.Component {
               Projects
               </button>
             </li>
-            <li>
+            {/* <li>
               <button
                 className="btn-app-toolbar unselectable"
                 name="myTeams"
@@ -54,7 +54,7 @@ class Projects extends React.Component {
               >
               My Teams
               </button>
-            </li>
+            </li> */}
           </ul>
         </div>
         {this.state.tab === 'projects' &&

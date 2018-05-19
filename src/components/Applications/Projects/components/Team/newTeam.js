@@ -98,11 +98,17 @@ class NewTeam extends React.Component {
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { createTeamAction, project } = this.props;
+    const { createTeamAction, project, loggedUser } = this.props;
+    const users = Object.entries(this.state.selectedUsers).map((value) => {
+      let selectedUser = {};
+      selectedUser = { ...selectedUser, spec: value[0], user: { _id: value[1]._id } };
+      return selectedUser;
+    });
     const values = {
-      users: Object.values(this.state.selectedUsers),
+      users: [...users, { spec: 'manager', user: { _id: loggedUser.user._id } }],
       name: this.state.name,
-      projects: [{ _id: project._id, title: project.title }],
+      project: { _id: project._id },
+      manager: { manager: loggedUser.user },
     };
     createTeamAction(values);
   }

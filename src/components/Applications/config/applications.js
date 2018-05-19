@@ -3,15 +3,6 @@
 */
 
 export default {
-  // TextEditor: {
-  //   appName: 'TextEditor',
-  //   title: 'Text Editor',
-  //   file: 'index.js',
-  //   fullSize: false,
-  //   display: false,
-  //   zIndex: 0,
-  //   icon: 'fas fa-edit',
-  // },
   Projects: {
     appName: 'Projects',
     title: 'Project Manager',
@@ -38,6 +29,16 @@ export default {
     display: false,
     zIndex: 0,
     icon: 'fas fa-cog',
+    reduce: false,
+    typeUser: ['all'],
+  },
+  TextEditor: {
+    appName: 'TextEditor',
+    title: 'Text Editor',
+    fullSize: false,
+    display: false,
+    zIndex: 0,
+    icon: 'fas fa-edit',
     reduce: false,
     typeUser: ['all'],
   },

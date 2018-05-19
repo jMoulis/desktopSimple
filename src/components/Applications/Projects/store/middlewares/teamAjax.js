@@ -37,13 +37,10 @@ const toObject = (arr) => {
  * Middleware
  */
 export default store => next => (action) => {
-  const { authReducer } = store.getState();
   switch (action.type) {
     case CREATE_TEAM: {
       const formData = action.payload;
-      formData.users = [...formData.users, {
-        _id: authReducer.loginProcess.loggedUser._id,
-      }];
+      formData.users = [...formData.users];
       axios({
         method: 'post',
         data: formData,
@@ -67,14 +64,11 @@ export default store => next => (action) => {
       break;
     }
     case EDIT_TEAM: {
-      // 1- the action.payload is the state with all fields.
-      // I filter to get only those who changed
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      // 2- I transform my array to an object
       const formData = toObject(filteredArray);
       axios({
         method: 'put',
-        data: formData,
+        data: action.payload,
         url: `${ROOT_URL}/api/teams/${store.getState().teamReducer.activeTeamProcess.team._id}`,
         headers: {
           Authorization: localStorage.getItem('token'),

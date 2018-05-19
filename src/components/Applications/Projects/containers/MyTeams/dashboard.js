@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Dashboard from '../../components/MyTeams/dashboard';
-import { fetchSingleTeamAction } from '../../store/reducers/teamReducer';
+import { fetchSingleTeamAction, editTeamAction } from '../../store/reducers/teamReducer';
 /*
  * Code
  */
@@ -21,6 +21,9 @@ const mapStateToProps = ({ teamReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   fetchSingleTeamAction: (teamId) => {
     dispatch(fetchSingleTeamAction(teamId));
+  },
+  editTeamAction: (values) => {
+    dispatch(editTeamAction(values));
   },
 });
 

@@ -10,7 +10,7 @@
 #footer {
   display: flex;
   align-items: center;
-  z-index: 3000;
+  z-index: 90;
   background-color: #0a1c28;
   width: 100%;
   background: linear-gradient(to bottom, #22323d 5%, #0a1c28 10%);

@@ -11,19 +11,30 @@ import { connect } from 'react-redux';
  */
 import App from '../../components/App/app';
 import { rehydrateAction } from '../../store/reducers/authReducer';
+import { fetchSingleTeamAction } from '../../store/reducers/teamReducer';
+import { fetchUserAction } from '../../store/reducers/userReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer }) => ({
+const mapStateToProps = ({ authReducer, mainTeamReducer, userReducer }) => ({
   auth: authReducer.auth,
+  loggedUser: authReducer.loginProcess.loggedUser,
+  activeTeamProcess: mainTeamReducer.activeTeamProcess,
+  userActive: userReducer.userActive,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
   rehydrateAction: () => {
     dispatch(rehydrateAction());
+  },
+  fetchSingleTeamAction: (teamId) => {
+    dispatch(fetchSingleTeamAction(teamId));
+  },
+  fetchUserAction: (userId) => {
+    dispatch(fetchUserAction(userId));
   },
 });
 

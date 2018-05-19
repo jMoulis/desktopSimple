@@ -14,10 +14,11 @@ import { setActiveAppAction } from '../../store/reducers/frameReducer';
  * Code
  */
 // State
-const mapStateToProps = ({ frameReducer, authReducer }) => ({
+const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer }) => ({
   activeApp: frameReducer.activeApp,
   applications: frameReducer.applications,
   activeApps: frameReducer.activeApps,
+  activeTeamProcess: mainTeamReducer.activeTeamProcess,
   loggedUser: {
     user: authReducer.loginProcess.loggedUser,
     auth: authReducer.auth,

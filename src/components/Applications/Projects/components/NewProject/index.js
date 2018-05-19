@@ -16,7 +16,7 @@ class NewProject extends React.Component {
     projectCreation: PropTypes.object.isRequired,
     createProjectAction: PropTypes.func.isRequired,
     clearProjectMessageAction: PropTypes.func.isRequired,
-    close: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
@@ -33,9 +33,9 @@ class NewProject extends React.Component {
     };
   }
   componentDidUpdate() {
-    const { projectCreation, close } = this.props;
+    const { projectCreation, closeFromParent } = this.props;
     if (projectCreation.success && projectCreation.success.status) {
-      close();
+      closeFromParent();
     }
     return true;
   }

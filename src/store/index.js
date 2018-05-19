@@ -13,7 +13,8 @@ import authReducer from './reducers/authReducer';
 import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
 import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
-import userReducer from './/reducers/userReducer';
+import mainTeamReducer from './reducers/teamReducer';
+import userReducer from './reducers/userReducer';
 
 // MIDDLEWARES
 import authAjax from './middlewares/authAjax';
@@ -21,6 +22,7 @@ import userAjax from './middlewares/userAjax';
 import profileAjax from '../components/Applications/Settings/store/middlewares/profileAjax';
 import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
 import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
+import mainTeamAjax from './middlewares/teamAjax';
 
 /*
  * Code
@@ -40,8 +42,10 @@ const mainReducer = combineReducers({
   projectReducer,
   userReducer,
   teamReducer,
+  mainTeamReducer,
 });
 
+// Reset reducer on logout
 const rootReducer = (state, action) => {
   if (action.type === 'LOGOUT') {
     state = undefined;
@@ -57,6 +61,7 @@ const store = createStore(
     applyMiddleware(profileAjax),
     applyMiddleware(projectAjax),
     applyMiddleware(teamAjax),
+    applyMiddleware(mainTeamAjax),
     ...devTools,
   ),
 );

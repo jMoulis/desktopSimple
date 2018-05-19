@@ -12,6 +12,10 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE';
 
+export const FETCH_USER = 'FETCH_USER';
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
+
 export const FETCH_USERS_COUNT = 'FETCH_USERS_COUNT';
 export const FETCH_USERS_COUNT_SUCCESS = 'FETCH_USERS_COUNT_SUCCESS';
 
@@ -89,6 +93,36 @@ const reducer = (state = initialState, action = {}) => {
         usersCount: action.payload,
       };
     }
+    case FETCH_USER: {
+      return {
+        ...state,
+        userActive: {
+          user: {},
+          loading: true,
+          error: null,
+        },
+      };
+    }
+    case FETCH_USER_SUCCESS: {
+      return {
+        ...state,
+        userActive: {
+          user: action.payload,
+          loading: false,
+          error: null,
+        },
+      };
+    }
+    case FETCH_USER_FAILURE: {
+      return {
+        ...state,
+        userActive: {
+          user: {},
+          loading: false,
+          error: action.payload,
+        },
+      };
+    }
     default:
       return {
         ...state,
@@ -118,6 +152,18 @@ export const fetchUsersSuccessAction = data => ({
 });
 export const fetchUsersFailureAction = error => ({
   type: FETCH_USERS_FAILURE,
+  payload: error,
+});
+export const fetchUserAction = userId => ({
+  type: FETCH_USER,
+  userId,
+});
+export const fetchUserSuccessAction = data => ({
+  type: FETCH_USER_SUCCESS,
+  payload: data,
+});
+export const fetchUserFailureAction = error => ({
+  type: FETCH_USER_FAILURE,
   payload: error,
 });
 export const editUserAction = (id, updates) => ({

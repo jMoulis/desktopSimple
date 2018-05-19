@@ -8,6 +8,9 @@ import axios from 'axios';
  */
 import { ROOT_URL } from '../../Utils/config';
 import {
+  FETCH_USER,
+  fetchUserSuccessAction,
+  fetchUserFailureAction,
   FETCH_USERS,
   fetchUsersSuccessAction,
   fetchUsersFailureAction,
@@ -36,6 +39,24 @@ export default store => next => (action) => {
         })
         .catch(({ response }) => {
           store.dispatch(fetchUsersFailureAction(response.statusText));
+        });
+      break;
+    case FETCH_USER:
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/users/${action.userId}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(fetchUserSuccessAction(data));
+        })
+        .catch((error) => {
+          if (!error.response) {
+            return console.log(error);
+          }
+          return store.dispatch(fetchUserFailureAction(error.response.error.errors));
         });
       break;
     case FETCH_USERS_COUNT:

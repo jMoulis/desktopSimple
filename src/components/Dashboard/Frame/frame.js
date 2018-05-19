@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import './frame.css';
-import Toolbar from '../../../containers/Dashboard/Toolbar/toolbar';
+import Toolbar from '../../../containers/Dashboard/Frame/Toolbar/toolbar';
 import Draggable from './Helpers/draggable';
 
 class Frame extends React.Component {

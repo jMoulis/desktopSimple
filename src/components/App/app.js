@@ -9,12 +9,29 @@ import LoginForm from '../../containers/Home/Login/login';
 import Content from '../../containers/Home/Content/content';
 import NoMatch from '../NoMatch/noMatch';
 import Signup from '../../containers/User/SignUp/signup';
+import TeamSelector from '../../containers/Dashboard/TeamSelector';
 
 
 class App extends Component {
   static propTypes = {
     auth: PropTypes.bool.isRequired,
     rehydrateAction: PropTypes.func.isRequired,
+    fetchSingleTeamAction: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+  }
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if (nextProps.auth === false) {
+      return {
+        showSelectTeam: true,
+      };
+    }
+    return nextState;
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSelectTeam: true,
+    };
   }
   componentDidMount() {
     // Refresh Management
@@ -27,8 +44,21 @@ class App extends Component {
       }
     }
   }
+  handleSelectTeam = (evt) => {
+    const { teamid } = evt.currentTarget.dataset;
+    const { fetchSingleTeamAction } = this.props;
+    this.setState(() => ({
+      showSelectTeam: false,
+    }));
+    fetchSingleTeamAction(teamid);
+  }
+  showSelectTeamPanel = () => {
+    this.setState(() => ({
+      showSelectTeam: true,
+    }));
+  }
   render() {
-    const { auth } = this.props;
+    const { auth, loggedUser } = this.props;
     return (
       <div id="app">
         <Switch>
@@ -73,7 +103,20 @@ class App extends Component {
             path="/dashboard"
             render={() => {
               if (auth) {
-                return [<Dashboard key="dashboard" />, <Footer key="footer" />];
+                return (
+                  <div id="app-container">
+                    <Dashboard
+                      key="dashboard"
+                      showSelectTeamPanel={this.showSelectTeamPanel}
+                    />
+                    {this.state.showSelectTeam &&
+                      loggedUser.typeUser !== 'company' &&
+                      loggedUser.teams.length !== 0 &&
+                        <TeamSelector selectTeam={this.handleSelectTeam} />
+                    }
+                    <Footer key="footer" />
+                  </div>
+                );
               }
               return <Redirect to="/" />;
             }}

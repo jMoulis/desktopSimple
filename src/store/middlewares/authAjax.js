@@ -17,7 +17,6 @@ import {
   loginFailureAction,
   REHYDRATE,
   rehydrateSuccessAction,
-  rehydrateFailureAction,
 } from '../reducers/authReducer';
 /*
  * Code
@@ -66,6 +65,7 @@ export default store => next => (action) => {
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
           localStorage.setItem('user', JSON.stringify(payload.user));
+          // store.dispatch(fetchUserSuccessAction({ user: payload.user }));
           store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
         })
         .catch((error) => {
@@ -104,8 +104,12 @@ export default store => next => (action) => {
         }
       });
       rehydrate
-        .then(user => store.dispatch(rehydrateSuccessAction(user)))
-        .catch(({ message }) => store.dispatch(rehydrateFailureAction(JSON.parse(message))));
+        .then(({ user, auth }) => {
+          // store.dispatch(fetchUserAction(user._id));
+          // store.dispatch(fetchUserSuccessAction({ user }));
+          store.dispatch(rehydrateSuccessAction({ user, auth }));
+        })
+        .catch(error => console.log(error));
       break;
     }
     default:

@@ -4,11 +4,16 @@ import PropTypes from 'prop-types';
 import './dashboard.css';
 import Frame from '../../containers/Dashboard/Frame/frame';
 import Helper from '../../containers/Dashboard/Helper/helper';
+import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
+import Modal from '../../Modules/Modal/modal';
+import TeamSettings from '../../containers/Dashboard/TeamSettings';
 
 class Dashboard extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    activeTeamProcess: PropTypes.object.isRequired,
+    showSelectTeamPanel: PropTypes.func.isRequired,
     activeApps: PropTypes.array,
   }
   static defaultProps = {
@@ -16,6 +21,12 @@ class Dashboard extends React.Component {
   }
   state = {
     helper: true,
+    showSettings: false,
+  }
+  handleShowSettings = () => {
+    this.setState(prevState => ({
+      showSettings: !prevState.showSettings,
+    }));
   }
   handleCloseHelper = () => {
     this.setState(prevState => ({
@@ -25,10 +36,23 @@ class Dashboard extends React.Component {
     return true;
   }
   render() {
-    const { applications, activeApps, loggedUser } = this.props;
-    const objectValues = Object.keys(applications).map(itm => applications[itm]);
+    const {
+      applications,
+      activeApps,
+      loggedUser,
+      activeTeamProcess,
+      showSelectTeamPanel,
+    } = this.props;
+    const objectValues = Object.keys(applications).map(item => applications[item]);
     return (
       <main id="dashboard">
+        {activeTeamProcess.loading === false &&
+          loggedUser.typeUser !== 'company' &&
+            <TeamToolbar
+              showSettings={this.handleShowSettings}
+              showSelectTeamPanel={showSelectTeamPanel}
+            />
+        }
         {objectValues.map((application) => {
           if (application.display) {
             return (
@@ -53,10 +77,21 @@ class Dashboard extends React.Component {
         })}
         {this.state.helper &&
           loggedUser.user.teams.length === 0 &&
+          loggedUser.user.typeUser === 'student' &&
           <Helper
             show={this.state.helper}
             close={this.handleCloseHelper}
           />}
+        {this.state.showSettings &&
+          <Modal
+            zIndex={4000}
+            name="Settings"
+            title="Settings"
+            closeFromParent={this.handleShowSettings}
+          >
+            <TeamSettings />
+          </Modal>
+        }
       </main>
     );
   }

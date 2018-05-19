@@ -7,7 +7,7 @@ const TeamWidget = ({ team }) => {
   return (
     <div className="team-widget">
       <div className="mini-container">
-        {team.users.map(user => (
+        {team.users.map(({ user }) => (
           <img
             key={user._id}
             className="mini-thumbnail"

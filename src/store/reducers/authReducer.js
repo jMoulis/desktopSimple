@@ -62,14 +62,6 @@ const reducer = (state = initialState, action = {}) => {
           creating: true,
           error: null,
         },
-        loginProcess: {
-          loggedUser: {
-            user: action.payload.user,
-            loading: false,
-            error: null,
-          },
-        },
-        auth: action.payload.auth,
       };
     }
     case CREATE_USER_FAILURE: {

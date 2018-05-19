@@ -21,13 +21,14 @@ class MyProject extends React.Component {
     }));
   }
   render() {
+    const { loggedUser } = this.props;
     return (
       <div className="my-project">
         <Header />
         <div className="my-project-content">
           <LeftPanel showDetail={this.handleDetailTeam} />
           {this.state.teamid ?
-            <Dashboard teamId={this.state.teamid} /> :
+            <Dashboard teamId={this.state.teamid} loggedUser={loggedUser} /> :
             <div>No Team Selected yet</div>
           }
         </div>

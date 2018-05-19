@@ -20,9 +20,9 @@ class LeftPanel extends React.Component {
                 onKeyPress={showDetail}
                 data-teamid={team._id}
               >
-                {team.users.map(user => (
+                {team.users.map((user, idx) => (
                   <img
-                    key={user._id}
+                    key={idx}
                     className="mini-thumbnail"
                     src={user.picture || '/img/avatar.png'}
                     alt="Student"
