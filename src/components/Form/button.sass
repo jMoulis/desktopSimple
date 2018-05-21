@@ -1,27 +1,52 @@
 @import './form.sass'
-.btn-form
-  border: 2px solid $beige
-  background-color: $orange
-  color: $beige
+.btn
+  display: inline-block
   padding: .5rem
   font-weight: bold
   font-family: 'Nunito', sans-serif
   cursor: pointer
-  transition: all 500ms
   outline: none
   font-size: 1rem
-  &:hover
-    background-color: $beige
-    border: 2px solid $orange
-    color: $orange
-  &:focus
-    background-color: $beige
-    border: 2px solid $orange
-    color: $orange
-  &:active
-    background-color: $lightblue
-    border: 2px solid $darkestblue
-    color: $darkestblue
-.disabled
-  opacity: 0.6
-  cursor: not-allowed
+  border: 2px solid $beige
+  color: $beige
+  transition: all 500ms
+  &-neutral
+    background-color: transparent
+    border: 2px solid transparent
+    &:hover
+      border: 2px solid $beige
+  &-primary
+    border: 2px solid $beige
+    background-color: $orange
+    color: $beige
+    &:hover
+      background-color: $beige
+      border: 2px solid $orange
+      color: $orange
+    &:focus
+      background-color: $beige
+      border: 2px solid $orange
+      color: $orange
+  &-danger
+    background-color: #c82333
+    &:hover
+      background-color: $beige
+      border: 2px solid #c82333
+      color: #c82333
+    &:focus
+      background-color: #c82333
+      border: 2px solid $beige
+      color: $beige
+  &-success
+    background-color: #218838
+    &:hover
+      background-color: $beige
+      border: 2px solid #1e7e34
+      color: #1e7e34
+    &:focus
+      background-color: #218838
+      border: 2px solid $beige
+      color: $beige
+  &-disabled
+    opacity: 0.6
+    cursor: not-allowed

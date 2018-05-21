@@ -7,6 +7,7 @@ import Helper from '../../containers/Dashboard/Helper/helper';
 import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
+import DetailUser from '../../containers/User/Detail';
 
 class Dashboard extends React.Component {
   static propTypes = {
@@ -14,6 +15,8 @@ class Dashboard extends React.Component {
     loggedUser: PropTypes.object.isRequired,
     activeTeamProcess: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
+    showUserDetailModalAction: PropTypes.func.isRequired,
+    showUserDetailModal: PropTypes.bool.isRequired,
     activeApps: PropTypes.array,
   }
   static defaultProps = {
@@ -42,6 +45,8 @@ class Dashboard extends React.Component {
       loggedUser,
       activeTeamProcess,
       showSelectTeamPanel,
+      showUserDetailModalAction,
+      showUserDetailModal,
     } = this.props;
     const objectValues = Object.keys(applications).map(item => applications[item]);
     return (
@@ -90,6 +95,17 @@ class Dashboard extends React.Component {
             closeFromParent={this.handleShowSettings}
           >
             <TeamSettings />
+          </Modal>
+        }
+        {showUserDetailModal &&
+          <Modal
+            title="User"
+            closeFromParent={showUserDetailModalAction}
+            name="User Detail"
+            zIndex={200}
+            small
+          >
+            <DetailUser />
           </Modal>
         }
       </main>

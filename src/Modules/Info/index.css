@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.info {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 1rem;
+  left: 0;
+  right: 0; }
+  .info-appear {
+    opacity: 0.01; }
+  .info-appear.info-appear-active {
+    opacity: 1;
+    transition: all 500ms; }
+  .info-exit {
+    opacity: 1; }
+  .info-exit.info-exit-active {
+    opacity: 0.01;
+    transition: all 500ms; }
+  .info p {
+    padding: 1rem;
+    background-color: #d4edda;
+    border: 2px solid #c3e6cb;
+    color: #155724; }

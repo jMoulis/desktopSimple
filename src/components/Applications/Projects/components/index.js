@@ -14,8 +14,7 @@ class Projects extends React.Component {
     tab: 'projects',
   }
   componentDidMount() {
-    const { fetchProjectsAction, fetchTeamsAction } = this.props;
-    fetchTeamsAction();
+    const { fetchProjectsAction } = this.props;
     fetchProjectsAction();
   }
   handleTabSelect = (evt) => {

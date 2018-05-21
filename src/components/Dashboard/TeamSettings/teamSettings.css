@@ -8,4 +8,5 @@
   justify-content: center; }
 
 .team-settings {
-  display: flex; }
+  display: flex;
+  padding: 1rem; }

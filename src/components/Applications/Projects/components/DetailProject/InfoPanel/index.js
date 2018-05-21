@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TeamWidget from './teamWidget';
+import Button from '../../../../../Form/button';
 import './index.css';
 
 const InfoPanel = ({ activeProjectProcess, openCreateTeamModal, user }) => {
@@ -17,12 +18,16 @@ const InfoPanel = ({ activeProjectProcess, openCreateTeamModal, user }) => {
         {project.teams.length < project.maxTeam &&
           user._id !== project.author._id &&
           <div>
-            <button
+            <Button
               type="button"
               onClick={openCreateTeamModal}
               data-tab="create-team"
-            >+ Create a team
-            </button>
+              category="primary"
+              style={{
+                marginTop: '.5rem',
+              }}
+            >Add my team
+            </Button>
           </div>
         }
       </div>

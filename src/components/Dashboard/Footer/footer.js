@@ -46,6 +46,9 @@ class Footer extends React.Component {
             if (!application.typeUser.includes(loggedUser.typeUser) && !application.typeUser.includes('all')) {
               return '';
             }
+            if (application.appName === 'Settings') {
+              return '';
+            }
             return (
               <button
                 key={application.appName}
@@ -54,23 +57,48 @@ class Footer extends React.Component {
                 className="app-btn"
               >
                 <div className="btn-container">
-                  {
-                    application.appName === 'Settings' ? <Thumbnail /> :
-                    [
-                      <i key={`${application.appName}-1`} className={application.icon} />,
-                      <span key={`${application.appName}-2`} className="btn-title">{application.title}</span>,
-                    ]
+                  {[
+                    <i
+                      key={`${application.appName}-1`}
+                      className={application.icon}
+                      title={application.title}
+                    />,
+                    <span
+                      key={`${application.appName}-2`}
+                      className="btn-title"
+                    >{application.title}
+                    </span>,
+                  ]}
+                  {applications[activeApp.appName] &&
+                    applications[activeApp.appName].reduce &&
+                    <span className="active-app-circle" />
                   }
-                  {applications[activeApp.appName] && applications[activeApp.appName].reduce && <span className="active-app-circle" />}
                 </div>
               </button>
             );
           })}
         </div>
-        <div className="btn-container">
-          <button className="app-btn logout" onClick={this.handleLogout}>
-            <i className="fas fa-sign-out-alt" />
-          </button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="btn-container">
+            <button
+              key="Settings"
+              data-appname="Settings"
+              onClick={this.handleStartApp}
+              className="app-btn"
+              title="Profile"
+            >
+              <Thumbnail />
+            </button>
+          </div>
+          <div className="btn-container">
+            <button
+              className="app-btn logout"
+              onClick={this.handleLogout}
+              title="Logout"
+            >
+              <i className="fas fa-power-off fa-2x" />
+            </button>
+          </div>
         </div>
       </footer>
     );

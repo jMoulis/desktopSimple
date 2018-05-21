@@ -64,8 +64,8 @@ export default store => next => (action) => {
       break;
     }
     case EDIT_TEAM: {
-      const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      const formData = toObject(filteredArray);
+      // const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
+      // const formData = toObject(filteredArray);
       axios({
         method: 'put',
         data: action.payload,

@@ -32,7 +32,8 @@
 .modal-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem; }
+  padding: .5rem;
+  box-shadow: 0 0 5px #0a1c28; }
 
 .modal-content {
   height: 90%;

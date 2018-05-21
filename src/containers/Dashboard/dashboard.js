@@ -9,12 +9,13 @@ import { connect } from 'react-redux';
  */
 import Dashboard from '../../components/Dashboard/dashboard';
 import { setActiveAppAction } from '../../store/reducers/frameReducer';
+import { showUserDetailModalAction } from '../../store/reducers/appReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer }) => ({
+const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer, appReducer }) => ({
   activeApp: frameReducer.activeApp,
   applications: frameReducer.applications,
   activeApps: frameReducer.activeApps,
@@ -23,12 +24,16 @@ const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer }) => ({
     user: authReducer.loginProcess.loggedUser,
     auth: authReducer.auth,
   },
+  showUserDetailModal: appReducer.showUserDetailModal,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
   setActiveAppAction: (app) => {
     dispatch(setActiveAppAction(app));
+  },
+  showUserDetailModalAction: () => {
+    dispatch(showUserDetailModalAction());
   },
 });
 

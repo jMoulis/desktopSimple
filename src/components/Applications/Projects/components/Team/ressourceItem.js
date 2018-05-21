@@ -39,8 +39,8 @@ const RessourceItem = ({ config }) => {
           </span>
         }
         <button
-          className="btn-form search"
           type="button"
+          className="btn btn-primary"
           data-filter={config.value}
           onClick={config.onClick}
         >

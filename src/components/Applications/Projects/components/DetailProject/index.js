@@ -11,6 +11,7 @@ import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
 import InfoPanel from '../../containers/DetailProject/InfoPanel';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
+import AlertBox from '../../../../../Modules/AlertBox';
 
 class DetailProject extends React.Component {
   static propTypes = {
@@ -43,6 +44,7 @@ class DetailProject extends React.Component {
           { value: '', focus: false, changed: false },
       },
       delete: false,
+      showAlertBox: false,
     };
   }
   componentDidUpdate(prevProps, prevState) {
@@ -270,6 +272,12 @@ class DetailProject extends React.Component {
         break;
     }
   }
+  handleShowAlertBox = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      showAlertBox: !prevState.showAlertBox,
+    }));
+  }
   render() {
     const { activeProjectProcess, openNewTeamModal, loggedUser } = this.props;
     const { error, loading, project } = activeProjectProcess;
@@ -389,20 +397,19 @@ class DetailProject extends React.Component {
                 blur={this.handleOnBlur}
                 readOnly={project.author._id !== user._id}
               />
+              {project.author._id === user._id &&
+                <button
+                  name="detailProjectModal"
+                  type="button"
+                  className="btn"
+                  onClick={this.handleShowAlertBox}
+                >Delete
+                </button>
+              }
             </div>
             <div className="form-content">
               <InfoPanel openCreateTeamModal={openNewTeamModal} user={user} />
             </div>
-            {project.author._id === user._id &&
-              <div className="form-content">
-                <button
-                  name="detailProjectModal"
-                  type="button"
-                  onClick={this.handleDeleteProject}
-                >Delete
-                </button>
-              </div>
-            }
             <div className="subscribe">
               {project.author._id !== user._id &&
                 project.subscribers &&
@@ -419,6 +426,26 @@ class DetailProject extends React.Component {
             </div>
           </div>
         </form>
+        {this.state.showAlertBox &&
+          <AlertBox
+            title="Confirmation: Delete Project"
+            message="Watch out, Are you really willing to delete this project?"
+            buttons={
+              [
+                {
+                  type: 'danger',
+                  action: this.handleDeleteProject,
+                  label: 'Yeap',
+                },
+                {
+                  type: 'success',
+                  action: this.handleShowAlertBox,
+                  label: 'Nope',
+                },
+              ]
+            }
+            type="danger"
+          />}
       </div>
     );
   }

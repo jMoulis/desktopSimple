@@ -17,11 +17,11 @@ const mapStateToProps = ({ authReducer }) => {
   if (localStorage.getItem('user')) {
     const user = JSON.parse(localStorage.getItem('user'));
     return {
-      picture: user.picture,
+      user,
     };
   }
   return {
-    picture: authReducer.loginProcess.loggedUser.picture,
+    user: authReducer.loginProcess.loggedUser,
   };
 };
 

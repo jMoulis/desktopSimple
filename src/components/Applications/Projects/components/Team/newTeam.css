@@ -1,2 +1,21 @@
-#new-team {
-  display: flex; }
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.team {
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap; }
+  .team .content {
+    flex: 1;
+    border-right: 2px solid #0a1c28; }
+    .team .content-newteam {
+      flex: 2; }
+
+.full-width {
+  width: 100%; }
+
+.new-team {
+  display: flex;
+  height: 100%; }
+  .new-team-content {
+    border-right: 2px solid #0a1c28;
+    padding: .5rem; }

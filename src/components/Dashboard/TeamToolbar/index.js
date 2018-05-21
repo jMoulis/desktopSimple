@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './index.css';
+import Button from '../../Form/button';
 
 class TeamToolbar extends React.Component {
   static propTypes = {
@@ -9,52 +10,71 @@ class TeamToolbar extends React.Component {
     showSelectTeamPanel: PropTypes.func.isRequired,
     showSettings: PropTypes.func.isRequired,
   }
-  componentDidMount() {
-    
+  componentDidMount() {}
+  showUserDetailModalAction = (evt) => {
+    const { showUserDetailModalAction } = this.props;
+    const { user } = evt.target.dataset;
+    showUserDetailModalAction(user);
   }
   render() {
     const { team, showSelectTeamPanel, showSettings } = this.props;
     return (
       <nav className="team-toolbar">
-        <ul className="ul-nav">
-          <li>
-            <button
-              type="button"
-              className="btn"
-              dataset-teamid={team._id}
-              onClick={showSelectTeamPanel}
-            >Switch Team
-            </button>
-          </li>
-          <li>
-            <button className="btn" type="button">
+        <div className="team-toolbar-list-item">
+          <Button
+            type="button"
+            category="neutral"
+            dataset-teamid={team._id}
+            onClick={showSelectTeamPanel}
+            title="Switch Team"
+          >
+            <i className="fas fa-exchange-alt fa-2x" />
+          </Button>
+        </div>
+        <ul className="ul-nav team-toolbar-list">
+          <li className="team-toolbar-list-item">
+            <Button category="neutral" type="button" title="Breaking News">
               <i className="far fa-newspaper fa-2x" />
-            </button>
+            </Button>
           </li>
-          <li>
-            <button className="btn" type="button">
+          <li className="team-toolbar-list-item">
+            <Button category="neutral" type="button" title="Message">
               <i className="far fa-envelope fa-2x" />
-            </button>
+            </Button>
           </li>
-          <li>
-            <button className="btn" type="button">
+          <li className="team-toolbar-list-item">
+            <Button category="neutral" type="button" title="Tasks">
               <i className="fas fa-tasks fa-2x" />
-            </button>
+            </Button>
           </li>
-          <li>
-            <button className="btn" type="button" onClick={showSettings}>
+          <li className="team-toolbar-list-item">
+            <Button
+              category="neutral"
+              type="button"
+              onClick={showSettings}
+              title="Team Settings"
+            >
               <i className="fas fa-cog fa-2x" />
-            </button>
+            </Button>
           </li>
-          <li>
+          <li className="team-list">
             <ul>
-              {team.users.map(({ user }, index) => {
+              {team.users.map(({ user, spec }, index) => {
                 return (
                   <img
                     key={index}
-                    className="miniature"
+                    data-user={user._id}
+                    onClick={this.showUserDetailModalAction}
+                    onKeyPress={this.showUserDetailModalAction}
+                    className="miniature miniature-smaller"
                     src={user.picture || 'img/avatar.png'}
+                    style={spec === 'manager' ? {
+                      border: '2px solid #d44c00',
+                    } : {
+                      border: '2px solid transparent',
+                    }}
                     alt="User"
+                    title={`${user.fullName} - ${spec}`}
                   />
                 );
               })}

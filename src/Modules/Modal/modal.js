@@ -8,11 +8,27 @@ class Modal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: null,
+      style: null,
       enterTimeout: 150,
       exitTimeout: 150,
       display: true,
     };
+  }
+  componentDidMount() {
+    this.setWidth();
+  }
+  setWidth = () => {
+    if (this.props.small) {
+      this.setState(prevState => ({
+        ...prevState,
+        style: {
+          width: '50%',
+          minWidth: '50%',
+          height: '70%',
+          margin: '4rem',
+        },
+      }));
+    }
   }
   handleClose = () => {
     this.setState(prevState => ({
@@ -28,6 +44,7 @@ class Modal extends React.Component {
       name,
       title,
       zIndex,
+      small,
     } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, { closeFromParent }));
@@ -43,11 +60,16 @@ class Modal extends React.Component {
         appear
         onExited={() => closeFromParent()}
       >
-        <div className="modal-overlay" style={{ zIndex }}>
-          <div className="modal-container" style={{ width: this.state.width && this.state.width }}>
+        <div data-close className="modal-overlay" style={{ zIndex }}>
+          <div className="modal-container" style={small ? this.state.style : {}}>
             <header className="modal-header">
               <h1>{title}</h1>
-              <button name={name} type="button" className="modal-btn" onClick={this.handleClose}>
+              <button
+                name={name}
+                type="button"
+                className="modal-btn"
+                onClick={this.handleClose}
+              >
                 <i className="fas fa-times-circle fa-2x" />
               </button>
             </header>

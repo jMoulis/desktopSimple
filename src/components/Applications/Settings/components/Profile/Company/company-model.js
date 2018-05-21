@@ -45,8 +45,8 @@ export default {
     type: 'text',
   },
   website: {
-    label: 'Personal Website',
-    placeholder: 'Personal Website',
+    label: 'Company Website',
+    placeholder: 'Company Website',
     name: 'website',
     type: 'url',
   },

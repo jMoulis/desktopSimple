@@ -40,12 +40,13 @@ class UsersLoader extends React.Component {
       return <span>Loading</span>;
     }
     return (
-      <div>Users
+      <div className="users">
         {error && <span>Error</span>}
         {pagination &&
-          <div>
+          <div className="users-pagination">
             {pagination.prevPage &&
               <button
+                className="btn btn-primary"
                 key="prev"
                 type="button"
                 onClick={this.handlePagination}
@@ -55,6 +56,7 @@ class UsersLoader extends React.Component {
             }
             {pagination.nextPage &&
               <button
+                className="btn btn-primary"
                 key="next"
                 type="button"
                 onClick={this.handlePagination}
@@ -63,13 +65,12 @@ class UsersLoader extends React.Component {
               </button>
             }
           </div>}
-        <ul className="ul-unstyled">
+        <ul className="ul-unstyled users-list">
           {users.map(user => (
             <li key={user._id} className="users-list-item">
               <div className="thumbnail-container">
-                <img className="thumbnail" src={user.picture} alt={user.fullName} />
-                <span>{user.fullName}</span>
                 <button
+                  className="btn btn-primary"
                   data-user={
                     JSON.stringify({
                       spec: filter,
@@ -82,6 +83,17 @@ class UsersLoader extends React.Component {
                   onClick={select}
                 >Select
                 </button>
+                <div className="thumbnail-content">
+                  <img className="thumbnail" src={user.picture} alt={user.fullName} />
+                  <div className="user-detail">
+                    <span className="user-detail-fullname">{user.fullName}</span>
+                    <ul className="tag-list">
+                      {user.tags.map((tag, index) => (
+                        <li key={index} className="tag-list-item">{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
             </li>
             ))}

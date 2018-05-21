@@ -38,7 +38,7 @@ class Settings extends React.Component {
           <ul>
             <li>
               <button
-                className="btn-form btn-app-toolbar unselectable"
+                className="btn-app-toolbar unselectable"
                 name="profile"
                 onClick={this.handleTabSelect}
               >Profile
@@ -47,7 +47,7 @@ class Settings extends React.Component {
             {userActive.user.typeUser !== 'student' &&
               <li>
                 <button
-                  className="btn-form btn-app-toolbar unselectable"
+                  className="btn-app-toolbar unselectable"
                   name="company"
                   onClick={this.handleTabSelect}
                 >Company
@@ -55,7 +55,7 @@ class Settings extends React.Component {
               </li>}
             <li>
               <button
-                className="btn-form btn-app-toolbar unselectable"
+                className="btn-app-toolbar unselectable"
                 name="teams"
                 onClick={this.handleTabSelect}
               >Teams
@@ -63,7 +63,7 @@ class Settings extends React.Component {
             </li>
             <li>
               <button
-                className="btn-form btn-app-toolbar unselectable"
+                className="btn-app-toolbar unselectable"
                 name="account"
                 onClick={this.handleTabSelect}
               >Touchy Info

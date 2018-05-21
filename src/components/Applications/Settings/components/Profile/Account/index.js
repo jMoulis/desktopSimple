@@ -5,12 +5,15 @@ import './account.css';
 import Model from './account-model';
 import Input from '../../../../../Form/input';
 import Button from '../../../../../Form/button';
+import AlertBox from '../../../../../../Modules/AlertBox';
+import Info from '../../../../../../Modules/Info';
 
 class AccountProfile extends React.Component {
   static propTypes = {
     userActive: PropTypes.object.isRequired,
     changePasswordAction: PropTypes.func.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
+    deleteUserAction: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
@@ -22,15 +25,14 @@ class AccountProfile extends React.Component {
     this.state = {
       ...field,
       disabled: true,
+      showAlertBox: false,
     };
     const { clearMessageAction } = props;
     clearMessageAction();
   }
   componentWillUnmount() {
-    console.log('unmount');
     const { clearMessageAction } = this.props;
     clearMessageAction();
-    // Maybe do someting? Like save Datas or anything else
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -88,12 +90,20 @@ class AccountProfile extends React.Component {
     const { deleteUserAction, userActive } = this.props;
     deleteUserAction(userActive.user._id);
   }
+  handleShowAlertBoxDanger = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      showAlertBox: !prevState.showAlertBox,
+    }));
+  }
   render() {
-    const { userActive } = this.props;
+    const { userActive, clearMessageAction } = this.props;
     const { loading, error, success } = userActive;
     return (
       <div id="profile" className="form-container account" key="app-content" >
-        {success && <p className="success">{success}</p>}
+        {success &&
+          <Info message={success} parentAction={clearMessageAction} />
+        }
         <form
           id="profile-form"
           className="form"
@@ -135,11 +145,44 @@ class AccountProfile extends React.Component {
                 }}
               />
               {this.state.error && <span className="error">{this.state.error}</span>}
-              <Button label="Change" loading={loading} disabled={this.state.disabled} />
+              <Button
+                type="submit"
+                label="Change"
+                loading={loading}
+                disabled={this.state.disabled}
+                category="primary"
+              />
             </div>
-            <button type="button" onClick={this.handleDeleteAccount}>Delete My Account</button>
             <div className="form-content">
               <h1>Other info</h1>
+              <Button
+                type="button"
+                category="danger"
+                onClick={this.handleShowAlertBoxDanger}
+              >Delete My Account
+              </Button>
+              {this.state.showAlertBox &&
+                <AlertBox
+                  title="Confirmation: Delete Account"
+                  message="Watch out, Are you really willing to delete your account?"
+                  buttons={
+                    [
+                      {
+                        type: 'button',
+                        action: this.handleDeleteAccount,
+                        label: 'Yeap',
+                        category: 'danger',
+                      },
+                      {
+                        type: 'button',
+                        action: this.handleShowAlertBoxDanger,
+                        label: 'Nope',
+                        category: 'success',
+                      },
+                    ]
+                  }
+                  type="danger"
+                />}
             </div>
           </div>
         </form>

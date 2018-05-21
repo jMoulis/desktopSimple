@@ -1,12 +1,42 @@
 @import './editTeam.sass'
 
-.users-list-item
-  margin-bottom: .5rem
-  .thumbnail-container
-    display: flex
-    align-items: center
-  .thumbnail
-    width: 50px
-    height: 50px
-    border-radius: 50%
-    margin-right: .5rem
+.users
+  padding: 1rem
+  &-pagination
+    margin-bottom: 1rem
+    padding-left: .5rem
+  &-list
+    margin-top: 1rem
+    &-item
+      margin-bottom: .5rem
+      padding: .5rem
+      transition: all 500ms
+      &:hover
+        box-shadow: 0 0 5px 0 $darkestblue
+      .thumbnail
+        width: 50px
+        height: 50px
+        border-radius: 50%
+        margin-right: .5rem
+      .thumbnail-container
+        display: flex
+        align-items: center
+      .thumbnail-content
+        display: flex
+        align-items: center
+        margin-left: 1rem
+        .user-detail
+          display: flex
+          flex-direction: column
+          &-fullname
+            font-weight: bold
+          .tag-list
+            display: flex
+            &-item
+              background-color: $blue
+              margin-right: .5rem
+              border: 2px solid $beige
+              color: $beige
+              padding: .3rem
+              font-weight: bold
+      

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Croppr from 'croppr';
 
 import './profile.css';
 import Model from './student-model';

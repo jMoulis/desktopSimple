@@ -67,8 +67,9 @@ h1 {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex; }
-  .ul-nav li {
+  display: flex;
+  align-items: center; }
+  .ul-nav .li {
     margin-right: .2rem; }
 
 .user-thumbnail {
@@ -84,10 +85,11 @@ h1 {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: .5rem; }
-
-.btn {
-  border: none;
-  background-color: transparent;
-  outline: none;
-  cursor: pointer; }
+  margin-right: .5rem;
+  cursor: pointer;
+  transition: all 200ms; }
+  .miniature:hover {
+    box-shadow: 0 0 5px 0 #0a1c28; }
+  .miniature-smaller {
+    width: 30px;
+    height: 30px; }

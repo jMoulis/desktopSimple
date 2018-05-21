@@ -7,6 +7,7 @@ import UsersLoader from '../../../../containers/Dashboard/TeamSettings/usersLoad
 import Input from '../../../Form/input';
 import RessourceItem from './ressourceItem';
 import Model from './team-model';
+import Button from '../../../Form/button';
 
 class EditTeam extends React.Component {
   static propTypes = {
@@ -66,8 +67,8 @@ class EditTeam extends React.Component {
           user: user.user,
         };
       }
+      return true;
     });
-
     this.state = {
       ...field,
       ressources: '',
@@ -150,7 +151,6 @@ class EditTeam extends React.Component {
         }));
       }
       else {
-        console.log('In')
         this.setState(prevState => ({
           ...prevState,
           ressources: '',
@@ -296,7 +296,7 @@ class EditTeam extends React.Component {
                       ))}
                     </ul>
                   </div>
-                  <button className="btn-form full-width" type="submit">Edit</button>
+                  <Button category="primary" style={{ width: '100%', marginTop: '.5rem' }}type="submit">Edit</Button>
                 </div>
               </div>
             </form>

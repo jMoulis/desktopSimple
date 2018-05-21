@@ -48,30 +48,54 @@
   font-style: italic;
   padding-top: .4rem; }
 
-.btn-form {
-  border: 2px solid #eee9d1;
-  background-color: #d44c00;
-  color: #eee9d1;
+.btn {
+  display: inline-block;
   padding: .5rem;
   font-weight: bold;
   font-family: 'Nunito', sans-serif;
   cursor: pointer;
-  transition: all 500ms;
   outline: none;
-  font-size: 1rem; }
-  .btn-form:hover {
-    background-color: #eee9d1;
-    border: 2px solid #d44c00;
-    color: #d44c00; }
-  .btn-form:focus {
-    background-color: #eee9d1;
-    border: 2px solid #d44c00;
-    color: #d44c00; }
-  .btn-form:active {
-    background-color: #97c0b7;
-    border: 2px solid #0a1c28;
-    color: #0a1c28; }
-
-.disabled {
-  opacity: 0.6;
-  cursor: not-allowed; }
+  font-size: 1rem;
+  border: 2px solid #eee9d1;
+  color: #eee9d1;
+  transition: all 500ms; }
+  .btn-neutral {
+    background-color: transparent;
+    border: 2px solid transparent; }
+    .btn-neutral:hover {
+      border: 2px solid #eee9d1; }
+  .btn-primary {
+    border: 2px solid #eee9d1;
+    background-color: #d44c00;
+    color: #eee9d1; }
+    .btn-primary:hover {
+      background-color: #eee9d1;
+      border: 2px solid #d44c00;
+      color: #d44c00; }
+    .btn-primary:focus {
+      background-color: #eee9d1;
+      border: 2px solid #d44c00;
+      color: #d44c00; }
+  .btn-danger {
+    background-color: #c82333; }
+    .btn-danger:hover {
+      background-color: #eee9d1;
+      border: 2px solid #c82333;
+      color: #c82333; }
+    .btn-danger:focus {
+      background-color: #c82333;
+      border: 2px solid #eee9d1;
+      color: #eee9d1; }
+  .btn-success {
+    background-color: #218838; }
+    .btn-success:hover {
+      background-color: #eee9d1;
+      border: 2px solid #1e7e34;
+      color: #1e7e34; }
+    .btn-success:focus {
+      background-color: #218838;
+      border: 2px solid #eee9d1;
+      color: #eee9d1; }
+  .btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed; }

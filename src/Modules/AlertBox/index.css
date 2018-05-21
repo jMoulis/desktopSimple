@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.alert-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5rem;
+  z-index: 100; }
+  .alert-modal-appear {
+    opacity: 0.01; }
+  .alert-modal-appear.alert-modal-appear-active {
+    opacity: 1;
+    transition: all 500ms; }
+  .alert-modal-exit {
+    opacity: 1; }
+  .alert-modal-exit.alert-modal-exit-active {
+    opacity: 0.01;
+    transition: all 500ms; }
+  .alert-modal-danger {
+    background-color: rgba(114, 28, 36, 0.5); }
+  .alert-modal-success {
+    background-color: rgba(40, 167, 69, 0.5); }
+  .alert-modal-container {
+    background-color: #eee9d1; }
+    .alert-modal-container-danger {
+      border: 5px solid #721c24; }
+    .alert-modal-container-success {
+      border: 5px solid #155724; }
+  .alert-modal-header {
+    color: #eee9d1;
+    font-weight: bold;
+    padding: .7rem; }
+    .alert-modal-header-danger {
+      border-bottom: 2px solid #721c24;
+      background-color: #dc3545; }
+    .alert-modal-header-success {
+      border-bottom: 2px solid #155724;
+      background-color: #28a745; }
+  .alert-modal-content {
+    padding: .7rem; }
+  .alert-modal-btn-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 5rem; }
+    .alert-modal-btn-container .btn-alertbox {
+      border: 2px solid #eee9d1;
+      background-color: #d44c00;
+      color: #eee9d1;
+      padding: .5rem;
+      font-weight: bold;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      outline: none;
+      font-size: 1rem;
+      transition: all 500ms; }
+      .alert-modal-btn-container .btn-alertbox-danger {
+        background-color: #dc3545;
+        border-color: #721c24;
+        color: #eee9d1;
+        min-width: 100px; }
+        .alert-modal-btn-container .btn-alertbox-danger:hover {
+          color: #721c24; }
+      .alert-modal-btn-container .btn-alertbox-success {
+        background-color: #28a745;
+        border: 2px solid #155724;
+        min-width: 100px; }
+        .alert-modal-btn-container .btn-alertbox-success:hover {
+          color: #155724; }

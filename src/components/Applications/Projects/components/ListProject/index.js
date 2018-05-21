@@ -158,14 +158,21 @@ class ListProject extends React.Component {
                   <ul className="tags-list">
                     {project.tags.map((tag, index) => <li key={index}>{tag}</li>)}
                   </ul>
-                  <button
-                    type="button"
-                    data-projectid={project._id}
-                    data-tab="project-detail"
-                    onClick={this.handleShowDetailModal}
-                  >
-                    Check me out
-                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      data-projectid={project._id}
+                      data-tab="project-detail"
+                      onClick={this.handleShowDetailModal}
+                      className="btn btn-primary"
+                      style={{
+                        width: '100%',
+                        marginTop: '.5rem',
+                      }}
+                    >
+                      Check me out
+                    </button>
+                  </div>
                 </div>
               </li>
             </ul>

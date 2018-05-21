@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './index.css';
 
 const TeamProfile = ({ user }) => {
   return (
@@ -7,7 +8,7 @@ const TeamProfile = ({ user }) => {
       {user.teams.map(team => (
         <li key={team._id} className="team-container">
           <div>
-            <span>Team: {team.name}</span>
+            <h2>{team.name}</h2>
             <ul>
               {team.users.map((teamMate, index) => (
                 <li key={index}>

@@ -62,7 +62,8 @@ h1
 	margin: 0
 	padding: 0
 	display: flex
-	li
+	align-items: center
+	.li
 		margin-right: .2rem
 .user-thumbnail
 	display: flex
@@ -77,8 +78,10 @@ h1
 	height: 40px
 	border-radius: 50%
 	margin-right: .5rem
-.btn
-	border: none
-	background-color: transparent
-	outline: none
 	cursor: pointer
+	transition: all 200ms
+	&:hover
+		box-shadow: 0 0 5px 0 $darkestblue
+	&-smaller
+		width: 30px
+		height: 30px

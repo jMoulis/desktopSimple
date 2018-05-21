@@ -113,7 +113,7 @@ class Signup extends React.Component {
               }}
             />
             <div className="form-group">
-              <Button label="Sign Up" loading={creating} />
+              <Button type="submit" category="primary" label="Sign Up" loading={creating} />
             </div>
           </div>
         </form>

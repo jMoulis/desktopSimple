@@ -1,5 +1,29 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#dashboard {
+  position: relative;
+  background-color: #41848f;
+  height: 98%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
 .team-toolbar {
   position: absolute;
   top: 0;
   right: 0;
-  left: 0; }
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem; }
+  .team-toolbar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; }
+    .team-toolbar-list-item {
+      border: 2px solid transparent;
+      margin-right: .3rem; }
+  .team-toolbar .team-list {
+    margin-left: .5rem; }

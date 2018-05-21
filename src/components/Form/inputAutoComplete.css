@@ -73,6 +73,7 @@
       padding: .4rem .5rem;
       color: #eee9d1 !important;
       border-left: 2px solid #eee9d1;
+      outline: none;
       transition: background-color 500ms; }
       .input-auto-values button:hover {
         background-color: #cc0000; }

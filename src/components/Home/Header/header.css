@@ -10,7 +10,7 @@
   background-color: #eee9d1; }
 
 .home-header {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -3,23 +3,62 @@ import PropTypes from 'prop-types';
 
 import './button.css';
 
-const Button = ({ label, loading, disabled }) => (
+/**
+ * Category: normal, success, danger, warning, neutral
+ * Size: large, small
+ * Type: button, submit
+*/
+const Button = ({
+  label,
+  loading,
+  disabled,
+  type,
+  size,
+  category,
+  children,
+  onClick,
+  style,
+  title,
+}) => (
   <button
-    type="submit"
+    type={type}
     disabled={disabled && true}
-    className={`btn btn-form ${disabled && 'disabled'}`}
+    style={style && style}
+    className={`btn ${disabled ? 'btn-disabled' : ''} btn-${category} ${size ? `btn-${size}` : ''}`}
+    onClick={onClick}
+    title={title}
   >
+    {children}
     {loading ? <i className="fas fa-spinner" /> : label}
   </button>
 );
 
 Button.propTypes = {
-  label: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  onClick: PropTypes.func,
+  loading: PropTypes.bool,
+  label: PropTypes.string,
   disabled: PropTypes.bool,
+  type: PropTypes.string,
+  size: PropTypes.string,
+  title: PropTypes.string,
+  category: PropTypes.string,
+  style: PropTypes.object,
 };
 Button.defaultProps = {
+  loading: false,
+  label: null,
   disabled: false,
+  type: 'button',
+  size: null,
+  category: 'primary',
+  onClick: null,
+  children: null,
+  style: null,
+  title: null,
 };
 
 export default Button;

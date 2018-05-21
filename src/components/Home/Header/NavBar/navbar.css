@@ -10,7 +10,7 @@
   background-color: #eee9d1; }
 
 .home-header {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,4 +38,5 @@
     cursor: pointer;
     margin-right: 1rem; }
     #navbar ul li a {
-      text-decoration: none; }
+      text-decoration: none;
+      display: inline-block; }

@@ -17,6 +17,7 @@ import {
   FETCH_USERS_COUNT,
   fetchUsersCountSuccessAction,
 } from '../reducers/userReducer';
+import { logoutAction } from '../reducers/authReducer';
 /*
  * Code
  */
@@ -55,6 +56,9 @@ export default store => next => (action) => {
         .catch((error) => {
           if (!error.response) {
             return console.log(error);
+          }
+          if (error.response.status === 500) {
+            return store.dispatch(logoutAction());
           }
           return store.dispatch(fetchUserFailureAction(error.response.error.errors));
         });

@@ -7,6 +7,7 @@ import UsersLoader from '../../containers/Team/usersLoader';
 import Input from '../../../../Form/input';
 import RessourceItem from './ressourceItem';
 import Subscribers from '../../containers/Team/subscribers';
+import Button from '../../../../Form/button';
 
 class NewTeam extends React.Component {
   static propTypes = {
@@ -162,8 +163,8 @@ class NewTeam extends React.Component {
     const { teamCreation, loggedUser } = this.props;
     const { error, success } = teamCreation;
     return (
-      <div id="new-team">
-        <div>
+      <div className="new-team">
+        <div className="new-team-content">
           <h1>Create your team</h1>
           {success && success.status ?
             <span>Team created</span> :
@@ -229,7 +230,7 @@ class NewTeam extends React.Component {
                       ))}
                     </ul>
                   </div>
-                  <button className="btn-form full-width" type="submit">Create</button>
+                  <Button category="success" style={{ width: '100%' }}type="submit">Create</Button>
                 </div>
               </div>
             </form>

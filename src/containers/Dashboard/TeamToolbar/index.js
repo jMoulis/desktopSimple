@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import TeamToolbar from '../../../components/Dashboard/TeamToolbar';
+import { showUserDetailModalAction } from '../../../store/reducers/appReducer';
 
 /*
  * Code
@@ -19,6 +20,9 @@ const mapStateToProps = ({ mainTeamReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
+  showUserDetailModalAction: (userId) => {
+    dispatch(showUserDetailModalAction(userId));
+  },
 });
 
 

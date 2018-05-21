@@ -36,7 +36,6 @@ const toObject = (arr) => {
  * Middleware
  */
 export default store => next => (action) => {
-  const { authReducer } = store.getState();
   switch (action.type) {
     case FETCH_SINGLE_USER:
       axios({

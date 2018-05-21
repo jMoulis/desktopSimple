@@ -7,7 +7,7 @@ import NewTeam from '../../containers/Team/newTeam';
 const Team = ({ loggedUser, closeFromParent }) => {
   return (
     <div className="team">
-      <div className="content content-projectinfo">
+      <div className="content content-project-info">
         <ProjectInfo />
       </div>
       <div className="content content-newteam">
