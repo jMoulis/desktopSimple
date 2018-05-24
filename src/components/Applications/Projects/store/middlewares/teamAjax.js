@@ -26,13 +26,13 @@ import { logoutAction } from '../../../../../store/reducers/authReducer';
 /*
  * Code
  */
-const toObject = (arr) => {
-  let obj = {};
-  arr.forEach((element) => {
-    obj = { ...obj, [element[0]]: element[1].value };
-  });
-  return obj;
-};
+// const toObject = (arr) => {
+//   let obj = {};
+//   arr.forEach((element) => {
+//     obj = { ...obj, [element[0]]: element[1].value };
+//   });
+//   return obj;
+// };
 /*
  * Middleware
  */

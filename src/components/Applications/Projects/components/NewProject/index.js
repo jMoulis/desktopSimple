@@ -35,14 +35,13 @@ class NewProject extends React.Component {
   componentDidUpdate() {
     const { projectCreation, closeFromParent } = this.props;
     if (projectCreation.success && projectCreation.success.status) {
-      closeFromParent();
+      closeFromParent('createTeamModal');
     }
     return true;
   }
   componentWillUnmount() {
     const { clearProjectMessageAction } = this.props;
     clearProjectMessageAction();
-    // Maybe do someting? Like save Datas or anything else
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -92,7 +91,7 @@ class NewProject extends React.Component {
   }
   handleInputSelectCompetencesChange = (evt) => {
     const inputValue = evt.target.value;
-    if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
+    if (evt.keyCode === 13) {
       const { state } = this;
       this.setState(() => ({
         ...state,
@@ -240,7 +239,7 @@ class NewProject extends React.Component {
                 docs={this.state.docs}
                 onFileChange={this.handleInputFileChange}
               />
-              <Button label="Create" loading={false} />
+              <Button type="submit" label="Create" loading={false} />
             </div>
           </div>
         </form>

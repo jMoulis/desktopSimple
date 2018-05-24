@@ -24,6 +24,10 @@ export const GLOBAL_EDIT_TEAM = 'GLOBAL_EDIT_TEAM';
 export const GLOBAL_EDIT_TEAM_SUCCESS = 'GLOBAL_EDIT_TEAM_SUCCESS';
 export const GLOBAL_EDIT_TEAM_FAILURE = 'GLOBAL_EDIT_TEAM_FAILURE';
 
+export const GLOBAL_DELETE_TEAM = 'GLOBAL_DELETE_TEAM';
+export const GLOBAL_DELETE_TEAM_SUCCESS = 'GLOBAL_DELETE_TEAM_SUCCESS';
+export const GLOBAL_DELETE_TEAM_FAILURE = 'GLOBAL_DELETE_TEAM_FAILURE';
+
 export const GLOBAL_CLEAR_TEAM_MESSAGE = 'GLOBAL_CLEAR_TEAM_MESSAGE';
 
 
@@ -188,6 +192,32 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case GLOBAL_DELETE_TEAM: {
+      return {
+        ...state,
+      };
+    }
+    case GLOBAL_DELETE_TEAM_SUCCESS: {
+      return {
+        ...state,
+        activeTeamProcess: {
+          team: {},
+          success: null,
+          loading: false,
+          error: null,
+        },
+      };
+    }
+    case GLOBAL_DELETE_TEAM_FAILURE: {
+      return {
+        ...state,
+        activeTeamProcess: {
+          ...state.activeTeamProcess,
+          loading: false,
+          error: action.payload,
+        },
+      };
+    }
     case GLOBAL_CLEAR_TEAM_MESSAGE: {
       return {
         ...state,
@@ -260,6 +290,18 @@ export const createTeamFailureAction = error => ({
 });
 export const clearTeamMessageAction = () => ({
   type: GLOBAL_CLEAR_TEAM_MESSAGE,
+});
+export const deleteTeamAction = teamId => ({
+  type: GLOBAL_DELETE_TEAM,
+  teamId,
+});
+export const deleteTeamSuccessAction = data => ({
+  type: GLOBAL_DELETE_TEAM_SUCCESS,
+  payload: data,
+});
+export const deleteTeamFailureAction = error => ({
+  type: GLOBAL_DELETE_TEAM_FAILURE,
+  payload: error,
 });
 /*
  * Export default

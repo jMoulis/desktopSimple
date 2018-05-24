@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import './project.css';
 import ListProject from '../containers/ListProject';
 import Team from '../containers/Team';
-import MyTeams from '../containers/MyTeams';
 
 class Projects extends React.Component {
   static propTypes = {
@@ -67,12 +66,6 @@ class Projects extends React.Component {
           <Team
             key="createTeam"
             projectid={this.state.projectid}
-            loggedUser={this.props.loggedUser}
-          />
-        }
-        {this.state.tab === 'myTeams' &&
-          <MyTeams
-            key="myTeams"
             loggedUser={this.props.loggedUser}
           />
         }

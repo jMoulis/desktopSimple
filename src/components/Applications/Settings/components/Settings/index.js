@@ -5,12 +5,18 @@ import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
 import AccountProfile from '../../containers/Profile/Account';
 import TeamProfile from '../Profile/Teams';
+import Loader from '../../../../../Modules/Loader';
 
 class Settings extends React.Component {
   static propTypes = {
     fetchSingleUserAction: PropTypes.func.isRequired,
+    deleteUserAction: PropTypes.func.isRequired,
     loginProcess: PropTypes.object.isRequired,
     userActive: PropTypes.object.isRequired,
+    globalActions: PropTypes.object,
+  }
+  static defaultProps = {
+    globalActions: null,
   }
   state = {
     tab: 'profile',
@@ -27,10 +33,10 @@ class Settings extends React.Component {
     }));
   }
   render() {
-    const { userActive, deleteUserAction } = this.props;
+    const { userActive, deleteUserAction, globalActions } = this.props;
     const { loading } = userActive;
     if (loading) {
-      return <span>Loading</span>;
+      return <Loader />;
     }
     return (
       <div className="settings-container">
@@ -71,10 +77,25 @@ class Settings extends React.Component {
             </li>
           </ul>
         </div>
-        {this.state.tab === 'profile' && <Profile key="profile" />}
-        {this.state.tab === 'teams' && <TeamProfile key="teams" user={userActive.user} />}
-        {this.state.tab === 'company' && <CompanyProfile key="profile" userActive={userActive} />}
-        {this.state.tab === 'account' && <AccountProfile key="account" deleteUserAction={deleteUserAction} userActive={userActive} />}
+        {this.state.tab === 'profile' &&
+          <Profile key="profile" />}
+        {this.state.tab === 'teams' &&
+          <TeamProfile
+            key="teams"
+            user={userActive.user}
+            selectTeam={globalActions.selectTeam}
+          />}
+        {this.state.tab === 'company' &&
+          <CompanyProfile
+            key="profile"
+            userActive={userActive}
+          />}
+        {this.state.tab === 'account' &&
+          <AccountProfile
+            key="account"
+            deleteUserAction={deleteUserAction}
+            userActive={userActive}
+          />}
       </div>
     );
   }

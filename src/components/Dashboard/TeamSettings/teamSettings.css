@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
-#dashboard {
+.dashboard {
   position: relative;
   background-color: #41848f;
   height: 98%;

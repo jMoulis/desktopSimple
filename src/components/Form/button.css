@@ -8,7 +8,7 @@
   min-width: 30%;
   padding-top: 0;
   overflow: auto;
-  height: 90%; }
+  height: calc(100% - 40px); }
   .form-container .form {
     width: 100%;
     border: none;
@@ -64,6 +64,9 @@
     border: 2px solid transparent; }
     .btn-neutral:hover {
       border: 2px solid #eee9d1; }
+    .btn-neutral:active {
+      border: 2px solid #0a1c28;
+      color: #0a1c28; }
   .btn-primary {
     border: 2px solid #eee9d1;
     background-color: #d44c00;
@@ -72,30 +75,30 @@
       background-color: #eee9d1;
       border: 2px solid #d44c00;
       color: #d44c00; }
-    .btn-primary:focus {
-      background-color: #eee9d1;
-      border: 2px solid #d44c00;
-      color: #d44c00; }
+    .btn-primary:active {
+      background-color: #41848f;
+      border: 2px solid #0a1c28;
+      color: #0a1c28; }
   .btn-danger {
     background-color: #c82333; }
     .btn-danger:hover {
       background-color: #eee9d1;
       border: 2px solid #c82333;
       color: #c82333; }
-    .btn-danger:focus {
-      background-color: #c82333;
-      border: 2px solid #eee9d1;
-      color: #eee9d1; }
+    .btn-danger:active {
+      background-color: #41848f;
+      border: 2px solid #0a1c28;
+      color: #0a1c28; }
   .btn-success {
     background-color: #218838; }
     .btn-success:hover {
       background-color: #eee9d1;
       border: 2px solid #1e7e34;
       color: #1e7e34; }
-    .btn-success:focus {
-      background-color: #218838;
-      border: 2px solid #eee9d1;
-      color: #eee9d1; }
+    .btn-success:active {
+      background-color: #41848f;
+      border: 2px solid #0a1c28;
+      color: #0a1c28; }
   .btn-disabled {
     opacity: 0.6;
     cursor: not-allowed; }

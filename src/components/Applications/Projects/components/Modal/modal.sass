@@ -12,7 +12,7 @@ $change-color: background-color 500ms ease-out
     background-color: rgba(10, 28, 40, 0.7)
     display: flex
     justify-content: center
-    z-index: 1
+    
     &-appear
       opacity: 0.01
     &-appear.modal-overlay-appear-active
@@ -35,8 +35,9 @@ $change-color: background-color 500ms ease-out
     display: flex
     justify-content: space-between
     padding: .5rem
+    box-shadow: 0 0 5px 0 $darkestblue
   &-content
-    height: 90%
+    height: calc(100% - 42px)
     overflow: auto
     .form-container
       height: auto

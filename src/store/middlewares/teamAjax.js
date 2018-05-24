@@ -20,6 +20,9 @@ import {
   GLOBAL_EDIT_TEAM,
   editTeamSuccessAction,
   editTeamFailureAction,
+  GLOBAL_DELETE_TEAM,
+  deleteTeamSuccessAction,
+  deleteTeamFailureAction,
 } from '../reducers/teamReducer';
 
 import { logoutAction } from '../../store/reducers/authReducer';
@@ -130,6 +133,25 @@ export default store => next => (action) => {
             return store.dispatch(logoutAction());
           }
           return store.dispatch(fetchSingleTeamFailureAction(error.response.data.errors));
+        });
+      break;
+    }
+    case GLOBAL_DELETE_TEAM: {
+      axios({
+        method: 'delete',
+        url: `${ROOT_URL}/api/teams/${action.teamId}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(deleteTeamSuccessAction(data));
+        })
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error);
+          }
+          return store.dispatch(deleteTeamFailureAction(error.response.data.errors));
         });
       break;
     }

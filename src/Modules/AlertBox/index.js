@@ -5,6 +5,12 @@ import './index.css';
 import Button from '../../components/Form/button';
 
 class AlertBox extends React.Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
+    buttons: PropTypes.array.isRequired,
+    type: PropTypes.string.isRequired,
+  }
   state = {
     show: true,
   }
@@ -57,12 +63,5 @@ class AlertBox extends React.Component {
     );
   }
 }
-
-AlertBox.propTypes = {
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  buttons: PropTypes.array.isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 export default AlertBox;

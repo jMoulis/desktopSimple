@@ -16,6 +16,7 @@ class Dashboard extends React.Component {
     activeTeamProcess: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showUserDetailModalAction: PropTypes.func.isRequired,
+    selectTeam: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
     activeApps: PropTypes.array,
   }
@@ -47,12 +48,14 @@ class Dashboard extends React.Component {
       showSelectTeamPanel,
       showUserDetailModalAction,
       showUserDetailModal,
+      selectTeam,
     } = this.props;
     const objectValues = Object.keys(applications).map(item => applications[item]);
+    const { user } = loggedUser;
     return (
-      <main id="dashboard">
+      <main id="dashboard" className="dashboard">
         {activeTeamProcess.loading === false &&
-          loggedUser.typeUser !== 'company' &&
+          user.typeUser !== 'company' &&
             <TeamToolbar
               showSettings={this.handleShowSettings}
               showSelectTeamPanel={showSelectTeamPanel}
@@ -70,7 +73,13 @@ class Dashboard extends React.Component {
                   if (activeApp.appName === application.appName) {
                     return React.createElement(
                       activeApp.appComponent,
-                      { key: activeApp, loggedUser },
+                      {
+                        key: activeApp,
+                        loggedUser: user,
+                        globalActions: {
+                          selectTeam,
+                        },
+                      },
                     );
                   }
                   return '';
@@ -81,8 +90,8 @@ class Dashboard extends React.Component {
           return false;
         })}
         {this.state.helper &&
-          loggedUser.user.teams.length === 0 &&
-          loggedUser.user.typeUser === 'student' &&
+          user.teams.length === 0 &&
+          user.typeUser === 'student' &&
           <Helper
             show={this.state.helper}
             close={this.handleCloseHelper}

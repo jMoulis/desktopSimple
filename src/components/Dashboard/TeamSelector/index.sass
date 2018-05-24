@@ -10,14 +10,28 @@
   display: flex
   align-items: center
   flex-direction: column
-  flex-wrap: wrap
   padding-top: 5rem
   z-index: 100
+  &-appear
+    opacity: 0.01
+  &-appear.team-selector-appear-active
+    opacity: 1
+    transition: opacity 300ms
+  &-exit
+    opacity: 1
+  &-exit.team-selector-exit-active
+    opacity: 0.01
+    transition: opacity 200ms
+  .ul-nav
+    align-items: flex-start
+    flex-wrap: wrap
+    min-width: 760px
   h1
     color: $beige
   &-item
     margin: .5rem
     width: 200px
+    height: 250px
     display: flex
     flex-direction: column
     min-height: 200px

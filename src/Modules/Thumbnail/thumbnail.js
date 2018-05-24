@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import UserIcon from '../UserIcon';
 import './thumbnail.css';
 
 const hasSelectedTag = (selectedTags, tag) => {
@@ -21,12 +23,11 @@ const Thumbnail = ({ user, configForThumbnail }) => {
   if (configForThumbnail) {
     amISelected = hisSelected(configForThumbnail.selectedUsers, user);
   }
-
   return (
     <div
       className={`thumbnail-container ${amISelected && 'thumbnail-container--selected'}`}
     >
-      <img className="thumbnail" src={user.picture || '/img/avatar.png'} alt={user.fullName} />
+      <UserIcon user={{ user }} />
       <div>
         <span>{user.fullName}</span>
         <ul className="ul-nav tag-list">
@@ -48,8 +49,8 @@ const Thumbnail = ({ user, configForThumbnail }) => {
                   disabled={selectedTag === false || amISelected}
                   data-user={
                     JSON.stringify({
-                      key: tag,
-                      value: {
+                      spec: tag,
+                      user: {
                         picture: user.picture,
                         fullName: user.fullName,
                         _id: user._id,

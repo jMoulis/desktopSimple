@@ -17,6 +17,7 @@ import {
   loginFailureAction,
   REHYDRATE,
   rehydrateSuccessAction,
+  rehydrateFailureAction,
 } from '../reducers/authReducer';
 /*
  * Code
@@ -105,9 +106,33 @@ export default store => next => (action) => {
       });
       rehydrate
         .then(({ user, auth }) => {
-          // store.dispatch(fetchUserAction(user._id));
-          // store.dispatch(fetchUserSuccessAction({ user }));
-          store.dispatch(rehydrateSuccessAction({ user, auth }));
+          const handleErrors = (response) => {
+            if (!response.ok) {
+              response.json()
+                .then((error) => {
+                  store.dispatch(rehydrateFailureAction(error));
+                  return error;
+                });
+              throw new Error('Auth error');
+            }
+            return response;
+          };
+
+          fetch(`${ROOT_URL}/api/users/${user._id}`, {
+            method: 'get',
+            headers: {
+              Authorization: `${localStorage.getItem('token')}`,
+            },
+          })
+            .then(handleErrors)
+            .then(response => response.json())
+            .then((userUpdated) => {
+              localStorage.setItem('user', JSON.stringify(userUpdated));
+              setTimeout(() => {
+                store.dispatch(rehydrateSuccessAction({ user: userUpdated, auth }));
+              }, 10);
+            })
+            .catch(error => console.error(error));
         })
         .catch(error => console.log(error));
       break;

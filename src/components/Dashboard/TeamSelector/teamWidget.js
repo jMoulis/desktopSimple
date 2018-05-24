@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import UserIcon from '../../../Modules/UserIcon';
 
 const TeamWidget = ({ team }) => (
   <div>
     <h1>{team.name}</h1>
-    <h2>{team.project.title}</h2>
+    {team.project ?
+      <h2>{team.project.title}</h2> :
+      'No project selected yet'}
     <ul>
-      {team.users.map(({ user }, index) => (
+      {team.users.map((user, index) => (
         <li key={index}>
           <div className="user-thumbnail">
-            <img src={user.picture} alt="User" />
-            <p>{user.fullName}</p>
+            <UserIcon
+              user={user}
+              active={false}
+              classCss="middle"
+            />
+            <p>{user.user.fullName}</p>
           </div>
         </li>
       ))}

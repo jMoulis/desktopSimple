@@ -8,6 +8,7 @@ import Input from '../../../Form/input';
 import RessourceItem from './ressourceItem';
 import Model from './team-model';
 import Button from '../../../Form/button';
+import AlertBox from '../../../../Modules/AlertBox';
 
 class EditTeam extends React.Component {
   static propTypes = {
@@ -16,6 +17,7 @@ class EditTeam extends React.Component {
     closeFromParent: PropTypes.func,
     activeTeamProcess: PropTypes.object.isRequired,
     clearTeamMessageAction: PropTypes.func.isRequired,
+    deleteTeamAction: PropTypes.func.isRequired,
   }
   static defaultProps = {
     closeFromParent: null,
@@ -78,6 +80,7 @@ class EditTeam extends React.Component {
       modal: false,
       manager,
       specAlreadySelected: null,
+      alertBox: false,
     };
   }
   componentDidUpdate() {
@@ -219,6 +222,17 @@ class EditTeam extends React.Component {
       });
     });
   }
+  hanldeDeleteTeam = () => {
+    const { deleteTeamAction, activeTeamProcess, closeFromParent } = this.props;
+    deleteTeamAction(activeTeamProcess.team._id);
+    closeFromParent();
+  }
+  handleShowAlertBox = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      alertBox: !prevState.alertBox,
+    }));
+  }
   render() {
     const {
       counters,
@@ -297,6 +311,7 @@ class EditTeam extends React.Component {
                     </ul>
                   </div>
                   <Button category="primary" style={{ width: '100%', marginTop: '.5rem' }}type="submit">Edit</Button>
+                  <Button onClick={this.handleShowAlertBox} category="danger" style={{ width: '100%', marginTop: '.5rem' }}type="button">Delete</Button>
                 </div>
               </div>
             </form>
@@ -313,6 +328,27 @@ class EditTeam extends React.Component {
                 select={this.handleSelectUser}
               />
             </Modal>
+          }
+          {this.state.alertBox &&
+            <AlertBox
+              title="Deleting Team"
+              message="WatchOut you are on your way to delete a team"
+              buttons={[
+                {
+                  type: 'danger',
+                  action: this.hanldeDeleteTeam,
+                  label: 'Yeap',
+                  category: 'danger',
+                },
+                {
+                  type: 'success',
+                  action: this.handleShowAlertBox,
+                  label: 'Nope',
+                  category: 'success',
+                },
+              ]}
+              type="danger"
+            />
           }
         </div>
       </div>

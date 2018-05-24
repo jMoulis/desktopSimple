@@ -175,7 +175,7 @@ class AddFilesInput extends React.Component {
             ))}
           </div>
         </div>
-        {error && <small className="error">{error}</small>}
+        {error && <small className="error-message">{error}</small>}
       </div>,
       <div key="viewer">{this.state.viewer.display &&
         <ViewerPdf close={this.handleCloseViewer} doc={this.state.viewer.doc} />}

@@ -10,8 +10,7 @@
   right: 0;
   background-color: rgba(10, 28, 40, 0.7);
   display: flex;
-  justify-content: center;
-  z-index: 1; }
+  justify-content: center; }
   .modal-overlay-appear {
     opacity: 0.01; }
   .modal-overlay-appear.modal-overlay-appear-active {
@@ -35,10 +34,11 @@
 .modal-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem; }
+  padding: .5rem;
+  box-shadow: 0 0 5px 0 #0a1c28; }
 
 .modal-content {
-  height: 90%;
+  height: calc(100% - 42px);
   overflow: auto; }
   .modal-content .form-container {
     height: auto;

@@ -3,7 +3,7 @@
  */
 import { connect } from 'react-redux';
 import { fetchUsersCountAction } from '../../../store/reducers/userReducer';
-import { editTeamAction, clearTeamMessageAction } from '../../../store/reducers/teamReducer';
+import { editTeamAction, clearTeamMessageAction, deleteTeamAction } from '../../../store/reducers/teamReducer';
 
 /*
  * Local import
@@ -25,6 +25,9 @@ const mapDispatchToProps = dispatch => ({
   },
   editTeamAction: (values) => {
     dispatch(editTeamAction(values));
+  },
+  deleteTeamAction: (teamId) => {
+    dispatch(deleteTeamAction(teamId));
   },
   clearTeamMessageAction: () => {
     dispatch(clearTeamMessageAction());

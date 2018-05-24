@@ -75,21 +75,3 @@ h1 {
 .user-thumbnail {
   display: flex;
   align-items: center; }
-  .user-thumbnail img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: .5rem; }
-
-.miniature {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: .5rem;
-  cursor: pointer;
-  transition: all 200ms; }
-  .miniature:hover {
-    box-shadow: 0 0 5px 0 #0a1c28; }
-  .miniature-smaller {
-    width: 30px;
-    height: 30px; }

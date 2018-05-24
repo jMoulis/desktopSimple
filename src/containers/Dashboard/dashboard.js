@@ -32,8 +32,8 @@ const mapDispatchToProps = dispatch => ({
   setActiveAppAction: (app) => {
     dispatch(setActiveAppAction(app));
   },
-  showUserDetailModalAction: () => {
-    dispatch(showUserDetailModalAction());
+  showUserDetailModalAction: (user) => {
+    dispatch(showUserDetailModalAction(user));
   },
 });
 

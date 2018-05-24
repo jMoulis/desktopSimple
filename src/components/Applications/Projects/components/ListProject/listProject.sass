@@ -2,7 +2,7 @@
 .project-list-container
   padding-top: 0
   overflow: auto
-  height: 90%
+  height: calc(100% - 40px)
   & > div
     display: flex
     flex-wrap: wrap
@@ -48,3 +48,8 @@
         flex-wrap: wrap
         li
           margin-right: .5rem
+.notFound
+  display: flex
+  justify-content: center
+  padding-top: 10rem
+  height: inherit

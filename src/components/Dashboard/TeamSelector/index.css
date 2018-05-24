@@ -9,14 +9,28 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  flex-wrap: wrap;
   padding-top: 5rem;
   z-index: 100; }
+  .team-selector-appear {
+    opacity: 0.01; }
+  .team-selector-appear.team-selector-appear-active {
+    opacity: 1;
+    transition: opacity 300ms; }
+  .team-selector-exit {
+    opacity: 1; }
+  .team-selector-exit.team-selector-exit-active {
+    opacity: 0.01;
+    transition: opacity 200ms; }
+  .team-selector .ul-nav {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    min-width: 760px; }
   .team-selector h1 {
     color: #eee9d1; }
   .team-selector-item {
     margin: .5rem;
     width: 200px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     min-height: 200px;

@@ -72,7 +72,7 @@ class Profile extends React.Component {
     const { value } = evt.target;
     const { editUserAction, userActive } = this.props;
 
-    if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
+    if (evt.keyCode === 13) {
       const { state } = this;
       const newTags = {
         ...state,

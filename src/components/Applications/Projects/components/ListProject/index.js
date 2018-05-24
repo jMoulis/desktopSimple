@@ -7,6 +7,7 @@ import Modal from '../Modal/modal';
 import NewProject from '../../containers/NewProject/newProject';
 import DetailProject from '../../containers/DetailProject/detailProject';
 import Team from '../../containers/Team';
+import Loader from '../../../../../Modules/Loader';
 
 class ListProject extends React.Component {
   static propTypes = {
@@ -76,20 +77,15 @@ class ListProject extends React.Component {
       }));
     }, 300);
   }
-  handleCloseModal = (target) => {
-    // This function is called form it self with his own evt
-    // or from a child. Then the evt is directly the currentTarget
-    let modalName;
-    if (typeof target === 'string') {
-      modalName = target;
-    }
-    else if (target.currentTarget) {
-      modalName = target.currentTarget.name;
-    }
-    else {
-      modalName = target.name;
-    }
-    // Wait until the transition is done
+  handleCloseDetailModal = () => {
+    this.setState(() => ({
+      detailProjectModal: {
+        display: false,
+        zIndex: 0,
+      },
+    }));
+  }
+  handleCloseModal = (modalName) => {
     setTimeout(() => {
       this.setState(() => ({
         [modalName]: {
@@ -102,9 +98,15 @@ class ListProject extends React.Component {
   render() {
     const { projectListProcess, loggedUser, activeProjectProcess } = this.props;
     const { error, loading } = projectListProcess;
-
     if (loading) {
-      return <span>Loading</span>;
+      return <Loader />;
+    }
+    if (loggedUser.typeUser && loggedUser.typeUser === 'student' && error) {
+      return (
+        <div className="notFound">
+          <span>{error}</span>
+        </div>
+      );
     }
     return (
       <div className="project-list-container">
@@ -123,8 +125,8 @@ class ListProject extends React.Component {
           </li>
         </ul>
         <div>
-          {loggedUser.user.typeUser &&
-          loggedUser.user.typeUser !== 'student' &&
+          {loggedUser.typeUser &&
+          loggedUser.typeUser !== 'student' &&
           <ul className="project-list">
             <li className="project-list-item">
               <h2>Add a Project</h2>
@@ -137,7 +139,6 @@ class ListProject extends React.Component {
               </div>
             </li>
           </ul>}
-          {error && <span>{error}</span>}
           {projectListProcess.projects.map(project => (
             <ul
               className="project-list"

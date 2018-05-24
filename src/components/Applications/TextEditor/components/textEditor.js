@@ -3,6 +3,7 @@ import Quill from 'quill';
 
 class TextEditor extends React.Component {
   componentDidMount() {
+    // eslint-disable-next-line
     const quill = new Quill('.quill', {
       modules: {
         toolbar: [

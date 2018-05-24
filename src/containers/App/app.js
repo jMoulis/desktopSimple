@@ -20,7 +20,7 @@ import { fetchUserAction } from '../../store/reducers/userReducer';
 // State
 const mapStateToProps = ({ authReducer, mainTeamReducer, userReducer }) => ({
   auth: authReducer.auth,
-  loggedUser: authReducer.loginProcess.loggedUser,
+  loginProcess: authReducer.loginProcess,
   activeTeamProcess: mainTeamReducer.activeTeamProcess,
   userActive: userReducer.userActive,
 });

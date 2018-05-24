@@ -60,7 +60,7 @@ class Modal extends React.Component {
         appear
         onExited={() => closeFromParent()}
       >
-        <div data-close className="modal-overlay" style={{ zIndex }}>
+        <div className="modal-overlay" style={{ zIndex }}>
           <div className="modal-container" style={small ? this.state.style : {}}>
             <header className="modal-header">
               <h1>{title}</h1>

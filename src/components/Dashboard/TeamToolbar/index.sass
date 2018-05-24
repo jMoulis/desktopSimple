@@ -9,6 +9,16 @@
     justify-content: space-between
     align-items: center
     padding: .5rem
+    &-appear
+      opacity: 0.01
+    &-appear.team-selector-appear-active
+      opacity: 1
+      transition: opacity 100ms
+    &-exit
+      opacity: 1
+    &-exit.team-selector-exit-active
+      opacity: 0.01
+      transition: opacity 100ms
     &-list
       list-style: none
       margin: 0

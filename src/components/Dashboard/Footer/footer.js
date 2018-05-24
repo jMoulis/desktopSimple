@@ -13,6 +13,9 @@ class Footer extends React.Component {
     activeApp: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
   }
+  state = {
+    appname: '',
+  }
   handleStartApp = (event) => {
     const {
       startAppAction,
@@ -30,20 +33,24 @@ class Footer extends React.Component {
         // See frameReducer
         setActiveAppAction({ appName: appname, appComponent });
       });
+    this.setState({
+      appname,
+    });
   }
   handleLogout = () => {
     const { logoutAction } = this.props;
     logoutAction();
   }
   render() {
-    const { applications, activeApp, loggedUser } = this.props;
+    const { applications, loggedUser } = this.props;
     const objectValues = Object.keys(applications).map(itm => applications[itm]);
     return (
       <footer id="footer">
         <div className="footer-app-icon">
           {/* Loop over the applications and load icons */}
           {objectValues.map((application) => {
-            if (!application.typeUser.includes(loggedUser.typeUser) && !application.typeUser.includes('all')) {
+            if (!application.typeUser.includes(loggedUser.typeUser) &&
+              !application.typeUser.includes('all')) {
               return '';
             }
             if (application.appName === 'Settings') {
@@ -69,11 +76,8 @@ class Footer extends React.Component {
                     >{application.title}
                     </span>,
                   ]}
-                  {applications[activeApp.appName] &&
-                    applications[activeApp.appName].reduce &&
-                    <span className="active-app-circle" />
-                  }
                 </div>
+                {applications[application.appName].reduce && <p className="active-app-circle" />}
               </button>
             );
           })}

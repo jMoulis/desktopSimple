@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
+
 import './app.css';
 import Dashboard from '../../containers/Dashboard/dashboard';
 import Footer from '../../containers/Dashboard/Footer/footer';
@@ -10,6 +11,7 @@ import Content from '../../containers/Home/Content/content';
 import NoMatch from '../NoMatch/noMatch';
 import Signup from '../../containers/User/SignUp/signup';
 import TeamSelector from '../../containers/Dashboard/TeamSelector';
+import Loader from '../../Modules/Loader';
 
 
 class App extends Component {
@@ -17,7 +19,7 @@ class App extends Component {
     auth: PropTypes.bool.isRequired,
     rehydrateAction: PropTypes.func.isRequired,
     fetchSingleTeamAction: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
+    loginProcess: PropTypes.object.isRequired,
   }
   static getDerivedStateFromProps(nextProps, nextState) {
     if (nextProps.auth === false) {
@@ -44,8 +46,7 @@ class App extends Component {
       }
     }
   }
-  handleSelectTeam = (evt) => {
-    const { teamid } = evt.currentTarget.dataset;
+  handleSelectTeam = (teamid) => {
     const { fetchSingleTeamAction } = this.props;
     this.setState(() => ({
       showSelectTeam: false,
@@ -58,7 +59,7 @@ class App extends Component {
     }));
   }
   render() {
-    const { auth, loggedUser } = this.props;
+    const { auth, loginProcess } = this.props;
     return (
       <div id="app">
         <Switch>
@@ -104,17 +105,34 @@ class App extends Component {
             render={() => {
               if (auth) {
                 return (
-                  <div id="app-container">
+                  <div className="app-container">
                     <Dashboard
                       key="dashboard"
                       showSelectTeamPanel={this.showSelectTeamPanel}
+                      selectTeam={this.handleSelectTeam}
                     />
                     {this.state.showSelectTeam &&
-                      loggedUser.typeUser !== 'company' &&
-                      loggedUser.teams.length !== 0 &&
+                      loginProcess.loggedUser.typeUser !== 'company' &&
+                      loginProcess.loggedUser.teams.length !== 0 &&
                         <TeamSelector selectTeam={this.handleSelectTeam} />
                     }
                     <Footer key="footer" />
+                  </div>
+                );
+              }
+              else if (loginProcess.logging) {
+                return (
+                  <div
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      backgroundColor: '#41848f',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Loader />
                   </div>
                 );
               }

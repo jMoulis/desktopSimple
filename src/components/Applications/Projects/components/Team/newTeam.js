@@ -106,10 +106,10 @@ class NewTeam extends React.Component {
       return selectedUser;
     });
     const values = {
-      users: [...users, { spec: 'manager', user: { _id: loggedUser.user._id } }],
+      users: [...users, { spec: 'manager', user: { _id: loggedUser._id } }],
       name: this.state.name,
       project: { _id: project._id },
-      manager: { manager: loggedUser.user },
+      manager: { manager: loggedUser },
     };
     createTeamAction(values);
   }
@@ -136,7 +136,7 @@ class NewTeam extends React.Component {
     const userParsed = JSON.parse(user);
     this.setState((prevState) => {
       const filteredselectedTags = prevState.selectedTags.map((ressource) => {
-        if (ressource.value === userParsed.key) {
+        if (ressource.value === userParsed.spec) {
           return {
             ...ressource,
             selected: true,
@@ -148,7 +148,7 @@ class NewTeam extends React.Component {
         modal: false,
         selectedUsers: {
           ...prevState.selectedUsers,
-          [userParsed.key]: userParsed.value,
+          [userParsed.spec]: userParsed.user,
         },
         selectedTags: filteredselectedTags,
       });

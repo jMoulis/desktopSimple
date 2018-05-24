@@ -12,6 +12,7 @@ import Checkbox from '../../../../Form/checkbox';
 import InfoPanel from '../../containers/DetailProject/InfoPanel';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import AlertBox from '../../../../../Modules/AlertBox';
+import UserIcon from '../../../../../Modules/UserIcon';
 
 class DetailProject extends React.Component {
   static propTypes = {
@@ -45,6 +46,8 @@ class DetailProject extends React.Component {
       },
       delete: false,
       showAlertBox: false,
+      author: project.author,
+
     };
   }
   componentDidUpdate(prevProps, prevState) {
@@ -140,7 +143,7 @@ class DetailProject extends React.Component {
   handleInputSelectTagsChange = (evt) => {
     const inputValue = evt.target.value;
     const { editProjectAction } = this.props;
-    if (evt.keyCode === 13 || evt.keyCode === 32 || evt.keyCode === 188) {
+    if (evt.keyCode === 13) {
       const { state } = this;
       const newTags = {
         ...state,
@@ -205,24 +208,10 @@ class DetailProject extends React.Component {
       },
     }));
   }
-  handleDeleteProject = (evt) => {
+  handleDeleteProject = () => {
     const { deleteProjectAction, activeProjectProcess, closeFromParent } = this.props;
     deleteProjectAction(activeProjectProcess.project._id);
-    const evtTargetChild = evt.currentTarget;
-    this.setState(prevState => ({
-      ...prevState,
-      delete: true,
-      evtTargetChild,
-    }), () => {
-      // The setTimeOut is used to let the time to display confirmation message
-      setTimeout(() => {
-        this.setState(prevState => ({
-          ...prevState,
-          delete: false,
-        }));
-        closeFromParent(evtTargetChild);
-      }, 1000);
-    });
+    closeFromParent('detailProjectModal');
   }
   handleSubscribe = (evt) => {
     const { name } = evt.currentTarget;
@@ -231,7 +220,7 @@ class DetailProject extends React.Component {
 
     let subscribers = [];
     const userAlreadySubscribed = stateSubscribers.find(subscriber => (
-      subscriber._id === loggedUser.user._id
+      subscriber._id === loggedUser._id
     ));
 
     switch (name) {
@@ -249,7 +238,7 @@ class DetailProject extends React.Component {
             subscribers: {
               value: [
                 ...stateSubscribers,
-                { _id: loggedUser.user._id },
+                { _id: loggedUser._id },
               ],
               changed: true,
             },
@@ -257,7 +246,7 @@ class DetailProject extends React.Component {
         }), () => editProjectAction(this.state.form));
       case 'unsubscribe':
         subscribers = stateSubscribers.filter(subscriber => (
-          subscriber._id !== loggedUser.user._id));
+          subscriber._id !== loggedUser._id));
         return this.setState(prevState => ({
           ...prevState,
           form: {
@@ -281,7 +270,7 @@ class DetailProject extends React.Component {
   render() {
     const { activeProjectProcess, openNewTeamModal, loggedUser } = this.props;
     const { error, loading, project } = activeProjectProcess;
-    const { user } = loggedUser;
+    const user = loggedUser;
     if (loading || Object.keys(project).length === 0) {
       if (this.state.delete) {
         return <span>Message confirmation deleted</span>;
@@ -298,6 +287,19 @@ class DetailProject extends React.Component {
         >
           <div className="form-content-wrapper">
             <div className="form-content">
+              <div className="company">
+                <img className="company-logo" src={this.state.author.company.logo} alt="logo company" />
+                <div className="company-info">
+                  <p className="company-info-name">{this.state.author.company.companyName}</p>
+                  <div className="company-author">
+                    <UserIcon
+                      user={{ user: this.state.author }}
+                      classCss="middle"
+                    />
+                    <p>{this.state.author.fullName}</p>
+                  </div>
+                </div>
+              </div>
               <Input
                 config={{
                   field: Model.title,
@@ -401,7 +403,7 @@ class DetailProject extends React.Component {
                 <button
                   name="detailProjectModal"
                   type="button"
-                  className="btn"
+                  className="btn btn-danger"
                   onClick={this.handleShowAlertBox}
                 >Delete
                 </button>
@@ -436,11 +438,13 @@ class DetailProject extends React.Component {
                   type: 'danger',
                   action: this.handleDeleteProject,
                   label: 'Yeap',
+                  category: 'danger',
                 },
                 {
                   type: 'success',
                   action: this.handleShowAlertBox,
                   label: 'Nope',
+                  category: 'success',
                 },
               ]
             }

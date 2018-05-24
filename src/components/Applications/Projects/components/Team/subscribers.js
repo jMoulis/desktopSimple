@@ -13,16 +13,20 @@ const Subscribers = ({ project, onClick, config }) => {
     <div className="subscribers-container">
       <h1>Subscribers</h1>
       <ul>
-        {project.subscribers.map((subscriber) => {
+        {project.subscribers.length > 0 ? project.subscribers.map((subscriber) => {
           if (config.loggedUser.user._id === subscriber._id) {
             return false;
           }
           return (
             <li key={subscriber._id}>
-              <Thumbnail user={subscriber} onClick={onClick} configForThumbnail={config} />
+              <Thumbnail
+                user={subscriber}
+                onClick={onClick}
+                configForThumbnail={config}
+              />
             </li>
           );
-        })}
+        }) : 'No subscribers'}
       </ul>
     </div>
   );
