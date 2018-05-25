@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Loader from '../../../../../Modules/Loader';
 import './userLoader.css';
 
 class UsersLoader extends React.Component {
@@ -37,7 +38,7 @@ class UsersLoader extends React.Component {
       pagination,
     } = userList;
     if (loading) {
-      return <span>Loading</span>;
+      return <Loader />;
     }
     return (
       <div className="users">

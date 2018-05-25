@@ -5,6 +5,7 @@ import { PDFViewer, PDFFindController } from 'pdfjs-dist/web/pdf_viewer';
 import { CSSTransition } from 'react-transition-group';
 import './viewerPdf.css';
 import '../../../node_modules/pdfjs-dist/web/pdf_viewer.css';
+import ViewerToolbar from './viewerToolbar';
 
 class ViewerPdf extends React.Component {
   static propTypes = {
@@ -21,19 +22,22 @@ class ViewerPdf extends React.Component {
         display: true,
         pdfRaw: props.doc,
         scaleValue: 1,
+        curYPos: null,
+        curXPos: null,
+        curDown: false,
       },
       enterTimeout: 150,
       exitTimeout: 100,
     };
     PdfJs.GlobalWorkerOptions.workerSrc = '/node_modules/pdfjs-dist/build/pdf.worker.js';
+    this.container = React.createRef();
   }
   componentDidMount() {
     this.renderPage({ value: this.state.viewer.pdfRaw }, this.state.viewer.scaleValue);
-    const container = document.querySelector('.viewer-container');
+    const container = this.container.current;
     this.pdfViewer = new PDFViewer({
       container,
     });
-    this.scrollByDragging(container);
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.viewer.page !== prevState.viewer.page ||
@@ -41,75 +45,55 @@ class ViewerPdf extends React.Component {
       this.pdfViewer.currentScaleValue = this.state.viewer.scaleValue;
     }
   }
-  scrollByDragging = (element) => {
-    let curYPos;
-    let curXPos;
-    let curDown;
-    element.addEventListener('mousemove', (e) => {
-      if (curDown) {
-        element.scrollTo({
-          top: element.scrollTop + ((curYPos - e.pageY) * 5),
-          left: element.scrollLeft + ((curXPos - e.pageX) * 5),
-          behavior: 'smooth',
-        });
-      }
-    });
-    element.addEventListener('mousedown', (e) => {
-      curYPos = e.pageY;
-      curXPos = e.pageX;
-      curDown = true;
-    });
-
-    element.addEventListener('mouseup', () => {
-      curDown = false;
-    });
+  setScaleValue = (scaleValue) => {
+    this.setState(prevState => ({
+      ...prevState,
+      viewer: {
+        ...prevState.viewer,
+        scaleValue: prevState.viewer.scaleValue + scaleValue,
+      },
+    }));
   }
-  handleCloseViewer = (evt) => {
-    // Show modal with huge canvas
-    const pdfRaw = evt.target.dataset.b64;
-    const { close } = this.props;
-    close(this.state.exitTimeout);
+  handleCloseViewer = () => {
     this.setState(prevState => ({
       viewer: {
         ...prevState.viewer,
         display: false,
-        pdfRaw,
       },
     }));
   }
-  handleZoom = (evt) => {
-    const { id } = evt.currentTarget;
-    this.setState((prevState) => {
-      switch (id) {
-        case 'minus':
-          if (this.state.viewer.scaleValue <= 0.5) {
-            return {
-              ...prevState,
-            };
-          }
-          return ({
-            ...prevState,
-            viewer: {
-              ...prevState.viewer,
-              scaleValue: prevState.viewer.scaleValue - 0.5,
-            },
-          });
-        case 'plus':
-          return {
-            ...prevState,
-            viewer: {
-              ...prevState.viewer,
-              scaleValue: prevState.viewer.scaleValue + 0.5,
-            },
-          };
-        default:
-          return {
-            ...prevState,
-          };
-      }
-    });
+  _onMouseDown = (evt) => {
+    const { pageY, pageX } = evt;
+    this.setState(prevState => ({
+      ...prevState,
+      viewer: {
+        ...prevState.viewer,
+        curYPos: pageY,
+        curXPos: pageX,
+        curDown: true,
+      },
+    }));
   }
-
+  _onMouseMove = (evt) => {
+    const element = evt.currentTarget;
+    const { pageY, pageX } = evt;
+    if (this.state.viewer.curDown) {
+      element.scrollTo({
+        top: element.scrollTop + ((this.state.viewer.curYPos - pageY) * 5),
+        left: element.scrollLeft + ((this.state.viewer.curXPos - pageX) * 5),
+        behavior: 'smooth',
+      });
+    }
+  }
+  _onMouseUp = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      viewer: {
+        ...prevState.viewer,
+        curDown: false,
+      },
+    }));
+  }
   renderPage = (doc, scale) => {
     ViewerPdf.trimBase64(doc)
       .then((newEncodedString) => {
@@ -136,8 +120,8 @@ class ViewerPdf extends React.Component {
           });
       });
   }
-
   render() {
+    const { close } = this.props;
     return (
       <CSSTransition
         in={this.state.viewer.display}
@@ -147,46 +131,23 @@ class ViewerPdf extends React.Component {
         }}
         classNames="viewer"
         appear
+        onExited={() => close()}
         unmountOnExit
       >
         <div key="viewer" className="viewer">
-          <ul className="btn-container">
-            <li>
-              <button
-                className="viewer-toolbar-item"
-                id="plus"
-                type="button"
-                onClick={this.handleZoom}
-              >
-                <i className="fas fa-search-plus" />
-              </button>
-              <button
-                className="viewer-toolbar-item"
-                id="minus"
-                type="button"
-                onClick={this.handleZoom}
-              >
-                <i className="fas fa-search-minus" />
-              </button>
-            </li>
-            <li>
-              <a
-                className="viewer-toolbar-item"
-                download
-                href={this.state.viewer.pdfRaw}
-              >
-                <i className="fas fa-download" />
-              </a>
-              <button
-                className="viewer-toolbar-item viewer-toolbar-item--close"
-                type="button"
-                onClick={this.handleCloseViewer}
-              >
-                <i className="fas fa-times-circle" />
-              </button>
-            </li>
-          </ul>
-          <div className="viewer-container">
+          <ViewerToolbar
+            setScaleValueAction={this.setScaleValue}
+            closeViewerAction={this.handleCloseViewer}
+            pdf={this.state.viewer.pdfRaw}
+            scaleValue={this.state.viewer.scaleValue}
+          />
+          <div
+            ref={this.container}
+            className="viewer-container"
+            onMouseDown={this._onMouseDown}
+            onMouseUp={this._onMouseUp}
+            onMouseMove={this._onMouseMove}
+          >
             <div id="viewer" className="pdfViewer" />
           </div>
         </div>

@@ -14,7 +14,7 @@ const Subscribers = ({ project, onClick, config }) => {
       <h1>Subscribers</h1>
       <ul>
         {project.subscribers.length > 0 ? project.subscribers.map((subscriber) => {
-          if (config.loggedUser.user._id === subscriber._id) {
+          if (config.loggedUser._id === subscriber._id) {
             return false;
           }
           return (

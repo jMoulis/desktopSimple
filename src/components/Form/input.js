@@ -19,6 +19,8 @@ const Input = ({ config }) => {
         onKeyUp={config.keyUp}
         readOnly={config.readOnly}
         onKeyPress={config.keyPress}
+        max={config.max}
+        min={config.min}
       />
       {config.small && <small className="tips">{config.small}</small>}
       {config.error && <small className="error-message">{config.error}</small>}

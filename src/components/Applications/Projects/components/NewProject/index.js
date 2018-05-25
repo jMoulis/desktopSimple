@@ -128,6 +128,36 @@ class NewProject extends React.Component {
       },
     }));
   }
+  handleOnFocus = (evt) => {
+    if (evt) {
+      const { name } = evt.target;
+      this.setState(prevState => ({
+        ...prevState,
+        [name]: {
+          ...prevState[name],
+          focus: true,
+        },
+      }));
+    }
+    else {
+      return false;
+    }
+  }
+  handleOnBlur = (evt) => {
+    if (evt) {
+      const { name } = evt.target;
+      this.setState(prevState => ({
+        ...prevState,
+        [name]: {
+          ...prevState[name],
+          focus: false,
+        },
+      }));
+    }
+    else {
+      return false;
+    }
+  }
   render() {
     const { projectCreation } = this.props;
     const { error, success } = projectCreation;
@@ -152,6 +182,7 @@ class NewProject extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   keyPress: this.handleInputChange,
+                  isFocused: this.state.title.focus,
                   error: error && error.title && error.title.detail,
                 }}
               />
@@ -162,6 +193,7 @@ class NewProject extends React.Component {
                   value: this.state.description.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
+                  isFocused: this.state.description.focus,
                   error: error && error.description && error.description.detail,
                 }}
               />
@@ -173,6 +205,7 @@ class NewProject extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   keyPress: this.handleInputChange,
+                  isFocused: this.state.dueDate.focus,
                   error: error && error.dueDate && error.dueDate.detail,
                 }}
               />
@@ -183,6 +216,7 @@ class NewProject extends React.Component {
                   value: this.state.isPrice.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
+                  isFocused: this.state.isPrice.focus,
                   error: error && error.isPrice && error.isPrice.detail,
                 }}
               />
@@ -195,6 +229,7 @@ class NewProject extends React.Component {
                     blur: this.handleOnBlur,
                     focus: this.handleOnFocus,
                     keyPress: this.handleInputChange,
+                    isFocused: this.state.price.focus,
                     error: error && error.price && error.price.detail,
                   }}
                 />
@@ -206,6 +241,7 @@ class NewProject extends React.Component {
                   value: this.state.isContest.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
+                  isFocused: this.state.isContest.focus,
                   error: error && error.isContest && error.isContest.detail,
                 }}
               />
@@ -218,6 +254,7 @@ class NewProject extends React.Component {
                     blur: this.handleOnBlur,
                     focus: this.handleOnFocus,
                     keyPress: this.handleInputChange,
+                    isFocused: this.state.maxTeam.focus,
                     error: error && error.maxTeam && error.maxTeam.detail,
                   }}
                 />
@@ -231,6 +268,7 @@ class NewProject extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   remove: this.handleRemove,
+                  isFocused: this.state.tags.focus,
                   error: error && error.tags && error.tags.detail,
                 }}
               />

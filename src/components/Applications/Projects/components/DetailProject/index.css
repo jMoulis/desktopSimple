@@ -5,34 +5,43 @@
 #edit-project {
   color: #0a1c28; }
 
-.subscribe {
+.actions {
   position: absolute;
-  right: 21px;
-  top: 50%; }
-  .subscribe .btn-subscribe {
-    width: 50px;
-    height: 50px;
+  right: 20px;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+  .actions .subscribed {
+    border: 2px solid #eee9d1;
+    background-color: #d44c00;
+    color: #eee9d1; }
+    .actions .subscribed:hover {
+      background-color: #ee5500; }
+  .actions-button {
+    width: 30px;
+    height: 30px;
+    margin-bottom: .5rem;
     border-radius: 50%;
-    border: 2px solid #0a1c28;
-    background-color: #41848f;
     cursor: pointer;
     outline: none;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     color: #0a1c28;
     transition: all 500ms; }
-    .subscribe .btn-subscribe:hover {
+    .actions-button-subscribe {
+      border: 2px solid #0a1c28;
+      background-color: #41848f; }
+    .actions-button-share {
+      border: 2px solid #eee9d1;
+      background-color: #0073b1;
+      color: #eee9d1; }
+    .actions-button:hover {
       background-color: #4994a1; }
-    .subscribe .btn-subscribe:active {
+    .actions-button:active {
       box-shadow: 0 0 5px 1px #0a1c28;
       background-color: #d44c00;
       border: 2px solid #eee9d1;
       color: #eee9d1; }
-  .subscribe .subscribed {
-    background-color: #d44c00;
-    color: #eee9d1;
-    border: 2px solid #eee9d1; }
-    .subscribe .subscribed:hover {
-      background-color: #ee5500; }
 
 .company {
   display: flex;

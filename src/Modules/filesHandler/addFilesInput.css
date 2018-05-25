@@ -17,9 +17,10 @@
     margin-right: 1rem;
     cursor: pointer;
     transition: all 500ms; }
-    .addfilesinput-thumbnail-wrapper .add-thumbnail:hover {
+    .addfilesinput-thumbnail-wrapper .add-thumbnail:hover, .addfilesinput-thumbnail-wrapper .add-thumbnail--focused {
       box-shadow: 0 0 10px 0 #0a1c28;
-      color: #d44c00; }
+      color: #d44c00;
+      border: 2px dotted #d44c00; }
   .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container {
     display: flex;
     flex-wrap: wrap;
@@ -35,7 +36,7 @@
       .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content canvas {
         width: 100%;
         cursor: pointer;
-        transition: box-shadow 200ms; }
+        transition: box-shadow 500ms; }
         .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content canvas:hover {
           box-shadow: 0 0 10px 0 #0a1c28; }
       .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content .delete-thumbnail {

@@ -10,11 +10,7 @@ class Footer extends React.Component {
     setActiveAppAction: PropTypes.func.isRequired,
     logoutAction: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
-    activeApp: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
-  }
-  state = {
-    appname: '',
   }
   handleStartApp = (event) => {
     const {
@@ -33,9 +29,6 @@ class Footer extends React.Component {
         // See frameReducer
         setActiveAppAction({ appName: appname, appComponent });
       });
-    this.setState({
-      appname,
-    });
   }
   handleLogout = () => {
     const { logoutAction } = this.props;

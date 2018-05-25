@@ -24,6 +24,9 @@
 .teams {
   align-items: flex-start;
   padding: 1rem; }
+  .teams-new-team {
+    padding-top: 1rem;
+    margin: 1rem; }
   .teams .team-container {
     margin: 1rem;
     transition: all 300ms;

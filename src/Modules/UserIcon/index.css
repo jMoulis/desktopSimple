@@ -11,4 +11,6 @@
     width: 40px;
     height: 40px; }
   .mini-thumbnail:hover {
-    box-shadow: 0 0 5px 0 #0a1c28; }
+    box-shadow: 0 0 10px 0 #0a1c28; }
+  .mini-thumbnail:active {
+    box-shadow: 0 0 2px 0 #0a1c28; }

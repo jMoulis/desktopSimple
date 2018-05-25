@@ -24,21 +24,26 @@ const UserIcon = ({
   user,
   active,
   classCss,
-}) => (
-  <img
-    className={`mini-thumbnail mini-thumbnail-${classCss}`}
-    src={user.user.picture || '/img/avatar.png'}
-    alt="Student"
-    title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
-    onClick={() => active && showUserDetailModal(user.user._id)}
-    onKeyPress={() => active && showUserDetailModal(user.user._id)}
-    style={user.spec === 'manager' ? {
-      border: '2px solid #d44c00',
-    } : {
-      border: '2px solid transparent',
-    }}
-  />
-);
+}) => {
+  if (!user.user) {
+    return null;
+  }
+  return (
+    <img
+      className={`mini-thumbnail mini-thumbnail-${classCss}`}
+      src={user.user.picture || '/img/avatar.png'}
+      alt="Student"
+      title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
+      onClick={() => active && showUserDetailModal(user.user._id)}
+      onKeyPress={() => active && showUserDetailModal(user.user._id)}
+      style={user.spec === 'manager' ? {
+        border: '2px solid #d44c00',
+      } : {
+        border: '2px solid transparent',
+      }}
+    />
+  );
+};
 
 UserIcon.propTypes = {
   showUserDetailModal: PropTypes.func.isRequired,

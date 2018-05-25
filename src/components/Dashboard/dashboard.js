@@ -13,11 +13,12 @@ class Dashboard extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
-    activeTeamProcess: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
+    globalActions: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showUserDetailModalAction: PropTypes.func.isRequired,
-    selectTeam: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
+    selectTeam: PropTypes.func.isRequired,
     activeApps: PropTypes.array,
   }
   static defaultProps = {
@@ -44,17 +45,18 @@ class Dashboard extends React.Component {
       applications,
       activeApps,
       loggedUser,
-      activeTeamProcess,
+      globalProps,
       showSelectTeamPanel,
       showUserDetailModalAction,
       showUserDetailModal,
+      globalActions,
       selectTeam,
     } = this.props;
     const objectValues = Object.keys(applications).map(item => applications[item]);
     const { user } = loggedUser;
     return (
       <main id="dashboard" className="dashboard">
-        {activeTeamProcess.loading === false &&
+        {globalProps.activeTeamProcess.loading === false &&
           user.typeUser !== 'company' &&
             <TeamToolbar
               showSettings={this.handleShowSettings}
@@ -77,12 +79,14 @@ class Dashboard extends React.Component {
                         key: activeApp,
                         loggedUser: user,
                         globalActions: {
+                          ...globalActions,
                           selectTeam,
                         },
+                        globalProps,
                       },
                     );
                   }
-                  return '';
+                  return null;
                 })}
               </Frame>
             );
@@ -98,12 +102,12 @@ class Dashboard extends React.Component {
           />}
         {this.state.showSettings &&
           <Modal
-            zIndex={4000}
+            zIndex={100}
             name="Settings"
             title="Settings"
             closeFromParent={this.handleShowSettings}
           >
-            <TeamSettings />
+            <TeamSettings globalActions={globalActions} />
           </Modal>
         }
         {showUserDetailModal &&

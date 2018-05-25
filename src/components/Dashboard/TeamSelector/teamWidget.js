@@ -9,18 +9,23 @@ const TeamWidget = ({ team }) => (
       <h2>{team.project.title}</h2> :
       'No project selected yet'}
     <ul>
-      {team.users.map((user, index) => (
-        <li key={index}>
-          <div className="user-thumbnail">
-            <UserIcon
-              user={user}
-              active={false}
-              classCss="middle"
-            />
-            <p>{user.user.fullName}</p>
-          </div>
-        </li>
-      ))}
+      {team.users.map((user, index) => {
+        if (!user.user) {
+          return null;
+        }
+        return (
+          <li key={index}>
+            <div className="user-thumbnail">
+              <UserIcon
+                user={user}
+                active={false}
+                classCss="middle"
+              />
+              <p>{user.user && user.user.fullName}</p>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   </div>
 );

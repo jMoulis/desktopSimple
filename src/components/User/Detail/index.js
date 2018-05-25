@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
+import Loader from '../../../Modules/Loader';
 
 class DetailUser extends React.Component {
   static propTypes = {
@@ -16,7 +17,7 @@ class DetailUser extends React.Component {
     const { userActive } = this.props;
     const { user, loading } = userActive;
     if (loading) {
-      return <span>loading</span>;
+      return <Loader />;
     }
     return (
       <div className="user">

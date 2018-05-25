@@ -59,14 +59,16 @@ class Settings extends React.Component {
                 >Company
                 </button>
               </li>}
-            <li>
-              <button
-                className="btn-app-toolbar unselectable"
-                name="teams"
-                onClick={this.handleTabSelect}
-              >Teams
-              </button>
-            </li>
+            {userActive.user.typeUser !== 'company' &&
+              <li>
+                <button
+                  className="btn-app-toolbar unselectable"
+                  name="teams"
+                  onClick={this.handleTabSelect}
+                >Teams
+                </button>
+              </li>
+            }
             <li>
               <button
                 className="btn-app-toolbar unselectable"
@@ -80,10 +82,11 @@ class Settings extends React.Component {
         {this.state.tab === 'profile' &&
           <Profile key="profile" />}
         {this.state.tab === 'teams' &&
+          userActive.user.typeUser !== 'company' &&
           <TeamProfile
             key="teams"
             user={userActive.user}
-            selectTeam={globalActions.selectTeam}
+            globalActions={globalActions}
           />}
         {this.state.tab === 'company' &&
           <CompanyProfile

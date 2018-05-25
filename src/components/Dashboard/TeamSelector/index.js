@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 
 import TeamWidget from './teamWidget';
 import './index.css';
+import Loader from '../../../Modules/Loader';
 
 class TeamSelector extends React.Component {
   static propTypes = {
@@ -35,7 +36,7 @@ class TeamSelector extends React.Component {
     const { teamId } = this.state;
 
     if (userActive.loading) {
-      return <span>Loading</span>;
+      return <span />;
     }
     return (
       <CSSTransition

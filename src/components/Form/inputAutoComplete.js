@@ -6,7 +6,7 @@ const InputAutoComplete = ({ config }) => {
   return (
     <div className={`form-group ${config.field.required ? 'required' : ''}`}>
       <label htmlFor={config.field.name}>{config.field.label}</label>
-      <div className="input-auto">
+      <div className={config.isFocused ? 'input-auto input-auto--focus' : 'input-auto'}>
         {config.values && config.values.map((value, index) => (
           <div className="input-auto-values" key={index}>
             <span className="input-auto-value">{value}</span>

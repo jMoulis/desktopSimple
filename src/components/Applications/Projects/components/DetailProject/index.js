@@ -13,11 +13,14 @@ import InfoPanel from '../../containers/DetailProject/InfoPanel';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import AlertBox from '../../../../../Modules/AlertBox';
 import UserIcon from '../../../../../Modules/UserIcon';
+import Loader from '../../../../../Modules/Loader';
 
 class DetailProject extends React.Component {
   static propTypes = {
     activeProjectProcess: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    globalActions: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
     openNewTeamModal: PropTypes.func.isRequired,
     deleteProjectAction: PropTypes.func.isRequired,
@@ -97,6 +100,7 @@ class DetailProject extends React.Component {
   }
   handleCheckBoxChange = (evt) => {
     const { name, checked } = evt.target;
+
     this.setState(prevState => ({
       ...prevState,
       form: {
@@ -196,6 +200,22 @@ class DetailProject extends React.Component {
       },
     }));
   }
+  handleOnFocus = (evt) => {
+    // Save the input field
+    if (evt) {
+      const { name } = evt.target;
+      this.setState(prevState => ({
+        ...prevState,
+        form: {
+          ...prevState.form,
+          [name]: {
+            ...prevState.form[name],
+            focus: true,
+          },
+        },
+      }));
+    }
+  }
   handleInputFileChange = (docs) => {
     this.setState(prevState => ({
       ...prevState,
@@ -267,15 +287,26 @@ class DetailProject extends React.Component {
       showAlertBox: !prevState.showAlertBox,
     }));
   }
+  handleShare = () => {
+    console.log('shared');
+    // Open a message to send to...
+  }
   render() {
-    const { activeProjectProcess, openNewTeamModal, loggedUser } = this.props;
+    const {
+      activeProjectProcess,
+      openNewTeamModal,
+      loggedUser,
+      globalActions,
+      globalProps,
+      editProjectAction,
+    } = this.props;
     const { error, loading, project } = activeProjectProcess;
     const user = loggedUser;
     if (loading || Object.keys(project).length === 0) {
       if (this.state.delete) {
         return <span>Message confirmation deleted</span>;
       }
-      return <span>loading</span>;
+      return <Loader />;
     }
     return (
       <div id="edit-project" className="form-container" key="app-content" >
@@ -308,6 +339,8 @@ class DetailProject extends React.Component {
                   blur: this.handleOnBlur,
                   keyPress: this.handleInputChange,
                   readOnly: project.author._id !== user._id,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.title.focus,
                   error: error && error.title && error.title.detail,
                 }}
               />
@@ -318,6 +351,8 @@ class DetailProject extends React.Component {
                   value: this.state.form.description.value,
                   blur: this.handleOnBlur,
                   readOnly: project.author._id !== user._id,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.description.focus,
                   error: error && error.description && error.description.detail,
                 }}
               />
@@ -329,6 +364,8 @@ class DetailProject extends React.Component {
                   blur: this.handleOnBlur,
                   keyPress: this.handleInputChange,
                   readOnly: project.author._id !== user._id,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.dueDate.focus,
                   error: error && error.dueDate && error.dueDate.detail,
                 }}
               />
@@ -339,6 +376,8 @@ class DetailProject extends React.Component {
                   value: this.state.form.isPrice.value,
                   blur: this.handleOnBlur,
                   readOnly: project.author._id !== user._id,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.isPrice.focus,
                   error: error && error.isPrice && error.isPrice.detail,
                 }}
               />
@@ -352,6 +391,7 @@ class DetailProject extends React.Component {
                     focus: this.handleOnFocus,
                     keyPress: this.handleInputChange,
                     readOnly: project.author._id !== user._id,
+                    isFocused: this.state.form.price.focus,
                     error: error && error.price && error.price.detail,
                   }}
                 />
@@ -363,6 +403,8 @@ class DetailProject extends React.Component {
                   value: this.state.form.isContest.value,
                   blur: this.handleOnBlur,
                   readOnly: project.author._id !== user._id,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.isContest.focus,
                   error: error && error.isContest && error.isContest.detail,
                 }}
               />
@@ -370,12 +412,15 @@ class DetailProject extends React.Component {
                 <Input
                   config={{
                     field: Model.maxTeam,
+                    max: 4,
+                    min: project.teams.length !== 0 ? project.teams.length : 1,
                     onChange: this.handleInputChange,
                     value: this.state.form.maxTeam.value,
                     blur: this.handleOnBlur,
                     focus: this.handleOnFocus,
                     keyPress: this.handleInputChange,
                     readOnly: project.author._id !== user._id,
+                    isFocused: this.state.form.maxTeam.focus,
                     error: error && error.maxTeam && error.maxTeam.detail,
                   }}
                 />
@@ -389,6 +434,8 @@ class DetailProject extends React.Component {
                   blur: this.handleOnBlur,
                   readOnly: project.author._id !== user._id,
                   error: error && error.tags && error.tags.detail,
+                  focus: this.handleOnFocus,
+                  isFocused: this.state.form.tags.focus,
                   remove: this.handleRemove,
                 }}
               />
@@ -410,21 +457,47 @@ class DetailProject extends React.Component {
               }
             </div>
             <div className="form-content">
-              <InfoPanel openCreateTeamModal={openNewTeamModal} user={user} />
+              <InfoPanel
+                openCreateTeamModal={openNewTeamModal}
+                user={user}
+                globalActions={{
+                    ...globalActions,
+                    editProjectAction,
+                }}
+                globalProps={globalProps}
+              />
             </div>
-            <div className="subscribe">
+            <div className="actions">
               {project.author._id !== user._id &&
                 project.subscribers &&
                   <button
-                    name={project.subscribers.find(subscriber => subscriber._id === user._id) ? 'unsubscribe' : 'subscribe'}
-                    className={`btn-subscribe ${project.subscribers.find(subscriber => subscriber._id === user._id) && 'subscribed'}`}
+                    title={project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                      'Unsubscribe from the project' :
+                      'subscribe to the project'
+                    }
+                    name={project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                      'unsubscribe' :
+                      'subscribe'
+                    }
+                    className={`actions-button actions-button-subscribe
+                      ${project.subscribers.find(subscriber => subscriber._id === user._id) &&
+                        ' subscribed'}`
+                      }
                     type="button"
                     onClick={this.handleSubscribe}
                   >
                     {project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                      <i className="fas fa-thumbs-up fa-2x" /> :
-                      <i className="fas fa-thumbs-up fa-2x" />}
+                      <i className="fas fa-thumbs-up" /> :
+                      <i className="fas fa-thumbs-up" />}
                   </button>}
+              <button
+                className="actions-button actions-button-share"
+                type="button"
+                title="Share the project"
+                onClick={this.handleShare}
+              >
+                <i className="fas fa-share-alt" />
+              </button>
             </div>
           </div>
         </form>

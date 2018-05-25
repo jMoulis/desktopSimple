@@ -7,12 +7,17 @@ import UserIcon from '../../../../../../Modules/UserIcon';
 const TeamWidget = ({ team }) => (
   <div className="team-widget">
     <div className="mini-container">
-      {team.users.map((user, index) => (
-        <UserIcon
-          key={index}
-          user={user}
-        />
-      ))}
+      {team.users.map((user, index) => {
+        if (!user.user) {
+          return null;
+        }
+        return (
+          <UserIcon
+            key={index}
+            user={user}
+          />
+        );
+      })}
     </div>
     <div className="team-widget-content">
       <h2>{team.name}</h2>

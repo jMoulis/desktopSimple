@@ -62,7 +62,7 @@
   .btn-neutral {
     background-color: transparent;
     border: 2px solid transparent; }
-    .btn-neutral:hover {
+    .btn-neutral:hover, .btn-neutral:focus {
       border: 2px solid #eee9d1; }
     .btn-neutral:active {
       border: 2px solid #0a1c28;
@@ -71,7 +71,7 @@
     border: 2px solid #eee9d1;
     background-color: #d44c00;
     color: #eee9d1; }
-    .btn-primary:hover {
+    .btn-primary:hover, .btn-primary:focus {
       background-color: #eee9d1;
       border: 2px solid #d44c00;
       color: #d44c00; }
@@ -81,7 +81,7 @@
       color: #0a1c28; }
   .btn-danger {
     background-color: #c82333; }
-    .btn-danger:hover {
+    .btn-danger:hover, .btn-danger:focus {
       background-color: #eee9d1;
       border: 2px solid #c82333;
       color: #c82333; }
@@ -91,7 +91,7 @@
       color: #0a1c28; }
   .btn-success {
     background-color: #218838; }
-    .btn-success:hover {
+    .btn-success:hover, .btn-success:focus {
       background-color: #eee9d1;
       border: 2px solid #1e7e34;
       color: #1e7e34; }

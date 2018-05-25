@@ -23,6 +23,7 @@ class AddFilesInput extends React.Component {
       doc: '',
     },
     error: null,
+    isFocused: false,
   }
 
   componentDidMount() {
@@ -108,7 +109,6 @@ class AddFilesInput extends React.Component {
     ));
   }
   handleViewer = (evt) => {
-    // Show modal with huge canvas
     const doc = evt.target.dataset.b64;
     this.setState(prevState => ({
       viewer: {
@@ -118,15 +118,25 @@ class AddFilesInput extends React.Component {
       },
     }));
   }
-  handleCloseViewer = (exitTimeOut) => {
-    window.setTimeout(() => {
-      this.setState(prevState => ({
-        viewer: {
-          ...prevState.viewer,
-          display: false,
-        },
-      }));
-    }, exitTimeOut);
+  handleCloseViewer = () => {
+    this.setState(prevState => ({
+      viewer: {
+        ...prevState.viewer,
+        display: false,
+      },
+    }));
+  }
+  handleOnFocus = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isFocused: true,
+    }));
+  }
+  handleOnBlur = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isFocused: false,
+    }));
   }
   render() {
     const {
@@ -138,7 +148,7 @@ class AddFilesInput extends React.Component {
         <div className="addfilesinput-thumbnail-wrapper">
           {!this.props.readOnly && [
             <label key="label-docs" htmlFor="docs">
-              <div className="add-thumbnail">
+              <div className={`add-thumbnail ${this.state.isFocused ? 'add-thumbnail--focused' : ''}`}>
                 <i className="fas fa-plus-circle fa-3x" />
               </div>
             </label>,
@@ -149,6 +159,8 @@ class AddFilesInput extends React.Component {
               id="docs"
               accept=".pdf"
               onChange={this.handleInputFileChange}
+              onFocus={this.handleOnFocus}
+              onBlur={this.handleOnBlur}
             />,
           ]}
           <div className="addfilesinput-thumbnail-container">

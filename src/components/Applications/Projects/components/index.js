@@ -29,6 +29,7 @@ class Projects extends React.Component {
     }));
   }
   render() {
+    const { globalActions, globalProps} = this.props;
     return (
       <div className="project-container">
         <div className="app-toolbar" key="app-toolbar">
@@ -60,6 +61,8 @@ class Projects extends React.Component {
             key="newProject"
             selectTab={this.handleTabSelect}
             loggedUser={this.props.loggedUser}
+            globalActions={globalActions}
+            globalProps={globalProps}
           />
         }
         {this.state.tab === 'create-team' &&

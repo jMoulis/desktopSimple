@@ -162,25 +162,6 @@ class EditTeam extends React.Component {
       }
     }
   }
-  handleSubmit = (evt) => {
-    evt.preventDefault();
-    const { editTeamAction } = this.props;
-    const users = [];
-    Object.entries(this.state.selectedUsers).forEach((user) => {
-      users.push({
-        spec: user[0],
-        user: user[1],
-      });
-    });
-    if (this.state.manager) {
-      users.push(this.state.manager);
-    }
-    const values = {
-      users,
-      name: this.state.name,
-    };
-    editTeamAction(values);
-  }
   handleSearch = (evt) => {
     const { filter } = evt.target.dataset;
     this.setState(() => ({
@@ -190,6 +171,7 @@ class EditTeam extends React.Component {
   }
   handleRemove = ({ target }) => {
     const { tagname } = target.dataset;
+    const { editTeamAction } = this.props;
     this.setState((prevState) => {
       const selectedTagsFiltered = prevState.selectedTags.filter(tag => tag.value !== tagname);
       delete prevState.selectedUsers[tagname];
@@ -197,11 +179,28 @@ class EditTeam extends React.Component {
         ...prevState,
         selectedTags: selectedTagsFiltered,
       });
+    }, () => {
+      const users = [];
+      Object.entries(this.state.selectedUsers)
+        .forEach((selectedUser) => {
+          users.push({
+            spec: selectedUser[0],
+            user: selectedUser[1],
+          });
+        });
+      if (this.state.manager) {
+        users.push(this.state.manager);
+      }
+      const values = {
+        users,
+      };
+      editTeamAction(values);
     });
   }
   handleSelectUser = ({ target }) => {
     const { user } = target.dataset;
     const userParsed = JSON.parse(user);
+    const { editTeamAction } = this.props;
     this.setState((prevState) => {
       const filteredselectedTags = prevState.selectedTags.map((ressource) => {
         if (ressource.value === userParsed.spec) {
@@ -220,6 +219,22 @@ class EditTeam extends React.Component {
         },
         selectedTags: filteredselectedTags,
       });
+    }, () => {
+      const users = [];
+      Object.entries(this.state.selectedUsers)
+        .forEach((selectedUser) => {
+          users.push({
+            spec: selectedUser[0],
+            user: selectedUser[1],
+          });
+        });
+      if (this.state.manager) {
+        users.push(this.state.manager);
+      }
+      const values = {
+        users,
+      };
+      editTeamAction(values);
     });
   }
   hanldeDeleteTeam = () => {
@@ -232,6 +247,14 @@ class EditTeam extends React.Component {
       ...prevState,
       alertBox: !prevState.alertBox,
     }));
+  }
+  handleOnBlur = (evt) => {
+    evt.preventDefault();
+    const { editTeamAction } = this.props;
+    const values = {
+      name: this.state.name,
+    };
+    editTeamAction(values);
   }
   render() {
     const {
@@ -267,6 +290,7 @@ class EditTeam extends React.Component {
                       error: error && error.name && error.name.detail,
                       value: this.state.name.value,
                       onChange: this.handleInputChange,
+                      blur: this.handleOnBlur,
                     }}
                   />
                   <div name="ressources">
@@ -310,8 +334,13 @@ class EditTeam extends React.Component {
                       ))}
                     </ul>
                   </div>
-                  <Button category="primary" style={{ width: '100%', marginTop: '.5rem' }}type="submit">Edit</Button>
-                  <Button onClick={this.handleShowAlertBox} category="danger" style={{ width: '100%', marginTop: '.5rem' }}type="button">Delete</Button>
+                  <Button
+                    onClick={this.handleShowAlertBox}
+                    category="danger"
+                    style={{ width: '100%', marginTop: '.5rem' }}
+                    type="button"
+                  >Delete
+                  </Button>
                 </div>
               </div>
             </form>

@@ -13,6 +13,8 @@ class ListProject extends React.Component {
   static propTypes = {
     projectListProcess: PropTypes.object.isRequired,
     activeProjectProcess: PropTypes.object.isRequired,
+    globalActions: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
   }
@@ -96,7 +98,13 @@ class ListProject extends React.Component {
     }, 300);
   };
   render() {
-    const { projectListProcess, loggedUser, activeProjectProcess } = this.props;
+    const {
+      projectListProcess,
+      loggedUser,
+      activeProjectProcess,
+      globalActions,
+      globalProps,
+    } = this.props;
     const { error, loading } = projectListProcess;
     if (loading) {
       return <Loader />;
@@ -211,6 +219,8 @@ class ListProject extends React.Component {
             <DetailProject
               loggedUser={this.props.loggedUser}
               openNewTeamModal={this.handleShowCreateTeamModal}
+              globalActions={globalActions}
+              globalProps={globalProps}
             />
           </Modal> : ''}
       </div>

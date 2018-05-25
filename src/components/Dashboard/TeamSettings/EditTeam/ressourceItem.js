@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import UserIcon from '../../../../Modules/UserIcon';
 import './ressourceItem.css';
 
 const hasPicture = (user) => {
@@ -31,14 +32,14 @@ const RessourceItem = ({ config }) => {
         >
           X
         </button>
-        <img
-          src={hasPicture(config.selectedUsers[config.value])}
-          alt="Expert"
+        <UserIcon user={{
+          user: config.selectedUsers[config.value],
+          }}
         />
         <span className="ressource-label">{config.value}</span>
         {
           <span>
-            {config.selected ?
+            {config.selected && config.selectedUsers[config.value] ?
               config.selectedUsers[config.value].fullName :
               config.counters[config.value]}
           </span>

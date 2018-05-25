@@ -4,15 +4,30 @@ import './index.css';
 
 import UserIcon from '../../../../../../Modules/UserIcon';
 
-const TeamProfile = ({ user, selectTeam }) => {
+const TeamProfile = ({
+  user,
+  globalActions,
+}) => {
   return (
     <ul className="ul-nav teams">
+      <li className="teams-new-team">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {
+            globalActions.startAppAction('Projects');
+          }}
+        >
+        Create Team
+        </button>
+      </li>
       {user.teams.map(team => (
         <li
           key={team._id}
           className="team-container"
-          onClick={() => selectTeam(team._id)}
-          onKeyPress={() => selectTeam(team._id)}
+          onClick={() => globalActions.selectTeam(team._id)}
+          onKeyPress={() => globalActions.selectTeam(team._id)}
+          title="Select Team"
         >
           <div>
             <h2>{team.name}</h2>
@@ -35,7 +50,7 @@ const TeamProfile = ({ user, selectTeam }) => {
 
 TeamProfile.propTypes = {
   user: PropTypes.object.isRequired,
-  selectTeam: PropTypes.func.isRequired,
+  globalActions: PropTypes.object.isRequired,
 };
 
 export default TeamProfile;

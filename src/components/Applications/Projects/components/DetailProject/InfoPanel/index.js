@@ -2,41 +2,49 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TeamWidget from './teamWidget';
-import Button from '../../../../../Form/button';
 import './index.css';
+import ButtonAction from './buttonAction';
+import NoRoomLeft from './noRoomLeft';
 
-const InfoPanel = ({ activeProjectProcess, openCreateTeamModal, user }) => {
+const InfoPanel = ({
+  activeProjectProcess,
+  openCreateTeamModal,
+  user,
+  globalActions,
+  globalProps,
+}) => {
   const { project } = activeProjectProcess;
   return (
-    <div>
-      <div className="teams-container">
-        <h1>Teams</h1>
-        {project.teams.length === 0 ? <span>No Teams yet</span> : project.teams.map(team => (
-          <TeamWidget key={team._id} team={team} />
-          ))}
-        {/* if the max Team is ok and if the user is a student */}
-        {project.teams.length < project.maxTeam &&
-          user._id !== project.author._id &&
-          <div>
-            <Button
-              type="button"
-              onClick={openCreateTeamModal}
-              data-tab="create-team"
-              category="primary"
-              style={{
-                marginTop: '.5rem',
-              }}
-            >Add my team
-            </Button>
-          </div>
+    <div className="teams-container">
+      <h1>Teams</h1>
+      {project.teams.length === 0 ?
+        <span>No Teams yet</span> :
+        project.teams.map((team, index) => (
+          <TeamWidget key={index} team={team} />
+      ))}
+      {/* if the max Team is ok and if the user is a student */}
+      {project.teams.length < project.maxTeam &&
+        user._id !== project.author._id &&
+          <ButtonAction
+            globalActions={globalActions}
+            openCreateTeamModal={openCreateTeamModal}
+            project={project}
+            user={user}
+            globalProps={globalProps}
+          />
         }
-      </div>
+      {project.teams.length === project.maxTeam &&
+        user.typeUser !== 'company' &&
+        <NoRoomLeft />
+      }
     </div>
   );
 };
 
 InfoPanel.propTypes = {
   activeProjectProcess: PropTypes.object.isRequired,
+  globalActions: PropTypes.object.isRequired,
+  globalProps: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   openCreateTeamModal: PropTypes.func,
 };
