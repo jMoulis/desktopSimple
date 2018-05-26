@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Cropper from 'cropperjs';
 
 import './profile.css';
+import '../../../../../../node_modules/cropperjs/dist/cropper.css';
 import Model from './student-model';
 import Input from '../../../../Form/input';
 import InputFile from '../../../../Form/inputFile';
@@ -10,6 +12,8 @@ import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
+import Modal from '../../../../../Modules/Modal/modal';
+import Crop from '../../../../../Modules/Crop';
 
 class Profile extends React.Component {
   static propTypes = {
@@ -27,6 +31,7 @@ class Profile extends React.Component {
     });
     this.state = {
       ...field,
+      cropModal: false,
     };
   }
   componentDidUpdate(prevProps, prevState) {
@@ -179,9 +184,37 @@ class Profile extends React.Component {
       },
     }));
   }
+  handleShowCropImageModal = () => {
+    this.setState(prevState => ({
+      cropModal: !prevState.cropModal,
+    }));
+  }
+  handleCloseCropImageModal = (img) => {
+    if (img) {
+      const { state } = this;
+      const { editUserAction, userActive } = this.props;
+      const newPicture = {
+        ...state,
+        picture: {
+          ...state.picture,
+          value: img,
+          changed: true,
+        },
+        cropModal: false,
+      };
+      this.setState(() => (newPicture));
+      editUserAction(userActive.user._id, newPicture);
+    }
+    else {
+      this.setState(prevState => ({
+        ...prevState,
+        cropModal: false,
+      }));
+    }
+  }
   render() {
-    const { userActive } = this.props;
-    const { error } = userActive;
+    const { userActive, editUserAction } = this.props;
+    const { error, user } = userActive;
     return (
       <div id="profile" className="form-container" key="app-content" >
         <form
@@ -196,16 +229,8 @@ class Profile extends React.Component {
                 className="profile-picture"
                 src={`${this.state.picture.value || '/img/avatar.png'}`}
                 alt="Profile"
-              />
-              <InputFile
-                config={{
-                  field: Model.picture,
-                  onChange: this.handleInputFileChange,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  typeFileAccepted: 'image/*',
-                  error: error && error.picture && error.picture.detail,
-                }}
+                onClick={this.handleShowCropImageModal}
+                onKeyPress={this.handleShowCropImageModal}
               />
               <Input
                 config={{
@@ -327,6 +352,23 @@ class Profile extends React.Component {
             </div>
           </div>
         </form>
+        {this.state.cropModal &&
+          <Modal
+            zIndex={100}
+            name="imageCropper"
+            title="Image Cropper"
+            closeFromParent={this.handleCloseCropImageModal}
+          >
+            <Crop
+              picture={this.state.picture.value}
+              parentConfig={{
+                user,
+                update: editUserAction,
+                error,
+                model: Model,
+              }}
+            />
+          </Modal>}
       </div>
     );
   }

@@ -1,0 +1,9 @@
+.cropper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+  .cropper-container {
+    width: 30%; }
+
+.cropper-bg {
+  background-image: url("/img/black.jpg") !important; }

@@ -5,6 +5,21 @@ import { CSSTransition } from 'react-transition-group';
 import './modal.css';
 
 class Modal extends React.Component {
+  static propTypes = {
+    closeFromParent: PropTypes.func,
+    zIndex: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    children: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool,
+      PropTypes.array,
+    ]),
+  }
+  static defaultProps = {
+    children: null,
+    closeFromParent: null,
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -82,22 +97,5 @@ class Modal extends React.Component {
     );
   }
 }
-
-Modal.propTypes = {
-  closeFromParent: PropTypes.func,
-  zIndex: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-    PropTypes.array,
-  ]),
-};
-
-Modal.defaultProps = {
-  children: null,
-  closeFromParent: null,
-};
 
 export default Modal;
