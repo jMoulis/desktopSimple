@@ -80,7 +80,7 @@ class Login extends React.Component {
               }}
             />
             <div className="form-group">
-              {<Button type="submit" category="primary" loading={logging} label="Sign In" />}
+              {<Button type="submit" category="primary" label="Sign In" />}
             </div>
           </div>
         </form>

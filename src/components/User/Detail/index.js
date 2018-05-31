@@ -11,7 +11,7 @@ class DetailUser extends React.Component {
   }
   componentDidMount() {
     const { fetchUserAction, userId } = this.props;
-    fetchUserAction(userId);
+    // fetchUserAction(userId);
   }
   render() {
     const { userActive } = this.props;

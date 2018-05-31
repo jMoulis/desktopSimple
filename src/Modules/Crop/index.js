@@ -54,10 +54,17 @@ class Crop extends React.Component {
       reader.readAsDataURL(input.files[0]);
     }
   }
+  handleRotate = () => {
+    if (this.state.cropper) {
+      this.state.cropper.rotate(90);
+    }
+  }
   handleCrop = () => {
     const { closeFromParent } = this.props;
-    const imgurl = this.state.cropper.getCroppedCanvas().toDataURL();
-    closeFromParent(imgurl);
+    if (this.state.cropper.getCroppedCanvas()) {
+      const imgurl = this.state.cropper.getCroppedCanvas().toDataURL();
+      closeFromParent(imgurl);
+    }
   }
   render() {
     const { img, parentConfig } = this.props;
@@ -69,11 +76,12 @@ class Crop extends React.Component {
               maxWidth: '100%',
             }}
             ref={this.picRef}
-            src={this.state.picture}
+            src={this.state.picture || '/img/avatar.png'}
             alt="Cropping"
           />
         </div>
         <button type="button" className="btn btn-primary" onClick={this.handleCrop}>Crop</button>
+        <button type="button" className="btn btn-primary" onClick={this.handleRotate}>Rotate</button>
         <InputFile
           config={{
             field: parentConfig.model.picture,

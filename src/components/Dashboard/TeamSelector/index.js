@@ -4,14 +4,11 @@ import { CSSTransition } from 'react-transition-group';
 
 import TeamWidget from './teamWidget';
 import './index.css';
-import Loader from '../../../Modules/Loader';
 
 class TeamSelector extends React.Component {
   static propTypes = {
     userActive: PropTypes.object,
     selectTeam: PropTypes.func.isRequired,
-    fetchUserAction: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
   }
   static defaultProps = {
     userActive: null,
@@ -19,10 +16,6 @@ class TeamSelector extends React.Component {
   state = {
     display: true,
     teamId: '',
-  }
-  componentDidMount() {
-    const { fetchUserAction, loggedUser } = this.props;
-    fetchUserAction(loggedUser._id);
   }
   handleCloseMe = (evt) => {
     const { teamid } = evt.currentTarget.dataset;

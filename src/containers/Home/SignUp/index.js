@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 /*
  * Local import
  */
-import SignUp from '../../../components/User/SignUp/signup';
+import SignUp from '../../../components/Home/SignUp';
 import { createUserAction } from '../../../store/reducers/authReducer';
 
 /*

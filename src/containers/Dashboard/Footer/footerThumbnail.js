@@ -13,17 +13,9 @@ import FooterThumbnail from '../../../components/Dashboard/Footer/footerThumbnai
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer }) => {
-  if (localStorage.getItem('user')) {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return {
-      user,
-    };
-  }
-  return {
-    user: authReducer.loginProcess.loggedUser,
-  };
-};
+const mapStateToProps = ({ userReducer }) => ({
+  user: userReducer.userActive.user,
+});
 
 // Actions
 const mapDispatchToProps = dispatch => ({});

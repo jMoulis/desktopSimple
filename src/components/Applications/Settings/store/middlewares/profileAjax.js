@@ -81,8 +81,11 @@ export default store => next => (action) => {
           const { user } = data;
           localStorage.setItem('user', JSON.stringify(user));
         })
-        .catch(({ response }) => {
-          store.dispatch(editUserFailureAction(response.data.errors));
+        .catch((error) => {
+          if (!error.response) {
+            return console.error(error)
+          }
+          store.dispatch(editUserFailureAction(error.response.data.errors));
         });
       break;
     }

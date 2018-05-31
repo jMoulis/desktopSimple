@@ -24,9 +24,12 @@ class Dashboard extends React.Component {
   static defaultProps = {
     activeApps: null,
   }
-  state = {
-    helper: true,
-    showSettings: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      helper: true,
+      showSettings: false,
+    };
   }
   handleShowSettings = () => {
     this.setState(prevState => ({
@@ -94,6 +97,7 @@ class Dashboard extends React.Component {
           return false;
         })}
         {this.state.helper &&
+          user &&
           user.teams.length === 0 &&
           user.typeUser === 'student' &&
           <Helper

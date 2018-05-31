@@ -19,6 +19,7 @@ import {
   rehydrateSuccessAction,
   rehydrateFailureAction,
 } from '../reducers/authReducer';
+import { fetchUserSuccessAction } from '../reducers/userReducer';
 /*
  * Code
  */
@@ -63,10 +64,14 @@ export default store => next => (action) => {
         .then((data) => {
           const payload = data.data;
           const auth = new Auth(payload.token);
+          const { user } = payload;
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
-          localStorage.setItem('user', JSON.stringify(payload.user));
-          // store.dispatch(fetchUserSuccessAction({ user: payload.user }));
+          localStorage.setItem('user', JSON.stringify({
+            _id: user._id,
+            fullName: user.fullName,
+          }));
+          store.dispatch(fetchUserSuccessAction(user));
           store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
         })
         .catch((error) => {
@@ -127,10 +132,14 @@ export default store => next => (action) => {
             .then(handleErrors)
             .then(response => response.json())
             .then((userUpdated) => {
-              localStorage.setItem('user', JSON.stringify(userUpdated));
+              localStorage.setItem('user', JSON.stringify({
+                _id: userUpdated._id,
+                fullName: userUpdated.fullName,
+              }));
               setTimeout(() => {
+                store.dispatch(fetchUserSuccessAction(userUpdated));
                 store.dispatch(rehydrateSuccessAction({ user: userUpdated, auth }));
-              }, 10);
+              }, 300);
             })
             .catch(error => console.error(error));
         })

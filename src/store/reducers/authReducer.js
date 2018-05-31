@@ -32,8 +32,9 @@ const initialState = {
   },
   loginProcess: {
     loggedUser: null,
-    logging: true,
+    logging: false,
     error: null,
+    loading: true,
   },
   createUserProcess: {
     creating: false,
@@ -80,6 +81,7 @@ const reducer = (state = initialState, action = {}) => {
           loggedUser: null,
           logging: true,
           error: null,
+          loading: true,
         },
         auth: false,
       };
@@ -91,6 +93,7 @@ const reducer = (state = initialState, action = {}) => {
           loggedUser: action.payload.user,
           logging: false,
           error: null,
+          loading: false,
         },
         auth: action.payload.auth,
       };
@@ -113,6 +116,7 @@ const reducer = (state = initialState, action = {}) => {
           loggedUser: null,
           logging: true,
           error: null,
+          loading: true,
         },
         auth: false,
       };
@@ -124,6 +128,7 @@ const reducer = (state = initialState, action = {}) => {
           loggedUser: action.payload.user,
           logging: false,
           error: null,
+          loading: false,
         },
         auth: action.payload.auth,
       };
