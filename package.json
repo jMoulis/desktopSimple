@@ -30,6 +30,7 @@
     "react-select": "^2.0.0-beta.2",
     "react-transition-group": "^2.3.1",
     "redux": "^4.0.0",
+    "serve": "^7.1.5",
     "socket.io-client": "^2.1.1",
     "video-react": "^0.10.5"
   },
@@ -39,7 +40,8 @@
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "serve build"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
