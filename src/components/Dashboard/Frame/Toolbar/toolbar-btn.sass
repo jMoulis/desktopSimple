@@ -1,11 +1,12 @@
-$red: red
-$green: #00cd00
+$red: #ff6666
+$green: #7fbf7f
 $gray: gray
-$change-color: background-color 1s ease-out
+$change-color: background-color 500ms ease-out
+
 .toolbar-button
-  width: 20px
-  height: 20px
-  border-radius: 50%
+  width: 10px
+  height: 12px
+  border-radius: 8px
   border: none
   margin-left: 5px
   margin-right: 5px
@@ -14,15 +15,21 @@ $change-color: background-color 1s ease-out
 .close
   background-color: $red
   transition: $change-color
-  &:hover
+  &:hover, &:focus
     background-color: darken($red, 20%)
+  &:active
+    background-color: darken($red, 40%)
 .full-size
   background-color: $green
   transition: $change-color
-  &:hover
+  &:hover, &:focus
     background-color: darken($green, 20%)
-.shrink
+  &:active
+    background-color: darken($green, 40%)
+.reduce
   background-color: $gray
   transition: $change-color
-  &:hover
+  &:hover, &:focus
     background-color: darken($gray, 20%)
+  &:active
+    background-color: darken($gray, 40%)

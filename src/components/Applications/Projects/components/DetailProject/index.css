@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.project-container {
+  height: 100%; }
+
+#edit-project {
+  color: #0a1c28; }
+
+.actions {
+  position: absolute;
+  right: 20px;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  flex-direction: column; }
+  .actions .subscribed {
+    border: 2px solid #eee9d1;
+    background-color: #d44c00;
+    color: #eee9d1; }
+    .actions .subscribed:hover {
+      background-color: #ee5500; }
+  .actions-button {
+    width: 30px;
+    height: 30px;
+    margin-bottom: .5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    color: #0a1c28;
+    transition: all 500ms; }
+    .actions-button-subscribe {
+      border: 2px solid #0a1c28;
+      background-color: #41848f; }
+    .actions-button-share {
+      border: 2px solid #eee9d1;
+      background-color: #0073b1;
+      color: #eee9d1; }
+    .actions-button:hover {
+      background-color: #4994a1; }
+    .actions-button:active {
+      box-shadow: 0 0 5px 1px #0a1c28;
+      background-color: #d44c00;
+      border: 2px solid #eee9d1;
+      color: #eee9d1; }
+
+.company {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: .5rem;
+  border-bottom: 2px solid #0a1c28;
+  padding-bottom: 1rem; }
+  .company-logo {
+    width: 60px;
+    height: 60px; }
+  .company-info {
+    margin-left: 1rem; }
+    .company-info-name {
+      margin-left: .3rem;
+      font-weight: bold; }
+  .company-author {
+    display: flex;
+    align-items: center; }

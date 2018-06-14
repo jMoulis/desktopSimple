@@ -1,0 +1,46 @@
+@import '../../../styles/charte.sass'
+
+.team-selector
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, .5)
+  display: flex
+  align-items: center
+  flex-direction: column
+  padding-top: 5rem
+  z-index: 100
+  &-appear
+    opacity: 0.01
+  &-appear.team-selector-appear-active
+    opacity: 1
+    transition: opacity 300ms
+  &-exit
+    opacity: 1
+  &-exit.team-selector-exit-active
+    opacity: 0.01
+    transition: opacity 200ms
+  .ul-nav
+    align-items: flex-start
+    flex-wrap: wrap
+    min-width: 760px
+  h1
+    color: $beige
+  &-item
+    margin: .5rem
+    width: 200px
+    height: 250px
+    display: flex
+    flex-direction: column
+    min-height: 200px
+    padding: 1rem
+    cursor: pointer
+    box-shadow: 0 0 5px 0 $orange
+    background-color: $blue
+    transition: all 200ms
+    &:hover
+      box-shadow: 0 0 15px 0 $orange
+    &:active
+      box-shadow: 0 0 5px 0 $orange

@@ -1,0 +1,25 @@
+@import '../../styles/charte.sass'
+
+.info
+  position: absolute
+  display: flex
+  justify-content: center
+  align-items: center
+  bottom: 1rem
+  left: 0
+  right: 0
+  &-appear
+    opacity: 0.01
+  &-appear.info-appear-active
+    opacity: 1
+    transition: all 500ms
+  &-exit
+    opacity: 1
+  &-exit.info-exit-active
+    opacity: 0.01
+    transition: all 500ms
+  p
+    padding: 1rem
+    background-color: $backSuccess
+    border: 2px solid $borderSuccess
+    color: $colorSuccess

@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.project-container {
+  height: 100%; }
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(10, 28, 40, 0.7);
+  display: flex;
+  justify-content: center; }
+  .modal-overlay-appear {
+    opacity: 0.01; }
+  .modal-overlay-appear.modal-overlay-appear-active {
+    opacity: 1;
+    transition: opacity 200ms; }
+  .modal-overlay-exit {
+    opacity: 1; }
+  .modal-overlay-exit.modal-overlay-exit-active {
+    opacity: 0.01;
+    transition: opacity 200ms; }
+
+.modal-container {
+  margin: 1rem;
+  border: 5px solid #0a1c28;
+  background-color: #97c0b7;
+  min-width: 90%;
+  height: 95%;
+  overflow: hidden;
+  position: relative; }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem;
+  box-shadow: 0 0 5px 0 #0a1c28; }
+
+.modal-content {
+  height: calc(100% - 42px);
+  overflow: auto; }
+  .modal-content .form-container {
+    height: auto;
+    width: 100%; }
+  .modal-content .form {
+    overflow: hidden;
+    overflow-x: auto; }
+
+.modal-btn {
+  outline: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #ff6666;
+  right: 14rem;
+  transition: color 500ms; }
+  .modal-btn:hover, .modal-btn:focus {
+    color: red; }
+  .modal-btn:active {
+    color: #990000; }

@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#profile-form .tag-list {
+  display: flex;
+  list-style: none;
+  padding: 0 1rem;
+  margin: 0; }
+  #profile-form .tag-list-item {
+    padding: 0 .3rem;
+    border: 2px solid #0a1c28; }
+
+#profile .profile-content-form-wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; }
+  #profile .profile-content-form-wrapper .form-content {
+    flex: 1; }
+
+#profile .profile-picture {
+  width: 150px;
+  height: 150px;
+  padding-left: .5rem;
+  border-radius: 50%; }
+
+.teams {
+  align-items: flex-start;
+  padding: 1rem; }
+  .teams-new-team {
+    padding-top: 1rem;
+    margin: 1rem; }
+  .teams .team-container {
+    margin: 1rem;
+    transition: all 300ms;
+    cursor: pointer; }
+    .teams .team-container:hover {
+      box-shadow: 0 0 10px 0 rgba(10, 28, 40, 0.5); }
+    .teams .team-container div {
+      padding: 1rem; }
+    .teams .team-container h2 {
+      font-weight: bold; }
+    .teams .team-container li {
+      display: flex;
+      align-items: center;
+      margin-top: .5rem; }

@@ -1,19 +1,64 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .frame {
-  position: absolute;
+  background-color: #008e8b;
+  border: 8px solid #0a1c28;
+  border-radius: 2px;
+  box-shadow: 0px 0px 20px 0px #0a1c28;
+  flex-direction: column;
   min-height: 250px;
   min-width: 250px;
-  background-color: #eee9d1;
-  border-radius: 2px;
-  border: 8px solid #0a1c28;
-  box-shadow: 0px 0px 20px 0px #0a1c28;
+  position: absolute;
+  overflow: auto;
   resize: both;
-  overflow: auto; }
+  max-height: 98%;
+  display: flex;
+  padding-bottom: 1rem; }
+  .frame-appear {
+    opacity: 0.01; }
+  .frame-appear.frame-appear-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in; }
+  .frame-exit {
+    opacity: 1; }
+  .frame-exit.frame-exit-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in; }
   .frame-reset {
-    resize: none;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
     bottom: 0 !important;
+    height: inherit !important;
+    left: 0 !important;
+    resize: none;
+    right: 0 !important;
+    top: 0 !important;
     width: inherit !important;
-    height: inherit !important; }
+    max-height: 100% !important; }
+  .frame-reduce {
+    display: none; }
+  .frame .child-app {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #97c0b7;
+    border-bottom: 2px solid #0a1c28; }
+    .frame .child-app .app-toolbar {
+      background-color: rgba(0, 142, 139, 0.5);
+      border-bottom: 1px solid #0a1c28;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      color: #eee9d1; }
+      .frame .child-app .app-toolbar .btn-app-toolbar {
+        margin: 0;
+        border: 2px solid transparent;
+        background-color: transparent;
+        cursor: pointer;
+        transition: border 500ms;
+        outline: none; }
+        .frame .child-app .app-toolbar .btn-app-toolbar:hover {
+          border-bottom: 2px solid #0a1c28; }
+      .frame .child-app .app-toolbar ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding-left: 1rem; }
+        .frame .child-app .app-toolbar ul li {
+          padding: 0 1rem; }

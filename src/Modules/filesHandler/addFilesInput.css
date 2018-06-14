@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.addfilesinput-thumbnail-wrapper {
+  display: flex;
+  margin-top: 1rem; }
+  .addfilesinput-thumbnail-wrapper #docs {
+    opacity: 0;
+    position: absolute;
+    width: .1px;
+    left: -2500; }
+  .addfilesinput-thumbnail-wrapper .add-thumbnail {
+    min-width: 80px;
+    min-height: 112px;
+    border: 2px dotted #0a1c28;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    cursor: pointer;
+    transition: all 500ms; }
+    .addfilesinput-thumbnail-wrapper .add-thumbnail:hover, .addfilesinput-thumbnail-wrapper .add-thumbnail--focused {
+      box-shadow: 0 0 10px 0 #0a1c28;
+      color: #d44c00;
+      border: 2px dotted #d44c00; }
+  .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start; }
+    .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content {
+      position: relative;
+      width: 84px;
+      margin-right: 1rem;
+      margin-bottom: .5rem; }
+      .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content p {
+        overflow-wrap: break-word;
+        font-size: .7rem; }
+      .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content canvas {
+        width: 100%;
+        cursor: pointer;
+        transition: box-shadow 500ms; }
+        .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content canvas:hover {
+          box-shadow: 0 0 10px 0 #0a1c28; }
+      .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content .delete-thumbnail {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        background-color: #ff6666;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        outline: none;
+        transition: background-color 200ms; }
+        .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content .delete-thumbnail:hover, .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content .delete-thumbnail:focus {
+          background-color: red; }
+        .addfilesinput-thumbnail-wrapper .addfilesinput-thumbnail-container .addfilesinput-thumbnail-content .delete-thumbnail:active {
+          background-color: #990000; }

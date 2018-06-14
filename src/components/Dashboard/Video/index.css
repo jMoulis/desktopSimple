@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a1c28; }
+  .video-content {
+    position: relatvie;
+    width: 100%; }

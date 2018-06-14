@@ -1,0 +1,55 @@
+@import '../project.sass'
+.project-list-container
+  padding-top: 0
+  overflow: auto
+  height: calc(100% - 40px)
+  & > div
+    display: flex
+    flex-wrap: wrap
+  .project-list
+    margin: .5rem
+    width: 200px
+    display: flex
+    flex-direction: column
+    min-height: 200px
+    transition: all 200ms
+    &:hover
+      box-shadow: 0 0 10px 0 $darkestblue
+    &-item
+      background-color: $darkblue
+      padding: .5rem
+      border: 3px solid $darkestblue
+      height: 100%
+      display: flex
+      flex-direction: column
+      .content
+        background-color: $lightblue
+        padding: .5rem
+        height: 100%
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        cursor: pointer
+        & p
+          word-break: break-all
+      .add-project
+        justify-content: center
+        align-items: center
+        color: $darkestblue
+        transition: color 500ms
+        &:hover
+          color: $orange
+      h2
+        font-weight: bold
+        font-size: 1.2rem
+        margin-bottom: 1rem
+      .tags-list
+        display: flex
+        flex-wrap: wrap
+        li
+          margin-right: .5rem
+.notFound
+  display: flex
+  justify-content: center
+  padding-top: 10rem
+  height: inherit

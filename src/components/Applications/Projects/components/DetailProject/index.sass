@@ -1,0 +1,58 @@
+@import '../project.sass'
+#edit-project
+  color: $darkestblue
+.actions
+  position: absolute
+  right: 20px
+  top: 40%
+  display: flex
+  align-items: center
+  flex-direction: column
+  .subscribed
+    border: 2px solid $beige
+    background-color: $orange
+    color: $beige
+    &:hover
+      background-color: lighten($orange, 5%)
+  &-button
+    width: 30px
+    height: 30px
+    margin-bottom: .5rem
+    border-radius: 50%
+    cursor: pointer
+    outline: none
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2)
+    color: $darkestblue
+    transition: all 500ms
+    &-subscribe
+      border: 2px solid $darkestblue
+      background-color: $darkblue
+    &-share
+      border: 2px solid $beige
+      background-color: #0073b1
+      color: $beige
+    &:hover
+      background-color: lighten($darkblue, 5%)
+    &:active
+      box-shadow: 0 0 5px 1px $darkestblue
+      background-color: $orange
+      border: 2px solid $beige
+      color: $beige
+.company
+  display: flex
+  align-items: flex-start
+  margin-bottom: .5rem
+  border-bottom: 2px solid $darkestblue
+  padding-bottom: 1rem
+  &-logo
+    width: 60px
+    height: 60px
+  &-info
+    margin-left: 1rem
+    &-name
+      margin-left: .3rem
+      font-weight: bold
+  &-author
+    display: flex
+    align-items: center
+

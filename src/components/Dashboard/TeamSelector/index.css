@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.team-selector {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5rem;
+  z-index: 100; }
+  .team-selector-appear {
+    opacity: 0.01; }
+  .team-selector-appear.team-selector-appear-active {
+    opacity: 1;
+    transition: opacity 300ms; }
+  .team-selector-exit {
+    opacity: 1; }
+  .team-selector-exit.team-selector-exit-active {
+    opacity: 0.01;
+    transition: opacity 200ms; }
+  .team-selector .ul-nav {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    min-width: 760px; }
+  .team-selector h1 {
+    color: #eee9d1; }
+  .team-selector-item {
+    margin: .5rem;
+    width: 200px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    padding: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 5px 0 #d44c00;
+    background-color: #008e8b;
+    transition: all 200ms; }
+    .team-selector-item:hover {
+      box-shadow: 0 0 15px 0 #d44c00; }
+    .team-selector-item:active {
+      box-shadow: 0 0 5px 0 #d44c00; }

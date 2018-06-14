@@ -4,39 +4,29 @@
 /*
  * Local Import
  */
+import applications from '../../components/Applications/config/applications';
 /*
  * Types
  */
 export const FULL_SIZE = 'FULL_SIZE';
 export const CLOSE_APP = 'CLOSE_APP';
 export const START_APP = 'START_APP';
+export const REDUCE_APP = 'REDUCE_APP';
 export const SET_ACTIVE_APP = 'SET_ACTIVE_APP';
 /*
  * State
 */
 const initialState = {
   // Used in frame to set the element for draggable action
-  activeApp: {},
+  activeApp: {
+    appName: '',
+    appComponent: null,
+  },
+  activeApps: [],
   // Used as a counter used to set up the z-index of the frames
   zIndex: 0,
-  applications: {
-    'text-editor': {
-      appName: 'text-editor',
-      title: 'Text Editor',
-      fullSize: false,
-      display: false,
-      zIndex: 0,
-    },
-    task: {
-      appName: 'task',
-      title: 'Task',
-      fullSize: false,
-      display: false,
-      zIndex: 0,
-    },
-  },
+  applications,
 };
-
 /*
  * Reducer
  */
@@ -66,6 +56,18 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case REDUCE_APP: {
+      return {
+        ...state,
+        applications: {
+          ...state.applications,
+          [action.payload]: {
+            ...state.applications[action.payload],
+            reduce: true,
+          },
+        },
+      };
+    }
     case CLOSE_APP: {
       return {
         ...state,
@@ -74,22 +76,36 @@ const reducer = (state = initialState, action = {}) => {
           [action.payload]: {
             ...state.applications[action.payload],
             display: false,
+            fullSize: false,
           },
         },
       };
     }
     case SET_ACTIVE_APP: {
+      let { activeApps } = state;
+      const { payload } = action;
+      if (state.activeApps.length === 0) {
+        activeApps = [...state.activeApps, action.payload];
+      }
+      else {
+        const result = activeApps.find(activeApp => activeApp.appName === payload.appName);
+        if (!result) {
+          activeApps = [...activeApps, payload];
+        }
+      }
       return {
         ...state,
         activeApp: action.payload,
         zIndex: state.zIndex + 1,
         applications: {
           ...state.applications,
-          [action.payload]: {
-            ...state.applications[action.payload],
+          [action.payload.appName]: {
+            ...state.applications[action.payload.appName],
             zIndex: state.zIndex + 1,
+            reduce: false,
           },
         },
+        activeApps,
       };
     }
     default:
@@ -114,9 +130,13 @@ export const closeAppAction = appId => ({
   type: CLOSE_APP,
   payload: appId,
 });
-export const setActiveAppAction = appId => ({
+export const setActiveAppAction = app => ({
   type: SET_ACTIVE_APP,
-  payload: appId,
+  payload: app,
+});
+export const reduceAppAction = app => ({
+  type: REDUCE_APP,
+  payload: app,
 });
 /*
  * Export default

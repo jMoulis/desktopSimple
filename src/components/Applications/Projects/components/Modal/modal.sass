@@ -1,0 +1,59 @@
+@import '../project.sass'
+$red: #ff6666
+$change-color: background-color 500ms ease-out
+
+.modal
+  &-overlay
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    background-color: rgba(10, 28, 40, 0.7)
+    display: flex
+    justify-content: center
+    
+    &-appear
+      opacity: 0.01
+    &-appear.modal-overlay-appear-active
+      opacity: 1
+      transition: opacity 200ms
+    &-exit
+      opacity: 1
+    &-exit.modal-overlay-exit-active
+      opacity: 0.01
+      transition: opacity 200ms
+  &-container
+    margin: 1rem
+    border: 5px solid $darkestblue
+    background-color: $lightblue
+    min-width: 90%
+    height: 95%
+    overflow: hidden
+    position: relative
+  &-header
+    display: flex
+    justify-content: space-between
+    padding: .5rem
+    box-shadow: 0 0 5px 0 $darkestblue
+  &-content
+    height: calc(100% - 42px)
+    overflow: auto
+    .form-container
+      height: auto
+      width: 100%
+    .form
+      overflow: hidden
+      overflow-x: auto
+  &-btn
+    outline: none
+    cursor: pointer
+    background: none
+    border: none
+    color: $red
+    right: 14rem
+    transition: color 500ms
+    &:hover, &:focus
+      color: darken($red, 20%)
+    &:active
+      color: darken($red, 40%)

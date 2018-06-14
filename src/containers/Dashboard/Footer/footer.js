@@ -8,14 +8,17 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Footer from '../../../components/Dashboard/Footer/footer';
-import { startAppAction, setActiveAppAction } from '../../../store/reducers/frameReducer';
+import { startAppAction, setActiveAppAction, closeAppAction, reduceAppAction } from '../../../store/reducers/frameReducer';
+import { logoutAction } from '../../../store/reducers/authReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ frameReducer }) => ({
+const mapStateToProps = ({ frameReducer, authReducer }) => ({
   applications: frameReducer.applications,
+  activeApp: frameReducer.activeApp,
+  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 // Actions
@@ -23,8 +26,17 @@ const mapDispatchToProps = dispatch => ({
   startAppAction: (appId) => {
     dispatch(startAppAction(appId));
   },
-  setActiveAppAction: (appId) => {
-    dispatch(setActiveAppAction(appId));
+  closeAppAction: (appId) => {
+    dispatch(closeAppAction(appId));
+  },
+  reduceAppAction: (appId) => {
+    dispatch(reduceAppAction(appId));
+  },
+  setActiveAppAction: (app) => {
+    dispatch(setActiveAppAction(app));
+  },
+  logoutAction: () => {
+    dispatch(logoutAction());
   },
 });
 

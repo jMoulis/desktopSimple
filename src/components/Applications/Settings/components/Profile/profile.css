@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#profile-form .tag-list {
+  display: flex;
+  list-style: none;
+  padding: 0 1rem;
+  margin: 0; }
+  #profile-form .tag-list-item {
+    padding: 0 .3rem;
+    border: 2px solid #0a1c28; }
+
+#profile .profile-content-form-wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; }
+  #profile .profile-content-form-wrapper .form-content {
+    flex: 1; }
+
+#profile .profile-picture {
+  width: 150px;
+  height: 150px;
+  padding-left: .5rem;
+  border-radius: 50%; }

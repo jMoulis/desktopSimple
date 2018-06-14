@@ -1,0 +1,74 @@
+@import '../../styles/charte.sass'
+
+.alert-modal
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  display: flex
+  justify-content: center
+  align-items: flex-start
+  padding-top: 5rem
+  z-index: 100
+  &-appear
+    opacity: 0.01
+  &-appear.alert-modal-appear-active
+    opacity: 1
+    transition: all 500ms
+  &-exit
+    opacity: 1
+  &-exit.alert-modal-exit-active
+    opacity: 0.01
+    transition: all 500ms
+  &-danger
+    background-color: rgba(#721c24, 0.5)
+  &-success
+    background-color: rgba(#28a745, 0.5)
+  &-container
+    background-color: $beige
+    &-danger
+      border: 5px solid #721c24
+    &-success
+      border: 5px solid #155724
+  &-header
+    color: $beige
+    font-weight: bold
+    padding: .7rem
+    &-danger
+      border-bottom: 2px solid #721c24
+      background-color: #dc3545
+    &-success
+      border-bottom: 2px solid #155724
+      background-color: #28a745
+  &-content
+    padding: .7rem
+  &-btn-container
+    display: flex
+    justify-content: space-around
+    align-items: center
+    margin-top: 5rem
+    .btn-alertbox
+      border: 2px solid $beige
+      background-color: $orange
+      color: $beige
+      padding: .5rem
+      font-weight: bold
+      font-family: 'Nunito', sans-serif
+      cursor: pointer
+      outline: none
+      font-size: 1rem
+      transition: all 500ms
+      &-danger
+        background-color: #dc3545
+        border-color: #721c24
+        color: $beige
+        min-width: 100px
+        &:hover
+          color: #721c24
+      &-success
+        background-color: #28a745
+        border: 2px solid #155724
+        min-width: 100px
+        &:hover
+          color: #155724

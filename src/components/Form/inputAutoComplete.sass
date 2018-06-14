@@ -1,0 +1,43 @@
+@import './form.sass'
+.input-auto
+  display: flex
+  border-bottom: 2px solid $darkestblue
+  align-items: center
+  transition: border-bottom 500ms
+  flex-wrap: wrap
+  padding-bottom: .5rem
+  &--focus
+    border-bottom: 2px solid $orange
+  &:hover
+    border-bottom: 2px solid $orange
+  &-values
+    display: flex
+    align-items: center
+    border: 2px solid $beige
+    background-color: $blue
+    margin-right: .5rem
+    cursor: pointer
+    button
+      display: block
+      border: none
+      background-color: #b20000
+      font-weight: bold
+      cursor: pointer
+      padding: .4rem .5rem
+      color: $beige !important
+      border-left: 2px solid $beige
+      outline: none
+      transition: background-color 500ms
+      &:hover
+        background-color: #cc0000
+  &-value
+    display: block
+    padding: .2rem .5rem
+    color: $beige !important
+    font-weight: bold
+  input
+    border: none !important
+    padding-left: 0 !important 
+    flex: 1
+    &:focus
+      border-bottom: none !important

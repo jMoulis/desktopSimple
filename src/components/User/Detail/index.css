@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.user {
+  padding: 1rem; }
+  .user-picture {
+    width: 150px;
+    height: 150px;
+    padding-left: .5rem;
+    border-radius: 50%; }
+  .user-detail-list li {
+    padding: .2rem; }
+  .user .tag-list {
+    display: flex; }
+    .user .tag-list .tag-item {
+      background-color: #008e8b;
+      margin-right: .5rem;
+      border: 2px solid #eee9d1;
+      color: #eee9d1;
+      padding: .3rem;
+      font-weight: bold; }

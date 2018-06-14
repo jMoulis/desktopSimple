@@ -7,7 +7,8 @@ const ToolBarButton = ({ icon, onClick, type }) => (
   <button
     className={`toolbar-button ${type}`}
     onClick={onClick}
-  >{icon}
+  >
+    {icon && <i className={icon} />}
   </button>
 );
 

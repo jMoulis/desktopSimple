@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5rem;
+  align-items: stretch;
+  min-width: 30%;
+  padding-top: 0;
+  overflow: auto;
+  height: calc(100% - 40px); }
+  .form-container .form {
+    width: 100%;
+    border: none;
+    overflow: auto; }
+    .form-container .form .form-header {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #008e8b; }
+      .form-container .form .form-header h1 {
+        margin: 0;
+        padding: 1rem; }
+    .form-container .form .form-content-wrapper {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap; }
+    .form-container .form .form-content {
+      background-color: #97c0b7;
+      padding: .5rem;
+      flex: 1; }
+      .form-container .form .form-content .form-group {
+        padding: 0.5rem 0; }
+        .form-container .form .form-content .form-group .form-control-error {
+          border-bottom: 2px solid #f8d7da; }
+      .form-container .form .form-content .error-login {
+        text-align: center; }
+      .form-container .form .form-content label {
+        color: #0a1c28;
+        font-weight: bold; }
+
+.error-message {
+  padding-top: .3rem;
+  color: #721c24;
+  font-size: .7rem; }
+
+.tips {
+  font-size: .7rem;
+  font-style: italic;
+  padding-top: .4rem; }
+
+.checkbox-group .label {
+  display: flex;
+  align-items: center; }
+
+.checkbox-group .custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #0a1c28;
+  margin-right: .5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 500ms; }
+  .checkbox-group .custom-checkbox:hover {
+    border-color: #d44c00;
+    color: #d44c00; }
+  .checkbox-group .custom-checkbox--focus {
+    border-color: #d44c00;
+    color: #d44c00; }
+
+.checkbox-group input {
+  position: absolute;
+  opacity: 0;
+  left: -1050px; }

@@ -1,0 +1,26 @@
+@import './form.sass'
+.form-group
+  display: flex
+  flex-direction: column
+  padding: 1rem 0
+  position: relative
+  .form-control
+    background-color: $lightblue
+    border: none
+    border-bottom: 2px solid $darkestblue
+    outline: none
+    transition: border-bottom 500ms
+    padding-bottom: .5rem
+    padding-top: .5rem
+    font-size: 1rem
+    color: $darkestblue
+    font-family: 'Nunito', sans-serif
+  input, textarea, select
+    transition: border-bottom 200ms
+    &:focus
+      border-bottom: 2px solid $orange
+    &::placeholder
+      color: $darkestblue
+      font-weight: normal
+      font-size: .8rem
+      font-family: 'Nunito', sans-serif

@@ -1,7 +1,7 @@
 .toolbar-button {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 10px;
+  height: 12px;
+  border-radius: 8px;
   border: none;
   margin-left: 5px;
   margin-right: 5px;
@@ -9,19 +9,25 @@
   cursor: pointer; }
 
 .close {
-  background-color: red;
-  transition: background-color 1s ease-out; }
-  .close:hover {
+  background-color: #ff6666;
+  transition: background-color 500ms ease-out; }
+  .close:hover, .close:focus {
+    background-color: red; }
+  .close:active {
     background-color: #990000; }
 
 .full-size {
-  background-color: #00cd00;
-  transition: background-color 1s ease-out; }
-  .full-size:hover {
-    background-color: #006700; }
+  background-color: #7fbf7f;
+  transition: background-color 500ms ease-out; }
+  .full-size:hover, .full-size:focus {
+    background-color: #489048; }
+  .full-size:active {
+    background-color: #264c26; }
 
-.shrink {
+.reduce {
   background-color: gray;
-  transition: background-color 1s ease-out; }
-  .shrink:hover {
+  transition: background-color 500ms ease-out; }
+  .reduce:hover, .reduce:focus {
     background-color: #4d4d4d; }
+  .reduce:active {
+    background-color: #1a1a1a; }

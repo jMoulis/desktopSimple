@@ -1,0 +1,6 @@
+#footer-thumbnail-container {
+  height: 40px; }
+  #footer-thumbnail-container img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%; }

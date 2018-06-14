@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#newProject {
+  padding-top: 0;
+  height: auto; }
+  #newProject-form {
+    width: 100%;
+    border: none;
+    overflow: auto;
+    height: 100%; }
+    #newProject-form .tag-list {
+      display: flex;
+      list-style: none;
+      padding: 0 1rem;
+      margin: 0; }
+      #newProject-form .tag-list-item {
+        padding: 0 .3rem;
+        border: 2px solid #0a1c28; }

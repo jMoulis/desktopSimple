@@ -1,0 +1,55 @@
+@import './form.sass'
+.btn
+  display: inline-block
+  padding: .5rem
+  font-weight: bold
+  font-family: 'Nunito', sans-serif
+  cursor: pointer
+  outline: none
+  font-size: 1rem
+  border: 2px solid $beige
+  color: $beige
+  transition: all 500ms
+  &-neutral
+    background-color: transparent
+    border: 2px solid transparent
+    &:hover, &:focus
+      border: 2px solid $beige
+    &:active
+      border: 2px solid $darkestblue
+      color: $darkestblue
+  &-primary
+    border: 2px solid $beige
+    background-color: $orange
+    color: $beige
+    &:hover, &:focus
+      background-color: $beige
+      border: 2px solid $orange
+      color: $orange
+    &:active
+      background-color: $darkblue
+      border: 2px solid $darkestblue
+      color: $darkestblue
+  &-danger
+    background-color: #c82333
+    &:hover, &:focus
+      background-color: $beige
+      border: 2px solid #c82333
+      color: #c82333
+    &:active
+      background-color: $darkblue
+      border: 2px solid $darkestblue
+      color: $darkestblue
+  &-success
+    background-color: #218838
+    &:hover, &:focus
+      background-color: $beige
+      border: 2px solid #1e7e34
+      color: #1e7e34
+    &:active
+      background-color: $darkblue
+      border: 2px solid $darkestblue
+      color: $darkestblue
+  &-disabled
+    opacity: 0.6
+    cursor: not-allowed
