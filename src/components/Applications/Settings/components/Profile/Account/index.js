@@ -10,10 +10,23 @@ import Info from '../../../../../../Modules/Info';
 
 class AccountProfile extends React.Component {
   static propTypes = {
-    userActive: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+    editUser: PropTypes.object.isRequired,
     changePasswordAction: PropTypes.func.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
     deleteUserAction: PropTypes.func.isRequired,
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.editUser.error) {
+      return {
+        ...state,
+        error: { ...state.props, ...props.editUser.error },
+      };
+    }
+    return {
+      ...state,
+    };
   }
   constructor(props) {
     super(props);
@@ -26,18 +39,18 @@ class AccountProfile extends React.Component {
       ...field,
       disabled: true,
       showAlertBox: false,
+      error: null,
     };
-    const { clearMessageAction } = props;
-    clearMessageAction();
   }
+
   componentWillUnmount() {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { changePasswordAction, userActive } = this.props;
-    changePasswordAction(userActive.user._id, this.state);
+    const { changePasswordAction, loggedUser } = this.props;
+    changePasswordAction(loggedUser._id, this.state);
     this.setState(() => ({
       actualPassword: {
         value: '',
@@ -59,6 +72,11 @@ class AccountProfile extends React.Component {
   }
   handleInputChange = (evt) => {
     const { value, name } = evt.target;
+    if (this.state.error) {
+      this.setState(() => ({
+        error: null,
+      }));
+    }
     this.setState(prevState => ({
       ...prevState,
       [name]: {
@@ -80,15 +98,24 @@ class AccountProfile extends React.Component {
         }));
       }
       else {
-        this.setState(() => ({
-          error: 'Passwords Must Match',
+        this.setState(prevState => ({
+          ...prevState,
+          error: {
+            ...prevState.error,
+            newPassword: {
+              detail: 'Passwords must match',
+            },
+            confirmPassword: {
+              detail: 'Passwords must match',
+            },
+          },
         }));
       }
     }
   }
   handleDeleteAccount = () => {
-    const { deleteUserAction, userActive } = this.props;
-    deleteUserAction(userActive.user._id);
+    const { deleteUserAction, loggedUser } = this.props;
+    deleteUserAction(loggedUser._id);
   }
   handleShowAlertBoxDanger = () => {
     this.setState(prevState => ({
@@ -97,8 +124,9 @@ class AccountProfile extends React.Component {
     }));
   }
   render() {
-    const { userActive, clearMessageAction } = this.props;
-    const { loading, error, success } = userActive;
+    const { editUser, clearMessageAction } = this.props;
+    const { editing, success } = editUser;
+    const { error } = this.state;
     return (
       <div id="profile" className="form-container account" key="app-content" >
         {success &&
@@ -133,7 +161,6 @@ class AccountProfile extends React.Component {
                   error: error && error.newPassword && error.newPassword.detail,
                 }}
               />
-              {this.state.error && <span className="error">{this.state.error}</span>}
               <Input
                 config={{
                   field: Model.confirmPassword,
@@ -144,11 +171,10 @@ class AccountProfile extends React.Component {
                   error: error && error.confirmPassword && error.confirmPassword.detail,
                 }}
               />
-              {this.state.error && <span className="error">{this.state.error}</span>}
               <Button
                 type="submit"
                 label="Change"
-                loading={loading}
+                editing={editing}
                 disabled={this.state.disabled}
                 category="primary"
               />

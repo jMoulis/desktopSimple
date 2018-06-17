@@ -19,10 +19,7 @@ export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
 export const FETCH_USERS_COUNT = 'FETCH_USERS_COUNT';
 export const FETCH_USERS_COUNT_SUCCESS = 'FETCH_USERS_COUNT_SUCCESS';
 
-export const EDIT_USER = 'EDIT_USER';
-export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
-export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
-
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 /*
  * State
 */
@@ -36,11 +33,6 @@ const initialState = {
   userActive: {
     user: {},
     loading: true,
-    error: null,
-  },
-  editUser: {
-    user: {},
-    editing: false,
     error: null,
   },
   usersCount: {},
@@ -123,6 +115,21 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
+        userActive: {
+          ...state.userActive,
+          loading: false,
+          error: null,
+          success: null,
+        },
+        editUser: {
+          error: null,
+          success: null,
+        },
+      };
+    }
     default:
       return {
         ...state,
@@ -166,18 +173,8 @@ export const fetchUserFailureAction = error => ({
   type: FETCH_USER_FAILURE,
   payload: error,
 });
-export const editUserAction = (id, updates) => ({
-  type: EDIT_USER,
-  id,
-  payload: updates,
-});
-export const editUserSuccessAction = data => ({
-  type: EDIT_USER_SUCCESS,
-  payload: data,
-});
-export const editUserFailureAction = error => ({
-  type: EDIT_USER_FAILURE,
-  payload: error,
+export const clearMessageAction = () => ({
+  type: CLEAR_MESSAGE,
 });
 /*
  * Export default

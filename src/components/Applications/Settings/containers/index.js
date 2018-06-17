@@ -8,22 +8,18 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Settings from '../components/Settings';
-import { fetchSingleUserAction, deleteUserAction } from '../store/reducers/profileReducer';
+import { deleteUserAction } from '../../../../store/reducers/authReducer';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer, profileReducer }) => ({
-  loginProcess: authReducer.loginProcess,
-  userActive: profileReducer.userActive,
+const mapStateToProps = ({ authReducer }) => ({
+  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchSingleUserAction: (userId) => {
-    dispatch(fetchSingleUserAction(userId));
-  },
   deleteUserAction: (userId) => {
     dispatch(deleteUserAction(userId));
   },

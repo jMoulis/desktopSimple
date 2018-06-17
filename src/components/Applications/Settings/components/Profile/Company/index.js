@@ -9,20 +9,21 @@ import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../../Modules/filesHandler/addFilesInput';
+import Modal from '../../../../Projects/components/Modal/modal';
+import Crop from '../../../../../../Modules/Crop';
 
 class CompanyProfile extends React.Component {
   static propTypes = {
-    userActive: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
     this.state = {};
-    const { userActive } = this.props;
-    const { user } = userActive; // Datas user
+    const { loggedUser } = this.props;
     let field = {};
     Object.keys(Model).map((key) => {
-      field = { ...field, [key]: user.company ? { value: user.company[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
+      field = { ...field, [key]: loggedUser.company ? { value: loggedUser.company[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
       return field;
     });
     this.state = {
@@ -32,11 +33,11 @@ class CompanyProfile extends React.Component {
     };
   }
   componentDidUpdate(prevProps, prevState) {
-    const { editUserAction, userActive } = prevProps;
+    const { editUserAction, loggedUser } = prevProps;
     // Dealing with documents
     if (prevState.company.legalDocs.value) {
       if (prevState.company.legalDocs.value.length !== this.state.company.legalDocs.value.length) {
-        editUserAction(userActive.user._id, this.state);
+        editUserAction(loggedUser._id, this.state);
       }
     }
   }
@@ -81,23 +82,23 @@ class CompanyProfile extends React.Component {
   }
   readUrl = (input) => {
     if (input.files && input.files[0]) {
-      const { editUserAction, userActive } = this.props;
+      const { editUserAction, loggedUser } = this.props;
       const { state } = this;
       const reader = new FileReader();
       reader.onload = (evt) => {
-        const newLogo = {
+        const newpicture = {
           ...state,
           company: {
             ...state.company,
-            logo: {
-              ...state.company.logo,
+            picture: {
+              ...state.company.picture,
               value: evt.target.result,
               changed: true,
             },
           },
         };
-        this.setState(() => (newLogo));
-        editUserAction(userActive.user._id, newLogo);
+        this.setState(() => (newpicture));
+        editUserAction(loggedUser._id, newpicture);
       };
       reader.readAsDataURL(input.files[0]);
     }
@@ -105,10 +106,10 @@ class CompanyProfile extends React.Component {
   handleOnBlur = (evt) => {
     // Save the input field
     const { name } = evt.target;
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
     // const fromData = document.getElementById('profile-form')
     if (this.state.company[name].changed) {
-      editUserAction(userActive.user._id, this.state);
+      editUserAction(loggedUser._id, this.state);
     }
     this.setState(prevState => ({
       ...prevState,
@@ -124,8 +125,7 @@ class CompanyProfile extends React.Component {
   }
   handleInputSelectTagsChange = (evt) => {
     const { value } = evt.target;
-    const { editUserAction, userActive } = this.props;
-
+    const { editUserAction, loggedUser } = this.props;
     if (evt.keyCode === 13) {
       const { state } = this;
       const newTags = {
@@ -143,19 +143,20 @@ class CompanyProfile extends React.Component {
         },
       };
       this.setState(() => newTags);
-      editUserAction(userActive.user._id, newTags);
+      editUserAction(loggedUser._id, newTags);
       evt.target.value = '';
     }
   }
   handleRemove = (evt) => {
     evt.preventDefault();
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
     const { state } = this;
     const values = state.company.tags.value.filter((value, index) => (
       index !== Number(evt.target.id)
     ));
     const newTags = {
       ...state,
+      cropModal: false,
       company: {
         ...state.company,
         tags: {
@@ -166,7 +167,7 @@ class CompanyProfile extends React.Component {
       },
     };
     this.setState(() => newTags);
-    editUserAction(userActive.user._id, newTags);
+    editUserAction(loggedUser._id, newTags);
   }
   handleDocsChange = (docs) => {
     this.setState(prevState => ({
@@ -180,13 +181,42 @@ class CompanyProfile extends React.Component {
       },
     }));
   }
-  render() {
-    const { userActive } = this.props;
-    const { loading, error } = userActive;
-    const { company } = this.state;
-    if (loading) {
-      return <span />;
+  handleShowCropImageModal = () => {
+    this.setState(prevState => ({
+      cropModal: !prevState.cropModal,
+    }));
+  }
+  handleCloseCropImageModal = (img) => {
+    // Server crashes on modal close if img undefined... Without response back
+    if (img) {
+      const { state } = this;
+      const { editUserAction, loggedUser } = this.props;
+      const newPicture = {
+        ...state,
+        company: {
+          ...state.company,
+          picture: {
+            ...state.picture,
+            value: img,
+            changed: true,
+          },
+        },
+        cropModal: false,
+      };
+      this.setState(() => (newPicture));
+      editUserAction(loggedUser._id, newPicture);
     }
+    else {
+      this.setState(prevState => ({
+        ...prevState,
+        cropModal: false,
+      }));
+    }
+  }
+  render() {
+    const { editUser, loggedUser, editUserAction } = this.props;
+    const { error } = editUser;
+    const { company } = this.state;
     return (
       <div id="profile" className="form-container" key="app-content" >
         <form
@@ -197,16 +227,12 @@ class CompanyProfile extends React.Component {
         >
           <div className="profile-content-form-wrapper">
             <div className="form-content">
-              <img className="profile-picture" src={`${company.logo.value || '/img/avatar.png'}`} alt="Profile" />
-              <InputFile
-                config={{
-                  field: Model.logo,
-                  onChange: this.handlePictureChange,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  typeFileAccepted: 'image/*',
-                  error: error && error.logo && error.logo.detail,
-                }}
+              <img
+                className="profile-picture"
+                src={`${company.picture.value || '/img/avatar.png'}`}
+                alt="Profile"
+                onClick={this.handleShowCropImageModal}
+                onKeyPress={this.handleShowCropImageModal}
               />
               <Input
                 config={{
@@ -318,6 +344,23 @@ class CompanyProfile extends React.Component {
             </div>
           </div>
         </form>
+        {this.state.cropModal &&
+          <Modal
+            zIndex={100}
+            name="imageCropper"
+            title="Image Cropper"
+            closeFromParent={this.handleCloseCropImageModal}
+          >
+            <Crop
+              picture={company.picture.value}
+              parentConfig={{
+                user: loggedUser,
+                update: editUserAction,
+                error,
+                model: Model,
+              }}
+            />
+          </Modal>}
       </div>
     );
   }

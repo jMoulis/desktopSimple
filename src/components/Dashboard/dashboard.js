@@ -98,6 +98,7 @@ class Dashboard extends React.Component {
         })}
         {this.state.helper &&
           user &&
+          user.teams &&
           user.teams.length === 0 &&
           user.typeUser === 'student' &&
           <Helper

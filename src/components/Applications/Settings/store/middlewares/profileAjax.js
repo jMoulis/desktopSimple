@@ -55,40 +55,7 @@ export default store => next => (action) => {
           return store.dispatch(fetchSingleUserFailureAction(error.response.error.errors));
         });
       break;
-    case EDIT_USER: {
-      let formData = {};
-      const hasCompanyProperty = Object.prototype.hasOwnProperty.call(action.payload, 'company');
-      if (hasCompanyProperty) {
-        formData = {
-          company: toObject(Object.entries(action.payload.company)
-            .filter(field => field[1].changed)),
-        };
-      }
-      else {
-        formData = toObject(Object.entries(action.payload)
-          .filter(field => field[1].changed));
-      }
-      axios({
-        method: 'put',
-        data: { ...formData },
-        url: `${ROOT_URL}/api/users/${action.id}`,
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-        .then(({ data }) => {
-          store.dispatch(editUserSuccessAction(data));
-          const { user } = data;
-          localStorage.setItem('user', JSON.stringify(user));
-        })
-        .catch((error) => {
-          if (!error.response) {
-            return console.error(error)
-          }
-          store.dispatch(editUserFailureAction(error.response.data.errors));
-        });
-      break;
-    }
+    
     case CHANGE_PASSWORD: {
       axios({
         method: 'post',

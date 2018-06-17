@@ -5,14 +5,11 @@ import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
 import AccountProfile from '../../containers/Profile/Account';
 import TeamProfile from '../Profile/Teams';
-import Loader from '../../../../../Modules/Loader';
 
 class Settings extends React.Component {
   static propTypes = {
-    fetchSingleUserAction: PropTypes.func.isRequired,
     deleteUserAction: PropTypes.func.isRequired,
-    loginProcess: PropTypes.object.isRequired,
-    userActive: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object,
   }
   static defaultProps = {
@@ -21,10 +18,7 @@ class Settings extends React.Component {
   state = {
     tab: 'profile',
   }
-  componentDidMount() {
-    const { fetchSingleUserAction, loginProcess } = this.props;
-    fetchSingleUserAction(loginProcess.loggedUser._id);
-  }
+
   handleTabSelect = (evt) => {
     // Save the input field
     const { name } = evt.target;
@@ -33,11 +27,7 @@ class Settings extends React.Component {
     }));
   }
   render() {
-    const { userActive, deleteUserAction, globalActions } = this.props;
-    const { loading } = userActive;
-    if (loading) {
-      return <Loader />;
-    }
+    const { loggedUser, deleteUserAction, globalActions } = this.props;
     return (
       <div className="settings-container">
         <div className="app-toolbar" key="app-toolbar">
@@ -50,7 +40,7 @@ class Settings extends React.Component {
               >Profile
               </button>
             </li>
-            {userActive.user.typeUser !== 'student' &&
+            {loggedUser.typeUser !== 'student' &&
               <li>
                 <button
                   className="btn-app-toolbar unselectable"
@@ -59,7 +49,7 @@ class Settings extends React.Component {
                 >Company
                 </button>
               </li>}
-            {userActive.user.typeUser !== 'company' &&
+            {loggedUser.typeUser !== 'company' &&
               <li>
                 <button
                   className="btn-app-toolbar unselectable"
@@ -82,22 +72,19 @@ class Settings extends React.Component {
         {this.state.tab === 'profile' &&
           <Profile key="profile" />}
         {this.state.tab === 'teams' &&
-          userActive.user.typeUser !== 'company' &&
+          loggedUser.typeUser !== 'company' &&
           <TeamProfile
             key="teams"
-            user={userActive.user}
+            loggedUser={loggedUser}
             globalActions={globalActions}
           />}
         {this.state.tab === 'company' &&
           <CompanyProfile
             key="profile"
-            userActive={userActive}
           />}
         {this.state.tab === 'account' &&
           <AccountProfile
             key="account"
-            deleteUserAction={deleteUserAction}
-            userActive={userActive}
           />}
       </div>
     );

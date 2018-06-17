@@ -13,8 +13,8 @@ import FooterThumbnail from '../../../components/Dashboard/Footer/footerThumbnai
  * Code
  */
 // State
-const mapStateToProps = ({ userReducer }) => ({
-  user: userReducer.userActive.user,
+const mapStateToProps = ({ authReducer }) => ({
+  user: authReducer.loginProcess.loggedUser,
 });
 
 // Actions

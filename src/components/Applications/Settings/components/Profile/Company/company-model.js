@@ -5,9 +5,9 @@ export default {
     placeholder: 'Company Name',
     name: 'companyName',
   },
-  logo: {
+  picture: {
     label: 'Choose your logo',
-    name: 'logo',
+    name: 'picture',
     type: 'file',
   },
   street: {

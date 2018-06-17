@@ -161,7 +161,7 @@ const reducer = (state = initialState, action = {}) => {
           error: action.payload.error,
           success: null,
         },
-      };
+      }; 
     }
     case CLEAR_MESSAGE: {
       return {

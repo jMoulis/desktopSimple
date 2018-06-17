@@ -42,6 +42,7 @@ export default store => next => (action) => {
           store.dispatch(fetchUsersFailureAction(response.statusText));
         });
       break;
+
     case FETCH_USER:
       axios({
         method: 'get',
@@ -63,6 +64,7 @@ export default store => next => (action) => {
           return store.dispatch(fetchUserFailureAction(error.response.error.errors));
         });
       break;
+
     case FETCH_USERS_COUNT:
       axios({
         method: 'get',

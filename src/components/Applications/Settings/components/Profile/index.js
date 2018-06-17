@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cropper from 'cropperjs';
 
 import './profile.css';
 import '../../../../../../node_modules/cropperjs/dist/cropper.css';
 import Model from './student-model';
 import Input from '../../../../Form/input';
-import InputFile from '../../../../Form/inputFile';
 import Select from '../../../../Form/select';
 import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
@@ -17,16 +15,16 @@ import Crop from '../../../../../Modules/Crop';
 
 class Profile extends React.Component {
   static propTypes = {
-    userActive: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
+    editUser: PropTypes.object.isRequired,
   }
   constructor(props) {
     super(props);
-    const { userActive } = this.props;
-    const { user } = userActive;
+    const { loggedUser } = this.props;
     let field = {};
     Object.keys(Model).map((key) => {
-      field = { ...field, [key]: user ? { value: user[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
+      field = { ...field, [key]: loggedUser ? { value: loggedUser[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
       return field;
     });
     this.state = {
@@ -35,11 +33,11 @@ class Profile extends React.Component {
     };
   }
   componentDidUpdate(prevProps, prevState) {
-    const { editUserAction, userActive } = prevProps;
+    const { editUserAction, loggedUser } = prevProps;
     // Dealing with documents
     if (prevState.docs.value) {
       if (prevState.docs.value.length !== this.state.docs.value.length) {
-        editUserAction(userActive.user._id, this.state);
+        editUserAction(loggedUser._id, this.state);
       }
     }
   }
@@ -75,7 +73,7 @@ class Profile extends React.Component {
   }
   handleInputSelectCompetencesChange = (evt) => {
     const { value } = evt.target;
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
 
     if (evt.keyCode === 13) {
       const { state } = this;
@@ -91,7 +89,7 @@ class Profile extends React.Component {
         },
       };
       this.setState(() => newTags);
-      editUserAction(userActive.user._id, newTags);
+      editUserAction(loggedUser._id, newTags);
       evt.target.value = '';
     }
   }
@@ -100,7 +98,7 @@ class Profile extends React.Component {
   }
   readUrl = (input) => {
     if (input.files && input.files[0]) {
-      const { editUserAction, userActive } = this.props;
+      const { editUserAction, loggedUser } = this.props;
       const { state } = this;
       const reader = new FileReader();
       reader.onload = (evt) => {
@@ -113,7 +111,7 @@ class Profile extends React.Component {
           },
         };
         this.setState(() => (newPicture));
-        editUserAction(userActive.user._id, newPicture);
+        editUserAction(loggedUser._id, newPicture);
       };
       reader.readAsDataURL(input.files[0]);
     }
@@ -132,10 +130,10 @@ class Profile extends React.Component {
   handleOnBlur = (evt) => {
     // Save the input field
     const { name } = evt.target;
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
     // const fromData = document.getElementById('profile-form')
     if (this.state[name].changed) {
-      editUserAction(userActive.user._id, this.state);
+      editUserAction(loggedUser._id, this.state);
     }
     this.setState(prevState => ({
       ...prevState,
@@ -159,7 +157,7 @@ class Profile extends React.Component {
   }
   handleRemove = (evt) => {
     evt.preventDefault();
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
     const { state } = this;
     const values = state.tags.value.filter((value, index) => (
       index !== Number(evt.target.id)
@@ -173,7 +171,7 @@ class Profile extends React.Component {
       },
     };
     this.setState(() => newtags);
-    editUserAction(userActive.user._id, newtags);
+    editUserAction(loggedUser._id, newtags);
   }
   handleDocsChange = (docs) => {
     this.setState(prevState => ({
@@ -190,10 +188,10 @@ class Profile extends React.Component {
     }));
   }
   handleCloseCropImageModal = (img) => {
-    // Server crashes on modal close if img undifined... Without response back 
+    // Server crashes on modal close if img undefined... Without response back
     if (img) {
       const { state } = this;
-      const { editUserAction, userActive } = this.props;
+      const { editUserAction, loggedUser } = this.props;
       const newPicture = {
         ...state,
         picture: {
@@ -204,7 +202,7 @@ class Profile extends React.Component {
         cropModal: false,
       };
       this.setState(() => (newPicture));
-      editUserAction(userActive.user._id, newPicture);
+      editUserAction(loggedUser._id, newPicture);
     }
     else {
       this.setState(prevState => ({
@@ -214,8 +212,8 @@ class Profile extends React.Component {
     }
   }
   render() {
-    const { userActive, editUserAction } = this.props;
-    const { error, user } = userActive;
+    const { editUser, editUserAction, loggedUser } = this.props;
+    const { error } = editUser;
     return (
       <div id="profile" className="form-container" key="app-content" >
         <form
@@ -363,7 +361,7 @@ class Profile extends React.Component {
             <Crop
               picture={this.state.picture.value}
               parentConfig={{
-                user,
+                user: loggedUser,
                 update: editUserAction,
                 error,
                 model: Model,

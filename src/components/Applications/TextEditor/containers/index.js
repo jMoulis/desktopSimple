@@ -13,10 +13,7 @@ import TextEditor from '../components/textEditor';
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer, profileReducer }) => ({
-  loginProcess: authReducer.loginProcess,
-  userActive: profileReducer.userActive,
-});
+const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({});

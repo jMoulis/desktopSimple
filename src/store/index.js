@@ -40,7 +40,6 @@ const mainReducer = combineReducers({
   appReducer,
   frameReducer,
   authReducer,
-  profileReducer,
   projectReducer,
   userReducer,
   teamReducer,
@@ -61,7 +60,6 @@ const store = createStore(
   compose(
     applyMiddleware(authAjax),
     applyMiddleware(userAjax),
-    applyMiddleware(profileAjax),
     applyMiddleware(projectAjax),
     applyMiddleware(teamAjax),
     applyMiddleware(mainTeamAjax),

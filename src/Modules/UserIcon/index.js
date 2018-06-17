@@ -7,10 +7,7 @@ import './index.css';
 // Action from global app... I think it might be a little spaghetti code
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
 
-const mapStateToProps = ({ userReducer, appReducer }) => ({
-  userActive: userReducer.userActive,
-  userId: appReducer.userId,
-});
+const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({

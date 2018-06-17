@@ -17,7 +17,7 @@ class TeamProfile extends React.Component {
     }));
   }
   render() {
-    const { user, globalActions } = this.props;
+    const { loggedUser, globalActions } = this.props;
     return (
       <div>
         <ul className="ul-nav teams">
@@ -39,7 +39,7 @@ class TeamProfile extends React.Component {
             Create Team
             </button>
           </li>
-          {user.teams.map(team => (
+          {loggedUser.teams.map(team => (
             <li
               key={team._id}
               className="team-container"
@@ -70,7 +70,7 @@ class TeamProfile extends React.Component {
           name="Create a team"
           title="Create a team"
         >
-          <NewTeamContainer loggedUser={user} />
+          <NewTeamContainer loggedUser={loggedUser} />
         </Modal>}
       </div>
     );
@@ -78,7 +78,7 @@ class TeamProfile extends React.Component {
 }
 
 TeamProfile.propTypes = {
-  user: PropTypes.object.isRequired,
+  loggedUser: PropTypes.object.isRequired,
   globalActions: PropTypes.object.isRequired,
 };
 
