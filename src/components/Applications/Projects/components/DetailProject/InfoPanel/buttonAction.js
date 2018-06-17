@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import Button from '../../../../../Form/button';
 import AlreadyProject from './alreadyProject';
 
-const ButtonAction = ({ globalActions, project, openCreateTeamModal, globalProps }) => (
+const ButtonAction = ({
+  globalActions,
+  project,
+  openCreateTeamModal,
+  globalProps,
+}) => (
   <div className="teams-container-buttons">
     <div className="teams-container-buttons-item">
       {!globalProps.activeTeamProcess.team.project ?
@@ -12,7 +17,7 @@ const ButtonAction = ({ globalActions, project, openCreateTeamModal, globalProps
             <h2>If you already have a team</h2>
             <Button
               type="button"
-              title="Add my team to the project"
+              title="Join the project"
               onClick={() => {
                 const { editTeamAction, editProjectAction } = globalActions;
                 editProjectAction({
@@ -40,7 +45,7 @@ const ButtonAction = ({ globalActions, project, openCreateTeamModal, globalProps
             <h2>If you don't have a team</h2>
             <Button
               type="button"
-              title="Create a team for the project"
+              title="Create a team"
               onClick={openCreateTeamModal}
               data-tab="create-team"
               category="primary"

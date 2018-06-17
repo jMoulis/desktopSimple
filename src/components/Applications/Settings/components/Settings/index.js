@@ -4,11 +4,10 @@ import Profile from '../../containers/Profile';
 import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
 import AccountProfile from '../../containers/Profile/Account';
-import TeamProfile from '../Profile/Teams';
+import TeamProfile from '../../containers/Profile/Teams';
 
 class Settings extends React.Component {
   static propTypes = {
-    deleteUserAction: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object,
   }
@@ -27,7 +26,7 @@ class Settings extends React.Component {
     }));
   }
   render() {
-    const { loggedUser, deleteUserAction, globalActions } = this.props;
+    const { loggedUser, globalActions } = this.props;
     return (
       <div className="settings-container">
         <div className="app-toolbar" key="app-toolbar">

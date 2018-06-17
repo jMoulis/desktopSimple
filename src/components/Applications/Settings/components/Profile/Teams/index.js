@@ -5,10 +5,15 @@ import './index.css';
 import Modal from '../../../../../../Modules/Modal/modal';
 import UserIcon from '../../../../../../Modules/UserIcon';
 import NewTeamContainer from '../../../containers/Profile/Teams/NewTeam';
+import Loader from '../../../../../../Modules/Loader';
 
 class TeamProfile extends React.Component {
   state = {
     showAddTeamModal: false,
+  }
+  componentDidMount() {
+    const { fetchTeamsAction, loggedUser } = this.props;
+    fetchTeamsAction();
   }
   handleShowAddTeamModal = () => {
     this.setState(prevState => ({
@@ -17,20 +22,15 @@ class TeamProfile extends React.Component {
     }));
   }
   render() {
-    const { loggedUser, globalActions } = this.props;
+    const { loggedUser, globalActions, teamsProcess } = this.props;
+    const { teams, loading, error } = teamsProcess;
+    if (loading) {
+      return <Loader size={60} />;
+    }
     return (
       <div>
         <ul className="ul-nav teams">
           <li className="teams-new-team">
-            {/* <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => {
-                globalActions.startAppAction('Projects');
-              }}
-            >
-            Create Team
-            </button> */}
             <button
               type="button"
               className="btn btn-primary"
@@ -39,7 +39,7 @@ class TeamProfile extends React.Component {
             Create Team
             </button>
           </li>
-          {loggedUser.teams.map(team => (
+          {teams.map(team => (
             <li
               key={team._id}
               className="team-container"

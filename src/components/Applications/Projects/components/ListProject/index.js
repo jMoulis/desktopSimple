@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 
@@ -137,14 +137,19 @@ class ListProject extends React.Component {
           loggedUser.typeUser !== 'student' &&
           <ul className="project-list">
             <li className="project-list-item">
-              <h2>Add a Project</h2>
-              <div className="content add-project">
-                <i
-                  onKeyPress={this.handleShowNewProjectForm}
-                  onClick={this.handleShowNewProjectForm}
-                  className="fas fa-plus-circle fa-3x"
-                />
-              </div>
+              {!loggedUser.company ?
+                <h2>Please fill in company's informations before posting a new project</h2> :
+                <Fragment>
+                  <h2>Add a Project</h2>
+                  <div className="content add-project">
+                    <i
+                      onKeyPress={this.handleShowNewProjectForm}
+                      onClick={this.handleShowNewProjectForm}
+                      className="fas fa-plus-circle fa-3x"
+                    />
+                  </div>
+                </Fragment>
+              }
             </li>
           </ul>}
           {projectListProcess.projects.map(project => (

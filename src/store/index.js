@@ -10,7 +10,6 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
-import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
 import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
 import chatReducer from '../components/Applications/Chat/store/reducers/chatReducer';
@@ -20,7 +19,6 @@ import userReducer from './reducers/userReducer';
 // MIDDLEWARES
 import authAjax from './middlewares/authAjax';
 import userAjax from './middlewares/userAjax';
-import profileAjax from '../components/Applications/Settings/store/middlewares/profileAjax';
 import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
 import chatAjax from '../components/Applications/Chat/store/middleswares/chatAjax';
 import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';

@@ -18,7 +18,12 @@ import { editTeamAction } from '../../store/reducers/teamReducer';
  * Code
  */
 // State
-const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer, appReducer, userReducer }) => ({
+const mapStateToProps = ({
+  frameReducer,
+  authReducer,
+  mainTeamReducer,
+  appReducer,
+}) => ({
   activeApp: frameReducer.activeApp,
   applications: frameReducer.applications,
   activeApps: frameReducer.activeApps,
@@ -26,7 +31,7 @@ const mapStateToProps = ({ frameReducer, authReducer, mainTeamReducer, appReduce
     activeTeamProcess: mainTeamReducer.activeTeamProcess,
   },
   loggedUser: {
-    user: userReducer.userActive.user,
+    user: authReducer.loginProcess.loggedUser,
     auth: authReducer.auth,
   },
   showUserDetailModal: appReducer.showUserDetailModal,

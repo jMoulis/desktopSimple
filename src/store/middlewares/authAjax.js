@@ -57,7 +57,11 @@ export default store => next => (action) => {
           const auth = new Auth(data.token);
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
-          localStorage.setItem('user', JSON.stringify(payload.user));
+          const { user } = payload;
+          localStorage.setItem('user', JSON.stringify({
+            _id: user._id,
+            fullName: user.fullName,
+          }));
           store.dispatch(createUserSuccessAction({ user: payload.user, auth: decodedToken.auth }));
           store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
         })

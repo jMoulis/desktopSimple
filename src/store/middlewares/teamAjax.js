@@ -24,8 +24,7 @@ import {
   deleteTeamSuccessAction,
   deleteTeamFailureAction,
 } from '../reducers/teamReducer';
-
-import { logoutAction } from '../../store/reducers/authReducer';
+import { logoutAction, editUserSuccessAction } from '../reducers/authReducer';
 /*
  * Code
  */

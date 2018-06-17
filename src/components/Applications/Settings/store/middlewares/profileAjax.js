@@ -11,9 +11,6 @@ import {
   FETCH_SINGLE_USER,
   fetchSingleUserSuccessAction,
   fetchSingleUserFailureAction,
-  EDIT_USER,
-  editUserSuccessAction,
-  editUserFailureAction,
   CHANGE_PASSWORD,
   changePasswordSuccessAction,
   changePasswordFailureAction,
@@ -25,13 +22,7 @@ import { logoutAction } from '../../../../../store/reducers/authReducer';
 /*
  * Code
  */
-const toObject = (arr) => {
-  let obj = {};
-  arr.forEach((element) => {
-    obj = { ...obj, [element[0]]: element[1].value };
-  });
-  return obj;
-};
+
 /*
  * Middleware
  */
@@ -55,7 +46,6 @@ export default store => next => (action) => {
           return store.dispatch(fetchSingleUserFailureAction(error.response.error.errors));
         });
       break;
-    
     case CHANGE_PASSWORD: {
       axios({
         method: 'post',

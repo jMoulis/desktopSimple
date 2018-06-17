@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Settings from '../components/Settings';
-import { deleteUserAction } from '../../../../store/reducers/authReducer';
 
 /*
  * Code
@@ -19,11 +18,7 @@ const mapStateToProps = ({ authReducer }) => ({
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({
-  deleteUserAction: (userId) => {
-    dispatch(deleteUserAction(userId));
-  },
-});
+const mapDispatchToProps = dispatch => ({});
 
 
 /*
