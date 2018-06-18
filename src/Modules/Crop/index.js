@@ -5,6 +5,11 @@ import InputFile from '../../components/Form/inputFile';
 import './index.css';
 
 class Crop extends React.Component {
+  static propTypes = {
+    picture: PropTypes.string.isRequired,
+    closeFromParent: PropTypes.func.isRequired,
+    parentConfig: PropTypes.object.isRequired,
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +24,6 @@ class Crop extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (prevState.picture !== this.state.picture) {
-      const image = this.picRef.current;
       this.state.cropper.replace(this.state.picture);
     }
   }
@@ -67,7 +71,7 @@ class Crop extends React.Component {
     }
   }
   render() {
-    const { img, parentConfig } = this.props;
+    const { parentConfig } = this.props;
     return (
       <div className="cropper">
         <div className="cropper-container">

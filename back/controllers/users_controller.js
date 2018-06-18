@@ -116,6 +116,7 @@ module.exports = {
         const apiResponse = new ApiResponse(res, null, 403);
         return apiResponse.failure();
       }
+
       await User.update({ _id: userId }, { $set: props }, options);
       const userUpdated = await User.findById({ _id: userId }, { password: 0 })
         .populate({
@@ -133,7 +134,9 @@ module.exports = {
         }, 404);
         return apiResponse.failure();
       }
-      const apiResponse = new ApiResponse(res, { user: userUpdated, success: 'Modify' }, 200);
+      const fieldUpdated = Object.keys(props)[0];
+
+      const apiResponse = new ApiResponse(res, { user: userUpdated, success: fieldUpdated }, 200);
       return apiResponse.success();
     } catch (error) {
       const apiResponse = new ApiResponse(res, 400);

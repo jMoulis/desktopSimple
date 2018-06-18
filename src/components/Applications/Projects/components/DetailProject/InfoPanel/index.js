@@ -7,10 +7,6 @@ import ButtonAction from './buttonAction';
 import NoRoomLeft from './noRoomLeft';
 
 class InfoPanel extends React.Component {
-  static getDerivedStateFromProps(nextProps, state) {
-    console.log('NextProps', nextProps.activeProjectProcess.project.teams.length)
-    console.log('State', state.project.teams.length)
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -18,15 +14,8 @@ class InfoPanel extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log('Mount')
-  }
-  componentDidUpdate() {
-    console.log('update')
-  }
   render() {
     const {
-      activeProjectProcess,
       openCreateTeamModal,
       user,
       globalActions,
@@ -40,18 +29,18 @@ class InfoPanel extends React.Component {
           <span>No Teams yet</span> :
           project.teams.map((team, index) => (
             <TeamWidget key={index} team={team} />
-        ))}
+          ))}
         {/* if the max Team is ok and if the user is a student */}
         {project.teams.length < project.maxTeam &&
           user._id !== project.author._id &&
-            <ButtonAction
-              globalActions={globalActions}
-              openCreateTeamModal={openCreateTeamModal}
-              project={project}
-              user={user}
-              globalProps={globalProps}
-            />
-          }
+          <ButtonAction
+            globalActions={globalActions}
+            openCreateTeamModal={openCreateTeamModal}
+            project={project}
+            user={user}
+            globalProps={globalProps}
+          />
+        }
         {project.teams.length === project.maxTeam &&
           user.typeUser !== 'company' &&
           <NoRoomLeft />

@@ -8,11 +8,17 @@ import NewTeamContainer from '../../../containers/Profile/Teams/NewTeam';
 import Loader from '../../../../../../Modules/Loader';
 
 class TeamProfile extends React.Component {
+  static propTypes = {
+    loggedUser: PropTypes.object.isRequired,
+    globalActions: PropTypes.object.isRequired,
+    fetchTeamsAction: PropTypes.func.isRequired,
+    teamsProcess: PropTypes.object.isRequired,
+  }
   state = {
     showAddTeamModal: false,
   }
   componentDidMount() {
-    const { fetchTeamsAction, loggedUser } = this.props;
+    const { fetchTeamsAction } = this.props;
     fetchTeamsAction();
   }
   handleShowAddTeamModal = () => {
@@ -23,7 +29,7 @@ class TeamProfile extends React.Component {
   }
   render() {
     const { loggedUser, globalActions, teamsProcess } = this.props;
-    const { teams, loading, error } = teamsProcess;
+    const { teams, loading } = teamsProcess;
     if (loading) {
       return <Loader size={60} />;
     }
@@ -36,7 +42,7 @@ class TeamProfile extends React.Component {
               className="btn btn-primary"
               onClick={this.handleShowAddTeamModal}
             >
-            Create Team
+              Create Team
             </button>
           </li>
           {teams.map(team => (
@@ -64,22 +70,17 @@ class TeamProfile extends React.Component {
           ))}
         </ul>
         {this.state.showAddTeamModal &&
-        <Modal
-          closeFromParent={this.handleShowAddTeamModal}
-          zIndex={300}
-          name="Create a team"
-          title="Create a team"
-        >
-          <NewTeamContainer loggedUser={loggedUser} />
-        </Modal>}
+          <Modal
+            closeFromParent={this.handleShowAddTeamModal}
+            zIndex={300}
+            name="Create a team"
+            title="Create a team"
+          >
+            <NewTeamContainer loggedUser={loggedUser} />
+          </Modal>}
       </div>
     );
   }
 }
-
-TeamProfile.propTypes = {
-  loggedUser: PropTypes.object.isRequired,
-  globalActions: PropTypes.object.isRequired,
-};
 
 export default TeamProfile;

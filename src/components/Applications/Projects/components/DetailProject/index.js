@@ -1,18 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import './index.css';
-import Model from '../Model/project-model';
-import Input from '../../../../Form/input';
-import Textarea from '../../../../Form/textarea';
-import InputAutoComplete from '../../../../Form/inputAutoComplete';
-import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
-import Checkbox from '../../../../Form/checkbox';
 import InfoPanel from '../../containers/DetailProject/InfoPanel';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import AlertBox from '../../../../../Modules/AlertBox';
-import UserIcon from '../../../../../Modules/UserIcon';
 import Loader from '../../../../../Modules/Loader';
 import EditFormProjectContainer from '../../containers/DetailProject/editFormProject';
 
@@ -29,8 +20,6 @@ class DetailProject extends React.Component {
   }
   constructor(props) {
     super(props);
-    const { activeProjectProcess } = props;
-    const { project } = activeProjectProcess;
     this.state = {
       delete: false,
       showAlertBox: false,
@@ -134,8 +123,8 @@ class DetailProject extends React.Component {
             openCreateTeamModal={openNewTeamModal}
             user={user}
             globalActions={{
-                ...globalActions,
-                editProjectAction,
+              ...globalActions,
+              editProjectAction,
             }}
             globalProps={globalProps}
           />
@@ -143,26 +132,26 @@ class DetailProject extends React.Component {
         <div className="actions">
           {project.author._id !== user._id &&
             project.subscribers &&
-              <button
-                title={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                  'Unsubscribe from the project' :
-                  'subscribe to the project'
-                }
-                name={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                  'unsubscribe' :
-                  'subscribe'
-                }
-                className={`actions-button actions-button-subscribe
+            <button
+              title={project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                'Unsubscribe from the project' :
+                'subscribe to the project'
+              }
+              name={project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                'unsubscribe' :
+                'subscribe'
+              }
+              className={`actions-button actions-button-subscribe
                   ${project.subscribers.find(subscriber => subscriber._id === user._id) &&
-                    ' subscribed'}`
-                  }
-                type="button"
-                onClick={this.handleSubscribe}
-              >
-                {project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                  <i className="fas fa-thumbs-up" /> :
-                  <i className="fas fa-thumbs-up" />}
-              </button>}
+                ' subscribed'}`
+              }
+              type="button"
+              onClick={this.handleSubscribe}
+            >
+              {project.subscribers.find(subscriber => subscriber._id === user._id) ?
+                <i className="fas fa-thumbs-up" /> :
+                <i className="fas fa-thumbs-up" />}
+            </button>}
           <button
             className="actions-button actions-button-share"
             type="button"

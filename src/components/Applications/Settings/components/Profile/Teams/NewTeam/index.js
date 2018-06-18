@@ -96,7 +96,7 @@ class NewTeam extends React.Component {
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { createTeamAction, loggedUser, closeFromParent } = this.props;
+    const { createTeamAction, loggedUser } = this.props;
     const users = Object.entries(this.state.selectedUsers).map((value) => {
       let selectedUser = {};
       selectedUser = { ...selectedUser, spec: value[0], user: { _id: value[1]._id } };
@@ -227,7 +227,7 @@ class NewTeam extends React.Component {
                       ))}
                     </ul>
                   </div>
-                  <Button category="success" style={{ width: '100%' }}type="submit">Create</Button>
+                  <Button category="success" style={{ width: '100%' }} type="submit">Create</Button>
                 </div>
               </div>
             </form>

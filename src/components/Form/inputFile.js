@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './inputFile.css';
+import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputFile = ({ config }) => {
   const {
@@ -22,6 +23,7 @@ const InputFile = ({ config }) => {
         onFocus={config.focus}
         accept={config.typeFileAccepted}
       />
+      {config.success === config.field.name && <SuccessIcon />}
       {config.error && <small className="error-message">{config.error}</small>}
     </div>
   );

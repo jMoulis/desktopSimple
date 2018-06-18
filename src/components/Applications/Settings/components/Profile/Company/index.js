@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import './company.css';
 import Model from './company-model';
 import Input from '../../../../../Form/input';
-import InputFile from '../../../../../Form/inputFile';
 import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import SuccessIcon from '../../assets/successIcon/successIcon';
 import './input.css';
 
 const Input = ({ config }) => {
@@ -22,6 +24,7 @@ const Input = ({ config }) => {
         max={config.max}
         min={config.min}
       />
+      {config.success && config.success === config.field.name && <SuccessIcon />}
       {config.small && <small className="tips">{config.small}</small>}
       {config.error && <small className="error-message">{config.error}</small>}
     </div>

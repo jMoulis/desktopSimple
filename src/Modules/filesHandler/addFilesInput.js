@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import PdfJs from 'pdfjs-dist';
 import './addFilesInput.css';
@@ -21,6 +21,8 @@ class AddFilesInput extends React.Component {
     docs: this.props.docs,
     viewer: {
       doc: '',
+      corrupted: false,
+      message: null,
     },
     error: null,
     isFocused: false,
@@ -61,10 +63,12 @@ class AddFilesInput extends React.Component {
       };
       reader.readAsDataURL(input.files[0]);
     }
-    this.setState(prevState => ({
-      ...prevState,
-      error: 'Wrong format accepts only pdf file',
-    }));
+    else {
+      this.setState(prevState => ({
+        ...prevState,
+        error: 'Wrong format accepts only pdf file',
+      }));
+    }
   }
   handleRemoveThumbnail = (evt) => {
     const { id } = evt.target;
@@ -104,7 +108,24 @@ class AddFilesInput extends React.Component {
                   };
                   page.render(renderContext);
                 });
-            });
+              this.setState(() => ({
+                viewer: {
+                  doc,
+                  [doc.name]: {
+                    corrupted: false,
+                  },
+                },
+              }));
+            })
+            .catch(() => this.setState(() => ({
+              viewer: {
+                doc,
+                [doc.name]: {
+                  corrupted: true,
+                  message: 'Pdf unreadable, the file is probably corrupted. Please delete it and try uploading it again',
+                },
+              },
+            })));
         })
     ));
   }
@@ -164,27 +185,34 @@ class AddFilesInput extends React.Component {
             />,
           ]}
           <div className="addfilesinput-thumbnail-container">
-            {this.state.docs.map((doc, index) => (
-              <div key={index} className="addfilesinput-thumbnail-content">
-                {!this.props.readOnly &&
-                  <button
-                    id={index}
-                    type="button"
-                    className="delete-thumbnail"
-                    onClick={this.handleRemoveThumbnail}
-                  >X
-                  </button>
-                }
-                <div>
-                  <canvas
-                    data-b64={doc.value}
-                    onClick={this.handleViewer}
-                    id={`canvas-${index}`}
-                  />
+            {this.state.docs.map((doc, index) => {
+              return (
+                <div key={index} className="addfilesinput-thumbnail-content">
+                  {!this.props.readOnly &&
+                    <button
+                      id={index}
+                      type="button"
+                      className="delete-thumbnail"
+                      onClick={this.handleRemoveThumbnail}
+                    >X
+                    </button>
+                  }
+                  {this.state.viewer[doc.name] && this.state.viewer[doc.name].corrupted ?
+                    <small className="error-message">{this.state.viewer[doc.name].message}</small> :
+                    <Fragment>
+                      <div>
+                        <canvas
+                          data-b64={doc.value}
+                          onClick={this.handleViewer}
+                          id={`canvas-${index}`}
+                        />
+                      </div>
+                      {doc.name && <p>{doc.name}</p>}
+                    </Fragment>
+                  }
                 </div>
-                {doc.name && <p>{doc.name}</p>}
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
         {error && <small className="error-message">{error}</small>}

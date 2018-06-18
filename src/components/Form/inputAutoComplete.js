@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './inputAutoComplete.css';
+import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputAutoComplete = ({ config }) => {
   return (
@@ -29,6 +30,8 @@ const InputAutoComplete = ({ config }) => {
           />
         }
       </div>
+      {config.success && config.success === config.field.name && <SuccessIcon />}
+      {config.small && <small className="tips">{config.small}</small>}
       {config.error && <small className="error-message">{config.error}</small>}
     </div>
   );

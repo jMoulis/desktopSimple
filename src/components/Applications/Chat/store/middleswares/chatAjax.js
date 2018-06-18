@@ -2,7 +2,6 @@
  * Npm import
  */
 import axios from 'axios';
-import io from 'socket.io-client';
 /*
  * Local import
  */
@@ -11,10 +10,7 @@ import { FETCH_CHAT, fetchChatSuccessAction } from '../reducers/chatReducer';
 /*
  * Code
  */
-const loggedUser = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  return user;
-};
+
 /*
  * Middleware
  */

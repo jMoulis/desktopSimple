@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SuccessIcon from '../../assets/successIcon/successIcon';
 
 
 const Select = ({ config }) => {
@@ -30,6 +31,7 @@ const Select = ({ config }) => {
         <option value="">{field.defaultOption}</option>
         {options.map((option, index) => <option key={index} value={option}>{option}</option>)}
       </select>
+      {config.success === config.field.name && <SuccessIcon />}
       {error && <small className="error-message">{error}</small>}
     </div>
   );

@@ -4,24 +4,13 @@ import PropTypes from 'prop-types';
 import UserIcon from '../../../../Modules/UserIcon';
 import './ressourceItem.css';
 
-const hasPicture = (user) => {
-  if (!user) {
-    return '/img/anonymous.png';
-  }
-  if (user.picture) {
-    if (user.picture.length > 0) {
-      return user.picture;
-    }
-  }
-  return '/img/avatar.png';
-};
 const RessourceItem = ({ config }) => {
   return (
     <li data-name={config.value}>
       <div
         className={
           `ressource-item ${config.specAlreadySelected === config.value &&
-            'ressource-item-already-selected'}`
+          'ressource-item-already-selected'}`
         }
       >
         <button
@@ -34,7 +23,7 @@ const RessourceItem = ({ config }) => {
         </button>
         <UserIcon user={{
           user: config.selectedUsers[config.value],
-          }}
+        }}
         />
         <span className="ressource-label">{config.value}</span>
         {

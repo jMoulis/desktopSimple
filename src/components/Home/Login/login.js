@@ -52,7 +52,7 @@ class Login extends React.Component {
   }
   render() {
     const { loginProcess } = this.props;
-    const { error, logging } = loginProcess;
+    const { error } = loginProcess;
     return (
       <div id="signin-form" className="form-container">
         <form

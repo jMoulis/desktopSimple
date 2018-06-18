@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './textarea.css';
+import SuccessIcon from '../../assets/successIcon/successIcon';
 
 class Textarea extends React.Component {
   static propTypes = {
@@ -35,6 +36,7 @@ class Textarea extends React.Component {
           style={{ height: this.state.scrollHeight }}
           readOnly={config.readOnly}
         />
+        {config.success === config.field.name && <SuccessIcon />}
         {config.error && <small className="error-message">{config.error}</small>}
       </div>
     );

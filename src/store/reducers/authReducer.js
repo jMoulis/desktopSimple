@@ -51,6 +51,7 @@ const initialState = {
   editUser: {
     editing: false,
     error: null,
+    success: false,
   },
   createUserProcess: {
     creating: false,
@@ -179,6 +180,7 @@ const reducer = (state = initialState, action = {}) => {
         editUser: {
           editing: true,
           error: null,
+          success: false,
         },
       };
     }
@@ -191,6 +193,7 @@ const reducer = (state = initialState, action = {}) => {
         },
         editUser: {
           editing: false,
+          success: action.payload.success,
         },
       };
     }
@@ -199,6 +202,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         editUser: {
           editing: false,
+          success: false,
           error: action.payload,
         },
       };

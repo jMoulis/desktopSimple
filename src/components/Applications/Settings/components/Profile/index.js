@@ -18,13 +18,19 @@ class Profile extends React.Component {
     loggedUser: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
     editUser: PropTypes.object.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
     const { loggedUser } = this.props;
     let field = {};
     Object.keys(Model).map((key) => {
-      field = { ...field, [key]: loggedUser ? { value: loggedUser[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
+      field = {
+        ...field,
+        [key]: loggedUser
+          ? { value: loggedUser[key], focus: false, changed: false }
+          : { value: '', focus: false, changed: false },
+      };
       return field;
     });
     this.state = {
@@ -33,16 +39,25 @@ class Profile extends React.Component {
     };
   }
   componentDidUpdate(prevProps, prevState) {
-    const { editUserAction, loggedUser } = prevProps;
+    const { editUserAction, loggedUser, clearMessageAction } = prevProps;
     // Dealing with documents
     if (prevState.docs.value) {
       if (prevState.docs.value.length !== this.state.docs.value.length) {
         editUserAction(loggedUser._id, this.state);
+        clearMessageAction();
       }
     }
   }
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
+  }
   handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
@@ -81,10 +96,7 @@ class Profile extends React.Component {
         ...state,
         tags: {
           ...state.tags,
-          value: [
-            ...state.tags.value,
-            value.toLowerCase(),
-          ],
+          value: [...state.tags.value, value.toLowerCase()],
           changed: true,
         },
       };
@@ -110,7 +122,7 @@ class Profile extends React.Component {
             changed: true,
           },
         };
-        this.setState(() => (newPicture));
+        this.setState(() => newPicture);
         editUserAction(loggedUser._id, newPicture);
       };
       reader.readAsDataURL(input.files[0]);
@@ -131,7 +143,6 @@ class Profile extends React.Component {
     // Save the input field
     const { name } = evt.target;
     const { editUserAction, loggedUser } = this.props;
-    // const fromData = document.getElementById('profile-form')
     if (this.state[name].changed) {
       editUserAction(loggedUser._id, this.state);
     }
@@ -159,9 +170,7 @@ class Profile extends React.Component {
     evt.preventDefault();
     const { editUserAction, loggedUser } = this.props;
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.tags.value.filter((value, index) => index !== Number(evt.target.id), );
     const newtags = {
       ...state,
       tags: {
@@ -201,7 +210,7 @@ class Profile extends React.Component {
         },
         cropModal: false,
       };
-      this.setState(() => (newPicture));
+      this.setState(() => newPicture);
       editUserAction(loggedUser._id, newPicture);
     }
     else {
@@ -213,9 +222,9 @@ class Profile extends React.Component {
   }
   render() {
     const { editUser, editUserAction, loggedUser } = this.props;
-    const { error } = editUser;
+    const { error, success, editing } = editUser;
     return (
-      <div id="profile" className="form-container" key="app-content" >
+      <div id="profile" className="form-container" key="app-content">
         <form
           id="profile-form"
           className="form"
@@ -240,6 +249,8 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.fullName && error.fullName.detail,
+                  success,
+                  editing,
                 }}
               />
               <Input
@@ -251,6 +262,8 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.email && error.email.detail,
+                  success,
+                  editing,
                 }}
               />
               <Input
@@ -262,6 +275,8 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.location && error.location.detail,
+                  success,
+                  editing,
                 }}
               />
               <Select
@@ -269,10 +284,11 @@ class Profile extends React.Component {
                   field: Model.school,
                   onChange: this.handleSelectChange,
                   value: this.state.school.value,
-                  options: ['Bem', 'O\'Clock'],
+                  options: ['Bem', "O'Clock"],
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.school && error.school.detail,
+                  success,
                 }}
               />
             </div>
@@ -286,6 +302,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.diploma && error.diploma.detail,
+                  success,
                 }}
               />
               <InputAutoComplete
@@ -298,6 +315,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
+                  success,
                 }}
               />
               <TextArea
@@ -308,6 +326,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.description && error.description.detail,
+                  success,
                 }}
               />
               <Input
@@ -319,6 +338,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.website && error.website.detail,
+                  success,
                 }}
               />
               <Input
@@ -330,6 +350,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.linkedIn && error.linkedIn.detail,
+                  success,
                 }}
               />
               <Input
@@ -341,6 +362,7 @@ class Profile extends React.Component {
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.gitHub && error.gitHub.detail,
+                  success,
                 }}
               />
               <AddFilesInput
@@ -351,7 +373,7 @@ class Profile extends React.Component {
             </div>
           </div>
         </form>
-        {this.state.cropModal &&
+        {this.state.cropModal && (
           <Modal
             zIndex={100}
             name="imageCropper"
@@ -367,7 +389,8 @@ class Profile extends React.Component {
                 model: Model,
               }}
             />
-          </Modal>}
+          </Modal>
+        )}
       </div>
     );
   }
