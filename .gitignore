@@ -2,10 +2,10 @@
 
 # dependencies
 /node_modules
-/student_project_back/node_modules
+/back/node_modules
 # testing
 /coverage
-
+.vscode
 # production
 /build
 /src/Utils/config.js
