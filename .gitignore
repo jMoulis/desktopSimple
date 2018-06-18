@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-
+/student_project_back/node_modules
 # testing
 /coverage
 
