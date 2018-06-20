@@ -11,7 +11,7 @@ const ProjectInfo = ({ project }) => (
     <ul className="ul-unstyled project-info-list">
       <li>
         <div className="company">
-          <img className="company-logo" src={project.author.company.logo} alt="logo company" />
+          <img className="company-logo" src={project.author.company.picture} alt="logo company" />
           <div className="company-info">
             <p className="company-info-name">{project.author.company.companyName}</p>
             <div className="company-author">
@@ -35,7 +35,7 @@ const ProjectInfo = ({ project }) => (
             <div key={index} className="input-tag-values">
               <span className="input-tag-value">{tag}</span>
             </div>
-            ))}
+          ))}
         </div>
       </li>
       <li>

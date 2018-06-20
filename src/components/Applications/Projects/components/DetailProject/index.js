@@ -20,9 +20,15 @@ class DetailProject extends React.Component {
   }
   constructor(props) {
     super(props);
+    const { activeProjectProcess } = props;
+    const { project } = activeProjectProcess;
+
     this.state = {
       delete: false,
       showAlertBox: false,
+      subscribers: {
+        value: project.subscribers,
+      },
     };
   }
 
@@ -34,8 +40,7 @@ class DetailProject extends React.Component {
   handleSubscribe = (evt) => {
     const { name } = evt.currentTarget;
     const { editProjectAction, loggedUser } = this.props;
-    const stateSubscribers = this.state.form.subscribers.value;
-
+    const stateSubscribers = this.state.subscribers.value;
     let subscribers = [];
     const userAlreadySubscribed = stateSubscribers.find(subscriber => (
       subscriber._id === loggedUser._id
@@ -108,7 +113,7 @@ class DetailProject extends React.Component {
     }
     return (
       <div id="edit-project" key="app-content" >
-        <div className="">
+        <div className="project-content">
           <EditFormProjectContainer loggedUser={loggedUser} />
           {project.author._id === user._id &&
             <button

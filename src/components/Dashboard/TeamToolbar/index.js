@@ -11,11 +11,14 @@ class TeamToolbar extends React.Component {
     showSelectTeamPanel: PropTypes.func.isRequired,
     showSettings: PropTypes.func.isRequired,
   }
-  componentDidMount() {}
+  componentDidMount() { }
   render() {
     const { team, showSelectTeamPanel, showSettings } = this.props;
-    if (Object.keys(team).length === 0) {
+    if (team && Object.keys(team).length === 0) {
       return <div className="team-toolbar" />;
+    }
+    if (!team) {
+      return <span />;
     }
     return (
       <CSSTransition

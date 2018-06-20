@@ -8,6 +8,7 @@ import NewProject from '../../containers/NewProject/newProject';
 import DetailProject from '../../containers/DetailProject/detailProject';
 import Team from '../../containers/Team';
 import Loader from '../../../../../Modules/Loader';
+import ListProjectItem from './listProjectItem';
 
 class ListProject extends React.Component {
   static propTypes = {
@@ -134,62 +135,26 @@ class ListProject extends React.Component {
         </ul>
         <div>
           {loggedUser.typeUser &&
-          loggedUser.typeUser !== 'student' &&
-          <ul className="project-list">
-            <li className="project-list-item">
-              {!loggedUser.company ?
-                <h2>Please fill in company's informations before posting a new project</h2> :
-                <Fragment>
-                  <h2>Add a Project</h2>
-                  <div className="content add-project">
-                    <i
-                      onKeyPress={this.handleShowNewProjectForm}
-                      onClick={this.handleShowNewProjectForm}
-                      className="fas fa-plus-circle fa-3x"
-                    />
-                  </div>
-                </Fragment>
-              }
-            </li>
-          </ul>}
-          {projectListProcess.projects.map(project => (
-            <ul
-              className="project-list"
-              key={project._id}
-            >
-              <li
-                className="project-list-item"
-                data-projectid={project._id}
-                data-tab="project-detail"
-                onClick={this.handleShowDetailModal}
-                onKeyPress={this.handleShowDetailModal}
-              >
-                <h2>{project.title}</h2>
-                <div className="content">
-                  <p>Due Date: {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}</p>
-                  <p>Teams: {project.teams.length}</p>
-                  <p>Description: {project.description}</p>
-                  <ul className="tags-list">
-                    {project.tags.map((tag, index) => <li key={index}>{tag}</li>)}
-                  </ul>
-                  <div>
-                    <button
-                      type="button"
-                      data-projectid={project._id}
-                      data-tab="project-detail"
-                      onClick={this.handleShowDetailModal}
-                      className="btn btn-primary"
-                      style={{
-                        width: '100%',
-                        marginTop: '.5rem',
-                      }}
-                    >
-                      Check me out
-                    </button>
-                  </div>
-                </div>
+            loggedUser.typeUser !== 'student' &&
+            <ul className="project-list">
+              <li className="project-list-item">
+                {!loggedUser.company ?
+                  <h2>Please fill in company's informations before posting a new project</h2> :
+                  <Fragment>
+                    <h2>Add a Project</h2>
+                    <div className="content add-project">
+                      <i
+                        onKeyPress={this.handleShowNewProjectForm}
+                        onClick={this.handleShowNewProjectForm}
+                        className="fas fa-plus-circle fa-3x"
+                      />
+                    </div>
+                  </Fragment>
+                }
               </li>
-            </ul>
+            </ul>}
+          {projectListProcess.projects.map(project => (
+            <ListProjectItem key={project._id} project={project} showDetailModal={this.handleShowDetailModal} />
           ))}
         </div>
         {this.state.showNewProjectForm.display &&

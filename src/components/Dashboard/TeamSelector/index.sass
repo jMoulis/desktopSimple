@@ -6,7 +6,7 @@
   bottom: 0
   left: 0
   right: 0
-  background-color: rgba(0, 0, 0, .5)
+  background-color: rgba(0, 0, 0, .8)
   display: flex
   align-items: center
   flex-direction: column
@@ -25,9 +25,13 @@
   .ul-nav
     align-items: flex-start
     flex-wrap: wrap
-    min-width: 760px
+    overflow: auto
+    max-height: 85%
+    justify-content: center
+    margin-top: 1rem
   h1
     color: $beige
+    margin-bottom: .5rem
   &-item
     margin: .5rem
     width: 200px

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../../../Form/button';
 import AlreadyProject from './alreadyProject';
+import './buttonAction.css';
 
 const ButtonAction = ({
   globalActions,
@@ -9,11 +10,11 @@ const ButtonAction = ({
   openCreateTeamModal,
   globalProps,
 }) => (
-  <div className="teams-container-buttons">
-    <div className="teams-container-buttons-item">
+    <Fragment>
       {!globalProps.activeTeamProcess.team.project ?
-        <div>
-          <div>
+        <div className="teams-container-buttons">
+          <h1>Want to join the project?</h1>
+          <div className="teams-container-buttons-item">
             <h2>If you already have a team</h2>
             <Button
               type="button"
@@ -21,10 +22,13 @@ const ButtonAction = ({
               onClick={() => {
                 const { editTeamAction, editProjectAction } = globalActions;
                 editProjectAction({
-                  teams: [
-                    ...project.teams,
-                    globalProps.activeTeamProcess.team._id,
-                  ],
+                  teams: {
+                    changed: true,
+                    value: [
+                      ...project.teams,
+                      globalProps.activeTeamProcess.team,
+                    ],
+                  },
                 });
                 editTeamAction({
                   project: {
@@ -38,7 +42,7 @@ const ButtonAction = ({
               style={{
                 marginTop: '.5rem',
               }}
-            >Add my team
+            >Join the project
             </Button>
           </div>
           <div className="teams-container-buttons-item">
@@ -58,9 +62,9 @@ const ButtonAction = ({
         </div> :
         <AlreadyProject />
       }
-    </div>
-  </div>
-);
+
+    </Fragment>
+  );
 
 ButtonAction.propTypes = {
   globalActions: PropTypes.object.isRequired,

@@ -3,7 +3,11 @@
   height: 100%; }
 
 #edit-project {
-  color: #0a1c28; }
+  color: #0a1c28;
+  padding: 1rem; }
+  #edit-project .project-content {
+    display: flex;
+    flex-wrap: wrap; }
 
 .actions {
   position: absolute;
@@ -63,8 +67,8 @@
 
 .team-widget {
   display: flex;
-  align-items: center;
-  margin-top: .5rem; }
+  margin-top: .5rem;
+  flex-direction: column; }
   .team-widget-content {
     display: flex;
     flex-direction: column;

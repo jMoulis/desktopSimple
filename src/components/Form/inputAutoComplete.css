@@ -54,7 +54,8 @@
   align-items: center;
   transition: border-bottom 500ms;
   flex-wrap: wrap;
-  padding-bottom: .5rem; }
+  padding-bottom: .5rem;
+  padding-top: .5rem; }
   .input-auto--focus {
     border-bottom: 2px solid #d44c00; }
   .input-auto:hover {

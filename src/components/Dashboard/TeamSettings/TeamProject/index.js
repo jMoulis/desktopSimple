@@ -13,7 +13,16 @@ class TeamProject extends React.Component {
     alertBox: false,
   }
   handleDelete = () => {
-    const { editTeamAction } = this.props;
+    const { editTeamAction, projects, activeTeam, fetchSingleProjectAction } = this.props;
+    const projectEdited = projects.find((project) => {
+      if (project.teams) {
+        return project.teams.find(projectTeam => projectTeam._id === activeTeam._id);
+      }
+      return null;
+    });
+    if (projectEdited) {
+      fetchSingleProjectAction(projectEdited._id);
+    }
     editTeamAction({
       project: {
         value: null,
@@ -62,26 +71,26 @@ class TeamProject extends React.Component {
           Delete participation
         </button>
         {this.state.alertBox &&
-        <AlertBox
-          title="Deleting Your participation"
-          message="WatchOut you are on your way to leave this project"
-          buttons={[
-            {
-              type: 'danger',
-              action: this.handleDelete,
-              label: 'Yeap',
-              category: 'danger',
-            },
-            {
-              type: 'success',
-              action: this.handleShowAlertBox,
-              label: 'Nope',
-              category: 'success',
-            },
-          ]}
-          type="danger"
-        />
-      }
+          <AlertBox
+            title="Deleting Your participation"
+            message="WatchOut you are on your way to leave this project"
+            buttons={[
+              {
+                type: 'danger',
+                action: this.handleDelete,
+                label: 'Yeap',
+                category: 'danger',
+              },
+              {
+                type: 'success',
+                action: this.handleShowAlertBox,
+                label: 'Nope',
+                category: 'success',
+              },
+            ]}
+            type="danger"
+          />
+        }
       </div>
     );
   }

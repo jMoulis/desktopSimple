@@ -63,6 +63,11 @@ class Crop extends React.Component {
       this.state.cropper.rotate(90);
     }
   }
+  handleRotateBack = () => {
+    if (this.state.cropper) {
+      this.state.cropper.rotate(-90);
+    }
+  }
   handleCrop = () => {
     const { closeFromParent } = this.props;
     if (this.state.cropper.getCroppedCanvas()) {
@@ -83,20 +88,35 @@ class Crop extends React.Component {
             src={this.state.picture || '/img/avatar.png'}
             alt="Cropping"
           />
+          <div className="crop-toolbar">
+            <button type="button" className="btn btn-primary" onClick={this.handleRotateBack} title="Rotate"><i className="fas fa-undo-alt" /></button>
+            <button type="button" className="btn btn-primary" onClick={this.handleRotate} title="Rotate"><i className="fas fa-redo-alt" /></button>
+          </div>
+          <footer>
+            <button type="button" className="btn btn-success">
+              <InputFile
+                config={{
+                  styleContainer: {
+                    padding: 0,
+                  },
+                  styleLabelContainer: {
+                    padding: 0,
+                    border: 'none',
+                  },
+                  field: { ...parentConfig.model.picture, label: 'Change picture' },
+                  onChange: this.handleInputFileChange,
+                  focus: this.handleOnFocus,
+                  typeFileAccepted: 'image/*',
+                  error: parentConfig.error &&
+                    parentConfig.error.picture &&
+                    parentConfig.error.picture.detail,
+                }}
+              />
+            </button>
+            <button type="button" className="btn btn-primary" onClick={this.handleCrop}>Edit</button>
+          </footer>
         </div>
-        <button type="button" className="btn btn-primary" onClick={this.handleCrop}>Crop</button>
-        <button type="button" className="btn btn-primary" onClick={this.handleRotate}>Rotate</button>
-        <InputFile
-          config={{
-            field: parentConfig.model.picture,
-            onChange: this.handleInputFileChange,
-            focus: this.handleOnFocus,
-            typeFileAccepted: 'image/*',
-            error: parentConfig.error &&
-              parentConfig.error.picture &&
-              parentConfig.error.picture.detail,
-          }}
-        />
+
       </div>
     );
   }

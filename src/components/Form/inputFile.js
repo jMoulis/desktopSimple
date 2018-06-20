@@ -7,10 +7,13 @@ const InputFile = ({ config }) => {
   const {
     field,
     onChange,
+    style,
+    styleContainer,
+    styleLabelContainer
   } = config;
   return (
-    <div className="form-group">
-      <div className="input-file-label-container">
+    <div className="form-group" style={styleContainer}>
+      <div className="input-file-label-container" style={styleLabelContainer}>
         <label className="input-file-label" htmlFor={field.name}>{field.label}</label>
       </div>
       <input

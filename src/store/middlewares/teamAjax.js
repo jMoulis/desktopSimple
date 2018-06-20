@@ -69,10 +69,12 @@ export default store => next => (action) => {
       const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
       const formData = toObject(filteredArray);
       formData.users = action.payload.users;
+      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team._id;
+
       axios({
         method: 'put',
         data: formData,
-        url: `${ROOT_URL}/api/teams/${store.getState().mainTeamReducer.activeTeamProcess.team._id}`,
+        url: `${ROOT_URL}/api/teams/${teamId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

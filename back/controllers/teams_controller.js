@@ -20,7 +20,21 @@ module.exports = {
   async index(req, res, next) {
     const userId = res.locals.user._id;
     try {
-      const teams = await Team.find({ users: { $in: [userId] } });
+      const teams = await Team.find({ 'users.user': userId })
+        .populate({
+          path: 'manager',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'project',
+          model: 'project',
+        })
+        .populate({
+          path: 'users.user',
+          model: 'user',
+          select: 'fullName picture',
+        });
       if (teams.length === 0) {
         const apiResponse = new ApiResponse(res, {
           teams: {
@@ -45,7 +59,22 @@ module.exports = {
     const teamProps = req.body;
     const manager = res.locals.user._id;
     try {
-      const team = await Team.create({ ...teamProps, manager });
+      const teamCreated = await Team.create({ ...teamProps, manager });
+      const team = await Team.findOne({ _id: teamCreated.id })
+        .populate({
+          path: 'manager',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'project',
+          model: 'project',
+        })
+        .populate({
+          path: 'users.user',
+          model: 'user',
+          select: 'fullName picture',
+        });
       // Add the new teams to user object
       const ids = team.users.map(({ user }) => user);
       User.updateMany({ _id: { $in: ids } }, {
@@ -154,10 +183,10 @@ module.exports = {
             $in: [team._id],
           },
         }, {
-          $pull: {
-            teams: team._id,
-          },
-        });
+            $pull: {
+              teams: team._id,
+            },
+          });
       }
       const apiResponse = new ApiResponse(res, { team, success: 'Modify' }, 200);
       return apiResponse.success();

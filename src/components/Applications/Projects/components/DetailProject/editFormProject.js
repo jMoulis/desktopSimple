@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import './index.css';
+import './editProjectForm.css';
 import Model from '../Model/project-model';
 import Input from '../../../../Form/input';
 import Textarea from '../../../../Form/textarea';
@@ -354,15 +354,18 @@ class EditFormProject extends Component {
               remove: this.handleRemove,
             }}
           />
-          <AddFilesInput
-            error={error && error.docs && error.docs.detail}
-            docs={this.state.form.docs.value}
-            onFileChange={this.handleInputFileChange}
-            blur={this.handleOnBlur}
-            readOnly={project.author._id !== user._id}
-          />
+          {this.state.form.docs.length > 0 ?
+            <AddFilesInput
+              error={error && error.docs && error.docs.detail}
+              docs={this.state.form.docs.value}
+              onFileChange={this.handleInputFileChange}
+              blur={this.handleOnBlur}
+              readOnly={project.author._id !== user._id}
+            /> :
+            <h2>No Documents available</h2>
+          }
         </div>
-    </form>
+      </form>
     );
   }
 }

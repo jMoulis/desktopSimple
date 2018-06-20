@@ -2,11 +2,7 @@
 .project-container {
   height: 100%; }
 
-.teams-container {
+.teams-container-buttons-item {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto; }
-  .teams-container-buttons {
-    margin-top: 2rem; }
-    .teams-container-buttons-item {
-      margin-bottom: 1rem; }
+  margin: 2rem 2rem 0 0; }

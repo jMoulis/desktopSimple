@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UserIcon from '../../../Modules/UserIcon';
+import './teamWidget.css';
 
 const TeamWidget = ({ team }) => (
-  <div>
+  <div className="selector-team-widget">
     <h1>{team.name}</h1>
     {team.project ?
       <h2>{team.project.title}</h2> :
       'No project selected yet'}
-    <ul>
+    <ul className="team-widget-users-list">
       {team.users.map((user, index) => {
         if (!user.user) {
           return null;

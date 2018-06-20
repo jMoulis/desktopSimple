@@ -9,9 +9,6 @@ import NoRoomLeft from './noRoomLeft';
 class InfoPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      project: props.activeProjectProcess.project,
-    };
   }
 
   render() {
@@ -21,7 +18,8 @@ class InfoPanel extends React.Component {
       globalActions,
       globalProps,
     } = this.props;
-    const { project } = this.state;
+    const { activeProjectProcess } = this.props;
+    const { project } = activeProjectProcess;
     return (
       <div className="teams-container">
         <h1>Teams</h1>

@@ -11,7 +11,36 @@ module.exports = {
       params = {};
     }
     try {
-      const projects = await Project.find(params);
+      const projects = await Project.find(params)
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users',
+            model: 'user',
+            select: 'spec',
+          },
+        })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+            options: { limit: 4 },
+          },
+        })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'subscribers',
+          model: 'user',
+          select: 'fullName picture tags',
+        });
       if (projects.length <= 0) {
         const apiResponse = new ApiResponse(res, {
           projects: [],
@@ -134,6 +163,16 @@ module.exports = {
             path: 'subscribers',
             model: 'user',
             select: 'fullName picture tags',
+          })
+          .populate({
+            path: 'teams',
+            select: 'name',
+            populate: {
+              path: 'users.user',
+              model: 'user',
+              select: 'fullName picture',
+              options: { limit: 4 },
+            },
           });
       })
       .then((project) => {

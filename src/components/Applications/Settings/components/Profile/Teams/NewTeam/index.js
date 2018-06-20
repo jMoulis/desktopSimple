@@ -6,6 +6,7 @@ import UsersLoader from '../../../../../../../Modules/UserLoader';
 import Input from '../../../../../../Form/input';
 import RessourceItem from '../../../../../../../Modules/RessourceItem';
 import Button from '../../../../../../Form/button';
+import './index.css';
 
 class NewTeam extends React.Component {
   static propTypes = {
@@ -160,9 +161,8 @@ class NewTeam extends React.Component {
     const { teamCreation } = this.props;
     const { error, success } = teamCreation;
     return (
-      <div className="new-team">
+      <div id="new-team-settings">
         <div className="new-team-content">
-          <h1>Create your team</h1>
           {success && success.status ?
             <span>Team created</span> :
             <form
@@ -187,7 +187,7 @@ class NewTeam extends React.Component {
                       onChange: this.handleInputChange,
                     }}
                   />
-                  <div name="ressources">
+                  <div className="ressources" name="ressources">
                     <Input
                       config={{
                         field: {
