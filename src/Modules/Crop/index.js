@@ -7,8 +7,11 @@ import './index.css';
 class Crop extends React.Component {
   static propTypes = {
     picture: PropTypes.string.isRequired,
-    closeFromParent: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func,
     parentConfig: PropTypes.object.isRequired,
+  }
+  static defaultProps = {
+    closeFromParent: null,
   }
   constructor(props) {
     super(props);

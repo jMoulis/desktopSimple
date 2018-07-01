@@ -13,8 +13,6 @@ import { fullSizeAction, closeAppAction, reduceAppAction } from '../../../../sto
 /*
  * Code
  */
-// State
-const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({
@@ -33,6 +31,6 @@ const mapDispatchToProps = dispatch => ({
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(null, mapDispatchToProps);
 const ToolbarContainer = createContainer(Toolbar);
 export default ToolbarContainer;

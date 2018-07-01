@@ -16,7 +16,6 @@ class NewProject extends React.Component {
     projectCreation: PropTypes.object.isRequired,
     createProjectAction: PropTypes.func.isRequired,
     clearProjectMessageAction: PropTypes.func.isRequired,
-    closeFromParent: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
@@ -31,13 +30,6 @@ class NewProject extends React.Component {
       isContest: false,
       isPrice: false,
     };
-  }
-  componentDidUpdate() {
-    const { projectCreation, closeFromParent } = this.props;
-    if (projectCreation.success && projectCreation.success.status) {
-      closeFromParent('createTeamModal');
-    }
-    return true;
   }
   componentWillUnmount() {
     const { clearProjectMessageAction } = this.props;
@@ -172,114 +164,110 @@ class NewProject extends React.Component {
           onSubmit={this.handleSubmit}
           noValidate="true"
         >
-          <div className="form-content-wrapper">
-            <div className="form-content">
-              <Input
-                config={{
-                  field: Model.title,
-                  onChange: this.handleInputChange,
-                  value: this.state.title.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  isFocused: this.state.title.focus,
-                  error: error && error.title && error.title.detail,
-                }}
-              />
-              <Textarea
-                config={{
-                  field: Model.description,
-                  onChange: this.handleTextAreaChange,
-                  value: this.state.description.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.description.focus,
-                  error: error && error.description && error.description.detail,
-                }}
-              />
-              <Input
-                config={{
-                  field: Model.dueDate,
-                  onChange: this.handleInputChange,
-                  value: this.state.dueDate.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  isFocused: this.state.dueDate.focus,
-                  error: error && error.dueDate && error.dueDate.detail,
-                }}
-              />
-              <Checkbox
-                config={{
-                  field: Model.isPrice,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.isPrice.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.isPrice.focus,
-                  error: error && error.isPrice && error.isPrice.detail,
-                }}
-              />
-              {this.state.isPrice.value &&
-                <Input
-                  config={{
-                    field: Model.price,
-                    onChange: this.handleInputChange,
-                    value: this.state.price.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    isFocused: this.state.price.focus,
-                    error: error && error.price && error.price.detail,
-                  }}
-                />
-              }
-              <Checkbox
-                config={{
-                  field: Model.isContest,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.isContest.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.isContest.focus,
-                  error: error && error.isContest && error.isContest.detail,
-                }}
-              />
-              {this.state.isContest.value &&
-                <Input
-                  config={{
-                    field: Model.maxTeam,
-                    onChange: this.handleInputChange,
-                    value: this.state.maxTeam.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    isFocused: this.state.maxTeam.focus,
-                    error: error && error.maxTeam && error.maxTeam.detail,
-                  }}
-                />
-              }
-              <InputAutoComplete
-                config={{
-                  field: Model.tags,
-                  onChange: this.handleInputSelectCompetencesChange,
-                  keyPress: this.handleInputSelectCompetencesChange,
-                  values: this.state.tags.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  remove: this.handleRemove,
-                  isFocused: this.state.tags.focus,
-                  error: error && error.tags && error.tags.detail,
-                }}
-              />
-              <AddFilesInput
-                error={error && error.docs && error.docs.detail}
-                docs={this.state.docs}
-                onFileChange={this.handleInputFileChange}
-              />
-              <Button type="submit" label="Create" loading={false} />
-            </div>
-          </div>
+          <Input
+            config={{
+              field: Model.title,
+              onChange: this.handleInputChange,
+              value: this.state.title.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              keyPress: this.handleInputChange,
+              isFocused: this.state.title.focus,
+              error: error && error.title && error.title.detail,
+            }}
+          />
+          <Textarea
+            config={{
+              field: Model.description,
+              onChange: this.handleTextAreaChange,
+              value: this.state.description.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.description.focus,
+              error: error && error.description && error.description.detail,
+            }}
+          />
+          <Input
+            config={{
+              field: Model.dueDate,
+              onChange: this.handleInputChange,
+              value: this.state.dueDate.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              keyPress: this.handleInputChange,
+              isFocused: this.state.dueDate.focus,
+              error: error && error.dueDate && error.dueDate.detail,
+            }}
+          />
+          <Checkbox
+            config={{
+              field: Model.isPrice,
+              onChange: this.handleCheckBoxChange,
+              value: this.state.isPrice.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.isPrice.focus,
+              error: error && error.isPrice && error.isPrice.detail,
+            }}
+          />
+          {this.state.isPrice.value &&
+            <Input
+              config={{
+                field: Model.price,
+                onChange: this.handleInputChange,
+                value: this.state.price.value,
+                blur: this.handleOnBlur,
+                focus: this.handleOnFocus,
+                keyPress: this.handleInputChange,
+                isFocused: this.state.price.focus,
+                error: error && error.price && error.price.detail,
+              }}
+            />
+          }
+          <Checkbox
+            config={{
+              field: Model.isContest,
+              onChange: this.handleCheckBoxChange,
+              value: this.state.isContest.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.isContest.focus,
+              error: error && error.isContest && error.isContest.detail,
+            }}
+          />
+          {this.state.isContest.value &&
+            <Input
+              config={{
+                field: Model.maxTeam,
+                onChange: this.handleInputChange,
+                value: this.state.maxTeam.value,
+                blur: this.handleOnBlur,
+                focus: this.handleOnFocus,
+                keyPress: this.handleInputChange,
+                isFocused: this.state.maxTeam.focus,
+                error: error && error.maxTeam && error.maxTeam.detail,
+              }}
+            />
+          }
+          <InputAutoComplete
+            config={{
+              field: Model.tags,
+              onChange: this.handleInputSelectCompetencesChange,
+              keyPress: this.handleInputSelectCompetencesChange,
+              values: this.state.tags.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              remove: this.handleRemove,
+              isFocused: this.state.tags.focus,
+              error: error && error.tags && error.tags.detail,
+            }}
+          />
+          <AddFilesInput
+            error={error && error.docs && error.docs.detail}
+            docs={this.state.docs}
+            onFileChange={this.handleInputFileChange}
+          />
+          <Button type="submit" label="Create" loading={false} />
         </form>
       </div>
     );

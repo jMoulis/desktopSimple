@@ -17,7 +17,8 @@
     "react/forbid-prop-types": "off",
     "react/no-unescaped-entities": "off",
     "react/no-array-index-key": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-useless-computed-key": "off"
   },
   "settings": {
     "import/resolver": {

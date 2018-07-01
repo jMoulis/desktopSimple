@@ -41,7 +41,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server": "serve build"
+    "server": "NODE_ENV=dev nodemon back/index.js"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

@@ -121,42 +121,26 @@ class ListProject extends React.Component {
       <div className="project-list-container">
         <ul>
           <li>
-            <form>
-              <label>Criteria 1</label>
-              <input />
-              <label>Criteria 2</label>
-              <input />
-              <label>Criteria 3</label>
-              <input />
-              <label>Criteria 4</label>
-              <input />
-            </form>
+            <button
+              onClick={this.handleShowNewProjectForm}
+              className="btn btn-primary"
+              disabled={!loggedUser.company}
+              title={!loggedUser.company ? "Please fill in company's informations before posting a new project" : 'New project'}
+            >New Project
+            </button>
           </li>
         </ul>
-        <div>
-          {loggedUser.typeUser &&
-            loggedUser.typeUser !== 'student' &&
-            <ul className="project-list">
-              <li className="project-list-item">
-                {!loggedUser.company ?
-                  <h2>Please fill in company's informations before posting a new project</h2> :
-                  <Fragment>
-                    <h2>Add a Project</h2>
-                    <div className="content add-project">
-                      <i
-                        onKeyPress={this.handleShowNewProjectForm}
-                        onClick={this.handleShowNewProjectForm}
-                        className="fas fa-plus-circle fa-3x"
-                      />
-                    </div>
-                  </Fragment>
-                }
-              </li>
-            </ul>}
+        <ul
+          className="project-list"
+        >
           {projectListProcess.projects.map(project => (
-            <ListProjectItem key={project._id} project={project} showDetailModal={this.handleShowDetailModal} />
+            <ListProjectItem
+              key={project._id}
+              project={project}
+              showDetailModal={this.handleShowDetailModal}
+            />
           ))}
-        </div>
+        </ul>
         {this.state.showNewProjectForm.display &&
           <Modal
             name="showNewProjectForm"

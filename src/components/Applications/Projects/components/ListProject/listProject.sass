@@ -9,17 +9,18 @@
   .project-list
     margin: .5rem
     display: flex
-    flex-direction: column
     min-height: 200px
-    transition: all 200ms
-    &:hover
-      box-shadow: 0 0 10px 0 $darkestblue
     &-item
       background-color: $darkblue
       padding: .5rem
       border: 3px solid $darkestblue
       display: flex
       flex-direction: column
+      max-width: 15rem
+      transition: all 200ms
+      margin: .5rem
+      &:hover
+        box-shadow: 0 0 10px 0 $darkestblue
       .content
         background-color: $lightblue
         padding: .5rem
@@ -27,6 +28,7 @@
         display: flex
         flex-direction: column
         justify-content: space-between
+        word-break: break-all
         & p
           word-break: break-all
         li
@@ -53,10 +55,9 @@
           background-color: $blue
           color: $beige
           font-weight: bold
-          font-size: .7rem
           cursor: pointer
           outline: none
-          margin-left: .5rem
+          margin-right: .5rem
 .notFound
   display: flex
   justify-content: center

@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './project.css';
 import ListProject from '../containers/ListProject';
-import Team from '../containers/Team';
+import NewProject from '../containers/NewProject/newProject';
 
 class Projects extends React.Component {
   static propTypes = {
     fetchProjectsAction: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    globalActions: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
   }
   state = {
     tab: 'projects',
@@ -17,7 +19,6 @@ class Projects extends React.Component {
     fetchProjectsAction();
   }
   handleTabSelect = (evt) => {
-    // Save the input field
     const { dataset } = evt.currentTarget;
     let dataSetToState = {};
     Object.keys(dataset).map((key) => {
@@ -29,7 +30,7 @@ class Projects extends React.Component {
     }));
   }
   render() {
-    const { globalActions, globalProps, loggedUser} = this.props;
+    const { globalActions, globalProps, loggedUser } = this.props;
     return (
       <div className="project-container">
         <div className="app-toolbar" key="app-toolbar">
@@ -44,31 +45,28 @@ class Projects extends React.Component {
               Projects
               </button>
             </li>
-            {/* <li>
+            <li>
               <button
                 className="btn-app-toolbar unselectable"
-                name="myTeams"
-                data-tab="myTeams"
+                name="create-project"
+                data-tab="create-project"
                 onClick={this.handleTabSelect}
               >
-              My Teams
+              New Project
               </button>
-            </li> */}
+            </li>
           </ul>
         </div>
         {this.state.tab === 'projects' &&
           <ListProject
-            key="newProject"
             selectTab={this.handleTabSelect}
             loggedUser={loggedUser}
             globalActions={globalActions}
             globalProps={globalProps}
           />
         }
-        {this.state.tab === 'create-team' &&
-          <Team
-            key="createTeam"
-            projectid={this.state.projectid}
+        {this.state.tab === 'create-project' &&
+          <NewProject
             loggedUser={loggedUser}
           />
         }

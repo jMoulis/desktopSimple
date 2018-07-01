@@ -199,7 +199,7 @@ module.exports = {
         Object.keys(userProps[key]).map((propKey) => {
           props = {
             ...props,
-            [`${key}.${propKey}`]: userProps[key][propKey],
+            [`${propKey}`]: userProps[key][propKey],
           };
           return props;
         });

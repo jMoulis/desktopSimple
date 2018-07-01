@@ -66,13 +66,44 @@ module.exports = {
       projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }
     try {
-      const project = await Project.create(projectProps);
+      const newProject = await Project.create(projectProps);
+      const project = await Project.findOne({ _id: newProject._id })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users',
+            model: 'user',
+            select: 'spec',
+          },
+        })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+            options: { limit: 4 },
+          },
+        })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'subscribers',
+          model: 'user',
+          select: 'fullName picture tags',
+        });
       const apiResponse = new ApiResponse(res, {
         project,
         success: { status: true, message: 'New Project Created' },
       }, 200);
       return apiResponse.success();
     } catch (error) {
+      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
@@ -157,8 +188,8 @@ module.exports = {
         }
       },
     )
-      .then(() => {
-        return Project.findById({ _id: projectId }, projection)
+      .then(() => (
+        Project.findById({ _id: projectId }, projection)
           .populate({
             path: 'subscribers',
             model: 'user',
@@ -173,16 +204,22 @@ module.exports = {
               select: 'fullName picture',
               options: { limit: 4 },
             },
-          });
-      })
+          })
+      ))
       .then((project) => {
         if ('subscribers' in projectProps) {
           if (projectProps.subscribers.length > 0) {
             User.update({ _id: userId }, { $push: { subscribes: project._id } })
-              .catch(error => console.log(error.message));
+              .catch((error) => {
+                const apiResponse = new ApiResponse(res, 400);
+                return apiResponse.failure(error);
+              });
           } else if (projectProps.subscribers.length === 0) {
             User.update({ _id: userId }, { $pull: { subscribes: project._id } })
-              .catch(error => console.log(error.message));
+              .catch((error) => {
+                const apiResponse = new ApiResponse(res, 400);
+                return apiResponse.failure(error);
+              });
           }
         }
         const apiResponse = new ApiResponse(res, {
@@ -191,10 +228,7 @@ module.exports = {
             value: project[Object.keys(projectProps)[0]],
             id: project._id,
           },
-          success: {
-            status: true,
-            message: 'Updated',
-          },
+          success: Object.keys(projectProps)[0],
         }, 200);
         return apiResponse.success();
       })
@@ -217,8 +251,8 @@ module.exports = {
         res.status(204).send({ message: 'deleted' });
       })
       .catch(next);
-    Team.findByAndUpdate({ project: projectId }, { $unset: { project: '' } })
-      .then(response => console.log(response))
-      .catch(error => console.log(error.message));
+    Team.findByIdAndUpdate({ project: projectId }, { $unset: { project: '' } })
+      .then(() => next())
+      .catch(error => next(error));
   },
 };

@@ -112,18 +112,22 @@ class DetailProject extends React.Component {
       return <Loader />;
     }
     return (
-      <div id="edit-project" key="app-content" >
+      <div id="edit-project">
+        <ul className="project-toolbar">
+          <li>
+            {project.author._id === user._id &&
+              <button
+                name="detailProjectModal"
+                type="button"
+                className="btn btn-danger"
+                onClick={this.handleShowAlertBox}
+              >Delete
+              </button>
+            }
+          </li>
+        </ul>
         <div className="project-content">
           <EditFormProjectContainer loggedUser={loggedUser} />
-          {project.author._id === user._id &&
-            <button
-              name="detailProjectModal"
-              type="button"
-              className="btn btn-danger"
-              onClick={this.handleShowAlertBox}
-            >Delete
-            </button>
-          }
           <InfoPanel
             openCreateTeamModal={openNewTeamModal}
             user={user}

@@ -142,10 +142,11 @@ class Profile extends React.Component {
   handleOnBlur = (evt) => {
     // Save the input field
     const { name } = evt.target;
-    const { editUserAction, loggedUser } = this.props;
+    const { editUserAction, loggedUser, clearMessageAction } = this.props;
     if (this.state[name].changed) {
       editUserAction(loggedUser._id, this.state);
     }
+    clearMessageAction();
     this.setState(prevState => ({
       ...prevState,
       [name]: {

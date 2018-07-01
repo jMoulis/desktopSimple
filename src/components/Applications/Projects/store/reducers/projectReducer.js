@@ -247,6 +247,12 @@ const reducer = (state = initialState, action = {}) => {
           loading: true,
           error: null,
         },
+        activeProjectProcess: {
+          ...state.activeProjectProcess,
+          loading: false,
+          error: null,
+          success: null,
+        },
       };
     }
     default:

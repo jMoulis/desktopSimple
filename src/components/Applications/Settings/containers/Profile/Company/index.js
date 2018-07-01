@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import CompanyProfile from '../../../components/Profile/Company';
-import { editUserAction } from '../../../../../../store/reducers/authReducer';
+import { editUserAction, clearMessageAction } from '../../../../../../store/reducers/authReducer';
 /*
  * Code
  */
@@ -22,6 +22,9 @@ const mapStateToProps = ({ authReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   editUserAction: (id, formData) => {
     dispatch(editUserAction(id, formData));
+  },
+  clearMessageAction: () => {
+    dispatch(clearMessageAction());
   },
 });
 

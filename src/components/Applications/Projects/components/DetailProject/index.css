@@ -3,11 +3,13 @@
   height: 100%; }
 
 #edit-project {
-  color: #0a1c28;
-  padding: 1rem; }
+  color: #0a1c28; }
   #edit-project .project-content {
     display: flex;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    padding: 1rem; }
+  #edit-project .project-toolbar {
+    padding: 1rem; }
 
 .actions {
   position: absolute;
@@ -52,7 +54,8 @@
   align-items: flex-start;
   margin-bottom: .5rem;
   border-bottom: 2px solid #0a1c28;
-  padding-bottom: 1rem; }
+  padding-bottom: 1rem;
+  min-height: 60px; }
   .company-logo {
     width: 60px;
     height: 60px; }

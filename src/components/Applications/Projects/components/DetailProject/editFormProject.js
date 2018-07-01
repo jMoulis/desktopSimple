@@ -17,6 +17,7 @@ class EditFormProject extends Component {
     activeProjectProcess: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
+    clearProjectMessageAction: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
@@ -142,10 +143,11 @@ class EditFormProject extends Component {
   handleOnBlur = (evt) => {
     // Save the input field
     const { name } = evt.target;
-    const { editProjectAction } = this.props;
+    const { editProjectAction, clearProjectMessageAction } = this.props;
     if (this.state.form[name].changed) {
       editProjectAction(this.state.form);
     }
+    clearProjectMessageAction();
     this.setState(prevState => ({
       ...prevState,
       form: {
@@ -223,7 +225,7 @@ class EditFormProject extends Component {
       loggedUser,
     } = this.props;
     const { author } = this.state;
-    const { error, project } = activeProjectProcess;
+    const { error, project, success } = activeProjectProcess;
     const user = loggedUser;
     return (
       <form
@@ -256,6 +258,7 @@ class EditFormProject extends Component {
               readOnly: project.author._id !== user._id,
               focus: this.handleOnFocus,
               isFocused: this.state.form.title.focus,
+              success,
               error: error && error.title && error.title.detail,
             }}
           />
@@ -268,6 +271,7 @@ class EditFormProject extends Component {
               readOnly: project.author._id !== user._id,
               focus: this.handleOnFocus,
               isFocused: this.state.form.description.focus,
+              success,
               error: error && error.description && error.description.detail,
             }}
           />
@@ -281,6 +285,7 @@ class EditFormProject extends Component {
               readOnly: project.author._id !== user._id,
               focus: this.handleOnFocus,
               isFocused: this.state.form.dueDate.focus,
+              success,
               error: error && error.dueDate && error.dueDate.detail,
             }}
           />
@@ -293,6 +298,7 @@ class EditFormProject extends Component {
               readOnly: project.author._id !== user._id,
               focus: this.handleOnFocus,
               isFocused: this.state.form.isPrice.focus,
+              success,
               error: error && error.isPrice && error.isPrice.detail,
             }}
           />
@@ -307,6 +313,7 @@ class EditFormProject extends Component {
                 keyPress: this.handleInputChange,
                 readOnly: project.author._id !== user._id,
                 isFocused: this.state.form.price.focus,
+                success,
                 error: error && error.price && error.price.detail,
               }}
             />
@@ -320,6 +327,7 @@ class EditFormProject extends Component {
               readOnly: project.author._id !== user._id,
               focus: this.handleOnFocus,
               isFocused: this.state.form.isContest.focus,
+              success,
               error: error && error.isContest && error.isContest.detail,
             }}
           />
@@ -336,6 +344,7 @@ class EditFormProject extends Component {
                 keyPress: this.handleInputChange,
                 readOnly: project.author._id !== user._id,
                 isFocused: this.state.form.maxTeam.focus,
+                success,
                 error: error && error.maxTeam && error.maxTeam.detail,
               }}
             />
@@ -348,6 +357,7 @@ class EditFormProject extends Component {
               values: this.state.form.tags.value,
               blur: this.handleOnBlur,
               readOnly: project.author._id !== user._id,
+              success,
               error: error && error.tags && error.tags.detail,
               focus: this.handleOnFocus,
               isFocused: this.state.form.tags.focus,
