@@ -65,4 +65,10 @@ export default {
     name: 'diploma',
     defaultOption: 'Select your Diploma',
   },
+  field: {
+    label: 'Diploma\'s field',
+    name: 'field',
+    type: 'text',
+    placeholder: 'Diploma\'s field',
+  },
 };

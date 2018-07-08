@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'moment';
 
 import './profile.css';
 import '../../../../../../node_modules/cropperjs/dist/cropper.css';
@@ -241,6 +242,10 @@ class Profile extends React.Component {
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
               />
+              <ul className="date-since-container">
+                <li><span className="date-since-item">{`Member since: ${Moment(loggedUser.createdAt).format('DD/MM/YYYY')}`}</span></li>
+                <li><span className="date-since-item">{`Last update: ${Moment(loggedUser.updatedAt).format('DD/MM/YYYY')}`}</span></li>
+              </ul>
               <Input
                 config={{
                   field: Model.fullName,
@@ -292,8 +297,6 @@ class Profile extends React.Component {
                   success,
                 }}
               />
-            </div>
-            <div className="form-content">
               <Select
                 config={{
                   field: Model.diploma,
@@ -306,6 +309,21 @@ class Profile extends React.Component {
                   success,
                 }}
               />
+              <Input
+                config={{
+                  field: Model.field,
+                  onChange: this.handleInputChange,
+                  value: this.state.field.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.field && error.field.detail,
+                  success,
+                  editing,
+                }}
+              />
+            </div>
+            <div className="form-content">
               <InputAutoComplete
                 config={{
                   field: Model.tags,

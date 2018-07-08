@@ -36,15 +36,6 @@ class TeamProfile extends React.Component {
     return (
       <div>
         <ul className="ul-nav teams">
-          <li className="teams-new-team">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleShowAddTeamModal}
-            >
-              Create Team
-            </button>
-          </li>
           {teams.map(team => (
             <li
               key={team._id}

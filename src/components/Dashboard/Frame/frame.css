@@ -45,7 +45,8 @@
       border-bottom: 1px solid #0a1c28;
       padding-top: .5rem;
       padding-bottom: .5rem;
-      color: #eee9d1; }
+      color: #eee9d1;
+      border-bottom: 2px solid #0a1c28; }
       .frame .child-app .app-toolbar .btn-app-toolbar {
         margin: 0;
         border: 2px solid transparent;
@@ -55,10 +56,11 @@
         outline: none; }
         .frame .child-app .app-toolbar .btn-app-toolbar:hover {
           border-bottom: 2px solid #0a1c28; }
-      .frame .child-app .app-toolbar ul {
+      .frame .child-app .app-toolbar-list {
         list-style: none;
         display: flex;
         margin: 0;
         padding-left: 1rem; }
-        .frame .child-app .app-toolbar ul li {
-          padding: 0 1rem; }
+        .frame .child-app .app-toolbar-list-item {
+          padding: 0 1rem;
+          position: relative; }

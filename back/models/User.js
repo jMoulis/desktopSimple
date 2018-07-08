@@ -44,9 +44,15 @@ const UserSchema = new Schema({
   company: CompanySchema,
   school: String,
   diploma: String,
+  field: String,
   description: String,
-  createdAt: String,
-  updatedAt: String,
+  createdAt: {
+    type: Date,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
   picture: String,
   tags: Array,
   teams: [{
@@ -75,7 +81,8 @@ const UserSchema = new Schema({
   rooms: Array,
 });
 
-UserSchema.pre('save', function test(next) {
+UserSchema.pre('save', function preSave(next) {
+  this.createdAt = new Date();
   if (!this.available) {
     this.available = true;
   } else {
@@ -84,6 +91,10 @@ UserSchema.pre('save', function test(next) {
   return next();
 });
 
+UserSchema.pre('update', function preUpdate(next) {
+  this.update({}, { $set: { updatedAt: new Date() } });
+  return next();
+});
 const User = mongoose.model('user', UserSchema);
 
 module.exports = User;

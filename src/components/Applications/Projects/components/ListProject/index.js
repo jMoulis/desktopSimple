@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
 
 import './listProject.css';
 import Modal from '../Modal/modal';
@@ -119,17 +118,6 @@ class ListProject extends React.Component {
     }
     return (
       <div className="project-list-container">
-        <ul>
-          <li>
-            <button
-              onClick={this.handleShowNewProjectForm}
-              className="btn btn-primary"
-              disabled={!loggedUser.company}
-              title={!loggedUser.company ? "Please fill in company's informations before posting a new project" : 'New project'}
-            >New Project
-            </button>
-          </li>
-        </ul>
         <ul
           className="project-list"
         >

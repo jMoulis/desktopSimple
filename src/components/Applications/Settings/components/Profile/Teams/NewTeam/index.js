@@ -43,16 +43,6 @@ class NewTeam extends React.Component {
     selectedUsers: {},
     modal: false,
   }
-  componentDidUpdate() {
-    const { teamCreation, closeFromParent } = this.props;
-    const { success } = teamCreation;
-    if (success && success.status) {
-      setTimeout(() => {
-        closeFromParent('createTeamModal');
-      }, 300);
-    }
-    return true;
-  }
   componentWillUnmount() {
     this.props.clearTeamMessageAction();
   }
