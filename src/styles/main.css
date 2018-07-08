@@ -75,3 +75,18 @@ h1 {
 .user-thumbnail {
   display: flex;
   align-items: center; }
+
+.online {
+  padding: .2rem;
+  font-size: 1rem;
+  border-radius: 2px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #eee9d1;
+  font-weight: bold;
+  letter-spacing: .05rem; }
+  .online--red {
+    background-color: #ff6666; }
+  .online--green {
+    background-color: #7fbf7f; }

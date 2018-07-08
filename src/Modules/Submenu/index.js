@@ -6,8 +6,8 @@ import './index.css';
 const SubMenu = ({ menus }) => (
   <div className="sub-menu">
     <ul className="sub-menu-list">
-      {menus.map(menu => (
-        <li className="sub-menu-list-item">
+      {menus.map((menu, index) => (
+        <li key={index} className="sub-menu-list-item">
           <button
             className="sub-menu-list-item-btn"
             name={menu.name}

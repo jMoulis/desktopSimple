@@ -8,7 +8,9 @@ module.exports = {
   async index(req, res) {
     let params = { author: res.locals.user._id };
     if (res.locals.user.typeUser !== 'company') {
-      params = {};
+      params = {
+        isOnline: true,
+      };
     }
     try {
       const projects = await Project.find(params)
@@ -235,7 +237,7 @@ module.exports = {
       .catch(next);
   },
 
-  delete(req, res, next) {
+  async delete(req, res, next) {
     const projectId = req.params.id;
     // Check later if I should delete teams after project deletion
     // Team.find({ project: projectId })
@@ -246,13 +248,11 @@ module.exports = {
     //   })
     //   .catch(error => console.log(error));
     // Team.remove({ project: projectId }).then();
-    Project.findByIdAndRemove({ _id: projectId })
-      .then(() => {
-        res.status(204).send({ message: 'deleted' });
-      })
-      .catch(next);
-    Team.findByIdAndUpdate({ project: projectId }, { $unset: { project: '' } })
-      .then(() => next())
-      .catch(error => next(error));
+    try {
+      await Team.update({ project: projectId }, { $unset: { project: '' } });
+      await Project.findByIdAndRemove({ _id: projectId });
+    } catch (error) {
+      next(error);
+    }
   },
 };

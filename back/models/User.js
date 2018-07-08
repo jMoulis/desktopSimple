@@ -46,6 +46,7 @@ const UserSchema = new Schema({
   diploma: String,
   field: String,
   description: String,
+  jobDescription: String,
   createdAt: {
     type: Date,
   },
@@ -78,11 +79,10 @@ const UserSchema = new Schema({
     ref: 'project',
   }],
   helper: Boolean,
-  rooms: Array,
+  isActive: Boolean,
 });
 
 UserSchema.pre('save', function preSave(next) {
-  this.createdAt = new Date();
   if (!this.available) {
     this.available = true;
   } else {

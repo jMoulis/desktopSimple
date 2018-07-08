@@ -33,7 +33,7 @@
   display: flex;
   justify-content: space-between;
   padding: .5rem;
-  box-shadow: 0 0 5px #0a1c28; }
+  border-bottom: 5px solid #0a1c28; }
 
 .modal-content {
   height: 90%;

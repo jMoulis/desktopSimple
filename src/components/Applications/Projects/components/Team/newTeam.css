@@ -10,8 +10,7 @@
     margin: 0;
     padding: 1rem 0 0 0; }
   .team .content {
-    flex: 1;
-    border-right: 2px solid #0a1c28; }
+    flex: 1; }
     .team .content-newteam {
       border: none;
       flex: 2; }
@@ -24,5 +23,4 @@
   height: 100%;
   flex-wrap: wrap; }
   .new-team-content {
-    border-right: 2px solid #0a1c28;
     padding: .5rem; }

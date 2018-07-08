@@ -2,7 +2,7 @@
 .addfilesinput-thumbnail-wrapper {
   display: flex;
   margin-top: 1rem; }
-  .addfilesinput-thumbnail-wrapper #docs {
+  .addfilesinput-thumbnail-wrapper .inputfile-docs {
     opacity: 0;
     position: absolute;
     width: .1px;

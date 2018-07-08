@@ -69,6 +69,11 @@ module.exports = {
         .populate({
           path: 'project',
           model: 'project',
+          populate: {
+            path: 'author',
+            model: 'user',
+            select: 'fullName picture company',
+          },
         })
         .populate({
           path: 'users.user',
@@ -111,6 +116,11 @@ module.exports = {
       .populate({
         path: 'project',
         model: 'project',
+        populate: {
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        },
       })
       .populate({
         path: 'users.user',
@@ -165,6 +175,11 @@ module.exports = {
         .populate({
           path: 'project',
           model: 'project',
+          populate: {
+            path: 'author',
+            model: 'user',
+            select: 'fullName picture company',
+          },
         })
         .populate({
           path: 'users.user',
@@ -183,10 +198,10 @@ module.exports = {
             $in: [team._id],
           },
         }, {
-            $pull: {
-              teams: team._id,
-            },
-          });
+          $pull: {
+            teams: team._id,
+          },
+        });
       }
       const apiResponse = new ApiResponse(res, { team, success: 'Modify' }, 200);
       return apiResponse.success();

@@ -21,13 +21,13 @@ class DetailUser extends React.Component {
     }
     return (
       <div className="user">
-        <img className="user-picture" src={user.picture} alt="User" />
+        <img className="user-picture" src={`${user.picture || '/img/avatar.png'}`} alt="User" />
         <h1>{user.fullName}</h1>
         <ul className="user-detail-list">
           <li>{user.description}</li>
           <li>{user.email}</li>
           <li>{user.school}</li>
-          <li>{user.diploma}</li>
+          <li>{user.diploma}</li> 
           <li>{user.location}</li>
           <li>
             <ul className="tag-list">

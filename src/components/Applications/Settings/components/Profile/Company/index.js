@@ -250,7 +250,7 @@ class CompanyProfile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${company['company.picture'].value || '/img/avatar.png'}`}
+                src={`${company['company.picture'].value || '/img/company-generic.png'}`}
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}

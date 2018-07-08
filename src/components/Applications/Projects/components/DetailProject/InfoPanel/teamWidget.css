@@ -71,7 +71,7 @@
 .team-widget {
   display: flex;
   margin-top: .5rem;
-  flex-direction: column; }
+  align-items: center; }
   .team-widget-content {
     display: flex;
     flex-direction: column;

@@ -5,7 +5,8 @@
     border: none;
     overflow: auto;
     height: 100%;
-    padding: 1rem; }
+    padding: 1rem;
+    width: auto; }
     #newProject-form .tag-list {
       display: flex;
       list-style: none;
@@ -14,3 +15,5 @@
       #newProject-form .tag-list-item {
         padding: 0 .3rem;
         border: 2px solid #0a1c28; }
+  #newProject .new-project-btn-container button {
+    margin-right: 1rem; }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import './index.css';
@@ -90,6 +90,16 @@ class DetailProject extends React.Component {
       showAlertBox: !prevState.showAlertBox,
     }));
   }
+  handleOnlineMode = () => {
+    const { editProjectAction, activeProjectProcess: { project } } = this.props;
+    editProjectAction({
+      ...this.state.form,
+      isOnline: {
+        value: !project.isOnline,
+        changed: true,
+      },
+    });
+  }
   handleShare = () => {
     console.log('shared');
     // Open a message to send to...
@@ -116,6 +126,7 @@ class DetailProject extends React.Component {
         <ul className="project-toolbar">
           <li>
             {project.author._id === user._id &&
+            <Fragment>
               <button
                 name="detailProjectModal"
                 type="button"
@@ -123,6 +134,14 @@ class DetailProject extends React.Component {
                 onClick={this.handleShowAlertBox}
               >Delete
               </button>
+              <button
+                name="isOnline"
+                type="button"
+                className={`btn btn-${project.isOnline ? 'danger' : 'success'}`}
+                onClick={this.handleOnlineMode}
+              >{project.isOnline ? 'Offline' : 'Online'}
+              </button>
+            </Fragment>
             }
           </li>
         </ul>

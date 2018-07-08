@@ -31,8 +31,8 @@ class ViewerToolbar extends React.Component {
   render() {
     const { closeViewerAction, pdf } = this.props;
     return (
-      <ul className="btn-container">
-        <li>
+      <ul className="viewer-toolbar btn-container">
+        <li className="viewer-toolbar-list-item">
           <button
             className="viewer-toolbar-item"
             id="plus"

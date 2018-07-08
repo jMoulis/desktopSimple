@@ -9,8 +9,14 @@ const ListProjectItem = ({ project, showDetailModal }) => {
     <li
       className="project-list-item"
     >
+      <span
+        className={`online ${project.isOnline ? 'online--green' : 'online--red'}`}
+        title={project.isOnline ? 'online' : 'offline'}
+      >
+        {project.isOnline ? 'online' : 'offline'}
+      </span>
       <div className="company">
-        <img className="company-logo" src={project.author.company.picture || '/img/anonymous.png'} alt="logo company" />
+        <img className="company-logo" src={project.author.company.picture || '/img/company-generic.png'} alt="logo company" />
         <div className="company-info">
           <p className="company-info-name">{project.author.company.companyName}</p>
           <div className="company-author">
@@ -25,9 +31,21 @@ const ListProjectItem = ({ project, showDetailModal }) => {
       <div className="content">
         <h2>{project.title}</h2>
         <ul>
-          <li><p><span className="title">Due Date:</span> {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}</p></li>
-          <li><p><span className="title">Teams registered:</span> {project.teams.length > 0 ? project.teams.length : <span>No Teams yet</span>}</p></li>
-          <li><p><span className="title">Description:</span> {project.description}</p></li>
+          <li>
+            <p>
+              <span className="title">Due Date:</span> {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}
+            </p>
+          </li>
+          <li>
+            <p>
+              <span className="title">Teams registered:</span> {project.teams.length > 0 ? project.teams.length : <span>No Teams yet</span>}
+            </p>
+          </li>
+          <li>
+            <p>
+              <span className="title">Description:</span> {project.description}
+            </p>
+          </li>
           <li>
             <ul className="tags-list">
               {project.tags.map((tag, index) => <li className="tags-list-item" key={index}>{tag}</li>)}

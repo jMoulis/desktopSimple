@@ -58,7 +58,8 @@
   font-size: 1rem;
   border: 2px solid #eee9d1;
   color: #eee9d1;
-  transition: all 500ms; }
+  transition: all 500ms;
+  margin-right: .5rem; }
   .btn-neutral {
     background-color: transparent;
     border: 2px solid transparent; }
@@ -99,6 +100,20 @@
       background-color: #41848f;
       border: 2px solid #0a1c28;
       color: #0a1c28; }
+  .btn-secondary {
+    background-color: #666666;
+    color: #eee9d1; }
+    .btn-secondary:hover {
+      background-color: #eee9d1;
+      border: 2px solid #666666;
+      color: #666666; }
+    .btn-secondary:active {
+      background-color: #666666;
+      border: 2px solid #cccccc;
+      color: #0a1c28; }
+    .btn-secondary:focus {
+      background-color: #666666;
+      color: #eee9d1; }
   .btn-disabled {
     opacity: 0.6;
     cursor: not-allowed; }

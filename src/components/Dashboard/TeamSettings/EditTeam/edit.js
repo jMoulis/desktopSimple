@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import './editTeam.css';
 import Modal from '../../../../Modules/Modal/modal';
-import UsersLoader from '../../../../containers/Dashboard/TeamSettings/usersLoader';
+import UsersLoader from '../../../../Modules/UserLoader';
 import Input from '../../../Form/input';
-import RessourceItem from './ressourceItem';
+import RessourceItem from '../../../../Modules/RessourceItem';
 import Model from './team-model';
 import Button from '../../../Form/button';
 import AlertBox from '../../../../Modules/AlertBox';
@@ -264,122 +264,117 @@ class EditTeam extends React.Component {
       specAlreadySelected,
     } = this.state;
     const { activeTeamProcess } = this.props;
-    const { error, success } = activeTeamProcess;
+    const { error } = activeTeamProcess;
     return (
       <div id="new-team">
-        <div>
-          {success && success.status ?
-            <span>Team Edited</span> :
-            <form
-              onSubmit={this.handleSubmit}
-              noValidate="true"
-              onKeyPress={this.handleFormKeyPress}
-              className="form"
-              name="detailProjectModal"
-            >
-              <div className="form-content-wrapper">
-                <div className="form-content">
-                  <Input
-                    config={{
-                      field: {
-                        type: 'text',
-                        name: 'name',
-                        id: 'name',
-                        label: 'Team\'s name',
-                      },
-                      error: error && error.name && error.name.detail,
-                      value: this.state.name.value,
-                      onChange: this.handleInputChange,
-                      blur: this.handleOnBlur,
-                    }}
-                  />
-                  <div name="ressources">
-                    <Input
+        <form
+          onSubmit={this.handleSubmit}
+          noValidate="true"
+          onKeyPress={this.handleFormKeyPress}
+          className="form"
+          name="detailProjectModal"
+        >
+          <div className="form-content-wrapper">
+            <div className="form-content">
+              <Input
+                config={{
+                  field: {
+                    type: 'text',
+                    name: 'name',
+                    id: 'name',
+                    label: 'Team\'s name',
+                  },
+                  error: error && error.name && error.name.detail,
+                  value: this.state.name.value,
+                  onChange: this.handleInputChange,
+                  blur: this.handleOnBlur,
+                }}
+              />
+              <div name="ressources">
+                <Input
+                  config={{
+                    field: {
+                      type: 'text',
+                      name: 'ressources',
+                      id: 'ressources',
+                      label: 'Ressources',
+                      placeholder: 'Marketing, Php, Finance...',
+                    },
+                    error: error && error.ressources && error.ressources.detail,
+                    small: 'ProTips: Type the competence you search an press \'enter\'. One at a time',
+                    value: this.state.ressources.value,
+                    onChange: this.handleInputChange,
+                    keyPress: this.handleSelectedTags,
+                  }}
+                />
+                <ul className="ul-nav ressource">
+                  {selectedTags.length <= 0 &&
+                    <li>
+                      <div className="ressource-item">
+                        <div className="ressource-item-temp" />
+                      </div>
+                    </li>}
+                  {selectedTags.map(({ value, selected }, index) => (
+                    <RessourceItem
+                      key={index}
                       config={{
-                        field: {
-                          type: 'text',
-                          name: 'ressources',
-                          id: 'ressources',
-                          label: 'Ressources',
-                          placeholder: 'Marketing, Php, Finance...',
-                        },
-                        error: error && error.ressources && error.ressources.detail,
-                        small: 'ProTips: Type the competence you search an press \'enter\'. One at a time',
-                        value: this.state.ressources.value,
-                        onChange: this.handleInputChange,
-                        keyPress: this.handleSelectedTags,
+                        value,
+                        selected,
+                        index,
+                        counters,
+                        selectedUsers,
+                        specAlreadySelected: specAlreadySelected && specAlreadySelected,
+                        onClick: this.handleSearch,
+                        remove: this.handleRemove,
                       }}
                     />
-                    <ul className="ul-nav ressource">
-                      {selectedTags.length <= 0 &&
-                        <li>
-                          <div className="ressource-item">
-                            <div className="ressource-item-temp" />
-                          </div>
-                        </li>}
-                      {selectedTags.map(({ value, selected }, index) => (
-                        <RessourceItem
-                          key={index}
-                          config={{
-                            value,
-                            selected,
-                            index,
-                            counters,
-                            selectedUsers,
-                            specAlreadySelected: specAlreadySelected && specAlreadySelected,
-                            onClick: this.handleSearch,
-                            remove: this.handleRemove,
-                          }}
-                        />
-                      ))}
-                    </ul>
-                  </div>
-                  <Button
-                    onClick={this.handleShowAlertBox}
-                    category="danger"
-                    style={{ width: '100%', marginTop: '.5rem' }}
-                    type="button"
-                  >Delete
-                  </Button>
-                </div>
+                  ))}
+                </ul>
               </div>
-            </form>
-          }
-          {this.state.modal &&
-            <Modal
-              zIndex={6000}
-              title="Pick your expert"
-              name="close"
-              closeFromParent={this.handleClose}
-            >
-              <UsersLoader
-                filter={this.state.filter}
-                select={this.handleSelectUser}
-              />
-            </Modal>
-          }
-          {this.state.alertBox &&
-            <AlertBox
-              title="Deleting Team"
-              message="WatchOut you are on your way to delete a team"
-              buttons={[
-                {
-                  type: 'danger',
-                  action: this.hanldeDeleteTeam,
-                  label: 'Yeap',
-                  category: 'danger',
-                },
-                {
-                  type: 'success',
-                  action: this.handleShowAlertBox,
-                  label: 'Nope',
-                  category: 'success',
-                },
-              ]}
-              type="danger"
+              <Button
+                onClick={this.handleShowAlertBox}
+                category="danger"
+                style={{ width: '100%', marginTop: '.5rem' }}
+                type="button"
+              >Delete
+              </Button>
+            </div>
+          </div>
+        </form>
+        {this.state.modal &&
+          <Modal
+            zIndex={6000}
+            title="Pick your expert"
+            name="close"
+            closeFromParent={this.handleClose}
+          >
+            <UsersLoader
+              filter={this.state.filter}
+              select={this.handleSelectUser}
             />
-          }
-        </div>
+          </Modal>
+        }
+        {this.state.alertBox &&
+          <AlertBox
+            title="Deleting Team"
+            message="WatchOut you are on your way to delete a team"
+            buttons={[
+              {
+                type: 'danger',
+                action: this.hanldeDeleteTeam,
+                label: 'Yeap',
+                category: 'danger',
+              },
+              {
+                type: 'success',
+                action: this.handleShowAlertBox,
+                label: 'Nope',
+                category: 'success',
+              },
+            ]}
+            type="danger"
+          />
+        }
       </div>
     );
   }

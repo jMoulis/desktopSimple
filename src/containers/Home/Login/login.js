@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * Local import
  */
 import Login from '../../../components/Home/Login/login';
-import { loginAction } from '../../../store/reducers/authReducer';
+import { loginAction, clearMessageAction } from '../../../store/reducers/authReducer';
 
 /*
  * Code
@@ -22,6 +22,9 @@ const mapStateToProps = ({ authReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   loginAction: (formData) => {
     dispatch(loginAction(formData));
+  },
+  clearMessageAction: () => {
+    dispatch(clearMessageAction());
   },
 });
 

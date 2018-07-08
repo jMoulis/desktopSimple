@@ -28,7 +28,6 @@ const ProjectSchema = new Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
   },
   author: {
     type: Schema.Types.ObjectId,
@@ -39,20 +38,26 @@ const ProjectSchema = new Schema({
     ref: 'team',
   }],
   docs: Array,
-  status: String,
-  draft: Boolean,
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
   subscribers: [{
     type: Schema.Types.ObjectId,
     ref: 'user',
   }],
 });
 
-ProjectSchema.pre('save', function test(next) {
+ProjectSchema.pre('save', function preSave(next) {
   if (!this.maxTeam) {
     this.maxTeam = 1;
   } else {
     next();
   }
+  return next();
+});
+ProjectSchema.pre('update', function preSave(next) {
+  this.update({}, { $set: { updatedAt: new Date() } });
   return next();
 });
 const Project = mongoose.model('project', ProjectSchema);

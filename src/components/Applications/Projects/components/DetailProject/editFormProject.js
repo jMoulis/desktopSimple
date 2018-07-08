@@ -236,7 +236,7 @@ class EditFormProject extends Component {
       >
         <div className="form-content">
           <div className="company">
-            <img className="company-logo" src={author.company.picture || '/img/anonymous.png'} alt="logo company" />
+            <img className="company-logo" src={author.company.picture || '/img/company-generic.png'} alt="logo company" />
             <div className="company-info">
               <p className="company-info-name">{author.company.companyName}</p>
               <div className="company-author">
@@ -364,14 +364,14 @@ class EditFormProject extends Component {
               remove: this.handleRemove,
             }}
           />
-          {this.state.form.docs.length > 0 ?
-            <AddFilesInput
-              error={error && error.docs && error.docs.detail}
-              docs={this.state.form.docs.value}
-              onFileChange={this.handleInputFileChange}
-              blur={this.handleOnBlur}
-              readOnly={project.author._id !== user._id}
-            /> :
+          <AddFilesInput
+            error={error && error.docs && error.docs.detail}
+            docs={this.state.form.docs.value}
+            onFileChange={this.handleInputFileChange}
+            blur={this.handleOnBlur}
+            readOnly={author._id !== user._id}
+          />
+          {this.state.form.docs.value.length === 0 &&
             <h2>No Documents available</h2>
           }
         </div>

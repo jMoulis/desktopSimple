@@ -19,14 +19,16 @@ const Button = ({
   onClick,
   style,
   title,
+  ...rest
 }) => (
   <button
     type={type}
     disabled={disabled && true}
     style={style && style}
-    className={`btn ${disabled ? 'btn-disabled' : ''} btn-${category} ${size ? `btn-${size}` : ''}`}
+    className={`btn${disabled ? ' btn-disabled' : ''} btn-${category} ${size ? `btn-${size}` : ''}`}
     onClick={onClick}
     title={title}
+    {...rest}
   >
     {children}
     {loading ? <i className="fas fa-spinner" /> : label}

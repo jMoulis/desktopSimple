@@ -38,6 +38,12 @@ class Settings extends React.Component {
     }));
   }
 
+  handleSuccessCreation = (tabName) => {
+    this.setState(prevState => ({
+      ...prevState,
+      tab: tabName,
+    }));
+  }
   handleTabSelect = (evt) => {
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -131,7 +137,7 @@ class Settings extends React.Component {
             globalActions={globalActions}
           />}
         {this.state.tab === 'newTeam' &&
-          <NewTeamContainer loggedUser={loggedUser} />
+          <NewTeamContainer loggedUser={loggedUser} onSuccess={this.handleSuccessCreation} tabName="teams" />
         }
         {this.state.tab === 'company' &&
           <CompanyProfile

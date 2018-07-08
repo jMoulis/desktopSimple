@@ -16,6 +16,12 @@ class NewProject extends React.Component {
     projectCreation: PropTypes.object.isRequired,
     createProjectAction: PropTypes.func.isRequired,
     clearProjectMessageAction: PropTypes.func.isRequired,
+    tabName: PropTypes.string,
+    onSuccess: PropTypes.func,
+  }
+  static defaultProps = {
+    tabName: '',
+    onSuccess: null,
   }
   constructor(props) {
     super(props);
@@ -31,14 +37,27 @@ class NewProject extends React.Component {
       isPrice: false,
     };
   }
+  componentDidUpdate() {
+    const { projectCreation: { error, loading }, onSuccess, tabName } = this.props;
+    if (!error && !loading && onSuccess) {
+      return onSuccess(tabName);
+    }
+    return true;
+  }
   componentWillUnmount() {
     const { clearProjectMessageAction } = this.props;
     clearProjectMessageAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
+    const { type } = evt.target.dataset;
     const { createProjectAction } = this.props;
-    return createProjectAction(this.state);
+    if (type === 'draft') {
+      createProjectAction({ ...this.state, isOnline: { value: false, changed: true } });
+    }
+    else {
+      createProjectAction({ ...this.state, isOnline: { value: true, changed: true } });
+    }
   }
   handleFormKeyPress = (evt) => {
     if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
@@ -151,17 +170,14 @@ class NewProject extends React.Component {
     }
   }
   render() {
-    const { projectCreation } = this.props;
-    const { error, success } = projectCreation;
+    const { projectCreation: { error }, onSuccess, tabName } = this.props;
 
     return (
       <div id="newProject" className="form-container" key="app-content" >
-        {success && <p className="success">{success.message}</p>}
         <form
           id="newProject-form"
           className="form"
           onKeyPress={this.handleFormKeyPress}
-          onSubmit={this.handleSubmit}
           noValidate="true"
         >
           <Input
@@ -266,8 +282,34 @@ class NewProject extends React.Component {
             error={error && error.docs && error.docs.detail}
             docs={this.state.docs}
             onFileChange={this.handleInputFileChange}
+            id="newProject"
           />
-          <Button type="submit" label="Create" loading={false} />
+          <div className="new-project-btn-container">
+            <Button
+              type="button"
+              category="secondary"
+              onClick={() => {
+                onSuccess(tabName);
+              }}
+              label="Cancel"
+              loading={false}
+            />
+            <Button
+              type="submit"
+              category="primary"
+              onClick={this.handleSubmit}
+              data-type="draft"
+              label="Draft"
+              loading={false}
+            />
+            <Button
+              type="submit"
+              category="success"
+              onClick={this.handleSubmit}
+              label="Publish"
+              loading={false}
+            />
+          </div>
         </form>
       </div>
     );

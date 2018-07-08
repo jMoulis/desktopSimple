@@ -12,14 +12,13 @@ class NewTeam extends React.Component {
   static propTypes = {
     fetchUsersCountAction: PropTypes.func.isRequired,
     createTeamAction: PropTypes.func.isRequired,
-    closeFromParent: PropTypes.func,
     teamCreation: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     clearTeamMessageAction: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func.isRequired,
+    tabName: PropTypes.string.isRequired,
   }
-  static defaultProps = {
-    closeFromParent: null,
-  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const { usersCount } = nextProps;
     if (usersCount.count) {
@@ -87,7 +86,7 @@ class NewTeam extends React.Component {
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { createTeamAction, loggedUser } = this.props;
+    const { createTeamAction, loggedUser, onSuccess, tabName } = this.props;
     const users = Object.entries(this.state.selectedUsers).map((value) => {
       let selectedUser = {};
       selectedUser = { ...selectedUser, spec: value[0], user: { _id: value[1]._id } };
@@ -99,7 +98,7 @@ class NewTeam extends React.Component {
       manager: { manager: loggedUser },
     };
     createTeamAction(values);
-    // closeFromParent();
+    onSuccess(tabName);
   }
   handleSearch = (evt) => {
     const { filter } = evt.target.dataset;

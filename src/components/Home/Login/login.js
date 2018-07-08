@@ -9,6 +9,7 @@ import Model from '../../../data/models/login-model';
 class Login extends React.Component {
   static propTypes = {
     loginAction: PropTypes.func.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
     loginProcess: PropTypes.object.isRequired,
   }
   constructor(props) {
@@ -26,6 +27,10 @@ class Login extends React.Component {
       return field;
     });
     this.state = field;
+  }
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();
@@ -52,7 +57,7 @@ class Login extends React.Component {
   }
   render() {
     const { loginProcess } = this.props;
-    const { error } = loginProcess;
+    const { error, logging } = loginProcess;
     return (
       <div id="signin-form" className="form-container">
         <form
@@ -64,7 +69,7 @@ class Login extends React.Component {
             <h1>Sign In</h1>
           </div>
           <div className="form-content">
-            {error && <div className="error-login">{error.login.detail}</div>}
+            {error && <div className="error-message">{error.login.detail}</div>}
             <Input
               config={{
                 field: Model.email,
@@ -80,7 +85,7 @@ class Login extends React.Component {
               }}
             />
             <div className="form-group">
-              {<Button type="submit" category="primary" label="Sign In" />}
+              {<Button type="submit" category="primary" loading={logging} label="Sign In" />}
             </div>
           </div>
         </form>

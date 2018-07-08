@@ -243,8 +243,16 @@ class Profile extends React.Component {
                 onKeyPress={this.handleShowCropImageModal}
               />
               <ul className="date-since-container">
-                <li><span className="date-since-item">{`Member since: ${Moment(loggedUser.createdAt).format('DD/MM/YYYY')}`}</span></li>
-                <li><span className="date-since-item">{`Last update: ${Moment(loggedUser.updatedAt).format('DD/MM/YYYY')}`}</span></li>
+                <li>
+                  <span className="date-since-item">
+                    {`Member since: ${Moment(loggedUser.createdAt).format('DD/MM/YYYY')}`}
+                  </span>
+                </li>
+                <li>
+                  <span className="date-since-item">
+                    {`Last update: ${Moment(loggedUser.updatedAt).format('DD/MM/YYYY')}`}
+                  </span>
+                </li>
               </ul>
               <Input
                 config={{
@@ -272,6 +280,21 @@ class Profile extends React.Component {
                   editing,
                 }}
               />
+              {loggedUser.typeUser === 'company' &&
+                <Input
+                  config={{
+                    field: Model.jobDescription,
+                    onChange: this.handleInputChange,
+                    value: this.state.jobDescription.value,
+                    type: 'text',
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    error: error && error.jobDescription && error.jobDescription.detail,
+                    success,
+                    editing,
+                  }}
+                />
+              }
               <Input
                 config={{
                   field: Model.location,

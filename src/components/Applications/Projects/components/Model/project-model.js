@@ -66,4 +66,9 @@ export default {
     placeholder: null,
     isArray: true,
   },
+  isOnline: {
+    type: 'text',
+    label: null,
+    name: 'isOnline',
+  },
 };

@@ -11,6 +11,7 @@ import Input from '../../Form/input';
 class Signup extends React.Component {
   static propTypes = {
     createUserAction: PropTypes.func.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
     createUserProcess: PropTypes.object.isRequired,
   };
   constructor(props) {
@@ -23,6 +24,10 @@ class Signup extends React.Component {
     this.state = {
       ...field,
     };
+  }
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
   }
   handleSubmit = (evt) => {
     evt.preventDefault();

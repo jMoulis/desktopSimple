@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import './newTeam.css';
 import Modal from '../Modal/modal';
-import UsersLoader from '../../containers/Team/usersLoader';
+import UsersLoader from '../../../../../Modules/UserLoader';
 import Input from '../../../../Form/input';
-import RessourceItem from './ressourceItem';
+import RessourceItem from '../../../../../Modules/RessourceItem';
 import Subscribers from '../../containers/Team/subscribers';
 import Button from '../../../../Form/button';
 

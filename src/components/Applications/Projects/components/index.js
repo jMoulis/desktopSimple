@@ -18,6 +18,12 @@ class Projects extends React.Component {
     const { fetchProjectsAction } = this.props;
     fetchProjectsAction();
   }
+  handleSuccessCreation = (tabName) => {
+    this.setState(prevState => ({
+      ...prevState,
+      tab: tabName,
+    }));
+  }
   handleTabSelect = (evt) => {
     const { dataset } = evt.currentTarget;
     let dataSetToState = {};
@@ -34,8 +40,8 @@ class Projects extends React.Component {
     return (
       <div className="project-container">
         <div className="app-toolbar" key="app-toolbar">
-          <ul>
-            <li>
+          <ul className="app-toolbar-list">
+            <li className="app-toolbar-list-item">
               <button
                 className="btn-app-toolbar unselectable"
                 name="projects"
@@ -68,6 +74,8 @@ class Projects extends React.Component {
         {this.state.tab === 'create-project' &&
           <NewProject
             loggedUser={loggedUser}
+            onSuccess={this.handleSuccessCreation}
+            tabName="projects"
           />
         }
       </div>

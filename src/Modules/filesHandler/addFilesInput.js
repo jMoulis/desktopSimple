@@ -40,6 +40,7 @@ class AddFilesInput extends React.Component {
   }
 
   handleInputFileChange = (evt) => {
+    console.log('click')
     this.readUrl(evt.target);
   }
   readUrl = (input) => {
@@ -62,6 +63,11 @@ class AddFilesInput extends React.Component {
         }));
       };
       reader.readAsDataURL(input.files[0]);
+    }
+    else if (input.files.length === 0) {
+      this.setState(prevState => ({
+        ...prevState,
+      }));
     }
     else {
       this.setState(prevState => ({
@@ -163,12 +169,13 @@ class AddFilesInput extends React.Component {
     const {
       error,
     } = this.state;
+    const { id } = this.props;
     return ([
       <div key="docs" className="addfilesinput form-group">
         <label>Documents</label>
         <div className="addfilesinput-thumbnail-wrapper">
           {!this.props.readOnly && [
-            <label key="label-docs" htmlFor="docs">
+            <label key="label-docs" htmlFor={`docs--${id}`}>
               <div className={`add-thumbnail ${this.state.isFocused ? 'add-thumbnail--focused' : ''}`}>
                 <i className="fas fa-plus-circle fa-3x" />
               </div>
@@ -177,7 +184,8 @@ class AddFilesInput extends React.Component {
               key="input-docs"
               type="file"
               name="docs"
-              id="docs"
+              className="inputfile-docs"
+              id={`docs--${id}`}
               accept=".pdf"
               onChange={this.handleInputFileChange}
               onFocus={this.handleOnFocus}

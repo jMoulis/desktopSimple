@@ -9,3 +9,5 @@
 
 #new-team {
   display: flex; }
+  #new-team form {
+    overflow-x: hidden; }

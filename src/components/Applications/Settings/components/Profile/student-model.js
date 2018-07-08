@@ -71,4 +71,10 @@ export default {
     type: 'text',
     placeholder: 'Diploma\'s field',
   },
+  jobDescription: {
+    label: 'Job Description',
+    type: 'text',
+    name: 'jobDescription',
+    placeholder: 'Job description',
+  },
 };

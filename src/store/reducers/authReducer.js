@@ -265,6 +265,14 @@ const reducer = (state = initialState, action = {}) => {
           error: null,
           success: null,
         },
+        loginProcess: {
+          ...state.loginProcess,
+          error: null,
+        },
+        createUserProcess: {
+          creating: false,
+          error: null,
+        },
       };
     }
     default:

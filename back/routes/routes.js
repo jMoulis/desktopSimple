@@ -5,6 +5,7 @@ const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const upload = require('../service/formData');
+const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 
 module.exports = (app) => {
   app.post('/api/login', AuthController.login);
@@ -16,7 +17,7 @@ module.exports = (app) => {
   app.get('/api/users', VerifyToken, UsersController.index);
   app.get('/api/users/:id', VerifyToken, UsersController.show);
 
-  app.post('/api/projects', VerifyToken, ProjectsController.create);
+  app.post('/api/projects', VerifyToken, CompanyIsAllowedToPost, ProjectsController.create);
   app.put('/api/projects/:id', VerifyToken, ProjectsController.edit);
   app.delete('/api/projects/:id', VerifyToken, ProjectsController.delete);
   app.get('/api/projects', VerifyToken, ProjectsController.index);
