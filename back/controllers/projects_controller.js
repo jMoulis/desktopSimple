@@ -19,7 +19,22 @@ module.exports = {
       };
     }
     try {
-      const projects = await Project.find(params)
+      // I want to filter also by company name
+      // Find all company that text match company name
+      // First search $text in 
+      // const users = await User.find({
+      //   $text: {
+      //     $search: req.query.search, $caseSensitive: false,
+      //   },
+      // });
+      // const usersIds = [];
+      // if (users) {
+      //   await users.forEach((user) => {
+      //     usersIds.push(user._id);
+      //   });
+      // }
+      const projects = await Project.find({ ...params })
+        .sort(req.query.sorting ? { createdAt: req.query.sorting } : { createdAt: 1 })
         .populate({
           path: 'teams',
           select: 'name',
@@ -62,6 +77,7 @@ module.exports = {
       }, 200);
       return apiResponse.success();
     } catch (error) {
+      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }

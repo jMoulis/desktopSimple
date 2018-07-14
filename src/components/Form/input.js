@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import classNames from 'classnames';
 import SuccessIcon from '../../assets/successIcon/successIcon';
 import './input.css';
 
 const Input = ({ config }) => {
   return (
-    <div className={`form-group ${config.field.required ? 'required' : ''}`}>
+    <div className={classNames(`form-group ${config.field.required ? 'required' : ''}`, config.parentClassName)}>
       {config.field.label && <label htmlFor={config.field.name}>{config.field.label}</label>}
       <input
         type={config.field.type}
@@ -15,7 +15,7 @@ const Input = ({ config }) => {
         value={config.value || ''}
         placeholder={config.field.placeholder ? config.field.placeholder : config.field.label}
         onChange={config.onChange}
-        className={`form-control ${config.error && 'form-control-error'}`}
+        className={classNames(`form-control ${config.error ? 'form-control-error' : ''}`, config.className)}
         onBlur={config.blur}
         onFocus={config.focus}
         onKeyUp={config.keyUp}
@@ -37,8 +37,10 @@ Input.propTypes = {
       PropTypes.string,
       PropTypes.number,
     ]),
+    className: PropTypes.string,
     onChange: PropTypes.func.isRequired,
   }).isRequired,
 };
+
 
 export default Input;

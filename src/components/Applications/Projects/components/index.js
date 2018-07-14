@@ -29,7 +29,7 @@ class Projects extends React.Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
     const { fetchProjectsAction } = this.props;
-    fetchProjectsAction({ filter: this.state.search });
+    fetchProjectsAction({ search: this.state.search });
   }
   handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -49,11 +49,25 @@ class Projects extends React.Component {
       ...dataSetToState,
     }));
   }
+  handleSorting = () => {
+    const { fetchProjectsAction } = this.props;
+    let sorting = -1;
+    if (this.state.sorting === 1) {
+      sorting = -1;
+    }
+    else {
+      sorting = 1;
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      sorting,
+    }), () => fetchProjectsAction({ search: this.state.search, sorting: this.state.sorting }));
+  }
   render() {
     const { globalActions, globalProps, loggedUser } = this.props;
     return (
       <div className="project-container">
-        <div className="app-toolbar" key="app-toolbar">
+        <div className="app-toolbar d-flex flex-justify-between" key="app-toolbar">
           <ul className="app-toolbar-list">
             <li className="app-toolbar-list-item">
               <button
@@ -65,7 +79,7 @@ class Projects extends React.Component {
               Projects
               </button>
             </li>
-            <li>
+            <li className="app-toolbar-list-item">
               <button
                 className="btn-app-toolbar unselectable"
                 name="create-project"
@@ -75,22 +89,28 @@ class Projects extends React.Component {
               New Project
               </button>
             </li>
-            <li>
-              <form onSubmit={this.handleSubmit}>
-                <Input
-                  config={{
-                    field: {
-                      type: 'text',
-                      name: 'search',
-                      placeholder: 'Filter',
-                    },
-                    onChange: this.handleInputChange,
-                    value: this.state.search,
-                  }}
-                />
-              </form>
-            </li>
           </ul>
+          <div className="d-flex">
+            <form onSubmit={this.handleSubmit} className="project-container-form">
+              <Input
+                config={{
+                  field: {
+                    type: 'text',
+                    name: 'search',
+                    placeholder: 'Search',
+                  },
+                  onChange: this.handleInputChange,
+                  value: this.state.search,
+                  className: 'project-input-search',
+                  parentClassName: 'project-input-search-container',
+                }}
+              />
+              <i className="fas fa-search project-input-search-icon" />
+            </form>
+            <button onClick={this.handleSorting} type="button">
+                Asc/desc
+            </button>
+          </div>
         </div>
         {this.state.tab === 'projects' &&
           <ListProject

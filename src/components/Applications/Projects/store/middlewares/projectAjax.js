@@ -93,9 +93,18 @@ export default store => next => (action) => {
       break;
     }
     case FETCH_PROJECTS: {
+      let query = null;
+      if (action.payload) {
+        if (action.payload.search) {
+          query = `search=${action.payload.search}`;
+        }
+        if (action.payload.sorting) {
+          query = `${query ? `${query}&` : ''}sorting=${action.payload.sorting}`;
+        }
+      }
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects${action.payload && action.payload.filter ? `?search=${action.payload.filter}` : ''}`,
+        url: `${ROOT_URL}/api/projects${query ? `?${query}` : ''}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
