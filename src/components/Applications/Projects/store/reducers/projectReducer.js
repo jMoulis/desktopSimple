@@ -278,9 +278,9 @@ export const fetchSingleProjectFailureAction = error => ({
   type: FETCH_SINGLE_PROJECT_FAILURE,
   payload: error,
 });
-export const fetchProjectsAction = id => ({
+export const fetchProjectsAction = filter => ({
   type: FETCH_PROJECTS,
-  id,
+  payload: filter,
 });
 export const fetchProjectsSuccessAction = data => ({
   type: FETCH_PROJECTS_SUCCESS,

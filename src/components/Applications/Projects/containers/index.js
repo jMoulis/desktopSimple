@@ -21,8 +21,8 @@ const mapStateToProps = ({ authReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchProjectsAction: (values) => {
-    dispatch(fetchProjectsAction(values));
+  fetchProjectsAction: (filter) => {
+    dispatch(fetchProjectsAction(filter));
   },
   fetchTeamsAction: () => {
     dispatch(fetchTeamsAction());

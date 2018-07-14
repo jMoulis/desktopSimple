@@ -58,12 +58,14 @@ export default {
   school: {
     label: 'Your school',
     name: 'school',
-    defaultOption: 'Select your School',
+    type: 'text',
+    placeholder: 'Your school',
   },
   diploma: {
     label: 'Your Diploma',
     name: 'diploma',
-    defaultOption: 'Select your Diploma',
+    type: 'text',
+    placeholder: 'Your diploma',
   },
   field: {
     label: 'Diploma\'s field',

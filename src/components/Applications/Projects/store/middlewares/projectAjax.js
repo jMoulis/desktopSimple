@@ -95,7 +95,7 @@ export default store => next => (action) => {
     case FETCH_PROJECTS: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects`,
+        url: `${ROOT_URL}/api/projects${action.payload && action.payload.filter ? `?search=${action.payload.filter}` : ''}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

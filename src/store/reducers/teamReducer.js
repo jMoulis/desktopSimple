@@ -206,6 +206,12 @@ const reducer = (state = initialState, action = {}) => {
           loading: false,
           error: null,
         },
+        teamListProcess: {
+          teams: action.payload.teams,
+          success: action.payload.success,
+          loading: false,
+          error: null,
+        },
       };
     }
     case GLOBAL_DELETE_TEAM_FAILURE: {

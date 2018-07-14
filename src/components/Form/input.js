@@ -7,7 +7,7 @@ import './input.css';
 const Input = ({ config }) => {
   return (
     <div className={`form-group ${config.field.required ? 'required' : ''}`}>
-      <label htmlFor={config.field.name}>{config.field.label}</label>
+      {config.field.label && <label htmlFor={config.field.name}>{config.field.label}</label>}
       <input
         type={config.field.type}
         name={config.field.name}

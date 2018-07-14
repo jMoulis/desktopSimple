@@ -12,6 +12,12 @@ module.exports = {
         isOnline: true,
       };
     }
+    if (req.query.search) {
+      params = {
+        ...params,
+        $text: { $search: req.query.search, $caseSensitive: false },
+      };
+    }
     try {
       const projects = await Project.find(params)
         .populate({

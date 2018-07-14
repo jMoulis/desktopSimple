@@ -33,4 +33,6 @@ module.exports = (app) => {
   app.put('/api/messages/:id', VerifyToken, MessageController.edit);
   app.delete('/api/messages/:id', VerifyToken, MessageController.delete);
   app.get('/api/messages', VerifyToken, MessageController.index);
+
+  // app.get('/api/metas', UsersController.metas);
 };

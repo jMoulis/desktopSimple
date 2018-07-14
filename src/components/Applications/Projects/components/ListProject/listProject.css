@@ -51,18 +51,6 @@
         font-weight: bold;
         font-size: 1.2rem;
         margin-bottom: 1rem; }
-      .project-list-container .project-list-item .tags-list {
-        display: flex;
-        flex-wrap: wrap; }
-        .project-list-container .project-list-item .tags-list-item {
-          border: 2px solid #eee9d1;
-          padding: .2rem .5rem;
-          background-color: #008e8b;
-          color: #eee9d1;
-          font-weight: bold;
-          cursor: pointer;
-          outline: none;
-          margin-right: .5rem; }
 
 .notFound {
   display: flex;

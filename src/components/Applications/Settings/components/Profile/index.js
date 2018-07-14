@@ -13,6 +13,7 @@ import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
+import InputSearch from '../../../../Form/inputSearch';
 
 class Profile extends React.Component {
   static propTypes = {
@@ -222,6 +223,27 @@ class Profile extends React.Component {
       }));
     }
   }
+  handleInputSearch = (inputValue, inputName) => {
+    console.log(inputValue)
+    const { editUserAction, loggedUser, clearMessageAction } = this.props;
+    this.setState(prevState => ({
+      ...prevState,
+      [inputName]: inputValue,
+    }), () => {
+      if (this.state[inputName].changed) {
+        editUserAction(loggedUser._id, this.state);
+        clearMessageAction();
+        this.setState(prevState => ({
+          ...prevState,
+          [inputName]: {
+            ...prevState[inputName],
+            focus: false,
+            changed: false,
+          },
+        }));
+      }
+    });
+  }
   render() {
     const { editUser, editUserAction, loggedUser } = this.props;
     const { error, success, editing } = editUser;
@@ -308,28 +330,30 @@ class Profile extends React.Component {
                   editing,
                 }}
               />
-              <Select
+              <Input
                 config={{
                   field: Model.school,
-                  onChange: this.handleSelectChange,
+                  onChange: this.handleInputChange,
                   value: this.state.school.value,
-                  options: ['Bem', "O'Clock"],
+                  type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.school && error.school.detail,
                   success,
+                  editing,
                 }}
               />
-              <Select
+              <Input
                 config={{
                   field: Model.diploma,
-                  onChange: this.handleSelectChange,
+                  onChange: this.handleInputChange,
                   value: this.state.diploma.value,
-                  options: ['Master', 'Bachelor'],
+                  type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.diploma && error.diploma.detail,
                   success,
+                  editing,
                 }}
               />
               <Input

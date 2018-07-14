@@ -206,24 +206,44 @@ module.exports = {
       const apiResponse = new ApiResponse(res, { team, success: 'Modify' }, 200);
       return apiResponse.success();
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   },
 
-  delete(req, res, next) {
+  async delete(req, res, next) {
     const teamId = req.params.id;
-    Team.findByIdAndRemove({ _id: teamId })
-      .then((team) => {
-        const ids = team.users.map(({ user }) => user);
-        User.updateMany({ _id: { $in: ids } }, {
-          $pull: {
-            teams: team._id,
-            rooms: team._id,
-          },
-        }).catch(error => console.log(error.message));
-        const apiResponse = new ApiResponse(res, { success: 'Delete' }, 204);
-        return apiResponse.success();
-      })
-      .catch(next);
+    try {
+      const teamToRemove = await Team.findOne({ _id: teamId });
+      const ids = teamToRemove.users.map(({ user }) => user);
+      await Team.findByIdAndRemove({ _id: teamId });
+      await User.updateMany({ _id: { $in: ids } }, {
+        $pull: {
+          teams: teamToRemove._id,
+          rooms: teamToRemove._id,
+        },
+      });
+      const teams = await Team.find({ 'users.user': res.locals.user })
+        .populate({
+          path: 'manager',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'project',
+          model: 'project',
+        })
+        .populate({
+          path: 'users.user',
+          model: 'user',
+          select: 'fullName picture',
+        });
+      const apiResponse = new ApiResponse(res, {
+        teams,
+        success: 'Deleted',
+      }, 200);
+      return apiResponse.success();
+    } catch (error) {
+      next(error);
+    }
   },
 };

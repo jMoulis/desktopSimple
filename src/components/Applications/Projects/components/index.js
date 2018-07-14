@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './project.css';
 import ListProject from '../containers/ListProject';
 import NewProject from '../containers/NewProject/newProject';
+import Input from '../../../Form/input';
 
 class Projects extends React.Component {
   static propTypes = {
@@ -13,6 +14,7 @@ class Projects extends React.Component {
   }
   state = {
     tab: 'projects',
+    search: '',
   }
   componentDidMount() {
     const { fetchProjectsAction } = this.props;
@@ -22,6 +24,18 @@ class Projects extends React.Component {
     this.setState(prevState => ({
       ...prevState,
       tab: tabName,
+    }));
+  }
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+    const { fetchProjectsAction } = this.props;
+    fetchProjectsAction({ filter: this.state.search });
+  }
+  handleInputChange = (evt) => {
+    const { name, value } = evt.target;
+    this.setState(prevState => ({
+      ...prevState,
+      [name]: value,
     }));
   }
   handleTabSelect = (evt) => {
@@ -60,6 +74,21 @@ class Projects extends React.Component {
               >
               New Project
               </button>
+            </li>
+            <li>
+              <form onSubmit={this.handleSubmit}>
+                <Input
+                  config={{
+                    field: {
+                      type: 'text',
+                      name: 'search',
+                      placeholder: 'Filter',
+                    },
+                    onChange: this.handleInputChange,
+                    value: this.state.search,
+                  }}
+                />
+              </form>
             </li>
           </ul>
         </div>

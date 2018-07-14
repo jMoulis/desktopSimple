@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Meta = require('../models/Meta');
 const ApiResponse = require('../service/api/apiResponse');
 
 module.exports = {
@@ -105,7 +106,7 @@ module.exports = {
       next(error);
     }
   },
-  async edit(req, res) {
+  async edit(req, res, next) {
     const userId = req.params.id;
     const userProps = req.body;
     module.exports.imageControl(req, res);
@@ -135,16 +136,19 @@ module.exports = {
         return apiResponse.failure();
       }
       const fieldUpdated = Object.keys(props)[0];
+      const keywords = ['school', 'diploma', 'field', 'tags'];
+      if (keywords.includes(fieldUpdated)) {
+        module.exports.persistMetas(fieldUpdated, userUpdated[fieldUpdated], keywords, next);
+      }
 
       const apiResponse = new ApiResponse(res, { user: userUpdated, success: fieldUpdated }, 200);
       return apiResponse.success();
     } catch (error) {
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return next(error);
     }
   },
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     const userId = req.params.id;
     try {
       const user = await User.findByIdAndRemove({ _id: userId });
@@ -152,11 +156,54 @@ module.exports = {
         const apiResponse = new ApiResponse(res, { success: 'Delete' }, 204);
         return apiResponse.success();
       }
+      return next();
     } catch (error) {
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
   },
+
+  async persistMetas(fieldUpdated, value, keywords, next) {
+    if (keywords.includes(fieldUpdated)) {
+      try {
+        if (Array.isArray(value)) {
+          value.forEach(async (val) => {
+            const isMetaExists = await Meta.findOne({ metaValue: val.toLowerCase() });
+            if (!isMetaExists) {
+              Meta.create({ metaName: fieldUpdated, metaValue: val.toLowerCase() });
+            }
+          });
+        } else {
+          const isMetaExists = await Meta.findOne({ metaValue: value.toLowerCase() });
+          if (!isMetaExists) {
+            await Meta.create({ metaName: fieldUpdated, metaValue: value.toLowerCase() });
+          }
+        }
+      } catch (error) {
+        return next(error.message);
+      }
+    } else {
+      return next();
+    }
+  },
+  // async metas(req, res, next) {
+  //   let query = {};
+
+  //   if (req.query) {
+  //     const regex = new RegExp(`^${req.query.metaValue}`, 'i');
+  //     query = { metaName: req.query.metaName, metaValue: { $regex: regex } };
+  //   }
+  //   try {
+  //     const metas = await Meta.find(query);
+  //     const apiResponse = new ApiResponse(res, {
+  //       metas,
+  //       success: 'Fetch Users',
+  //     }, 200);
+  //     return apiResponse.success();
+  //   } catch (error) {
+  //     return next(error.message);
+  //   }
+  // },
   // Utils Function
   imageControl(req, res) {
     const imageTypeRegularExpression = /\/(.*?)$/;

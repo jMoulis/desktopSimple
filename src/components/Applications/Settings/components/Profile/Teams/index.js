@@ -21,6 +21,7 @@ class TeamProfile extends React.Component {
     const { fetchTeamsAction } = this.props;
     fetchTeamsAction();
   }
+
   handleShowAddTeamModal = () => {
     this.setState(prevState => ({
       ...prevState,

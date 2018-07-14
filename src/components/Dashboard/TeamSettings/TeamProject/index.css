@@ -1,7 +1,26 @@
 .team-project {
   padding: 1rem;
   flex: 1; }
+  .team-project-info-list-item {
+    margin: .5rem; }
+    .team-project-info-list-item label {
+      font-weight: bold; }
+  .team-project-company {
+    display: flex; }
+    .team-project-company-info {
+      margin: .5rem; }
+    .team-project-company-logo {
+      width: 100px;
+      height: 100px;
+      margin: .5rem;
+      margin-left: 0;
+      border-radius: 50%; }
+    .team-project-company-info-name {
+      margin-bottom: .5rem;
+      margin-left: .3rem;
+      font-size: 1.5rem; }
+    .team-project-company-author {
+      display: flex;
+      align-items: center; }
   .team-project h1 {
     margin-bottom: 1rem; }
-  .team-project p {
-    margin: 1rem 0; }

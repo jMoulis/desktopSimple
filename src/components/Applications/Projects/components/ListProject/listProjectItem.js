@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import UserIconContainer from '../../../../../Modules/UserIcon';
 import './listProject.css';
+import TagList from '../../../../../Modules/Tag/tagList';
+
+const truncateDescription = (text) => {
+  const maxWord = 25;
+  const newText = text.split(' ').splice(0, maxWord).join(' ');
+  return `${newText} ...`;
+};
 
 const ListProjectItem = ({ project, showDetailModal }) => {
   return (
@@ -32,24 +39,22 @@ const ListProjectItem = ({ project, showDetailModal }) => {
         <h2>{project.title}</h2>
         <ul>
           <li>
-            <p>
+            <div>
               <span className="title">Due Date:</span> {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}
-            </p>
+            </div>
           </li>
           <li>
-            <p>
+            <div>
               <span className="title">Teams registered:</span> {project.teams.length > 0 ? project.teams.length : <span>No Teams yet</span>}
-            </p>
+            </div>
           </li>
           <li>
-            <p>
-              <span className="title">Description:</span> {project.description}
-            </p>
+            <div>
+              <span className="title">Description:</span><p>{truncateDescription(project.description)}</p>
+            </div>
           </li>
           <li>
-            <ul className="tags-list">
-              {project.tags.map((tag, index) => <li className="tags-list-item" key={index}>{tag}</li>)}
-            </ul>
+            <TagList tags={project.tags} />
           </li>
         </ul>
         <div>
