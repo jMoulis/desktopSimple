@@ -45,7 +45,7 @@ let server;
 
 let httpsOptions = null;
 // let server;
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') {
   server = http.createServer(app);
 } else {
   httpsOptions = {

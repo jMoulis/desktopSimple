@@ -3,6 +3,7 @@ const ProjectsController = require('../controllers/projects_controller');
 const AuthController = require('../controllers/auth_controller');
 const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
+const TasksController = require('../controllers/tasks_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const upload = require('../service/formData');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
@@ -34,5 +35,9 @@ module.exports = (app) => {
   app.delete('/api/messages/:id', VerifyToken, MessageController.delete);
   app.get('/api/messages', VerifyToken, MessageController.index);
 
-  // app.get('/api/metas', UsersController.metas);
+  app.get('/api/tasks', TasksController.index);
+  app.post('/api/tasks', TasksController.create);
+  app.get('/api/tasks/:id', TasksController.read);
+  app.put('/api/tasks/:id', TasksController.update);
+  app.delete('/api/tasks/:id', TasksController.delete);
 };

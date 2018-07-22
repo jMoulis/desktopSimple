@@ -77,7 +77,6 @@ module.exports = {
       }, 200);
       return apiResponse.success();
     } catch (error) {
-      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
@@ -127,7 +126,6 @@ module.exports = {
       }, 200);
       return apiResponse.success();
     } catch (error) {
-      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }

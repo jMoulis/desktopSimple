@@ -1,9 +1,11 @@
 const User = require('../models/User');
 const Meta = require('../models/Meta');
 const ApiResponse = require('../service/api/apiResponse');
+const ApiResponse2 = require('../service/api/apiResponse_v2');
 
 module.exports = {
   async index(req, res) {
+    const apiResponse2 = new ApiResponse2(res);
     try {
       const query = {
         tags: { $in: [req.query.filter] },
@@ -12,14 +14,13 @@ module.exports = {
       };
       if (req.query.count && req.query.filter) {
         const usersCount = await User.find(query).count();
-        const apiResponse = new ApiResponse(res, {
+        return apiResponse2.success(200, {
           count: {
             key: req.query.filter,
             count: usersCount,
           },
           success: 'Count',
-        }, 200);
-        return apiResponse.success();
+        });
       } else if (req.query.filter) {
         const usersTotal = await User.find(query).count();
         // Pagination
@@ -48,32 +49,24 @@ module.exports = {
         };
         const users = await User.find(query).skip(SKIP).limit(LIMIT);
         if (users.length !== 0) {
-          const apiResponse = new ApiResponse(
-            res,
-            { users, pagination, success: 'Fetch Users' },
-            200,
-          );
-          return apiResponse.success();
+          return apiResponse2.success(200, { users, pagination, success: 'Fetch Users' } );
         }
-        const apiResponse = new ApiResponse(res, {
+        return apiResponse2.failure(404, null, {
           error: 'No users found',
-        }, 404);
-        return apiResponse.failure();
+        });
       }
       const users = await User.find({ typeUser: 'student' });
       if (users.length !== 0) {
-        const apiResponse = new ApiResponse(res, {
+        return apiResponse2.success(200, {
           users,
           success: 'Fetch Users',
-        }, 200);
-        return apiResponse.success();
+        });
       }
-      const apiResponse = new ApiResponse(res, {
+      return apiResponse2.failure(404, null, {
         error: 'No users found',
-      }, 404);
-      return apiResponse.failure();
+      });
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).send({ error: error.message });
     }
   },
 
@@ -153,7 +146,7 @@ module.exports = {
     try {
       const user = await User.findByIdAndRemove({ _id: userId });
       if (user) {
-        const apiResponse = new ApiResponse(res, { success: 'Delete' }, 204);
+        const apiResponse = new ApiResponse(res, { success: 'Delete' }, 404);
         return apiResponse.success();
       }
       return next();

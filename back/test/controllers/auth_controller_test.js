@@ -10,6 +10,7 @@ const newUser = {
   password: 'test',
   typeUser: 'student',
 };
+
 describe('Auth Controller', () => {
   it('Create User', (done) => {
     request(app)
