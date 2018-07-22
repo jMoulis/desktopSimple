@@ -44,6 +44,7 @@ class NewTeam extends React.Component {
     counters: {},
     selectedUsers: {},
     modal: false,
+    filter: '',
   }
   componentDidUpdate() {
     const { teamCreation, closeFromParent } = this.props;

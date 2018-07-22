@@ -6,8 +6,8 @@ const moment = require('moment');
 
 module.exports = {
   async index(req, res) {
-    let params = { author: res.locals.user._id };
-    if (res.locals.user.typeUser !== 'company') {
+    let params = { author: res.locals.user && res.locals.user && res.locals.user._id };
+    if (res.locals && res.locals.user && res.locals.user && res.locals.user.typeUser !== 'company') {
       params = {
         isOnline: true,
       };
@@ -84,7 +84,7 @@ module.exports = {
 
   async create(req, res) {
     const projectProps = req.body;
-    projectProps.author = { _id: res.locals.user._id };
+    projectProps.author = { _id: res.locals.user && res.locals.user._id };
     if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
       projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }
@@ -189,7 +189,7 @@ module.exports = {
   edit(req, res, next) {
     const projectId = req.params.id;
     const projectProps = req.body;
-    const userId = res.locals.user._id;
+    const userId = res.locals.user && res.locals.user._id;
     if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
       projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }

@@ -8,12 +8,12 @@ module.exports = {
     const apiResponse2 = new ApiResponse2(res);
     try {
       const query = {
-        tags: { $in: [req.query.filter] },
         available: true,
         typeUser: 'student',
       };
+
       if (req.query.count && req.query.filter) {
-        const usersCount = await User.find(query).count();
+        const usersCount = await User.find({ ...query, tags: { $in: [req.query.filter] } }).count();
         return apiResponse2.success(200, {
           count: {
             key: req.query.filter,
@@ -22,7 +22,7 @@ module.exports = {
           success: 'Count',
         });
       } else if (req.query.filter) {
-        const usersTotal = await User.find(query).count();
+        const usersTotal = await User.find({ ...query, tags: { $in: [req.query.filter] } }).count();
         // Pagination
         const LIMIT = 50;
         let SKIP = 0;
@@ -55,7 +55,8 @@ module.exports = {
           error: 'No users found',
         });
       }
-      const users = await User.find({ typeUser: 'student' });
+
+      const users = await User.find(query);
       if (users.length !== 0) {
         return apiResponse2.success(200, {
           users,
@@ -106,7 +107,7 @@ module.exports = {
     const props = module.exports.buildEditProps(userProps);
     const options = { runValidators: true, upsert: true };
     try {
-      if (res.locals.user._id.toString() !== userId) {
+      if (res.locals && res.locals.user && res.locals.user._id.toString() !== userId) {
         const apiResponse = new ApiResponse(res, null, 403);
         return apiResponse.failure();
       }
@@ -137,6 +138,7 @@ module.exports = {
       const apiResponse = new ApiResponse(res, { user: userUpdated, success: fieldUpdated }, 200);
       return apiResponse.success();
     } catch (error) {
+      console.log(error.message)
       return next(error);
     }
   },

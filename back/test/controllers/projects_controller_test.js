@@ -6,6 +6,7 @@ const app = require('../../app');
 const User = mongoose.model('user');
 const Project = mongoose.model('project');
 const Team = mongoose.model('team');
+const utils = require('../test_helper');
 
 const newProject = {
   title: 'Project',
@@ -32,69 +33,60 @@ const newUser = {
 let JWT;
 let userId;
 describe('Projects controller', () => {
-  // before((done) => {
-  //   User.findOne({ email: 'admin@admin.com'})
-  //     .then((user) => {
-  //       if (!user) {
-  //         request(app)
-  //           .post('/api/register')
-  //           .send({
-  //             email: 'admin@admin.com',
-  //             fullName: 'Admin',
-  //             password: 'test',
-  //             typeUser: 'company',
-  //             company: {
-  //               companyName: 'company',
-  //               street: 'company',
-  //               postalCode: 'company',
-  //               town: 'company',
-  //               description: 'company',
-  //               legalDocs: 'company',
-  //             },
-  //           })
-  //           .end((err, res) => {
-  //             assert(res.statusCode === 201);
-  //             assert(res.body.token);
-  //             JWT = res.body.token;
-  //             done();
-  //           });
-  //       } else {
-  //         request(app)
-  //           .post('/api/login')
-  //           .send({ email: 'admin@admin.com', password: 'test'})
-  //           .end((err, res) => {
-  //             assert(res.statusCode === 200);
-  //             assert(res.body.user);
-  //             JWT = res.body.token;
-  //             userId = res.body.user.id;
-  //             done();
-  //           });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // });
-
-  xit('Create Projects', (done) => {
-    const team1 = new Team(newTeam);
-    team1.name = 'Team 1';
-    const team2 = new Team(newTeam);
-    team2.name = 'Team 2';
-    const project = new Project(newProject);
-    project.teams.push(team1);
-    project.teams.push(team2);
-    project.save()
-      .then(() => {
-        request(app)
-          .post('/api/projects')
-          .set('Authorization', `${JWT}`)
-          .send(newProject)
-          .end((err, res) => {
-            assert(res.body.success.message === 'New Project Created');
-            done();
+  before((done) => {
+    const student1 = utils.newUser('student', 14, ['php', 'angular'], true);
+    request(app)
+      .post('/api/register')
+      .send(student1)
+      .end((err, res) => {
+        User.findOne({ email: res.body.user.email })
+          .then((user) => {
+            request(app)
+              .post('/api/login')
+              .send({ email: user.email, password: 'test' })
+              .end((err, response) => {
+                JWT = response.body.token;
+                assert(response.statusCode === 200);
+                assert(Object.prototype.hasOwnProperty.call(response.body, 'token'));
+                done();
+              });
           });
       });
+  });
+
+  it('Create Projects', (done) => {
+    const team1 = utils.newTeam('team1');
+    const team2 = utils.newTeam('team2');
+    
+    Promise.all([team1.save(), team2.save()])
+      .then((teams) => {
+        const project = utils.newProject(2, teams);
+        project.save()
+          .then(() => {
+            request(app)
+              .post('/api/projects')
+              .set('Authorization', `${JWT}`)
+              .send(newProject)
+              .end((err, res) => {
+                assert(res.body.success.message === 'New Project Created');
+                done();
+              });
+          });
+        done();
+      });
+    // project.teams.push(team1);
+    // project.teams.push(team2);
+    // project.save()
+    //   .then(() => {
+    //     request(app)
+    //       .post('/api/projects')
+    //       .set('Authorization', `${JWT}`)
+    //       .send(newProject)
+    //       .end((err, res) => {
+    //         assert(res.body.success.message === 'New Project Created');
+    //         done();
+    //       });
+    //   });
   });
 
   xit('Put to /api/projects/id can update a record', (done) => {

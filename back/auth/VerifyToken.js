@@ -11,29 +11,32 @@ const verifyToken = (req, res, next) => {
     });
   }
   jwt.verify(token, config.secret, async (err, decoded) => {
-    if (err) {
-      return res.status(401)
-        .send({
-          auth: false,
-          login: {
-            detail: 'You have been disconnected, please logIn',
-          },
-        });
+    try {
+      if (err) {
+        return res.status(401)
+          .send({
+            auth: false,
+            login: {
+              detail: 'You have been disconnected, please logIn',
+            },
+          });
+      }
+      const user = await User.findOne(
+        { _id: decoded.user._id },
+        {
+          typeUser: 1,
+          fullName: 1,
+          picture: 1,
+          available: 1,
+          rooms: 1,
+        },
+      );
+      res.locals.user = user;
+    } catch (error) {
+      return next(error);
     }
-    req.userId = decoded.user.id;
-    const user = await User.findOne(
-      { _id: decoded.user._id },
-      {
-        typeUser: 1,
-        fullName: 1,
-        picture: 1,
-        available: 1,
-        rooms: 1,
-      },
-    );
-    res.locals.user = user;
-    return next();
   });
+  next();
 };
 
 module.exports = verifyToken;

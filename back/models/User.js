@@ -83,7 +83,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.pre('save', function preSave(next) {
-  if (!this.available) {
+  if (typeof this.available === 'undefined') {
     this.available = true;
   } else {
     next();

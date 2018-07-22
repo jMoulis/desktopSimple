@@ -18,7 +18,7 @@ const decodeBase64Image = (dataString) => {
 
 module.exports = {
   async index(req, res, next) {
-    const userId = res.locals.user._id;
+    const userId = res.locals.user && res.locals.user._id;
     try {
       const teams = await Team.find({ 'users.user': userId })
         .populate({
@@ -57,7 +57,7 @@ module.exports = {
   },
   async create(req, res) {
     const teamProps = req.body;
-    const manager = res.locals.user._id;
+    const manager = res.locals.user && res.locals.user._id;
     try {
       const teamCreated = await Team.create({ ...teamProps, manager });
       const team = await Team.findOne({ _id: teamCreated.id })
