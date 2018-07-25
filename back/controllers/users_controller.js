@@ -49,7 +49,7 @@ module.exports = {
         };
         const users = await User.find(query).skip(SKIP).limit(LIMIT);
         if (users.length !== 0) {
-          return apiResponse2.success(200, { users, pagination, success: 'Fetch Users' } );
+          return apiResponse2.success(200, { users, pagination, success: 'Fetch Users' });
         }
         return apiResponse2.failure(404, null, {
           error: 'No users found',
@@ -107,7 +107,7 @@ module.exports = {
     const props = module.exports.buildEditProps(userProps);
     const options = { runValidators: true, upsert: true };
     try {
-      if (res.locals && res.locals.user && res.locals.user._id.toString() !== userId) {
+      if (res.locals.user._id.toString() !== userId) {
         const apiResponse = new ApiResponse(res, null, 403);
         return apiResponse.failure();
       }
@@ -138,7 +138,7 @@ module.exports = {
       const apiResponse = new ApiResponse(res, { user: userUpdated, success: fieldUpdated }, 200);
       return apiResponse.success();
     } catch (error) {
-      console.log(error.message)
+
       return next(error);
     }
   },

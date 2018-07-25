@@ -18,7 +18,7 @@ const decodeBase64Image = (dataString) => {
 
 module.exports = {
   async index(req, res, next) {
-    const userId = res.locals.user && res.locals.user._id;
+    const userId = res.locals.user._id;
     try {
       const teams = await Team.find({ 'users.user': userId })
         .populate({
@@ -55,7 +55,7 @@ module.exports = {
       next(error);
     }
   },
-  async create(req, res) {
+  async create(req, res, next) {
     const teamProps = req.body;
     const manager = res.locals.user && res.locals.user._id;
     try {
@@ -87,14 +87,14 @@ module.exports = {
           teams: team,
           rooms: team._id,
         },
-      }).catch(error => console.log(error.message));
+      }).catch(error => next(error.message));
       await Project.update(
         { _id: team.project },
         {
           $push: { teams: team._id },
         },
       )
-        .catch(error => console.log('Project Update', error.message));
+        .catch(error => next(error.message));
       const apiResponse = new ApiResponse(res, {
         team,
         success: { status: true, message: 'New Team Created' },
@@ -198,10 +198,10 @@ module.exports = {
             $in: [team._id],
           },
         }, {
-          $pull: {
-            teams: team._id,
-          },
-        });
+            $pull: {
+              teams: team._id,
+            },
+          });
       }
       const apiResponse = new ApiResponse(res, { team, success: 'Modify' }, 200);
       return apiResponse.success();

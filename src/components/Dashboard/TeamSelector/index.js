@@ -42,7 +42,7 @@ class TeamSelector extends React.Component {
         appear
       >
         <div className="team-selector">
-          <h1>Please select the board you want to load</h1>
+          <h1>Please select the team you want to load</h1>
           <ul className="ul-nav">
             {userActive.user.teams.map((team, index) => (
               <li

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import UserIcon from '../UserIcon';
 import './ressourceItem.css';
+import Button from '../../components/Form/button';
 
 const RessourceItem = ({ config }) => {
   return (
@@ -10,7 +11,7 @@ const RessourceItem = ({ config }) => {
       <div
         className={
           `ressource-item ${config.specAlreadySelected === config.value &&
-            'ressource-item-already-selected'}`
+          'ressource-item-already-selected'}`
         }
       >
         <button
@@ -21,10 +22,10 @@ const RessourceItem = ({ config }) => {
         >
           X
         </button>
-        {!config.selectedUsers[config.value] && <img src="/img/anonymous.png" alt="expert" /> }
+        {!config.selectedUsers[config.value] && <img src="/img/anonymous.png" alt="expert" />}
         <UserIcon user={{
           user: config.selectedUsers[config.value],
-          }}
+        }}
         />
         <span className="ressource-label">{config.value}</span>
         {
@@ -34,14 +35,14 @@ const RessourceItem = ({ config }) => {
               config.counters[config.value]}
           </span>
         }
-        <button
-          className="btn btn-primary"
+        <Button
           type="button"
+          category="primary"
           data-filter={config.value}
           onClick={config.onClick}
         >
           {config.selected ? 'Change' : 'Search'}
-        </button>
+        </Button>
       </div>
     </li>
   );

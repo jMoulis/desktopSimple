@@ -3,15 +3,15 @@ const config = require('../config/config');
 const User = require('../models/User');
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(403).send({
-      auth: false,
-      message: 'No token provided.',
-    });
-  }
-  jwt.verify(token, config.secret, async (err, decoded) => {
-    try {
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(403).send({
+        auth: false,
+        message: 'No token provided.',
+      });
+    }
+    jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) {
         return res.status(401)
           .send({
@@ -21,6 +21,7 @@ const verifyToken = (req, res, next) => {
             },
           });
       }
+      req.userId = decoded.user.id;
       const user = await User.findOne(
         { _id: decoded.user._id },
         {
@@ -32,11 +33,11 @@ const verifyToken = (req, res, next) => {
         },
       );
       res.locals.user = user;
-    } catch (error) {
-      return next(error);
-    }
-  });
-  next();
+      next();
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = verifyToken;

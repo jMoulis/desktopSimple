@@ -13,7 +13,7 @@ before((done) => {
     });
 });
 
-beforeEach((done) => {
+before((done) => {
   const { users, projects, teams } = mongoose.connection.collections;
   users.deleteMany({ email: { $ne: 'admin@admin.com' } });
   projects.deleteMany();

@@ -60,9 +60,9 @@ class TeamProject extends React.Component {
     const { project } = activeTeam;
     if (!project) {
       return (
-        <div className="team-project">
-          <h1>No Project yet</h1>
-          <p>To start you should to select a project</p>
+        <div className="team-project no-project">
+          <h1>No project  selected yet</h1>
+          <p>To start you should select a project</p>
           <button
             type="button"
             className="btn btn-primary"

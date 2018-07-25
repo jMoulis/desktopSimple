@@ -9,6 +9,7 @@ module.exports = {
   async login(req, res) {
     try {
       const { email, password } = req.body;
+
       const existingUser = await User.findOne({ email });
       // if (process.env.NODE_ENV !== 'test') {
       //   const fakeUsers = loadFakeUser();
@@ -19,7 +20,7 @@ module.exports = {
       if (!existingUser) {
         const apiResponse = new ApiResponse(res, {
           login: {
-            source: { pointer: '/data/attributes/athentification' },
+            source: { pointer: '/data/attributes/authentification' },
             detail: 'Incorrect username or password.',
           },
           auth: false,
@@ -32,7 +33,7 @@ module.exports = {
       if (!passwordIsValid) {
         const apiResponse = new ApiResponse(res, {
           login: {
-            source: { pointer: '/data/attributes/athentification' },
+            source: { pointer: '/data/attributes/authentification' },
             detail: 'Incorrect username or password.',
           },
           auth: false,

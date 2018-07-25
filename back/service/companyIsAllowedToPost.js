@@ -3,6 +3,7 @@ const ApiResponse = require('../service/api/apiResponse_v2');
 
 module.exports = async (req, res, next) => {
   try {
+    console.log(res.locals)
     const user = await User.findById(res.locals.user._id);
     const apiResponse = new ApiResponse(res);
     const fieldsMandatory = [
@@ -22,7 +23,7 @@ module.exports = async (req, res, next) => {
         }
         return arrayController;
       });
-      if (arrayController.length < fieldsMandatory.length) {   
+      if (arrayController.length < fieldsMandatory.length) {
         return apiResponse.failure(403, {
           error: 'Not allowed, please fill in company information',
         });
@@ -33,7 +34,7 @@ module.exports = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error.message)
+    console.log('CompanyIsAlloawed:', error.message);
     next(error);
   }
 };

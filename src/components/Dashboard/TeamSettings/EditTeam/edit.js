@@ -331,13 +331,15 @@ class EditTeam extends React.Component {
                   ))}
                 </ul>
               </div>
-              <Button
-                onClick={this.handleShowAlertBox}
-                category="danger"
-                style={{ width: '100%', marginTop: '.5rem' }}
-                type="button"
-              >Delete
-              </Button>
+              <div className="btn-container">
+                <Button
+                  onClick={this.handleShowAlertBox}
+                  category="danger"
+                  style={{ width: '100%', marginTop: '.5rem' }}
+                  type="button"
+                >Delete the team
+                </Button>
+              </div>
             </div>
           </div>
         </form>
@@ -357,7 +359,7 @@ class EditTeam extends React.Component {
         {this.state.alertBox &&
           <AlertBox
             title="Deleting Team"
-            message="WatchOut you are on your way to delete a team"
+            message="Watch out you are on your way to delete a team"
             buttons={[
               {
                 type: 'danger',

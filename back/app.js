@@ -30,15 +30,8 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 routes(app);
-app.use((req, res, err) => {
+app.use((req, res, err, next) => {
   res.status(422).send({ error: err.message });
-});
-
-app.use((req, res) => {
-  res.status(404).send({
-    message: 'Page Not Found',
-    status: 404,
-  });
 });
 
 let server;

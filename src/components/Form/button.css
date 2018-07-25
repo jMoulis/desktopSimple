@@ -59,7 +59,9 @@
   border: 2px solid #eee9d1;
   color: #eee9d1;
   transition: all 500ms;
-  margin-right: .5rem; }
+  margin-right: .5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem; }
   .btn-neutral {
     background-color: transparent;
     border: 2px solid transparent; }

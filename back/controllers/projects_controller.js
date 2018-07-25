@@ -6,33 +6,19 @@ const moment = require('moment');
 
 module.exports = {
   async index(req, res) {
-    let params = { author: res.locals.user && res.locals.user && res.locals.user._id };
-    if (res.locals && res.locals.user && res.locals.user && res.locals.user.typeUser !== 'company') {
-      params = {
-        isOnline: true,
-      };
-    }
-    if (req.query.search) {
-      params = {
-        ...params,
-        $text: { $search: req.query.search, $caseSensitive: false },
-      };
-    }
     try {
-      // I want to filter also by company name
-      // Find all company that text match company name
-      // First search $text in 
-      // const users = await User.find({
-      //   $text: {
-      //     $search: req.query.search, $caseSensitive: false,
-      //   },
-      // });
-      // const usersIds = [];
-      // if (users) {
-      //   await users.forEach((user) => {
-      //     usersIds.push(user._id);
-      //   });
-      // }
+      let params = { author: res.locals.user._id };
+      if (res.locals.user.typeUser !== 'company') {
+        params = {
+          isOnline: true,
+        };
+      }
+      if (req.query.search) {
+        params = {
+          ...params,
+          $text: { $search: req.query.search, $caseSensitive: false },
+        };
+      }
       const projects = await Project.find({ ...params })
         .sort(req.query.sorting ? { createdAt: req.query.sorting } : { createdAt: 1 })
         .populate({
@@ -77,18 +63,21 @@ module.exports = {
       }, 200);
       return apiResponse.success();
     } catch (error) {
+      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
   },
 
   async create(req, res) {
-    const projectProps = req.body;
-    projectProps.author = { _id: res.locals.user && res.locals.user._id };
-    if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
-      projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
-    }
     try {
+      const projectProps = req.body;
+
+      console.log('From users show', res.locals)
+      projectProps.author = { _id: res.locals.user._id };
+      if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
+        projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+      }
       const newProject = await Project.create(projectProps);
       const project = await Project.findOne({ _id: newProject._id })
         .populate({
@@ -126,6 +115,7 @@ module.exports = {
       }, 200);
       return apiResponse.success();
     } catch (error) {
+      console.log(error.message)
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
@@ -189,7 +179,7 @@ module.exports = {
   edit(req, res, next) {
     const projectId = req.params.id;
     const projectProps = req.body;
-    const userId = res.locals.user && res.locals.user._id;
+    const userId = res.locals.user._id;
     if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
       projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     }

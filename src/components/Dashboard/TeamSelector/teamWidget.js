@@ -8,7 +8,7 @@ const TeamWidget = ({ team }) => (
     <h1>{team.name}</h1>
     {team.project ?
       <h2>{team.project.title}</h2> :
-      'No project selected yet'}
+      <h2>No project selected yet</h2>}
     <ul className="team-widget-users-list">
       {team.users.map((user, index) => {
         if (!user.user) {
