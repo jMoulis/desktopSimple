@@ -68,10 +68,10 @@ export default {
     placeholder: 'Your diploma',
   },
   field: {
-    label: 'Diploma\'s field',
+    label: "Diploma's field",
     name: 'field',
     type: 'text',
-    placeholder: 'Diploma\'s field',
+    placeholder: "Diploma's field",
   },
   jobDescription: {
     label: 'Job Description',

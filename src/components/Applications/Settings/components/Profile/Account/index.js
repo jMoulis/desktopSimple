@@ -15,6 +15,21 @@ class AccountProfile extends React.Component {
     changePasswordAction: PropTypes.func.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
     deleteUserAction: PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    let field = {};
+    Object.keys(Model).map(key => {
+      field = { ...field, [key]: { value: '', focus: false, changed: false } };
+      return field;
+    });
+    this.state = {
+      ...field,
+      disabled: true,
+      showAlertBox: false,
+      error: null,
+    };
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -28,26 +43,12 @@ class AccountProfile extends React.Component {
       ...state,
     };
   }
-  constructor(props) {
-    super(props);
-    let field = {};
-    Object.keys(Model).map((key) => {
-      field = { ...field, [key]: { value: '', focus: false, changed: false } };
-      return field;
-    });
-    this.state = {
-      ...field,
-      disabled: true,
-      showAlertBox: false,
-      error: null,
-    };
-  }
 
   componentWillUnmount() {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
-  handleSubmit = (evt) => {
+  handleSubmit = evt => {
     evt.preventDefault();
     const { changePasswordAction, loggedUser } = this.props;
     changePasswordAction(loggedUser._id, this.state);
@@ -62,15 +63,19 @@ class AccountProfile extends React.Component {
         value: '',
       },
     }));
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     if (this.state.error) {
       this.setState(() => ({
@@ -86,18 +91,22 @@ class AccountProfile extends React.Component {
       },
       disabled: true,
     }));
-  }
+  };
   handleOnBlur = () => {
     const { actualPassword, newPassword, confirmPassword } = this.state;
-    if (actualPassword.value && actualPassword.value.length > 0 &&
-        newPassword.value && newPassword.value.length > 0 &&
-        confirmPassword.value && confirmPassword.value.length > 0) {
+    if (
+      actualPassword.value &&
+      actualPassword.value.length > 0 &&
+      newPassword.value &&
+      newPassword.value.length > 0 &&
+      confirmPassword.value &&
+      confirmPassword.value.length > 0
+    ) {
       if (confirmPassword.value === newPassword.value) {
         this.setState(() => ({
           disabled: false,
         }));
-      }
-      else {
+      } else {
         this.setState(prevState => ({
           ...prevState,
           error: {
@@ -112,26 +121,26 @@ class AccountProfile extends React.Component {
         }));
       }
     }
-  }
+  };
   handleDeleteAccount = () => {
     const { deleteUserAction, loggedUser } = this.props;
     deleteUserAction(loggedUser._id);
-  }
+  };
   handleShowAlertBoxDanger = () => {
     this.setState(prevState => ({
       ...prevState,
       showAlertBox: !prevState.showAlertBox,
     }));
-  }
+  };
   render() {
     const { editUser, clearMessageAction } = this.props;
     const { editing, success } = editUser;
     const { error } = this.state;
     return (
-      <div id="profile" className="form-container account" key="app-content" >
-        {success &&
+      <div id="profile" className="form-container account" key="app-content">
+        {success && (
           <Info message={success} parentAction={clearMessageAction} />
-        }
+        )}
         <form
           id="profile-form"
           className="form"
@@ -148,7 +157,10 @@ class AccountProfile extends React.Component {
                   value: this.state.actualPassword.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.actualPassword && error.actualPassword.detail,
+                  error:
+                    error &&
+                    error.actualPassword &&
+                    error.actualPassword.detail,
                 }}
               />
               <Input
@@ -168,7 +180,10 @@ class AccountProfile extends React.Component {
                   value: this.state.confirmPassword.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
-                  error: error && error.confirmPassword && error.confirmPassword.detail,
+                  error:
+                    error &&
+                    error.confirmPassword &&
+                    error.confirmPassword.detail,
                 }}
               />
               <Button
@@ -185,30 +200,30 @@ class AccountProfile extends React.Component {
                 type="button"
                 category="danger"
                 onClick={this.handleShowAlertBoxDanger}
-              >Delete My Account
+              >
+                Delete My Account
               </Button>
-              {this.state.showAlertBox &&
+              {this.state.showAlertBox && (
                 <AlertBox
                   title="Confirmation: Delete Account"
                   message="Watch out, Are you really willing to delete your account?"
-                  buttons={
-                    [
-                      {
-                        type: 'button',
-                        action: this.handleDeleteAccount,
-                        label: 'Yeap',
-                        category: 'danger',
-                      },
-                      {
-                        type: 'button',
-                        action: this.handleShowAlertBoxDanger,
-                        label: 'Nope',
-                        category: 'success',
-                      },
-                    ]
-                  }
+                  buttons={[
+                    {
+                      type: 'button',
+                      action: this.handleDeleteAccount,
+                      label: 'Yeap',
+                      category: 'danger',
+                    },
+                    {
+                      type: 'button',
+                      action: this.handleShowAlertBoxDanger,
+                      label: 'Nope',
+                      category: 'success',
+                    },
+                  ]}
                   type="danger"
-                />}
+                />
+              )}
             </div>
           </div>
         </form>

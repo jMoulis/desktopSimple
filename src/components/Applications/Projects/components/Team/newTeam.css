@@ -24,3 +24,5 @@
   flex-wrap: wrap; }
   .new-team-content {
     padding: .5rem; }
+    .new-team-content .form {
+      overflow-x: hidden !important; }

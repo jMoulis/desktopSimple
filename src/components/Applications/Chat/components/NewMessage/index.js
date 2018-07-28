@@ -8,22 +8,25 @@ class NewMessage extends Component {
       message: '',
     };
   }
-  handleSubmit = (evt) => {
+  handleSubmit = evt => {
     evt.preventDefault();
-    console.log('SendMessage');
     this.props.onSubmit(this.state.message);
-  }
-  hanldeInputChange = (evt) => {
+  };
+  hanldeInputChange = evt => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
       [name]: value,
     }));
-  }
+  };
   render() {
     return (
       <form onSubmit={this.handleSubmit} className="new-message">
-        <textarea name="message" value={this.state.message} onChange={this.hanldeInputChange} />
+        <textarea
+          name="message"
+          value={this.state.message}
+          onChange={this.hanldeInputChange}
+        />
         <button type="submit">Envoyer</button>
       </form>
     );

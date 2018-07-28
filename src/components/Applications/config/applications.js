@@ -1,6 +1,6 @@
 /**
  * Becarefull the appName Value has to be the same as the key object value
-*/
+ */
 
 export default {
   Projects: {
@@ -40,6 +40,16 @@ export default {
     display: false,
     zIndex: 0,
     icon: 'fas fa-edit fa-2x',
+    reduce: false,
+    typeUser: ['all'],
+  },
+  Task: {
+    appName: 'Task',
+    title: 'Task Manager',
+    fullSize: false,
+    display: false,
+    zIndex: 0,
+    icon: 'fas fa-tasks fa-2x',
     reduce: false,
     typeUser: ['all'],
   },

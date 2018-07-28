@@ -10,24 +10,25 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
+import taskReducer from './reducers/taskReducer';
+import userReducer from './reducers/userReducer';
+import mainTeamReducer from './reducers/teamReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
 import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
 import chatReducer from '../components/Applications/Chat/store/reducers/chatReducer';
-import mainTeamReducer from './reducers/teamReducer';
-import userReducer from './reducers/userReducer';
 
 // MIDDLEWARES
 import authAjax from './middlewares/authAjax';
 import userAjax from './middlewares/userAjax';
+import taskAjax from './middlewares/taskAjax';
+import mainTeamAjax from './middlewares/teamAjax';
 import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
 import chatAjax from '../components/Applications/Chat/store/middleswares/chatAjax';
 import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
-import mainTeamAjax from './middlewares/teamAjax';
 
 /*
  * Code
 */
-
 
 // Redux DevTools extension
 let devTools = [];
@@ -43,6 +44,7 @@ const mainReducer = combineReducers({
   teamReducer,
   mainTeamReducer,
   chatReducer,
+  taskReducer,
 });
 
 // Reset reducer on logout
@@ -62,6 +64,7 @@ const store = createStore(
     applyMiddleware(teamAjax),
     applyMiddleware(mainTeamAjax),
     applyMiddleware(chatAjax),
+    applyMiddleware(taskAjax),
     ...devTools,
   ),
 );

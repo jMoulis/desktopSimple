@@ -9,16 +9,26 @@ const ButtonAction = ({
   project,
   openCreateTeamModal,
   globalProps,
-}) => (
+  user,
+}) => {
+  return (
     <Fragment>
-      {!globalProps.activeTeamProcess.team.project ?
+      {!globalProps.activeTeamProcess.team.project ? (
         <div className="teams-container-buttons">
           <h1>Want to join the project?</h1>
           <div className="teams-container-buttons-item">
-            <h2>If you already have a team</h2>
+            {user && user.teams && user.teams.length === 0 ? (
+              <h2>
+                You don't have a team yet. So you have to create one first
+              </h2>
+            ) : (
+              <h2>If you already have a team</h2>
+            )}
+
             <Button
               type="button"
               title="Join the project"
+              disabled={user && user.teams && user.teams.length === 0}
               onClick={() => {
                 const { editTeamAction, editProjectAction } = globalActions;
                 editProjectAction({
@@ -42,11 +52,16 @@ const ButtonAction = ({
               style={{
                 marginTop: '.5rem',
               }}
-            >Join the project
+            >
+              Join the project
             </Button>
           </div>
           <div className="teams-container-buttons-item">
-            <h2>If you don't have a team</h2>
+            {user && user.teams && user.teams.length === 0 ? (
+              <h2>To participate create a team</h2>
+            ) : (
+              <h2>If you don't have a team for this project</h2>
+            )}
             <Button
               type="button"
               title="Create a team"
@@ -56,20 +71,23 @@ const ButtonAction = ({
               style={{
                 marginTop: '.5rem',
               }}
-            >Create a team
+            >
+              Create a team
             </Button>
           </div>
-        </div> :
+        </div>
+      ) : (
         <AlreadyProject />
-      }
-
+      )}
     </Fragment>
   );
+};
 
 ButtonAction.propTypes = {
   globalActions: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
   globalProps: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   openCreateTeamModal: PropTypes.func.isRequired,
 };
 export default ButtonAction;

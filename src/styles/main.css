@@ -47,9 +47,13 @@ table {
   border-spacing: 0; }
 
 input {
-  font-family: "Nunito", sans-serif; }
+  font-family: "Nunito", sans-serif;
+  background-color: #eee9d1; }
   input:placeholder {
     font-family: "Nunito", sans-serif; }
+
+textarea {
+  background-color: #eee9d1; }
 
 h1 {
   font-size: 1.5rem;
@@ -69,7 +73,7 @@ h1 {
   padding: 0;
   display: flex;
   align-items: center; }
-  .ul-nav .li {
+  .ul-nav > li {
     margin-right: .2rem; }
 
 .user-thumbnail {
@@ -79,11 +83,11 @@ h1 {
 
 .online {
   padding: .2rem;
-  font-size: 1rem;
+  font-size: .8rem;
   border-radius: 2px;
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 60px;
+  right: 8px;
   color: #eee9d1;
   font-weight: bold;
   letter-spacing: .05rem; }
@@ -94,6 +98,12 @@ h1 {
 
 .d-flex {
   display: flex; }
+
+.flex-column {
+  flex-direction: column; }
+
+.flex1 {
+  flex: 1 0 auto; }
 
 .flex-justify-between {
   justify-content: space-between; }

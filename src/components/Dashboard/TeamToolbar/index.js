@@ -10,8 +10,8 @@ class TeamToolbar extends React.Component {
     team: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showSettings: PropTypes.func.isRequired,
-  }
-  componentDidMount() { }
+  };
+  componentDidMount() {}
   render() {
     const { team, showSelectTeamPanel, showSettings } = this.props;
     if (team && Object.keys(team).length === 0) {
@@ -21,12 +21,7 @@ class TeamToolbar extends React.Component {
       return <span />;
     }
     return (
-      <CSSTransition
-        in
-        timeout={200}
-        classNames="team-toolbar"
-        appear
-      >
+      <CSSTransition in timeout={200} classNames="team-toolbar" appear>
         <nav className="team-toolbar">
           <div className="team-toolbar-list-item">
             <Button
@@ -68,12 +63,7 @@ class TeamToolbar extends React.Component {
             <li className="team-list">
               <ul>
                 {team.users.map((user, index) => {
-                  return (
-                    <UserIcon
-                      key={index}
-                      user={user}
-                    />
-                  );
+                  return <UserIcon key={index} user={user} />;
                 })}
               </ul>
             </li>
@@ -83,6 +73,5 @@ class TeamToolbar extends React.Component {
     );
   }
 }
-
 
 export default TeamToolbar;

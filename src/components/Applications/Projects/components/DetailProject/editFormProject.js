@@ -18,27 +18,34 @@ class EditFormProject extends Component {
     loggedUser: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
     clearProjectMessageAction: PropTypes.func.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     const { activeProjectProcess } = props;
     const { project } = activeProjectProcess;
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = {
         ...field,
-        [key]: project ?
-          { value: project[key], focus: false, changed: false } :
-          { value: Model[key].isArray ? [] : '', focus: false, changed: false },
+        [key]: project
+          ? { value: project[key], focus: false, changed: false }
+          : {
+              value: Model[key].isArray ? [] : '',
+              focus: false,
+              changed: false,
+            },
       };
       return field;
     });
     this.state = {
       form: {
         ...field,
-        dueDate: project.dueDate ?
-          { value: moment(project.dueDate).format('DD/MM/YYYY'), changed: false } :
-          { value: '', focus: false, changed: false },
+        dueDate: project.dueDate
+          ? {
+              value: moment(project.dueDate).format('DD/MM/YYYY'),
+              changed: false,
+            }
+          : { value: '', focus: false, changed: false },
       },
       author: project.author,
     };
@@ -47,12 +54,14 @@ class EditFormProject extends Component {
     const { editProjectAction } = prevProps;
     // Dealing with documents
     if (prevState.form.docs.value) {
-      if (prevState.form.docs.value.length !== this.state.form.docs.value.length) {
+      if (
+        prevState.form.docs.value.length !== this.state.form.docs.value.length
+      ) {
         editProjectAction(this.state.form);
       }
     }
   }
-  handleInputChange = (evt) => {
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     return this.setState(prevState => ({
       ...prevState,
@@ -65,8 +74,8 @@ class EditFormProject extends Component {
         },
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -80,8 +89,8 @@ class EditFormProject extends Component {
         },
       },
     }));
-  }
-  handleCheckBoxChange = (evt) => {
+  };
+  handleCheckBoxChange = evt => {
     const { name, checked } = evt.target;
 
     this.setState(prevState => ({
@@ -95,15 +104,19 @@ class EditFormProject extends Component {
         },
       },
     }));
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputSelectTagsChange = (evt) => {
+  };
+  handleInputSelectTagsChange = evt => {
     const inputValue = evt.target.value;
     const { editProjectAction } = this.props;
     if (evt.keyCode === 13) {
@@ -114,10 +127,7 @@ class EditFormProject extends Component {
           ...state.form,
           tags: {
             ...state.form.tags,
-            value: [
-              ...state.form.tags.value,
-              inputValue,
-            ],
+            value: [...state.form.tags.value, inputValue],
             changed: true,
           },
         },
@@ -128,10 +138,7 @@ class EditFormProject extends Component {
           ...prevState.form,
           tags: {
             ...state.form.tags,
-            value: [
-              ...state.form.tags.value,
-              inputValue,
-            ],
+            value: [...state.form.tags.value, inputValue],
             changed: true,
           },
         },
@@ -139,8 +146,8 @@ class EditFormProject extends Component {
       editProjectAction(newTags);
       evt.target.value = '';
     }
-  }
-  handleOnBlur = (evt) => {
+  };
+  handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
     const { editProjectAction, clearProjectMessageAction } = this.props;
@@ -159,8 +166,8 @@ class EditFormProject extends Component {
         },
       },
     }));
-  }
-  handleOnFocus = (evt) => {
+  };
+  handleOnFocus = evt => {
     // Save the input field
     if (evt) {
       const { name } = evt.target;
@@ -175,8 +182,8 @@ class EditFormProject extends Component {
         },
       }));
     }
-  }
-  handleInputFileChange = (docs) => {
+  };
+  handleInputFileChange = docs => {
     this.setState(prevState => ({
       ...prevState,
       form: {
@@ -187,14 +194,14 @@ class EditFormProject extends Component {
         },
       },
     }));
-  }
-  handleRemove = (evt) => {
+  };
+  handleRemove = evt => {
     evt.preventDefault();
     const { editProjectAction } = this.props;
     const { state } = this;
-    const values = state.form.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.form.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     const newTags = {
       ...state,
       form: {
@@ -218,12 +225,9 @@ class EditFormProject extends Component {
       },
     }));
     editProjectAction(newTags);
-  }
+  };
   render() {
-    const {
-      activeProjectProcess,
-      loggedUser,
-    } = this.props;
+    const { activeProjectProcess, loggedUser } = this.props;
     const { author } = this.state;
     const { error, project, success } = activeProjectProcess;
     const user = loggedUser;
@@ -236,14 +240,15 @@ class EditFormProject extends Component {
       >
         <div className="form-content">
           <div className="company">
-            <img className="company-logo" src={author.company.picture || '/img/company-generic.png'} alt="logo company" />
+            <img
+              className="company-logo"
+              src={author.company.picture || '/img/company-generic.png'}
+              alt="logo company"
+            />
             <div className="company-info">
               <p className="company-info-name">{author.company.companyName}</p>
               <div className="company-author">
-                <UserIcon
-                  user={{ user: author }}
-                  classCss="middle"
-                />
+                <UserIcon user={{ user: author }} classCss="middle" />
                 <p>{author.fullName}</p>
               </div>
             </div>
@@ -302,7 +307,7 @@ class EditFormProject extends Component {
               error: error && error.isPrice && error.isPrice.detail,
             }}
           />
-          {this.state.form.isPrice.value &&
+          {this.state.form.isPrice.value && (
             <Input
               config={{
                 field: Model.price,
@@ -317,7 +322,7 @@ class EditFormProject extends Component {
                 error: error && error.price && error.price.detail,
               }}
             />
-          }
+          )}
           <Checkbox
             config={{
               field: Model.isContest,
@@ -331,7 +336,7 @@ class EditFormProject extends Component {
               error: error && error.isContest && error.isContest.detail,
             }}
           />
-          {this.state.form.isContest.value &&
+          {this.state.form.isContest.value && (
             <Input
               config={{
                 field: Model.maxTeam,
@@ -348,7 +353,7 @@ class EditFormProject extends Component {
                 error: error && error.maxTeam && error.maxTeam.detail,
               }}
             />
-          }
+          )}
           <InputAutoComplete
             config={{
               field: Model.tags,
@@ -371,9 +376,9 @@ class EditFormProject extends Component {
             blur={this.handleOnBlur}
             readOnly={author._id !== user._id}
           />
-          {this.state.form.docs.value.length === 0 &&
+          {this.state.form.docs.value.length === 0 && (
             <h2>No Documents available</h2>
-          }
+          )}
         </div>
       </form>
     );

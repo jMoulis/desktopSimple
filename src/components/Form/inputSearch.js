@@ -11,7 +11,7 @@ class InputSearch extends Component {
     config: PropTypes.object.isRequired,
     callback: PropTypes.func.isRequired,
     metaName: PropTypes.string.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +21,7 @@ class InputSearch extends Component {
       metas: null,
     };
   }
-  handleInputChange = async (evt) => {
+  handleInputChange = async evt => {
     const { value, name } = evt.target;
     const { metaName } = this.props;
     try {
@@ -36,8 +36,7 @@ class InputSearch extends Component {
           },
           metas: data.metas,
         }));
-      }
-      else {
+      } else {
         this.setState(prevState => ({
           ...prevState,
           [name]: {
@@ -47,14 +46,12 @@ class InputSearch extends Component {
           metas: [],
         }));
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error.message);
     }
-  }
-  handleBlur = (evt) => {
+  };
+  handleBlur = evt => {
     const { value, name } = evt.target;
-    const { callback } = this.props;
     if (this.state[name].changed) {
       this.setState(prevState => ({
         ...prevState,
@@ -65,32 +62,40 @@ class InputSearch extends Component {
         metas: [],
       }));
     }
-  }
+  };
   // diplome_rgp discipline_lib
-  handleSelect = (evt) => {
+  handleSelect = evt => {
     const { metavalue } = evt.target.dataset;
     const { callback, metaName } = this.props;
 
-    this.setState(prevState => ({
-      ...prevState,
-      [metaName]: {
-        ...prevState[metaName],
-        value: metavalue,
-        changed: true,
-      },
-      metas: [],
-    }), () =>
-      callback(this.state[metaName], metaName));
-  }
+    this.setState(
+      prevState => ({
+        ...prevState,
+        [metaName]: {
+          ...prevState[metaName],
+          value: metavalue,
+          changed: true,
+        },
+        metas: [],
+      }),
+      () => callback(this.state[metaName], metaName),
+    );
+  };
   fetchmetas = (metaName, metaValue) => {
-    const metas = axios.get(`${ROOT_URL}/api/metas?metaName=${metaName}&metaValue=${metaValue}`);
+    const metas = axios.get(
+      `${ROOT_URL}/api/metas?metaName=${metaName}&metaValue=${metaValue}`,
+    );
     return metas;
-  }
+  };
   render() {
     const { metas } = this.state;
     const { config } = this.props;
     return (
-      <div className={`form-group input-search ${config.field.required ? 'required' : ''}`}>
+      <div
+        className={`form-group input-search ${
+          config.field.required ? 'required' : ''
+        }`}
+      >
         <label htmlFor={config.field.name}>{config.field.label}</label>
         <input
           value={this.state[config.field.name].value}
@@ -98,7 +103,11 @@ class InputSearch extends Component {
           type={config.field.type}
           name={config.field.name}
           id={config.field.name}
-          placeholder={config.field.placeholder ? config.field.placeholder : config.field.label}
+          placeholder={
+            config.field.placeholder
+              ? config.field.placeholder
+              : config.field.label
+          }
           className={`form-control ${config.error && 'form-control-error'}`}
           readOnly={config.readOnly}
           max={config.max}
@@ -106,25 +115,29 @@ class InputSearch extends Component {
           autoComplete="off"
           onBlur={this.handleBlur}
         />
-        {metas &&
+        {metas && (
           <div className="input-search-box">
             <ul>
-              {metas && metas.map((meta, index) => (
-                <li
-                  key={index}
-                  data-metavalue={meta.metaValue}
-                  onClick={this.handleSelect}
-                  onKeyPress={this.handleSelect}
-                >
-                  {meta.metaValue}
-                </li>
-              ))}
+              {metas &&
+                metas.map((meta, index) => (
+                  <li
+                    key={index}
+                    data-metavalue={meta.metaValue}
+                    onClick={this.handleSelect}
+                    onKeyPress={this.handleSelect}
+                  >
+                    {meta.metaValue}
+                  </li>
+                ))}
             </ul>
           </div>
-        }
-        {config.success && config.success === config.field.name && <SuccessIcon />}
+        )}
+        {config.success &&
+          config.success === config.field.name && <SuccessIcon />}
         {config.small && <small className="tips">{config.small}</small>}
-        {config.error && <small className="error-message">{config.error}</small>}
+        {config.error && (
+          <small className="error-message">{config.error}</small>
+        )}
       </div>
     );
   }

@@ -7,7 +7,8 @@ import './button.css';
  * Category: normal, success, danger, warning, neutral
  * Size: large, small
  * Type: button, submit
-*/
+ */
+
 const Button = ({
   label,
   loading,
@@ -25,7 +26,9 @@ const Button = ({
     type={type}
     disabled={disabled && true}
     style={style && style}
-    className={`btn${disabled ? ' btn-disabled' : ''} btn-${category} ${size ? `btn-${size}` : ''}`}
+    className={`btn${disabled ? ' btn-disabled' : ''} btn-${category} ${
+      size ? `btn-${size}` : ''
+    }`}
     onClick={onClick}
     title={title}
     {...rest}
@@ -36,10 +39,7 @@ const Button = ({
 );
 
 Button.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onClick: PropTypes.func,
   loading: PropTypes.bool,
   label: PropTypes.string,

@@ -6,14 +6,12 @@ import './profile.css';
 import '../../../../../../node_modules/cropperjs/dist/cropper.css';
 import Model from './student-model';
 import Input from '../../../../Form/input';
-import Select from '../../../../Form/select';
 import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
-import InputSearch from '../../../../Form/inputSearch';
 
 class Profile extends React.Component {
   static propTypes = {
@@ -21,12 +19,12 @@ class Profile extends React.Component {
     editUserAction: PropTypes.func.isRequired,
     editUser: PropTypes.object.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     const { loggedUser } = this.props;
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = {
         ...field,
         [key]: loggedUser
@@ -54,7 +52,7 @@ class Profile extends React.Component {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
-  handleFormKeyPress = (evt) => {
+  handleFormKeyPress = evt => {
     if (
       evt.key === 'Enter' &&
       evt.target.type !== 'textarea' &&
@@ -64,8 +62,8 @@ class Profile extends React.Component {
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -75,8 +73,8 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -87,8 +85,8 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleInputSelectCompetencesChange = (evt) => {
+  };
+  handleInputSelectCompetencesChange = evt => {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
 
@@ -106,16 +104,16 @@ class Profile extends React.Component {
       editUserAction(loggedUser._id, newTags);
       evt.target.value = '';
     }
-  }
-  handleInputFileChange = (evt) => {
+  };
+  handleInputFileChange = evt => {
     this.readUrl(evt.target);
-  }
-  readUrl = (input) => {
+  };
+  readUrl = input => {
     if (input.files && input.files[0]) {
       const { editUserAction, loggedUser } = this.props;
       const { state } = this;
       const reader = new FileReader();
-      reader.onload = (evt) => {
+      reader.onload = evt => {
         const newPicture = {
           ...state,
           picture: {
@@ -129,8 +127,8 @@ class Profile extends React.Component {
       };
       reader.readAsDataURL(input.files[0]);
     }
-  }
-  handleSelectChange = (evt) => {
+  };
+  handleSelectChange = evt => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -140,8 +138,8 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleOnBlur = (evt) => {
+  };
+  handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
     const { editUserAction, loggedUser, clearMessageAction } = this.props;
@@ -157,8 +155,8 @@ class Profile extends React.Component {
         changed: false,
       },
     }));
-  }
-  handleOnFocus = (evt) => {
+  };
+  handleOnFocus = evt => {
     // Save the input field
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -168,12 +166,14 @@ class Profile extends React.Component {
         focus: true,
       },
     }));
-  }
-  handleRemove = (evt) => {
+  };
+  handleRemove = evt => {
     evt.preventDefault();
     const { editUserAction, loggedUser } = this.props;
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => index !== Number(evt.target.id), );
+    const values = state.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     const newtags = {
       ...state,
       tags: {
@@ -184,8 +184,8 @@ class Profile extends React.Component {
     };
     this.setState(() => newtags);
     editUserAction(loggedUser._id, newtags);
-  }
-  handleDocsChange = (docs) => {
+  };
+  handleDocsChange = docs => {
     this.setState(prevState => ({
       ...prevState,
       docs: {
@@ -193,13 +193,13 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
+  };
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
-  }
-  handleCloseCropImageModal = (img) => {
+  };
+  handleCloseCropImageModal = img => {
     // Server crashes on modal close if img undefined... Without response back
     if (img) {
       const { state } = this;
@@ -215,35 +215,37 @@ class Profile extends React.Component {
       };
       this.setState(() => newPicture);
       editUserAction(loggedUser._id, newPicture);
-    }
-    else {
+    } else {
       this.setState(prevState => ({
         ...prevState,
         cropModal: false,
       }));
     }
-  }
+  };
   handleInputSearch = (inputValue, inputName) => {
-    console.log(inputValue)
+    console.log(inputValue);
     const { editUserAction, loggedUser, clearMessageAction } = this.props;
-    this.setState(prevState => ({
-      ...prevState,
-      [inputName]: inputValue,
-    }), () => {
-      if (this.state[inputName].changed) {
-        editUserAction(loggedUser._id, this.state);
-        clearMessageAction();
-        this.setState(prevState => ({
-          ...prevState,
-          [inputName]: {
-            ...prevState[inputName],
-            focus: false,
-            changed: false,
-          },
-        }));
-      }
-    });
-  }
+    this.setState(
+      prevState => ({
+        ...prevState,
+        [inputName]: inputValue,
+      }),
+      () => {
+        if (this.state[inputName].changed) {
+          editUserAction(loggedUser._id, this.state);
+          clearMessageAction();
+          this.setState(prevState => ({
+            ...prevState,
+            [inputName]: {
+              ...prevState[inputName],
+              focus: false,
+              changed: false,
+            },
+          }));
+        }
+      },
+    );
+  };
   render() {
     const { editUser, editUserAction, loggedUser } = this.props;
     const { error, success, editing } = editUser;
@@ -267,12 +269,16 @@ class Profile extends React.Component {
               <ul className="date-since-container">
                 <li>
                   <span className="date-since-item">
-                    {`Member since: ${Moment(loggedUser.createdAt).format('DD/MM/YYYY')}`}
+                    {`Member since: ${Moment(loggedUser.createdAt).format(
+                      'DD/MM/YYYY',
+                    )}`}
                   </span>
                 </li>
                 <li>
                   <span className="date-since-item">
-                    {`Last update: ${Moment(loggedUser.updatedAt).format('DD/MM/YYYY')}`}
+                    {`Last update: ${Moment(loggedUser.updatedAt).format(
+                      'DD/MM/YYYY',
+                    )}`}
                   </span>
                 </li>
               </ul>
@@ -302,7 +308,7 @@ class Profile extends React.Component {
                   editing,
                 }}
               />
-              {loggedUser.typeUser === 'company' &&
+              {loggedUser.typeUser === 'company' && (
                 <Input
                   config={{
                     field: Model.jobDescription,
@@ -311,12 +317,15 @@ class Profile extends React.Component {
                     type: 'text',
                     blur: this.handleOnBlur,
                     focus: this.handleOnFocus,
-                    error: error && error.jobDescription && error.jobDescription.detail,
+                    error:
+                      error &&
+                      error.jobDescription &&
+                      error.jobDescription.detail,
                     success,
                     editing,
                   }}
                 />
-              }
+              )}
               <Input
                 config={{
                   field: Model.location,

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './listProject.css';
-import Modal from '../Modal/modal';
+import Modal from '../../../../../Modules/Modal/modal';
 import NewProject from '../../containers/NewProject/newProject';
 import DetailProject from '../../containers/DetailProject/detailProject';
 import Team from '../../containers/Team';
@@ -17,7 +17,7 @@ class ListProject extends React.Component {
     globalProps: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
-  }
+  };
   state = {
     showNewProjectForm: {
       display: false,
@@ -31,7 +31,7 @@ class ListProject extends React.Component {
       display: false,
       zIndex: 0,
     },
-  }
+  };
   handleShowNewProjectForm = () => {
     this.setState(prevState => ({
       showNewProjectForm: {
@@ -39,8 +39,8 @@ class ListProject extends React.Component {
         zIndex: 1,
       },
     }));
-  }
-  handleShowDetailModal = (evt) => {
+  };
+  handleShowDetailModal = evt => {
     const { projectid } = evt.currentTarget.dataset;
     const { fetchSingleProjectAction } = this.props;
     fetchSingleProjectAction(projectid);
@@ -55,47 +55,27 @@ class ListProject extends React.Component {
       },
       projectId: projectid,
     }));
-  }
+  };
   handleShowCreateTeamModal = () => {
     this.setState(prevState => ({
       ...prevState,
       createTeamModal: {
         display: !prevState.createTeamModal.display,
-        zIndex: prevState.createTeamModal.zIndex + 1,
+        zIndex: prevState.createTeamModal.zIndex + 20,
       },
       detailProjectModal: {
         ...prevState.detailProjectModal,
         display: true,
       },
     }));
-    // Avoid a nasty effect between transition
-    setTimeout(() => {
-      this.setState(prevState => ({
-        ...prevState,
-        detailProjectModal: {
-          display: false,
-          zIndex: 0,
-        },
-      }));
-    }, 300);
-  }
-  handleCloseDetailModal = () => {
+  };
+  handleCloseModal = modalName => {
     this.setState(() => ({
-      detailProjectModal: {
+      [modalName]: {
         display: false,
         zIndex: 0,
       },
     }));
-  }
-  handleCloseModal = (modalName) => {
-    setTimeout(() => {
-      this.setState(() => ({
-        [modalName]: {
-          display: false,
-          zIndex: 0,
-        },
-      }));
-    }, 300);
   };
   render() {
     const {
@@ -118,9 +98,7 @@ class ListProject extends React.Component {
     }
     return (
       <div className="project-list-container">
-        <ul
-          className="project-list"
-        >
+        <ul className="project-list">
           {projectListProcess.projects.map(project => (
             <ListProjectItem
               key={project._id}
@@ -129,29 +107,28 @@ class ListProject extends React.Component {
             />
           ))}
         </ul>
-        {this.state.showNewProjectForm.display &&
+        {this.state.showNewProjectForm.display && (
           <Modal
             name="showNewProjectForm"
             closeFromParent={this.handleShowNewProjectForm}
             title="New Project"
             zIndex={this.state.showNewProjectForm.zIndex}
           >
-            <NewProject
-              loggedUser={this.props.loggedUser}
-            />
-          </Modal>}
-        {this.state.createTeamModal.display &&
+            <NewProject loggedUser={this.props.loggedUser} />
+          </Modal>
+        )}
+        {this.state.createTeamModal.display && (
           <Modal
             name="createTeamModal"
             closeFromParent={this.handleCloseModal}
             title="Create Team"
             zIndex={this.state.createTeamModal.zIndex}
           >
-            <Team
-              loggedUser={this.props.loggedUser}
-            />
-          </Modal>}
-        {this.state.detailProjectModal.display && activeProjectProcess.loading === false ?
+            <Team loggedUser={this.props.loggedUser} />
+          </Modal>
+        )}
+        {this.state.detailProjectModal.display &&
+        activeProjectProcess.loading === false ? (
           <Modal
             name="detailProjectModal"
             closeFromParent={this.handleCloseModal}
@@ -164,11 +141,13 @@ class ListProject extends React.Component {
               globalActions={globalActions}
               globalProps={globalProps}
             />
-          </Modal> : ''}
+          </Modal>
+        ) : (
+          ''
+        )}
       </div>
     );
   }
 }
-
 
 export default ListProject;

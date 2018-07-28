@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -20,10 +19,12 @@ const mapStateToProps = ({ authReducer }) => ({
 // Actions
 const mapDispatchToProps = dispatch => ({});
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const SettingsContainer = createContainer(Settings);
 export default SettingsContainer;

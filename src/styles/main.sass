@@ -46,8 +46,11 @@ table
 	border-spacing: 0
 input
 	font-family: $font
+	background-color: $beige
 	&:placeholder
 		font-family: $font
+textarea
+	background-color: $beige
 h1
 	font-size: 1.5rem
 	font-weight: bold
@@ -63,7 +66,7 @@ h1
 	padding: 0
 	display: flex
 	align-items: center
-	.li
+	& > li
 		margin-right: .2rem
 .user-thumbnail
 	display: flex
@@ -71,11 +74,11 @@ h1
 	padding: .2rem
 .online
 	padding: .2rem
-	font-size: 1rem
+	font-size: .8rem
 	border-radius: 2px
 	position: absolute
-	top: 5px
-	right: 5px
+	top: 60px
+	right: 8px
 	color: $beige
 	font-weight: bold
 	letter-spacing: .05rem
@@ -85,5 +88,9 @@ h1
 		background-color: $green
 .d-flex
 	display: flex
+.flex-column
+	flex-direction: column
+.flex1
+	flex: 1 0 auto
 .flex-justify-between
 	justify-content: space-between

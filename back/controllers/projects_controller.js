@@ -20,7 +20,11 @@ module.exports = {
         };
       }
       const projects = await Project.find({ ...params })
-        .sort(req.query.sorting ? { createdAt: req.query.sorting } : { createdAt: 1 })
+        .sort(
+          req.query.sorting
+            ? { createdAt: req.query.sorting }
+            : { createdAt: 1 },
+        )
         .populate({
           path: 'teams',
           select: 'name',
@@ -51,19 +55,27 @@ module.exports = {
           select: 'fullName picture tags',
         });
       if (projects.length <= 0) {
-        const apiResponse = new ApiResponse(res, {
-          projects: [],
-          error: 'No projects yet, you should come back later...',
-        }, 404);
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            projects: [],
+            error: 'No projects yet, you should come back later...',
+          },
+          404,
+        );
         return apiResponse.failure();
       }
-      const apiResponse = new ApiResponse(res, {
-        projects,
-        success: 'Projects',
-      }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          projects,
+          success: 'Projects',
+        },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
-      console.log(error.message)
+      console.log('Get projects:', error.message);
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
@@ -72,11 +84,12 @@ module.exports = {
   async create(req, res) {
     try {
       const projectProps = req.body;
-
-      console.log('From users show', res.locals)
       projectProps.author = { _id: res.locals.user._id };
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
-        projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        projectProps.dueDate = moment(
+          projectProps.dueDate,
+          'DD/MM/YYYY',
+        ).format('YYYY-MM-DD');
       }
       const newProject = await Project.create(projectProps);
       const project = await Project.findOne({ _id: newProject._id })
@@ -109,13 +122,17 @@ module.exports = {
           model: 'user',
           select: 'fullName picture tags',
         });
-      const apiResponse = new ApiResponse(res, {
-        project,
-        success: { status: true, message: 'New Project Created' },
-      }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          project,
+          success: { status: true, message: 'New Project Created' },
+        },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       const apiResponse = new ApiResponse(res, 400);
       return apiResponse.failure(error);
     }
@@ -154,21 +171,29 @@ module.exports = {
       });
     try {
       if (!project) {
-        const apiResponse = new ApiResponse(res, {
-          status: 404,
-          source: { pointer: '/data/attributes/picture' },
-          title: 'Bad Request',
-          detail: 'Project Not Found',
-        }, 404);
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            status: 404,
+            source: { pointer: '/data/attributes/picture' },
+            title: 'Bad Request',
+            detail: 'Project Not Found',
+          },
+          404,
+        );
         return apiResponse.failure();
       }
-      const apiResponse = new ApiResponse(res, {
-        project,
-        success: {
-          status: true,
-          message: 'Project found',
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          project,
+          success: {
+            status: true,
+            message: 'Project found',
+          },
         },
-      }, 200);
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
       const apiResponse = new ApiResponse(res, 400);
@@ -181,7 +206,9 @@ module.exports = {
     const projectProps = req.body;
     const userId = res.locals.user._id;
     if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
-      projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+      projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format(
+        'YYYY-MM-DD',
+      );
     }
     // Fetch the key name a set it to true
     // To send back only the field that changed
@@ -193,14 +220,14 @@ module.exports = {
       { _id: projectId },
       { ...projectProps, updatedAt: new Date() },
       options,
-      (error) => {
+      error => {
         if (error) {
           const apiResponse = new ApiResponse(res, 400);
           return apiResponse.failure(error);
         }
       },
     )
-      .then(() => (
+      .then(() =>
         Project.findById({ _id: projectId }, projection)
           .populate({
             path: 'subscribers',
@@ -216,32 +243,40 @@ module.exports = {
               select: 'fullName picture',
               options: { limit: 4 },
             },
-          })
-      ))
-      .then((project) => {
+          }),
+      )
+      .then(project => {
         if ('subscribers' in projectProps) {
           if (projectProps.subscribers.length > 0) {
-            User.update({ _id: userId }, { $push: { subscribes: project._id } })
-              .catch((error) => {
-                const apiResponse = new ApiResponse(res, 400);
-                return apiResponse.failure(error);
-              });
+            User.update(
+              { _id: userId },
+              { $push: { subscribes: project._id } },
+            ).catch(error => {
+              const apiResponse = new ApiResponse(res, 400);
+              return apiResponse.failure(error);
+            });
           } else if (projectProps.subscribers.length === 0) {
-            User.update({ _id: userId }, { $pull: { subscribes: project._id } })
-              .catch((error) => {
-                const apiResponse = new ApiResponse(res, 400);
-                return apiResponse.failure(error);
-              });
+            User.update(
+              { _id: userId },
+              { $pull: { subscribes: project._id } },
+            ).catch(error => {
+              const apiResponse = new ApiResponse(res, 400);
+              return apiResponse.failure(error);
+            });
           }
         }
-        const apiResponse = new ApiResponse(res, {
-          project: {
-            field: Object.keys(projectProps)[0],
-            value: project[Object.keys(projectProps)[0]],
-            id: project._id,
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            project: {
+              field: Object.keys(projectProps)[0],
+              value: project[Object.keys(projectProps)[0]],
+              id: project._id,
+            },
+            success: Object.keys(projectProps)[0],
           },
-          success: Object.keys(projectProps)[0],
-        }, 200);
+          200,
+        );
         return apiResponse.success();
       })
       .catch(next);

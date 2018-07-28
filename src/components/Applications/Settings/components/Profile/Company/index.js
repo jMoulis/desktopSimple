@@ -17,29 +17,29 @@ class CompanyProfile extends React.Component {
     editUserAction: PropTypes.func.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
     editUser: PropTypes.object,
-  }
+  };
   static defaultProps = {
     editUser: null,
-  }
+  };
   constructor(props) {
     super(props);
     this.state = {};
     const { loggedUser } = this.props;
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = {
         ...field,
-        [`company.${key}`]: loggedUser.company ?
-          {
-            value: loggedUser.company[key],
-            focus: false,
-            changed: false,
-          } :
-          {
-            value: '',
-            focus: false,
-            changed: false,
-          },
+        [`company.${key}`]: loggedUser.company
+          ? {
+              value: loggedUser.company[key],
+              focus: false,
+              changed: false,
+            }
+          : {
+              value: '',
+              focus: false,
+              changed: false,
+            },
       };
       return field;
     });
@@ -53,7 +53,10 @@ class CompanyProfile extends React.Component {
     const { editUserAction, loggedUser } = prevProps;
     // Dealing with documents
     if (prevState.company['company.legalDocs'].value) {
-      if (prevState.company['company.legalDocs'].value.length !== this.state.company['company.legalDocs'].value.length) {
+      if (
+        prevState.company['company.legalDocs'].value.length !==
+        this.state.company['company.legalDocs'].value.length
+      ) {
         editUserAction(loggedUser._id, this.state);
       }
     }
@@ -62,14 +65,18 @@ class CompanyProfile extends React.Component {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -82,8 +89,8 @@ class CompanyProfile extends React.Component {
         },
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -97,34 +104,34 @@ class CompanyProfile extends React.Component {
         },
       },
     }));
-  }
-  handlePictureChange = (evt) => {
+  };
+  handlePictureChange = evt => {
     this.readUrl(evt.target);
-  }
-  readUrl = (input) => {
+  };
+  readUrl = input => {
     if (input.files && input.files[0]) {
       const { editUserAction, loggedUser } = this.props;
       const { state } = this;
       const reader = new FileReader();
-      reader.onload = (evt) => {
+      reader.onload = evt => {
         const newpicture = {
           ...state,
           company: {
             ...state.company,
-            ['company.picture']: {
+            'company.picture': {
               ...state.company['company.picture'],
               value: evt.target.result,
               changed: true,
             },
           },
         };
-        this.setState(() => (newpicture));
+        this.setState(() => newpicture);
         editUserAction(loggedUser._id, newpicture);
       };
       reader.readAsDataURL(input.files[0]);
     }
-  }
-  handleOnBlur = (evt) => {
+  };
+  handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
     const { editUserAction, loggedUser, clearMessageAction } = this.props;
@@ -143,8 +150,8 @@ class CompanyProfile extends React.Component {
         },
       },
     }));
-  }
-  handleInputSelectTagsChange = (evt) => {
+  };
+  handleInputSelectTagsChange = evt => {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
     if (evt.keyCode === 13) {
@@ -153,7 +160,7 @@ class CompanyProfile extends React.Component {
         ...state,
         company: {
           ...state.company,
-          ['company.tags']: {
+          'company.tags': {
             ...state.company['company.tags'],
             value: [
               ...state.company['company.tags'].value,
@@ -167,20 +174,20 @@ class CompanyProfile extends React.Component {
       editUserAction(loggedUser._id, newTags);
       evt.target.value = '';
     }
-  }
-  handleRemove = (evt) => {
+  };
+  handleRemove = evt => {
     evt.preventDefault();
     const { editUserAction, loggedUser } = this.props;
     const { state } = this;
-    const values = state.company['company.tags'].value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.company['company.tags'].value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     const newTags = {
       ...state,
       cropModal: false,
       company: {
         ...state.company,
-        ['company.tags']: {
+        'company.tags': {
           ...state.company['company.tags'],
           value: values,
           changed: true,
@@ -189,25 +196,25 @@ class CompanyProfile extends React.Component {
     };
     this.setState(() => newTags);
     editUserAction(loggedUser._id, newTags);
-  }
-  handleDocsChange = (docs) => {
+  };
+  handleDocsChange = docs => {
     this.setState(prevState => ({
       ...prevState,
       company: {
         ...prevState.company,
-        ['company.legalDocs']: {
+        'company.legalDocs': {
           value: docs,
           changed: true,
         },
       },
     }));
-  }
+  };
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
-  }
-  handleCloseCropImageModal = (img) => {
+  };
+  handleCloseCropImageModal = img => {
     // Server crashes on modal close if img undefined... Without response back
     if (img) {
       const { state } = this;
@@ -216,7 +223,7 @@ class CompanyProfile extends React.Component {
         ...state,
         company: {
           ...state.company,
-          ['company.picture']: {
+          'company.picture': {
             ...state.company['company.picture'],
             value: img,
             changed: true,
@@ -224,22 +231,21 @@ class CompanyProfile extends React.Component {
         },
         cropModal: false,
       };
-      this.setState(() => (newPicture));
+      this.setState(() => newPicture);
       editUserAction(loggedUser._id, newPicture);
-    }
-    else {
+    } else {
       this.setState(prevState => ({
         ...prevState,
         cropModal: false,
       }));
     }
-  }
+  };
   render() {
     const { editUser, loggedUser, editUserAction } = this.props;
     const { error, success, editing } = editUser;
     const { company } = this.state;
     return (
-      <div id="profile" className="form-container" key="app-content" >
+      <div id="profile" className="form-container" key="app-content">
         <form
           id="profile-form"
           className="form"
@@ -250,7 +256,10 @@ class CompanyProfile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${company['company.picture'].value || '/img/company-generic.png'}`}
+                src={`${(company &&
+                  company.company &&
+                  company.company.picture.value) ||
+                  '/img/company-generic.png'}`}
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
@@ -383,7 +392,7 @@ class CompanyProfile extends React.Component {
             </div>
           </div>
         </form>
-        {this.state.cropModal &&
+        {this.state.cropModal && (
           <Modal
             zIndex={100}
             name="imageCropper"
@@ -399,7 +408,8 @@ class CompanyProfile extends React.Component {
                 model: Model,
               }}
             />
-          </Modal>}
+          </Modal>
+        )}
       </div>
     );
   }

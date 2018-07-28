@@ -33,19 +33,23 @@ const ProjectSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
-  teams: [{
-    type: Schema.Types.ObjectId,
-    ref: 'team',
-  }],
+  teams: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'team',
+    },
+  ],
   docs: Array,
   isOnline: {
     type: Boolean,
     default: false,
   },
-  subscribers: [{
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  }],
+  subscribers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
 });
 
 ProjectSchema.pre('save', function preSave(next) {

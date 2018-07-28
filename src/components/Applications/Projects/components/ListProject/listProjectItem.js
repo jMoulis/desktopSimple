@@ -5,27 +5,36 @@ import UserIconContainer from '../../../../../Modules/UserIcon';
 import './listProject.css';
 import TagList from '../../../../../Modules/Tag/tagList';
 
-const truncateDescription = (text) => {
+const truncateDescription = text => {
   const maxWord = 25;
-  const newText = text.split(' ').splice(0, maxWord).join(' ');
+  const newText = text
+    .split(' ')
+    .splice(0, maxWord)
+    .join(' ');
   return `${newText} ...`;
 };
 
 const ListProjectItem = ({ project, showDetailModal }) => {
   return (
-    <li
-      className="project-list-item"
-    >
+    <li className="project-list-item">
       <span
-        className={`online ${project.isOnline ? 'online--green' : 'online--red'}`}
+        className={`online ${
+          project.isOnline ? 'online--green' : 'online--red'
+        }`}
         title={project.isOnline ? 'online' : 'offline'}
       >
         {project.isOnline ? 'online' : 'offline'}
       </span>
       <div className="company">
-        <img className="company-logo" src={project.author.company.picture || '/img/company-generic.png'} alt="logo company" />
+        <img
+          className="company-logo"
+          src={project.author.company.picture || '/img/company-generic.png'}
+          alt="logo company"
+        />
         <div className="company-info">
-          <p className="company-info-name">{project.author.company.companyName}</p>
+          <p className="company-info-name">
+            {project.author.company.companyName}
+          </p>
           <div className="company-author">
             <UserIconContainer
               user={{ user: project.author }}
@@ -40,17 +49,26 @@ const ListProjectItem = ({ project, showDetailModal }) => {
         <ul>
           <li>
             <div>
-              <span className="title">Due Date:</span> {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}
+              <span className="title">Due Date:</span>{' '}
+              {project.dueDate && (
+                <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>
+              )}
             </div>
           </li>
           <li>
             <div>
-              <span className="title">Teams registered:</span> {project.teams.length > 0 ? project.teams.length : <span>No Teams yet</span>}
+              <span className="title">Teams registered:</span>{' '}
+              {project.teams.length > 0 ? (
+                project.teams.length
+              ) : (
+                <span>No Teams yet</span>
+              )}
             </div>
           </li>
           <li>
             <div>
-              <span className="title">Description:</span><p>{truncateDescription(project.description)}</p>
+              <span className="title">Description:</span>
+              <p>{truncateDescription(project.description)}</p>
             </div>
           </li>
           <li>

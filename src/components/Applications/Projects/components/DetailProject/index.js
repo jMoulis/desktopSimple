@@ -17,7 +17,7 @@ class DetailProject extends React.Component {
     openNewTeamModal: PropTypes.func.isRequired,
     deleteProjectAction: PropTypes.func.isRequired,
     closeFromParent: PropTypes.func.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     const { activeProjectProcess } = props;
@@ -33,18 +33,22 @@ class DetailProject extends React.Component {
   }
 
   handleDeleteProject = () => {
-    const { deleteProjectAction, activeProjectProcess, closeFromParent } = this.props;
+    const {
+      deleteProjectAction,
+      activeProjectProcess,
+      closeFromParent,
+    } = this.props;
     deleteProjectAction(activeProjectProcess.project._id);
     closeFromParent('detailProjectModal');
-  }
-  handleSubscribe = (evt) => {
+  };
+  handleSubscribe = evt => {
     const { name } = evt.currentTarget;
     const { editProjectAction, loggedUser } = this.props;
     const stateSubscribers = this.state.subscribers.value;
     let subscribers = [];
-    const userAlreadySubscribed = stateSubscribers.find(subscriber => (
-      subscriber._id === loggedUser._id
-    ));
+    const userAlreadySubscribed = stateSubscribers.find(
+      subscriber => subscriber._id === loggedUser._id,
+    );
 
     switch (name) {
       case 'subscribe':
@@ -54,44 +58,51 @@ class DetailProject extends React.Component {
           subscribers = stateSubscribers;
           return subscribers;
         }
-        return this.setState(prevState => ({
-          ...prevState,
-          form: {
-            ...prevState.form,
-            subscribers: {
-              value: [
-                ...stateSubscribers,
-                { _id: loggedUser._id },
-              ],
-              changed: true,
+        return this.setState(
+          prevState => ({
+            ...prevState,
+            form: {
+              ...prevState.form,
+              subscribers: {
+                value: [...stateSubscribers, { _id: loggedUser._id }],
+                changed: true,
+              },
             },
-          },
-        }), () => editProjectAction(this.state.form));
+          }),
+          () => editProjectAction(this.state.form),
+        );
       case 'unsubscribe':
-        subscribers = stateSubscribers.filter(subscriber => (
-          subscriber._id !== loggedUser._id));
-        return this.setState(prevState => ({
-          ...prevState,
-          form: {
-            ...prevState.form,
-            subscribers: {
-              value: subscribers,
-              changed: true,
+        subscribers = stateSubscribers.filter(
+          subscriber => subscriber._id !== loggedUser._id,
+        );
+        return this.setState(
+          prevState => ({
+            ...prevState,
+            form: {
+              ...prevState.form,
+              subscribers: {
+                value: subscribers,
+                changed: true,
+              },
             },
-          },
-        }), () => editProjectAction(this.state.form));
+          }),
+          () => editProjectAction(this.state.form),
+        );
       default:
         break;
     }
-  }
+  };
   handleShowAlertBox = () => {
     this.setState(prevState => ({
       ...prevState,
       showAlertBox: !prevState.showAlertBox,
     }));
-  }
+  };
   handleOnlineMode = () => {
-    const { editProjectAction, activeProjectProcess: { project } } = this.props;
+    const {
+      editProjectAction,
+      activeProjectProcess: { project },
+    } = this.props;
     editProjectAction({
       ...this.state.form,
       isOnline: {
@@ -99,11 +110,11 @@ class DetailProject extends React.Component {
         changed: true,
       },
     });
-  }
+  };
   handleShare = () => {
     console.log('shared');
     // Open a message to send to...
-  }
+  };
   render() {
     const {
       activeProjectProcess,
@@ -125,24 +136,28 @@ class DetailProject extends React.Component {
       <div id="edit-project">
         <ul className="project-toolbar">
           <li>
-            {project.author._id === user._id &&
-            <Fragment>
-              <button
-                name="detailProjectModal"
-                type="button"
-                className="btn btn-danger"
-                onClick={this.handleShowAlertBox}
-              >Delete
-              </button>
-              <button
-                name="isOnline"
-                type="button"
-                className={`btn btn-${project.isOnline ? 'danger' : 'success'}`}
-                onClick={this.handleOnlineMode}
-              >{project.isOnline ? 'Offline' : 'Online'}
-              </button>
-            </Fragment>
-            }
+            {project.author._id === user._id && (
+              <Fragment>
+                <button
+                  name="detailProjectModal"
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={this.handleShowAlertBox}
+                >
+                  Delete
+                </button>
+                <button
+                  name="isOnline"
+                  type="button"
+                  className={`btn btn-${
+                    project.isOnline ? 'danger' : 'success'
+                  }`}
+                  onClick={this.handleOnlineMode}
+                >
+                  {project.isOnline ? 'Set Offline' : 'Set Online'}
+                </button>
+              </Fragment>
+            )}
           </li>
         </ul>
         <div className="project-content">
@@ -159,27 +174,38 @@ class DetailProject extends React.Component {
         </div>
         <div className="actions">
           {project.author._id !== user._id &&
-            project.subscribers &&
-            <button
-              title={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                'Unsubscribe from the project' :
-                'subscribe to the project'
-              }
-              name={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                'unsubscribe' :
-                'subscribe'
-              }
-              className={`actions-button actions-button-subscribe
-                  ${project.subscribers.find(subscriber => subscriber._id === user._id) &&
-                ' subscribed'}`
-              }
-              type="button"
-              onClick={this.handleSubscribe}
-            >
-              {project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                <i className="fas fa-thumbs-up" /> :
-                <i className="fas fa-thumbs-up" />}
-            </button>}
+            project.subscribers && (
+              <button
+                title={
+                  project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  )
+                    ? 'Unsubscribe from the project'
+                    : 'subscribe to the project'
+                }
+                name={
+                  project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  )
+                    ? 'unsubscribe'
+                    : 'subscribe'
+                }
+                className={`actions-button actions-button-subscribe
+                  ${project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  ) && ' subscribed'}`}
+                type="button"
+                onClick={this.handleSubscribe}
+              >
+                {project.subscribers.find(
+                  subscriber => subscriber._id === user._id,
+                ) ? (
+                  <i className="fas fa-thumbs-up" />
+                ) : (
+                  <i className="fas fa-thumbs-up" />
+                )}
+              </button>
+            )}
           <button
             className="actions-button actions-button-share"
             type="button"
@@ -189,28 +215,27 @@ class DetailProject extends React.Component {
             <i className="fas fa-share-alt" />
           </button>
         </div>
-        {this.state.showAlertBox &&
+        {this.state.showAlertBox && (
           <AlertBox
             title="Confirmation: Delete Project"
             message="Watch out, Are you really willing to delete this project?"
-            buttons={
-              [
-                {
-                  type: 'danger',
-                  action: this.handleDeleteProject,
-                  label: 'Yeap',
-                  category: 'danger',
-                },
-                {
-                  type: 'success',
-                  action: this.handleShowAlertBox,
-                  label: 'Nope',
-                  category: 'success',
-                },
-              ]
-            }
+            buttons={[
+              {
+                type: 'danger',
+                action: this.handleDeleteProject,
+                label: 'Yeap',
+                category: 'danger',
+              },
+              {
+                type: 'success',
+                action: this.handleShowAlertBox,
+                label: 'Nope',
+                category: 'success',
+              },
+            ]}
             type="danger"
-          />}
+          />
+        )}
       </div>
     );
   }

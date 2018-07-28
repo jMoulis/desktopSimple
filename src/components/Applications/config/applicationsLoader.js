@@ -17,14 +17,12 @@ class AppLoader {
       try {
         const app = await import(`../${this.appName}/containers/index.js`);
         return app.default;
-      }
-      catch (error) {
-        console.log(error);
+      } catch (error) {
         throw new Error(`Unable to import app: ${error.message}`);
       }
     }
     return false;
-  }
+  };
 }
 
 export default AppLoader;

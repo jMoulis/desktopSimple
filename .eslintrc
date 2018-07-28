@@ -1,11 +1,15 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
+  "plugins": [
+    "prettier"
+  ],
   "parser": "babel-eslint",
   "env": {
     "browser": true
   },
   "rules": {
-    "brace-style": ["error", "stroustrup"],
+    "prettier/prettier": ["error"],
+    "brace-style": "off",
     "no-param-reassign": ["error", { "props": false }],
     "no-mixed-operators": ["error", { "allowSamePrecedence": true }],
     "jsx-a11y/no-static-element-interactions": "off",

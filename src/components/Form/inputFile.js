@@ -9,12 +9,14 @@ const InputFile = ({ config }) => {
     onChange,
     style,
     styleContainer,
-    styleLabelContainer
+    styleLabelContainer,
   } = config;
   return (
     <div className="form-group" style={styleContainer}>
       <div className="input-file-label-container" style={styleLabelContainer}>
-        <label className="input-file-label" htmlFor={field.name}>{field.label}</label>
+        <label className="input-file-label" htmlFor={field.name}>
+          {field.label}
+        </label>
       </div>
       <input
         name={field.name}
@@ -25,6 +27,7 @@ const InputFile = ({ config }) => {
         onBlur={config.blur}
         onFocus={config.focus}
         accept={config.typeFileAccepted}
+        style={style}
       />
       {config.success === config.field.name && <SuccessIcon />}
       {config.error && <small className="error-message">{config.error}</small>}
@@ -37,4 +40,3 @@ InputFile.propTypes = {
 };
 
 export default InputFile;
-

@@ -25,7 +25,7 @@
       justify-content: space-around;
       flex-wrap: wrap; }
     .form-container .form .form-content {
-      background-color: #97c0b7;
+      background-color: #eee9d1;
       padding: .5rem;
       flex: 1; }
       .form-container .form .form-content .form-group {
@@ -54,7 +54,6 @@
   padding: 1rem 0;
   position: relative; }
   .form-group .form-control {
-    background-color: #97c0b7;
     border: none;
     border-bottom: 2px solid #0a1c28;
     outline: none;

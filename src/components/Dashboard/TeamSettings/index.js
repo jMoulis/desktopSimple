@@ -7,7 +7,10 @@ import TeamProject from '../../../containers/Dashboard/TeamSettings/TeamProject'
 const TeamSettings = ({ closeFromParent, globalActions }) => (
   <div className="team-settings">
     <EditTeam closeFromParent={closeFromParent} />
-    <TeamProject globalActions={globalActions} closeFromParent={closeFromParent} />
+    <TeamProject
+      globalActions={globalActions}
+      closeFromParent={closeFromParent}
+    />
   </div>
 );
 

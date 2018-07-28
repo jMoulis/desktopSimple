@@ -12,22 +12,22 @@ class Settings extends React.Component {
   static propTypes = {
     loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object,
-  }
+  };
   static defaultProps = {
     globalActions: null,
-  }
+  };
 
   state = {
     tab: 'profile',
     subMenu: {},
-  }
+  };
 
   componentDidUpdate() {
     if (Object.keys(this.state.subMenu).length !== 0) {
-      document.addEventListener('click', this._resetSubMenu );
+      document.addEventListener('click', this._resetSubMenu);
     }
   }
-  handleShowSubMenu = (evt) => {
+  handleShowSubMenu = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -36,30 +36,30 @@ class Settings extends React.Component {
         [name]: !prevState.subMenu[name],
       },
     }));
-  }
+  };
 
-  handleSuccessCreation = (tabName) => {
+  handleSuccessCreation = tabName => {
     this.setState(prevState => ({
       ...prevState,
       tab: tabName,
     }));
-  }
-  handleTabSelect = (evt) => {
+  };
+  handleTabSelect = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
       tab: name,
       subMenu: {},
     }));
-  }
-  _resetSubMenu = (evt) => {
+  };
+  _resetSubMenu = evt => {
     if (!evt.target.dataset.toggle) {
       this.setState(prevState => ({
         ...prevState,
         subMenu: {},
       }));
     }
-  }
+  };
   render() {
     const { loggedUser, globalActions } = this.props;
     const { subMenu } = this.state;
@@ -72,81 +72,86 @@ class Settings extends React.Component {
                 className="btn-app-toolbar unselectable"
                 name="profile"
                 onClick={this.handleTabSelect}
-              >Profile
+              >
+                Profile
               </button>
             </li>
-            {loggedUser.typeUser !== 'student' &&
+            {loggedUser.typeUser !== 'student' && (
               <li className="app-toolbar-list-item">
                 <button
                   className="btn-app-toolbar unselectable"
                   data-toggle="toggle"
                   name="company"
                   onClick={this.handleTabSelect}
-                >Company
+                >
+                  Company
                 </button>
-              </li>}
-            {loggedUser.typeUser !== 'company' &&
+              </li>
+            )}
+            {loggedUser.typeUser !== 'company' && (
               <li className="app-toolbar-list-item">
                 <button
                   className="btn-app-toolbar unselectable"
                   data-toggle="toggle"
                   name="newTeam"
                   onClick={this.handleShowSubMenu}
-                >Teams
+                >
+                  Teams
                 </button>
-                {subMenu.newTeam && <SubMenu
-                  menus={[
-                    {
-                      label: 'Create Team',
-                      disabled: false,
-                      name: 'newTeam',
-                      action: (evt) => {
-                        this.handleTabSelect(evt);
+                {subMenu.newTeam && (
+                  <SubMenu
+                    menus={[
+                      {
+                        label: 'Create Team',
+                        disabled: false,
+                        name: 'newTeam',
+                        action: evt => {
+                          this.handleTabSelect(evt);
+                        },
                       },
-                    },
-                    {
-                      label: 'Teams List',
-                      disabled: false,
-                      name: 'teams',
-                      action: (evt) => {
-                        this.handleTabSelect(evt);
+                      {
+                        label: 'Teams List',
+                        disabled: false,
+                        name: 'teams',
+                        action: evt => {
+                          this.handleTabSelect(evt);
+                        },
                       },
-                    },
-                  ]}
-                />}
+                    ]}
+                  />
+                )}
               </li>
-            }
+            )}
             <li className="app-toolbar-list-item">
               <button
                 className="btn-app-toolbar unselectable"
                 name="account"
                 data-toggle="toggle"
                 onClick={this.handleTabSelect}
-              >Touchy Info
+              >
+                Touchy Info
               </button>
             </li>
           </ul>
         </div>
-        {this.state.tab === 'profile' &&
-          <Profile key="profile" />}
+        {this.state.tab === 'profile' && <Profile key="profile" />}
         {this.state.tab === 'teams' &&
-          loggedUser.typeUser !== 'company' &&
-          <TeamProfile
-            key="teams"
+          loggedUser.typeUser !== 'company' && (
+            <TeamProfile
+              key="teams"
+              loggedUser={loggedUser}
+              globalActions={globalActions}
+            />
+          )}
+        {this.state.tab === 'newTeam' && (
+          <NewTeamContainer
             loggedUser={loggedUser}
-            globalActions={globalActions}
-          />}
-        {this.state.tab === 'newTeam' &&
-          <NewTeamContainer loggedUser={loggedUser} onSuccess={this.handleSuccessCreation} tabName="teams" />
-        }
-        {this.state.tab === 'company' &&
-          <CompanyProfile
-            key="profile"
-          />}
-        {this.state.tab === 'account' &&
-          <AccountProfile
-            key="account"
-          />}
+            onSuccess={this.handleSuccessCreation}
+            tabName="teams"
+          />
+        )}
+        {this.state.tab === 'company' && <CompanyProfile key="profile" />}
+        {this.state.tab === 'account' && <AccountProfile key="account" />}
       </div>
     );
   }

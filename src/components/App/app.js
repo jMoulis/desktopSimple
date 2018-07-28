@@ -13,13 +13,18 @@ import Signup from '../../containers/Home/SignUp';
 import TeamSelector from '../../containers/Dashboard/TeamSelector';
 import Loader from '../../Modules/Loader';
 
-
 class App extends Component {
   static propTypes = {
     auth: PropTypes.bool.isRequired,
     rehydrateAction: PropTypes.func.isRequired,
     fetchSingleTeamAction: PropTypes.func.isRequired,
     loginProcess: PropTypes.object.isRequired,
+  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSelectTeam: true,
+    };
   }
   static getDerivedStateFromProps(nextProps, nextState) {
     if (nextProps.auth === false) {
@@ -28,12 +33,6 @@ class App extends Component {
       };
     }
     return nextState;
-  }
-  constructor(props) {
-    super(props);
-    this.state = {
-      showSelectTeam: true,
-    };
   }
   componentDidMount() {
     // Refresh Management
@@ -46,18 +45,18 @@ class App extends Component {
       }
     }
   }
-  handleSelectTeam = (teamid) => {
+  handleSelectTeam = teamid => {
     const { fetchSingleTeamAction } = this.props;
     this.setState(() => ({
       showSelectTeam: false,
     }));
     fetchSingleTeamAction(teamid);
-  }
+  };
   showSelectTeamPanel = () => {
     this.setState(() => ({
       showSelectTeam: true,
     }));
-  }
+  };
   render() {
     const { auth, loginProcess } = this.props;
     return (
@@ -68,7 +67,11 @@ class App extends Component {
             path="/"
             render={() => {
               if (auth) return <Redirect to="/dashboard" />;
-              return <Home><Content /></Home>;
+              return (
+                <Home>
+                  <Content />
+                </Home>
+              );
             }}
           />
           <Route
@@ -82,7 +85,7 @@ class App extends Component {
                 <Home>
                   <LoginForm />
                 </Home>
-                );
+              );
             }}
           />
           <Route
@@ -96,7 +99,7 @@ class App extends Component {
                 <Home>
                   <Signup />
                 </Home>
-                );
+              );
             }}
           />
           <Route
@@ -113,14 +116,13 @@ class App extends Component {
                     />
                     {this.state.showSelectTeam &&
                       loginProcess.loggedUser.typeUser !== 'company' &&
-                      loginProcess.loggedUser.teams.length !== 0 &&
+                      loginProcess.loggedUser.teams.length !== 0 && (
                         <TeamSelector selectTeam={this.handleSelectTeam} />
-                    }
+                      )}
                     <Footer key="footer" />
                   </div>
                 );
-              }
-              else if (loginProcess.loading) {
+              } else if (loginProcess.loading) {
                 return (
                   <div
                     style={{
@@ -144,7 +146,7 @@ class App extends Component {
               <Home>
                 <NoMatch />
               </Home>
-              )}
+            )}
           />
         </Switch>
       </div>

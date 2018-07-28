@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .frame {
-  background-color: #008e8b;
+  background-color: #97c0b7;
   border: 8px solid #0a1c28;
   border-radius: 2px;
   box-shadow: 0px 0px 20px 0px #0a1c28;
@@ -38,7 +38,7 @@
     height: 100%;
     overflow: hidden;
     position: relative;
-    background-color: #97c0b7;
+    background-color: #eee9d1;
     border-bottom: 2px solid #0a1c28; }
     .frame .child-app .app-toolbar {
       background-color: rgba(0, 142, 139, 0.5);
