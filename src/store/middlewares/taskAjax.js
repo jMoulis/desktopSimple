@@ -25,6 +25,7 @@ import {
   deleteTaskFailureAction,
 } from '../reducers/taskReducer';
 import { logoutAction } from '../reducers/authReducer';
+import Utils from '../../Utils/utils';
 /*
  * Code
  */
@@ -39,10 +40,15 @@ const toObject = arr => {
  * Middleware
  */
 export default store => next => action => {
+  const utils = new Utils();
   switch (action.type) {
     case CREATE_TASK: {
-      const formData = action.payload;
-      formData.users = [...formData.users];
+      const formData = utils.cleanUpFormsDataBeforePost(action.payload);
+      const documents = action.payload.documents.map(document => ({
+        value: document.value,
+        name: document.name,
+      }));
+      formData.documents = documents;
       axios({
         method: 'post',
         data: formData,
@@ -99,9 +105,11 @@ export default store => next => action => {
       break;
     }
     case FETCH_TASKS: {
+      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
+        ._id;
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/tasks`,
+        url: `${ROOT_URL}/api/tasks/team/${teamId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

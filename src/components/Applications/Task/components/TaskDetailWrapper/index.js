@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TaskDetail from './TaskDetail';
+import TaskDetail from '../../containers/TaskDetailWrapper/TaskDetail';
 import TaskActivity from './TaskActivity';
 import TaskInfo from './TaskInfo';
 

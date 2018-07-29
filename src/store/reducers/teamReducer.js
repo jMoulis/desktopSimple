@@ -81,10 +81,10 @@ const reducer = (state = initialState, action = {}) => {
           error: null,
           success: action.payload.success,
         },
-        teamListProcess: {
-          ...state.teamListProcess,
-          teams: [action.payload.team, ...state.teamListProcess.teams],
-        },
+        // teamListProcess: {
+        //   ...state.teamListProcess,
+        //   teams: [action.payload.team, ...state.teamListProcess.teams],
+        // },
       };
     }
     case GLOBAL_CREATE_TEAM_FAILURE: {

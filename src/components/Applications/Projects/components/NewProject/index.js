@@ -18,16 +18,23 @@ class NewProject extends React.Component {
     clearProjectMessageAction: PropTypes.func.isRequired,
     tabName: PropTypes.string,
     onSuccess: PropTypes.func,
-  }
+  };
   static defaultProps = {
     tabName: '',
     onSuccess: null,
-  }
+  };
   constructor(props) {
     super(props);
     let field = {};
-    Object.keys(Model).map((key) => {
-      field = { ...field, [key]: { value: Model[key].isArray ? [] : '', focus: false, changed: false } };
+    Object.keys(Model).map(key => {
+      field = {
+        ...field,
+        [key]: {
+          value: Model[key].isArray ? [] : '',
+          focus: false,
+          changed: false,
+        },
+      };
       return field;
     });
     this.state = {
@@ -38,7 +45,11 @@ class NewProject extends React.Component {
     };
   }
   componentDidUpdate() {
-    const { projectCreation: { error, loading }, onSuccess, tabName } = this.props;
+    const {
+      projectCreation: { error, loading },
+      onSuccess,
+      tabName,
+    } = this.props;
     if (!error && !loading && onSuccess) {
       return onSuccess(tabName);
     }
@@ -48,25 +59,34 @@ class NewProject extends React.Component {
     const { clearProjectMessageAction } = this.props;
     clearProjectMessageAction();
   }
-  handleSubmit = (evt) => {
+  handleSubmit = evt => {
     evt.preventDefault();
     const { type } = evt.target.dataset;
     const { createProjectAction } = this.props;
     if (type === 'draft') {
-      createProjectAction({ ...this.state, isOnline: { value: false, changed: true } });
+      createProjectAction({
+        ...this.state,
+        isOnline: { value: false, changed: true },
+      });
+    } else {
+      createProjectAction({
+        ...this.state,
+        isOnline: { value: true, changed: true },
+      });
     }
-    else {
-      createProjectAction({ ...this.state, isOnline: { value: true, changed: true } });
-    }
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     return this.setState(prevState => ({
       ...prevState,
@@ -76,8 +96,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -88,8 +108,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleCheckBoxChange = (evt) => {
+  };
+  handleCheckBoxChange = evt => {
     const { name, checked } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -99,8 +119,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleInputSelectCompetencesChange = (evt) => {
+  };
+  handleInputSelectCompetencesChange = evt => {
     const inputValue = evt.target.value;
     if (evt.keyCode === 13) {
       const { state } = this;
@@ -108,28 +128,25 @@ class NewProject extends React.Component {
         ...state,
         tags: {
           ...state.tags,
-          value: [
-            ...state.tags.value,
-            inputValue.toLowerCase(),
-          ],
+          value: [...state.tags.value, inputValue.toLowerCase()],
           changed: true,
         },
       }));
       evt.target.value = '';
     }
-  }
-  handleInputFileChange = (docs) => {
+  };
+  handleInputFileChange = docs => {
     this.setState(prevState => ({
       ...prevState,
       docs,
     }));
-  }
-  handleRemove = (evt) => {
+  };
+  handleRemove = evt => {
     evt.preventDefault();
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     this.setState(prevState => ({
       ...prevState,
       tags: {
@@ -138,8 +155,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleOnFocus = (evt) => {
+  };
+  handleOnFocus = evt => {
     if (evt) {
       const { name } = evt.target;
       this.setState(prevState => ({
@@ -149,12 +166,11 @@ class NewProject extends React.Component {
           focus: true,
         },
       }));
-    }
-    else {
+    } else {
       return false;
     }
-  }
-  handleOnBlur = (evt) => {
+  };
+  handleOnBlur = evt => {
     if (evt) {
       const { name } = evt.target;
       this.setState(prevState => ({
@@ -164,16 +180,19 @@ class NewProject extends React.Component {
           focus: false,
         },
       }));
-    }
-    else {
+    } else {
       return false;
     }
-  }
+  };
   render() {
-    const { projectCreation: { error }, onSuccess, tabName } = this.props;
+    const {
+      projectCreation: { error },
+      onSuccess,
+      tabName,
+    } = this.props;
 
     return (
-      <div id="newProject" className="form-container" key="app-content" >
+      <div id="newProject" className="form-container" key="app-content">
         <form
           id="newProject-form"
           className="form"
@@ -226,7 +245,7 @@ class NewProject extends React.Component {
               error: error && error.isPrice && error.isPrice.detail,
             }}
           />
-          {this.state.isPrice.value &&
+          {this.state.isPrice.value && (
             <Input
               config={{
                 field: Model.price,
@@ -239,7 +258,7 @@ class NewProject extends React.Component {
                 error: error && error.price && error.price.detail,
               }}
             />
-          }
+          )}
           <Checkbox
             config={{
               field: Model.isContest,
@@ -251,7 +270,7 @@ class NewProject extends React.Component {
               error: error && error.isContest && error.isContest.detail,
             }}
           />
-          {this.state.isContest.value &&
+          {this.state.isContest.value && (
             <Input
               config={{
                 field: Model.maxTeam,
@@ -264,7 +283,7 @@ class NewProject extends React.Component {
                 error: error && error.maxTeam && error.maxTeam.detail,
               }}
             />
-          }
+          )}
           <InputAutoComplete
             config={{
               field: Model.tags,

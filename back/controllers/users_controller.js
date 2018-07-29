@@ -13,7 +13,10 @@ module.exports = {
       };
 
       if (req.query.count && req.query.filter) {
-        const usersCount = await User.find({ ...query, tags: { $in: [req.query.filter] } }).count();
+        const usersCount = await User.find({
+          ...query,
+          tags: { $in: [req.query.filter] },
+        }).count();
         return apiResponse2.success(200, {
           count: {
             key: req.query.filter,
@@ -22,7 +25,10 @@ module.exports = {
           success: 'Count',
         });
       } else if (req.query.filter) {
-        const usersTotal = await User.find({ ...query, tags: { $in: [req.query.filter] } }).count();
+        const usersTotal = await User.find({
+          ...query,
+          tags: { $in: [req.query.filter] },
+        }).count();
         // Pagination
         const LIMIT = 50;
         let SKIP = 0;
@@ -37,7 +43,7 @@ module.exports = {
         if (SKIP >= usersTotal) {
           nextPage = null;
         }
-        if ((SKIP + LIMIT) >= totalPage) {
+        if (SKIP + LIMIT >= totalPage) {
           nextPage = null;
         }
         if (SKIP > 0) {
@@ -47,9 +53,18 @@ module.exports = {
           nextPage,
           prevPage,
         };
-        const users = await User.find(query).skip(SKIP).limit(LIMIT);
+        const users = await User.find({
+          ...query,
+          tags: { $in: [req.query.filter] },
+        })
+          .skip(SKIP)
+          .limit(LIMIT);
         if (users.length !== 0) {
-          return apiResponse2.success(200, { users, pagination, success: 'Fetch Users' });
+          return apiResponse2.success(200, {
+            users,
+            pagination,
+            success: 'Fetch Users',
+          });
         }
         return apiResponse2.failure(404, null, {
           error: 'No users found',
@@ -67,7 +82,7 @@ module.exports = {
         error: 'No users found',
       });
     } catch (error) {
-      res.status(500).send({ error: error.message });
+      return apiResponse2.failure(422, error, { message: error.message });
     }
   },
 
@@ -104,41 +119,56 @@ module.exports = {
     const userId = req.params.id;
     const userProps = req.body;
     module.exports.imageControl(req, res);
+
     const props = module.exports.buildEditProps(userProps);
+
     const options = { runValidators: true, upsert: true };
     try {
       if (res.locals.user._id.toString() !== userId) {
         const apiResponse = new ApiResponse(res, null, 403);
         return apiResponse.failure();
       }
-
       await User.update({ _id: userId }, { $set: props }, options);
-      const userUpdated = await User.findById({ _id: userId }, { password: 0 })
-        .populate({
-          path: 'teams',
-          select: 'users name',
-          populate: {
-            path: 'users.user',
-            model: 'user',
-            select: 'fullName picture',
-          },
-        });
+      const userUpdated = await User.findById(
+        { _id: userId },
+        { password: 0 },
+      ).populate({
+        path: 'teams',
+        select: 'users name',
+        populate: {
+          path: 'users.user',
+          model: 'user',
+          select: 'fullName picture',
+        },
+      });
       if (!userUpdated) {
-        const apiResponse = new ApiResponse(res, {
-          error: 'No users found',
-        }, 404);
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            error: 'No users found',
+          },
+          404,
+        );
         return apiResponse.failure();
       }
       const fieldUpdated = Object.keys(props)[0];
       const keywords = ['school', 'diploma', 'field', 'tags'];
       if (keywords.includes(fieldUpdated)) {
-        module.exports.persistMetas(fieldUpdated, userUpdated[fieldUpdated], keywords, next);
+        module.exports.persistMetas(
+          fieldUpdated,
+          userUpdated[fieldUpdated],
+          keywords,
+          next,
+        );
       }
 
-      const apiResponse = new ApiResponse(res, { user: userUpdated, success: fieldUpdated }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        { user: userUpdated, success: fieldUpdated },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
-
       return next(error);
     }
   },
@@ -162,16 +192,26 @@ module.exports = {
     if (keywords.includes(fieldUpdated)) {
       try {
         if (Array.isArray(value)) {
-          value.forEach(async (val) => {
-            const isMetaExists = await Meta.findOne({ metaValue: val.toLowerCase() });
+          value.forEach(async val => {
+            const isMetaExists = await Meta.findOne({
+              metaValue: val.toLowerCase(),
+            });
             if (!isMetaExists) {
-              Meta.create({ metaName: fieldUpdated, metaValue: val.toLowerCase() });
+              Meta.create({
+                metaName: fieldUpdated,
+                metaValue: val.toLowerCase(),
+              });
             }
           });
         } else {
-          const isMetaExists = await Meta.findOne({ metaValue: value.toLowerCase() });
+          const isMetaExists = await Meta.findOne({
+            metaValue: value.toLowerCase(),
+          });
           if (!isMetaExists) {
-            await Meta.create({ metaName: fieldUpdated, metaValue: value.toLowerCase() });
+            await Meta.create({
+              metaName: fieldUpdated,
+              metaValue: value.toLowerCase(),
+            });
           }
         }
       } catch (error) {
@@ -204,17 +244,23 @@ module.exports = {
     const imageTypeRegularExpression = /\/(.*?)$/;
     if (req.body.picture) {
       const imageBuffer = module.exports.decodeBase64Image(req.body.picture);
-      const typeUploadedFile = imageBuffer.type.match(imageTypeRegularExpression)[1];
+      const typeUploadedFile = imageBuffer.type.match(
+        imageTypeRegularExpression,
+      )[1];
       const validFormat = ['jpeg', 'png'];
       if (!validFormat.includes(typeUploadedFile)) {
-        const apiResponse = new ApiResponse(res, {
-          picture: {
-            status: 400,
-            source: { pointer: '/data/attributes/picture' },
-            title: 'Bad Request',
-            detail: 'Wrong format. Valid format jpg/jpeg/png',
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            picture: {
+              status: 400,
+              source: { pointer: '/data/attributes/picture' },
+              title: 'Bad Request',
+              detail: 'Wrong format. Valid format jpg/jpeg/png',
+            },
           },
-        }, 400);
+          400,
+        );
         return apiResponse.failure();
       }
       return true;
@@ -234,11 +280,14 @@ module.exports = {
     return response;
   },
   buildEditProps(userProps) {
-    const hasCompanyProperty = Object.prototype.hasOwnProperty.call(userProps, 'company');
+    const hasCompanyProperty = Object.prototype.hasOwnProperty.call(
+      userProps,
+      'company',
+    );
     let props = {};
     if (hasCompanyProperty) {
-      Object.keys(userProps).map((key) => {
-        Object.keys(userProps[key]).map((propKey) => {
+      Object.keys(userProps).map(key => {
+        Object.keys(userProps[key]).map(propKey => {
           props = {
             ...props,
             [`${propKey}`]: userProps[key][propKey],

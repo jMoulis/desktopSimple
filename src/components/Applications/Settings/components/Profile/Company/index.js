@@ -8,7 +8,7 @@ import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../../Modules/filesHandler/addFilesInput';
-import Modal from '../../../../Projects/components/Modal/modal';
+import Modal from '../../../../../../Modules/Modal/modal';
 import Crop from '../../../../../../Modules/Crop';
 
 class CompanyProfile extends React.Component {

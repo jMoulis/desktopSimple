@@ -1,18 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import TaskFilter from '../containers/TaskFilter';
 import TaskList from '../containers/TaskList';
 import TaskDetailWrapperContainer from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
 import './index.css';
-import TaskCreateForm from './TaskDetailWrapper/TaskDetail/TaskCreateForm.js';
+import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
 
 class Task extends React.Component {
+  static propTypes = {
+    fetchTasksAction: PropTypes.func.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
       showCreateModal: false,
     };
+  }
+
+  componentDidMount() {
+    const { fetchTasksAction } = this.props;
+    fetchTasksAction();
   }
   handleShowCreateModal = () => {
     this.setState(prevState => ({

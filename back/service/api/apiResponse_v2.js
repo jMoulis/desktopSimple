@@ -1,4 +1,3 @@
-
 const statusText = require('./statusText');
 
 module.exports = class ApiResponse {
@@ -10,14 +9,20 @@ module.exports = class ApiResponse {
     this.res.set({
       'Content-Type': 'application/json',
     });
-    return this.res.status(code).send(data);
+    return this.res.status(code).send({ ...data, success: true });
   }
 
   failure(code = 422, err, data = null) {
     let errorsApi = {};
-    if (typeof err !== 'undefined' && err) {
+    if (data) {
+      errorsApi = {
+        error: {
+          detail: data,
+        },
+      };
+    } else if (typeof err !== 'undefined' && err) {
       if (err.errors) {
-        Object.keys(err.errors).map((key) => {
+        Object.keys(err.errors).map(key => {
           const error = {
             status: code,
             source: { pointer: `/data/attributes/${key}` },
@@ -35,16 +40,19 @@ module.exports = class ApiResponse {
         if (err.kind === 'date') {
           errorsApi = {
             ...errorsApi,
-            [err.path]: {
+            error: {
               detail: 'Wrong date format JJ/MM/YYYY',
+            },
+          };
+        } else {
+          errorsApi = {
+            ...errorsApi,
+            error: {
+              detail: err.message,
             },
           };
         }
       }
-    } else {
-      errorsApi = {
-        ...data,
-      };
     }
     this.res.set({
       'Content-Type': 'application/json',
@@ -52,4 +60,3 @@ module.exports = class ApiResponse {
     return this.res.status(code).send({ errors: errorsApi });
   }
 };
-

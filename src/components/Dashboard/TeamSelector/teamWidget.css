@@ -1,11 +1,10 @@
 .selector-team-widget h1 {
   font-weight: bold;
-  padding: 1rem;
   text-align: center; }
 
 .selector-team-widget h2 {
   text-align: center;
-  padding-bottom: 2rem; }
+  padding: .5rem; }
 
 .selector-team-widget-users-list {
   margin-top: 1rem; }

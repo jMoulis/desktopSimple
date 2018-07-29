@@ -1,12 +1,17 @@
 import { connect } from 'react-redux';
 
 import TaskList from '../../components/TaskList';
+import { fetchSingleTaskAction } from '../../../../../store/reducers/taskReducer';
 
-const mapStateToProps = ({ authReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
+const mapStateToProps = ({ taskReducer }) => ({
+  tasks: taskReducer.taskListProcess.tasks,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  fetchSingleTaskAction: taskId => {
+    dispatch(fetchSingleTaskAction(taskId));
+  },
+});
 
 const createContainer = connect(
   mapStateToProps,

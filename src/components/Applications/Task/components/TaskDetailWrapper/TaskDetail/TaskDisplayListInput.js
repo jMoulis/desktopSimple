@@ -1,23 +1,38 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-const TaskDisplayListInput = props => {
-  return (
-    <ul>
-      {['type', 'status', 'priority', 'solved', 'label', 'description'].map(
-        (field, index) => (
-          <li key={index}>
-            <div>
-              <label>{field}</label>
-              <input />
-            </div>
-          </li>
-        ),
-      )}
-    </ul>
-  );
-};
+const TaskDisplayListInput = ({ task }) => (
+  <Fragment>
+    {!task ? (
+      <div>Loading</div>
+    ) : (
+      <ul>
+        <li>
+          <label>Type:</label> {task.type}
+        </li>
+        <li>
+          <label>Status:</label>
+          {task.status}
+        </li>
+        <li>
+          <label>Priority:</label>
+          {task.priority}
+        </li>
+        <li>
+          <label>Labels:</label>
+          {task.label}
+        </li>
+        <li>
+          <label>Description:</label>
+          {task.description}
+        </li>
+      </ul>
+    )}
+  </Fragment>
+);
 
-TaskDisplayListInput.propTypes = {};
+TaskDisplayListInput.propTypes = {
+  task: PropTypes.object.isRequired,
+};
 
 export default TaskDisplayListInput;

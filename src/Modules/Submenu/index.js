@@ -13,7 +13,8 @@ const SubMenu = ({ menus }) => (
             name={menu.name}
             onClick={menu.action}
             disabled={menu.disabled}
-          >{menu.label}
+          >
+            {menu.label}
           </button>
         </li>
       ))}
@@ -22,12 +23,14 @@ const SubMenu = ({ menus }) => (
 );
 
 SubMenu.propTypes = {
-  menus: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    action: PropTypes.func,
-    disabled: PropTypes.bool,
-    name: PropTypes.string,
-  }).isRequired).isRequired,
+  menus: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      action: PropTypes.func,
+      disabled: PropTypes.bool,
+      name: PropTypes.string,
+    }).isRequired,
+  ).isRequired,
 };
 
 export default SubMenu;

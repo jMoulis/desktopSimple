@@ -5,17 +5,24 @@ const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
 const VerifyToken = require('../auth/VerifyToken');
-const upload = require('../service/formData');
+const multer = require('multer');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 
-module.exports = (app) => {
+const upload = multer({ dest: 'uploads/' });
+
+module.exports = app => {
   app.post('/api/login', AuthController.login);
   app.post('/api/register', upload.single('picture'), AuthController.register);
   app.post('/api/security', VerifyToken, AuthController.changePassword);
 
   app.get('/api/users', VerifyToken, UsersController.index);
   app.get('/api/users/:id', VerifyToken, UsersController.show);
-  app.put('/api/users/:id', upload.single('picture'), VerifyToken, UsersController.edit);
+  app.put(
+    '/api/users/:id',
+    upload.single('picture'),
+    VerifyToken,
+    UsersController.edit,
+  );
   app.delete('/api/users/:id', VerifyToken, UsersController.delete);
 
   app.get('/api/projects', VerifyToken, ProjectsController.index);
@@ -35,9 +42,14 @@ module.exports = (app) => {
   app.put('/api/messages/:id', VerifyToken, MessageController.edit);
   app.delete('/api/messages/:id', VerifyToken, MessageController.delete);
 
-  app.get('/api/tasks', TasksController.index);
-  app.post('/api/tasks', TasksController.create);
-  app.get('/api/tasks/:id', TasksController.read);
+  app.get('/api/tasks/team/:id', VerifyToken, TasksController.index);
+  app.post(
+    '/api/tasks',
+    upload.single('documents'),
+    VerifyToken,
+    TasksController.create,
+  );
+  app.get('/api/tasks/:id', VerifyToken, TasksController.read);
   app.put('/api/tasks/:id', TasksController.update);
   app.delete('/api/tasks/:id', TasksController.delete);
 };

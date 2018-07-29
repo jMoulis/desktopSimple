@@ -33,7 +33,10 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Email is required'],
     validate: {
-      validator: v => /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(v),
+      validator: v =>
+        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+          v,
+        ),
       message: 'Please provide a valid email',
     },
   },
@@ -56,14 +59,18 @@ const UserSchema = new Schema({
   },
   picture: String,
   tags: Array,
-  teams: [{
-    type: Schema.Types.ObjectId,
-    ref: 'team',
-  }],
-  projects: [{
-    type: Schema.Types.ObjectId,
-    ref: 'project',
-  }],
+  teams: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'team',
+    },
+  ],
+  projects: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'project',
+    },
+  ],
   linkedIn: String,
   website: String,
   gitHub: String,
@@ -74,10 +81,12 @@ const UserSchema = new Schema({
     type: Array,
     default: [],
   },
-  subscribes: [{
-    type: Schema.Types.ObjectId,
-    ref: 'project',
-  }],
+  subscribes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'project',
+    },
+  ],
   helper: Boolean,
   isActive: Boolean,
 });

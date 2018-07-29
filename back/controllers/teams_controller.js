@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Project = require('../models/Project');
 const ApiResponse = require('../service/api/apiResponse');
 
-const decodeBase64Image = (dataString) => {
+const decodeBase64Image = dataString => {
   const matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
   const response = {};
 
@@ -36,20 +36,28 @@ module.exports = {
           select: 'fullName picture',
         });
       if (teams.length === 0) {
-        const apiResponse = new ApiResponse(res, {
-          teams: {
-            status: 404,
-            source: { pointer: '/data/attributes/teams' },
-            title: 'Not Found',
-            detail: 'No teams found',
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            teams: {
+              status: 404,
+              source: { pointer: '/data/attributes/teams' },
+              title: 'Not Found',
+              detail: 'No teams found',
+            },
           },
-        }, 404);
+          404,
+        );
         return apiResponse.failure();
       }
-      const apiResponse = new ApiResponse(res, {
-        teams,
-        success: 'Teams',
-      }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          teams,
+          success: 'Teams',
+        },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
       next(error);
@@ -82,23 +90,29 @@ module.exports = {
         });
       // Add the new teams to user object
       const ids = team.users.map(({ user }) => user);
-      User.updateMany({ _id: { $in: ids } }, {
-        $addToSet: {
-          teams: team,
-          rooms: team._id,
+      User.updateMany(
+        { _id: { $in: ids } },
+        {
+          $addToSet: {
+            teams: team,
+            rooms: team._id,
+          },
         },
-      }).catch(error => next(error.message));
+      ).catch(error => next(error.message));
       await Project.update(
         { _id: team.project },
         {
           $push: { teams: team._id },
         },
-      )
-        .catch(error => next(error.message));
-      const apiResponse = new ApiResponse(res, {
-        team,
-        success: { status: true, message: 'New Team Created' },
-      }, 200);
+      ).catch(error => next(error.message));
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          team,
+          success: { status: true, message: 'New Team Created' },
+        },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
       const apiResponse = new ApiResponse(res, 400);
@@ -127,11 +141,15 @@ module.exports = {
         model: 'user',
         select: 'fullName picture',
       })
-      .then((team) => {
-        const apiResponse = new ApiResponse(res, {
-          team,
-          success: 'Team',
-        }, 200);
+      .then(team => {
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            team,
+            success: 'Team',
+          },
+          200,
+        );
         return apiResponse.success();
       })
       .catch(next);
@@ -143,23 +161,29 @@ module.exports = {
     const imageTypeRegularExpression = /\/(.*?)$/;
     if (req.body.picture) {
       const imageBuffer = decodeBase64Image(req.body.picture);
-      const typeUploadedFile = imageBuffer.type.match(imageTypeRegularExpression)[1];
+      const typeUploadedFile = imageBuffer.type.match(
+        imageTypeRegularExpression,
+      )[1];
       const validFormat = ['jpeg', 'png'];
       if (!validFormat.includes(typeUploadedFile)) {
-        const apiResponse = new ApiResponse(res, {
-          picture: {
-            status: 400,
-            source: { pointer: '/data/attributes/picture' },
-            title: 'Bad Request',
-            detail: 'Wrong format. Valid format jpg/jpeg/png',
+        const apiResponse = new ApiResponse(
+          res,
+          {
+            picture: {
+              status: 400,
+              source: { pointer: '/data/attributes/picture' },
+              title: 'Bad Request',
+              detail: 'Wrong format. Valid format jpg/jpeg/png',
+            },
           },
-        }, 400);
+          400,
+        );
         return apiResponse.failure();
       }
     }
     const options = { runValidators: true };
     try {
-      await Team.update({ _id: teamId }, teamProps, options, (error) => {
+      await Team.update({ _id: teamId }, teamProps, options, error => {
         if (error) {
           const apiResponse = new ApiResponse(res, 400);
           return apiResponse.failure(error);
@@ -190,20 +214,26 @@ module.exports = {
         await Project.update(
           { _id: team.project },
           { $addToSet: { teams: team._id } },
-        )
-          .catch(error => console.log('Project Update', error.message));
+        ).catch(error => console.log('Project Update', error.message));
       } else {
-        await Project.findOneAndUpdate({
-          teams: {
-            $in: [team._id],
+        await Project.findOneAndUpdate(
+          {
+            teams: {
+              $in: [team._id],
+            },
           },
-        }, {
+          {
             $pull: {
               teams: team._id,
             },
-          });
+          },
+        );
       }
-      const apiResponse = new ApiResponse(res, { team, success: 'Modify' }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        { team, success: 'Modify' },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
       next(error);
@@ -216,12 +246,15 @@ module.exports = {
       const teamToRemove = await Team.findOne({ _id: teamId });
       const ids = teamToRemove.users.map(({ user }) => user);
       await Team.findByIdAndRemove({ _id: teamId });
-      await User.updateMany({ _id: { $in: ids } }, {
-        $pull: {
-          teams: teamToRemove._id,
-          rooms: teamToRemove._id,
+      await User.updateMany(
+        { _id: { $in: ids } },
+        {
+          $pull: {
+            teams: teamToRemove._id,
+            rooms: teamToRemove._id,
+          },
         },
-      });
+      );
       const teams = await Team.find({ 'users.user': res.locals.user })
         .populate({
           path: 'manager',
@@ -237,10 +270,14 @@ module.exports = {
           model: 'user',
           select: 'fullName picture',
         });
-      const apiResponse = new ApiResponse(res, {
-        teams,
-        success: 'Deleted',
-      }, 200);
+      const apiResponse = new ApiResponse(
+        res,
+        {
+          teams,
+          success: 'Deleted',
+        },
+        200,
+      );
       return apiResponse.success();
     } catch (error) {
       next(error);

@@ -79,10 +79,6 @@ const reducer = (state = initialState, action = {}) => {
           error: null,
           success: action.payload.success,
         },
-        taskListProcess: {
-          ...state.taskListProcess,
-          tasks: [action.payload.task, ...state.taskListProcess.tasks],
-        },
       };
     }
     case CREATE_TASK_FAILURE: {
@@ -114,6 +110,12 @@ const reducer = (state = initialState, action = {}) => {
           tasks: action.payload.tasks,
           success: action.payload.success,
           loading: false,
+          error: null,
+        },
+        activeTaskProcess: {
+          task: action.payload.tasks && action.payload.tasks[0],
+          success: null,
+          loading: true,
           error: null,
         },
       };

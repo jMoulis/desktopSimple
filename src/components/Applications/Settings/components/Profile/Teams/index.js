@@ -13,10 +13,11 @@ class TeamProfile extends React.Component {
     globalActions: PropTypes.object.isRequired,
     fetchTeamsAction: PropTypes.func.isRequired,
     teamsProcess: PropTypes.object.isRequired,
-  }
+  };
+
   state = {
     showAddTeamModal: false,
-  }
+  };
   componentDidMount() {
     const { fetchTeamsAction } = this.props;
     fetchTeamsAction();
@@ -27,7 +28,7 @@ class TeamProfile extends React.Component {
       ...prevState,
       showAddTeamModal: !prevState.showAddTeamModal,
     }));
-  }
+  };
   render() {
     const { loggedUser, globalActions, teamsProcess } = this.props;
     const { teams, loading } = teamsProcess;
@@ -50,9 +51,7 @@ class TeamProfile extends React.Component {
                 <ul>
                   {team.users.map((teamMate, index) => (
                     <li key={index}>
-                      <UserIcon
-                        user={teamMate}
-                      />
+                      <UserIcon user={teamMate} />
                       <p>{teamMate.user.fullName}</p>
                     </li>
                   ))}
@@ -61,7 +60,7 @@ class TeamProfile extends React.Component {
             </li>
           ))}
         </ul>
-        {this.state.showAddTeamModal &&
+        {this.state.showAddTeamModal && (
           <Modal
             closeFromParent={this.handleShowAddTeamModal}
             zIndex={300}
@@ -69,7 +68,8 @@ class TeamProfile extends React.Component {
             title="Create a team"
           >
             <NewTeamContainer loggedUser={loggedUser} />
-          </Modal>}
+          </Modal>
+        )}
       </div>
     );
   }

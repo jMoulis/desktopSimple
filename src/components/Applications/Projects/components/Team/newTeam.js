@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './newTeam.css';
-import Modal from '../Modal/modal';
+import Modal from '../../../../../Modules/Modal/modal';
 import UsersLoader from '../../../../../Modules/UserLoader';
 import Input from '../../../../Form/input';
 import RessourceItem from '../../../../../Modules/RessourceItem';
@@ -22,6 +22,15 @@ class NewTeam extends React.Component {
   static defaultProps = {
     closeFromParent: null,
   };
+  state = {
+    name: '',
+    ressources: '',
+    selectedTags: [],
+    counters: {},
+    selectedUsers: {},
+    modal: false,
+    filter: '',
+  };
   static getDerivedStateFromProps(nextProps, prevState) {
     const { usersCount } = nextProps;
     if (usersCount.count) {
@@ -37,15 +46,6 @@ class NewTeam extends React.Component {
       ...prevState,
     };
   }
-  state = {
-    name: '',
-    ressources: '',
-    selectedTags: [],
-    counters: {},
-    selectedUsers: {},
-    modal: false,
-    filter: '',
-  };
   componentDidUpdate() {
     const { teamCreation, closeFromParent } = this.props;
     const { success } = teamCreation;

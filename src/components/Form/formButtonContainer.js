@@ -15,10 +15,10 @@ const FormButtonsContainer = ({ onCancel, onCreate, onEdit }) => (
       />
     )}
     {onCreate && (
-      <Button type="button" category="primary" label="Create" loading={false} />
+      <Button type="submit" category="primary" label="Create" loading={false} />
     )}
     {onEdit && (
-      <Button type="button" category="secondary" label="Edit" loading={false} />
+      <Button type="submit" category="secondary" label="Edit" loading={false} />
     )}
   </div>
 );

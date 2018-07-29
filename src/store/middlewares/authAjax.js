@@ -32,9 +32,9 @@ import { fetchUserSuccessAction } from '../reducers/userReducer';
 /*
  * Code
  */
-const toObject = (arr) => {
+const toObject = arr => {
   let obj = {};
-  arr.forEach((element) => {
+  arr.forEach(element => {
     obj = { ...obj, [element[0]]: element[1].value };
   });
   return obj;
@@ -43,7 +43,7 @@ const toObject = (arr) => {
  * Middleware
  * 
  */
-export default store => next => (action) => {
+export default store => next => action => {
   switch (action.type) {
     case CREATE_USER: {
       const formData = new FormData(action.payload);
@@ -58,18 +58,30 @@ export default store => next => (action) => {
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
           const { user } = payload;
-          localStorage.setItem('user', JSON.stringify({
-            _id: user._id,
-            fullName: user.fullName,
-          }));
-          store.dispatch(createUserSuccessAction({ user: payload.user, auth: decodedToken.auth }));
-          store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              _id: user._id,
+              fullName: user.fullName,
+            }),
+          );
+          store.dispatch(
+            createUserSuccessAction({
+              user: payload.user,
+              auth: decodedToken.auth,
+            }),
+          );
+          store.dispatch(
+            loginSuccessAction({ user: payload.user, auth: decodedToken.auth }),
+          );
         })
-        .catch((data) => {
+        .catch(data => {
           if (!data.response) {
             return console.error(data);
           }
-          return store.dispatch(createUserFailureAction(data.response.data.errors));
+          return store.dispatch(
+            createUserFailureAction(data.response.data.errors),
+          );
         });
       break;
     }
@@ -81,33 +93,39 @@ export default store => next => (action) => {
         url,
         data: { email: email.value, password: password.value },
       })
-        .then((data) => {
+        .then(data => {
           const payload = data.data;
           const auth = new Auth(payload.token);
           const { user } = payload;
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
-          localStorage.setItem('user', JSON.stringify({
-            _id: user._id,
-            fullName: user.fullName,
-          }));
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              _id: user._id,
+              fullName: user.fullName,
+            }),
+          );
           store.dispatch(fetchUserSuccessAction(user));
-          store.dispatch(loginSuccessAction({ user: payload.user, auth: decodedToken.auth }));
+          store.dispatch(
+            loginSuccessAction({ user: payload.user, auth: decodedToken.auth }),
+          );
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             console.error(error.message);
             if (error.message === 'Network Error') {
-              store.dispatch(loginFailureAction({
-                login: {
-                  status: 500,
-                  detail: 'Serveur Error, contact customer services',
-                },
-                auth: false,
-              }));
+              store.dispatch(
+                loginFailureAction({
+                  login: {
+                    status: 500,
+                    detail: 'Serveur Error, contact customer services',
+                  },
+                  auth: false,
+                }),
+              );
             }
-          }
-          else {
+          } else {
             store.dispatch(loginFailureAction(error.response.data.errors));
             localStorage.removeItem('token');
           }
@@ -122,8 +140,7 @@ export default store => next => (action) => {
         if ('auth' in decodedToken) {
           const user = JSON.parse(localStorage.getItem('user'));
           resolve({ user, auth: decodedToken.auth });
-        }
-        else {
+        } else {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           reject(new Error(JSON.stringify({ auth: false })));
@@ -131,13 +148,12 @@ export default store => next => (action) => {
       });
       rehydrate
         .then(({ user, auth }) => {
-          const handleErrors = (response) => {
+          const handleErrors = response => {
             if (!response.ok) {
-              response.json()
-                .then((error) => {
-                  store.dispatch(rehydrateFailureAction(error));
-                  return error;
-                });
+              response.json().then(error => {
+                store.dispatch(rehydrateFailureAction(error));
+                return error;
+              });
               throw new Error('Auth error');
             }
             return response;
@@ -151,14 +167,19 @@ export default store => next => (action) => {
           })
             .then(handleErrors)
             .then(response => response.json())
-            .then((userUpdated) => {
-              localStorage.setItem('user', JSON.stringify({
-                _id: userUpdated._id,
-                fullName: userUpdated.fullName,
-              }));
+            .then(userUpdated => {
+              localStorage.setItem(
+                'user',
+                JSON.stringify({
+                  _id: userUpdated._id,
+                  fullName: userUpdated.fullName,
+                }),
+              );
               setTimeout(() => {
                 store.dispatch(fetchUserSuccessAction(userUpdated));
-                store.dispatch(rehydrateSuccessAction({ user: userUpdated, auth }));
+                store.dispatch(
+                  rehydrateSuccessAction({ user: userUpdated, auth }),
+                );
               }, 300);
             })
             .catch(error => console.error(error));
@@ -168,16 +189,22 @@ export default store => next => (action) => {
     }
     case EDIT_USER: {
       let formData = {};
-      const hasCompanyProperty = Object.prototype.hasOwnProperty.call(action.payload, 'company');
+      const hasCompanyProperty = Object.prototype.hasOwnProperty.call(
+        action.payload,
+        'company',
+      );
       if (hasCompanyProperty) {
         formData = {
-          company: toObject(Object.entries(action.payload.company)
-            .filter(field => field[1].changed)),
+          company: toObject(
+            Object.entries(action.payload.company).filter(
+              field => field[1].changed,
+            ),
+          ),
         };
-      }
-      else {
-        formData = toObject(Object.entries(action.payload)
-          .filter(field => field[1].changed));
+      } else {
+        formData = toObject(
+          Object.entries(action.payload).filter(field => field[1].changed),
+        );
       }
       axios({
         method: 'put',
@@ -190,11 +217,13 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(editUserSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
-          return store.dispatch(editUserFailureAction(error.response.data.errors));
+          return store.dispatch(
+            editUserFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -211,11 +240,13 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(changePasswordSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.log(error.message);
           }
-          return store.dispatch(changePasswordFailureAction(error.response.data.errors));
+          return store.dispatch(
+            changePasswordFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -230,12 +261,14 @@ export default store => next => (action) => {
         .then(() => {
           store.dispatch(logoutAction());
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(error => {
+          console.error(error);
           if (!error.response) {
             return console.log(error.message);
           }
-          return store.dispatch(deleteUserFailureAction(error.response.data.errors));
+          return store.dispatch(
+            deleteUserFailureAction(error.response.data.errors),
+          );
         });
       break;
     }

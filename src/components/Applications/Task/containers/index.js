@@ -1,25 +1,18 @@
-/*
- * Npm import
- */
 import { connect } from 'react-redux';
 
-/*
- * Local import
- */
 import Task from '../components';
+import { fetchTasksAction } from '../../../../store/reducers/taskReducer';
 
-/*
- * Code
- */
-// State
-const mapStateToProps = state => ({});
+const mapStateToProps = ({ taskReducer }) => ({
+  taskListProcess: taskReducer.taskListProcess,
+});
 
-// Actions
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  fetchTasksAction: () => {
+    dispatch(fetchTasksAction());
+  },
+});
 
-/*
- * Export default
- */
 const createContainer = connect(
   mapStateToProps,
   mapDispatchToProps,

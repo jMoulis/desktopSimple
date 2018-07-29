@@ -25,6 +25,7 @@ export default {
   labels: {
     label: 'Labels',
     name: 'labels',
+    isArray: true,
   },
   documents: {
     label: 'Documents',

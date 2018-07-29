@@ -223,7 +223,6 @@ class Profile extends React.Component {
     }
   };
   handleInputSearch = (inputValue, inputName) => {
-    console.log(inputValue);
     const { editUserAction, loggedUser, clearMessageAction } = this.props;
     this.setState(
       prevState => ({

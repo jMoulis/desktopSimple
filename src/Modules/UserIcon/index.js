@@ -11,17 +11,12 @@ const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  showUserDetailModal: (userId) => {
+  showUserDetailModal: userId => {
     dispatch(showUserDetailModalAction(userId));
   },
 });
 
-const UserIcon = ({
-  showUserDetailModal,
-  user,
-  active,
-  classCss,
-}) => {
+const UserIcon = ({ showUserDetailModal, user, active, classCss }) => {
   if (!user.user) {
     return null;
   }
@@ -33,11 +28,15 @@ const UserIcon = ({
       title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
       onClick={() => active && showUserDetailModal(user.user._id)}
       onKeyPress={() => active && showUserDetailModal(user.user._id)}
-      style={user.spec === 'manager' ? {
-        border: '2px solid #d44c00',
-      } : {
-        border: '2px solid transparent',
-      }}
+      style={
+        user.spec === 'manager'
+          ? {
+              border: '2px solid #d44c00',
+            }
+          : {
+              border: '2px solid transparent',
+            }
+      }
     />
   );
 };
@@ -54,7 +53,10 @@ UserIcon.defaultProps = {
   classCss: '',
 };
 
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const UserIconContainer = createContainer(UserIcon);
 
 export default UserIconContainer;

@@ -44,11 +44,10 @@ const TaskSchema = new Schema({
   },
   priority: String,
   labels: Array,
-  documents: [
-    {
-      type: String,
-    },
-  ],
+  documents: {
+    type: Array,
+    default: [],
+  },
   comments: [CommentSchema],
   team: {
     type: Schema.Types.ObjectId,
