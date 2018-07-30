@@ -1,14 +1,45 @@
 const UsersController = require('../controllers/users_controller');
 const ProjectsController = require('../controllers/projects_controller');
 const AuthController = require('../controllers/auth_controller');
+const multer = require('multer');
+const mime = require('mime');
+const fs = require('fs');
+
 const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
 const VerifyToken = require('../auth/VerifyToken');
-const multer = require('multer');
+
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 
-const upload = multer({ dest: 'uploads/' });
+const mimeTypesAuthorized = ['jpeg', 'jpg', 'pdf', 'doc', 'docx'];
+const validate = mimetype => {
+  if (mimeTypesAuthorized.includes(mimetype)) {
+    return true;
+  }
+  return false;
+};
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (fs.existsSync(`back/uploads/${req.body.team}`)) {
+      cb(null, `back/uploads/${req.body.team}`);
+    } else {
+      fs.mkdirSync(`back/uploads/${req.body.team}`);
+      cb(null, `back/uploads/${req.body.team}`);
+    }
+  },
+  filename: (req, file, cb) => {
+    if (validate(mime.extension(file.mimetype))) {
+      return cb(
+        null,
+        `${file.fieldname}-${Date.now()}.${mime.extension(file.mimetype)}`,
+      );
+    }
+    return cb(new Error('Wrong file format'));
+  },
+});
+
+const upload = multer({ storage });
 
 module.exports = app => {
   app.post('/api/login', AuthController.login);
@@ -45,7 +76,7 @@ module.exports = app => {
   app.get('/api/tasks/team/:id', VerifyToken, TasksController.index);
   app.post(
     '/api/tasks',
-    upload.single('documents'),
+    upload.array('documents'),
     VerifyToken,
     TasksController.create,
   );

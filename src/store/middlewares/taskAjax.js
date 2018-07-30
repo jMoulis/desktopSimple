@@ -43,12 +43,16 @@ export default store => next => action => {
   const utils = new Utils();
   switch (action.type) {
     case CREATE_TASK: {
-      const formData = utils.cleanUpFormsDataBeforePost(action.payload);
-      const documents = action.payload.documents.map(document => ({
-        value: document.value,
-        name: document.name,
-      }));
-      formData.documents = documents;
+      //const formData = utils.cleanUpFormsDataBeforePost(action.payload);
+      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
+        ._id;
+      const formData = new FormData();
+      formData.append('team', teamId);
+      formData.append('title', action.payload.title.value);
+      formData.append('assign', action.payload.assign.value);
+      action.payload.documents.forEach(document => {
+        formData.append('documents', document);
+      });
       axios({
         method: 'post',
         data: formData,

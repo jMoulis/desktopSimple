@@ -24,7 +24,6 @@ class TaskCreateForm extends React.Component {
 
   constructor(props) {
     super(props);
-    // 'id:noRYYNn8cLsAAAAAAAAA0Q'
     let fields = {};
     Object.keys(taskModel).map(key => {
       fields = {
@@ -94,22 +93,24 @@ class TaskCreateForm extends React.Component {
       },
     }));
   };
-  // handleInputFileChange = evt => {
-  //   const file = evt.target.files[0];
-  //   this.setState(prevState => ({
-  //     ...prevState,
-  //     documents: {
-  //       value: file,
-  //       changed: true,
-  //     },
-  //   }));
-  // };
-  handleInputFileChange = docs => {
+  handleInputFileChange = evt => {
+    const file = evt.target.files[0];
     this.setState(prevState => ({
       ...prevState,
-      documents: docs,
+      documents: [...prevState.documents, file],
     }));
   };
+  // handleInputFileChange = docs => {
+  //   this.setState(
+  //     prevState => ({
+  //       ...prevState,
+  //       documents: docs,
+  //     }),
+  //     () => {
+  //       console.log(this.state.documents);
+  //     },
+  //   );
+  // };
 
   render() {
     const {
@@ -174,12 +175,18 @@ class TaskCreateForm extends React.Component {
             error: error && error.labels && error.labels.detail,
           }}
         /> */}
-        <AddFilesInput
+        {/* <AddFilesInput
           error={error && error.documents && error.documents.detail}
           docs={documents}
           onFileChange={this.handleInputFileChange}
           blur={this.handleOnBlur}
-        />
+        /> */}
+        <input type="file" multiple onChange={this.handleInputFileChange} />
+        <ul>
+          {documents.map(document => {
+            return <li>{document.name}</li>;
+          })}
+        </ul>
         {documents.length === 0 && <h2>No Documents available</h2>}
         <Input
           config={{

@@ -6,6 +6,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 
+const ApiResponse = require('./service/api/apiResponse_v2');
 const routes = require('./routes/routes');
 const config = require('./config/config');
 
@@ -21,17 +22,23 @@ const options = {
 };
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect('mongodb://localhost/student', options)
+  mongoose
+    .connect(
+      'mongodb://localhost/student',
+      options,
+    )
     .catch(error => console.warn(error));
-  mongoose.connection
-    .on('error', error => console.warn('Warning', error.message));
+  mongoose.connection.on('error', error =>
+    console.warn('Warning', error.message),
+  );
 }
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 routes(app);
-app.use((req, res, err, next) => {
-  res.status(422).send({ error: err.message });
+app.use((err, req, res, next) => {
+  const apiResponse = new ApiResponse(res);
+  return apiResponse.failure(422, null, err.message);
 });
 
 let server;
