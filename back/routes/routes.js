@@ -1,43 +1,18 @@
-const UsersController = require('../controllers/users_controller');
-const ProjectsController = require('../controllers/projects_controller');
-const AuthController = require('../controllers/auth_controller');
 const multer = require('multer');
 const mime = require('mime');
 const fs = require('fs');
 
+const UsersController = require('../controllers/users_controller');
+const ProjectsController = require('../controllers/projects_controller');
+const AuthController = require('../controllers/auth_controller');
 const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
 const VerifyToken = require('../auth/VerifyToken');
-
+const multerTest = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 
-const mimeTypesAuthorized = ['jpeg', 'jpg', 'pdf', 'doc', 'docx'];
-const validate = mimetype => {
-  if (mimeTypesAuthorized.includes(mimetype)) {
-    return true;
-  }
-  return false;
-};
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (fs.existsSync(`back/uploads/${req.body.team}`)) {
-      cb(null, `back/uploads/${req.body.team}`);
-    } else {
-      fs.mkdirSync(`back/uploads/${req.body.team}`);
-      cb(null, `back/uploads/${req.body.team}`);
-    }
-  },
-  filename: (req, file, cb) => {
-    if (validate(mime.extension(file.mimetype))) {
-      return cb(
-        null,
-        `${file.fieldname}-${Date.now()}.${mime.extension(file.mimetype)}`,
-      );
-    }
-    return cb(new Error('Wrong file format'));
-  },
-});
+const { storage } = multerTest;
 
 const upload = multer({ storage });
 
@@ -57,7 +32,12 @@ module.exports = app => {
   app.delete('/api/users/:id', VerifyToken, UsersController.delete);
 
   app.get('/api/projects', VerifyToken, ProjectsController.index);
-  app.post('/api/projects', VerifyToken, ProjectsController.create);
+  app.post(
+    '/api/projects',
+    VerifyToken,
+    CompanyIsAllowedToPost,
+    ProjectsController.create,
+  );
   app.get('/api/projects/:id', VerifyToken, ProjectsController.show);
   app.put('/api/projects/:id', VerifyToken, ProjectsController.edit);
   app.delete('/api/projects/:id', VerifyToken, ProjectsController.delete);

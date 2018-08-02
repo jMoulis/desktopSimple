@@ -43,7 +43,6 @@ export default store => next => action => {
   const utils = new Utils();
   switch (action.type) {
     case CREATE_TASK: {
-      //const formData = utils.cleanUpFormsDataBeforePost(action.payload);
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
         ._id;
       const formData = new FormData();
@@ -59,6 +58,8 @@ export default store => next => action => {
         url: `${ROOT_URL}/api/tasks`,
         headers: {
           Authorization: localStorage.getItem('token'),
+          type: 'task',
+          folder: teamId,
         },
       })
         .then(({ data }) => {
@@ -90,6 +91,7 @@ export default store => next => action => {
         // url: `${ROOT_URL}/api/tasks/${taskId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
+          type: 'task',
         },
       })
         .then(({ data }) => {

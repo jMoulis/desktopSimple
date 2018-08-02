@@ -27,7 +27,7 @@ module.exports = {
       } else if (req.query.filter) {
         const usersTotal = await User.find({
           ...query,
-          tags: { $in: [req.query.filter] },
+          tags: { $in: [req.query.fi3lter] },
         }).count();
         // Pagination
         const LIMIT = 50;
@@ -119,9 +119,7 @@ module.exports = {
     const userId = req.params.id;
     const userProps = req.body;
     module.exports.imageControl(req, res);
-
     const props = module.exports.buildEditProps(userProps);
-
     const options = { runValidators: true, upsert: true };
     try {
       if (res.locals.user._id.toString() !== userId) {
@@ -161,10 +159,9 @@ module.exports = {
           next,
         );
       }
-
       const apiResponse = new ApiResponse(
         res,
-        { user: userUpdated, success: fieldUpdated },
+        { user: userUpdated, success: true },
         200,
       );
       return apiResponse.success();
@@ -292,9 +289,7 @@ module.exports = {
             ...props,
             [`${propKey}`]: userProps[key][propKey],
           };
-          return props;
         });
-        return true;
       });
     } else {
       props = userProps;

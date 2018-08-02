@@ -25,7 +25,7 @@ import { logoutAction } from '../reducers/authReducer';
 /*
  * Middleware
  */
-export default store => next => (action) => {
+export default store => next => action => {
   switch (action.type) {
     case FETCH_USERS:
       axios({
@@ -49,19 +49,22 @@ export default store => next => (action) => {
         url: `${ROOT_URL}/api/users/${action.userId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
+          type: 'user',
         },
       })
         .then(({ data }) => {
           store.dispatch(fetchUserSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.log(error);
           }
           if (error.response.status === 500) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchUserFailureAction(error.response.error.errors));
+          return store.dispatch(
+            fetchUserFailureAction(error.response.error.errors),
+          );
         });
       break;
 

@@ -21,6 +21,19 @@ const CommentSchema = new Schema({
   },
 });
 
+const DocumentSchema = new Schema({
+  name: String,
+  folder: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  mimetype: String,
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+});
 const ActivitySchema = new Schema({
   type: String,
   author: {
@@ -44,10 +57,7 @@ const TaskSchema = new Schema({
   },
   priority: String,
   labels: Array,
-  documents: {
-    type: Array,
-    default: [],
-  },
+  documents: [DocumentSchema],
   comments: [CommentSchema],
   team: {
     type: Schema.Types.ObjectId,

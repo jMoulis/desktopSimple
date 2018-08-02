@@ -1,11 +1,12 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
 const Team = require('../models/Team');
-const ApiResponse = require('../service/api/apiResponse');
+const ApiResponse = require('../service/api/apiResponse_v2');
 const moment = require('moment');
 
 module.exports = {
   async index(req, res) {
+    const apiResponse = new ApiResponse(res);
     try {
       let params = { author: res.locals.user._id };
       if (res.locals.user.typeUser !== 'company') {
@@ -54,34 +55,24 @@ module.exports = {
           model: 'user',
           select: 'fullName picture tags',
         });
+
       if (projects.length <= 0) {
-        const apiResponse = new ApiResponse(
-          res,
-          {
-            projects: [],
-            error: 'No projects yet, you should come back later...',
-          },
+        return apiResponse.failure(
           404,
+          null,
+          'No projects yet, you should come back later...',
         );
-        return apiResponse.failure();
       }
-      const apiResponse = new ApiResponse(
-        res,
-        {
-          projects,
-          success: 'Projects',
-        },
-        200,
-      );
-      return apiResponse.success();
+
+      return apiResponse.success(200, { projects, success: true });
     } catch (error) {
       console.log('Get projects:', error.message);
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return apiResponse.failure(422, error);
     }
   },
 
   async create(req, res) {
+    const apiResponse = new ApiResponse(res);
     try {
       const projectProps = req.body;
       projectProps.author = { _id: res.locals.user._id };
@@ -122,164 +113,130 @@ module.exports = {
           model: 'user',
           select: 'fullName picture tags',
         });
-      const apiResponse = new ApiResponse(
-        res,
-        {
-          project,
-          success: { status: true, message: 'New Project Created' },
-        },
-        200,
-      );
-      return apiResponse.success();
+      return apiResponse.success(200, { project, success: true });
     } catch (error) {
-      console.log(error.message);
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return apiResponse.failure(422, error);
     }
   },
 
   async show(req, res) {
-    const project = await Project.findOne({ _id: req.params.id })
-      .populate({
-        path: 'teams',
-        select: 'name',
-        populate: {
-          path: 'users',
-          model: 'user',
-          select: 'spec',
-        },
-      })
-      .populate({
-        path: 'teams',
-        select: 'name',
-        populate: {
-          path: 'users.user',
-          model: 'user',
-          select: 'fullName picture',
-          options: { limit: 4 },
-        },
-      })
-      .populate({
-        path: 'author',
-        model: 'user',
-        select: 'fullName picture company',
-      })
-      .populate({
-        path: 'subscribers',
-        model: 'user',
-        select: 'fullName picture tags',
-      });
+    const apiResponse = new ApiResponse(res);
     try {
+      const project = await Project.findOne({ _id: req.params.id })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users',
+            model: 'user',
+            select: 'spec',
+          },
+        })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+            options: { limit: 4 },
+          },
+        })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'subscribers',
+          model: 'user',
+          select: 'fullName picture tags',
+        });
       if (!project) {
-        const apiResponse = new ApiResponse(
-          res,
-          {
-            status: 404,
-            source: { pointer: '/data/attributes/picture' },
-            title: 'Bad Request',
-            detail: 'Project Not Found',
-          },
-          404,
-        );
-        return apiResponse.failure();
+        return apiResponse.failure(404, null, 'Project not found');
       }
-      const apiResponse = new ApiResponse(
-        res,
-        {
-          project,
-          success: {
-            status: true,
-            message: 'Project found',
-          },
-        },
-        200,
-      );
-      return apiResponse.success();
+      return apiResponse.success(200, { project, success: true });
     } catch (error) {
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return apiResponse.failure(422, error);
     }
   },
 
-  edit(req, res, next) {
-    const projectId = req.params.id;
-    const projectProps = req.body;
-    const userId = res.locals.user._id;
-    if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
-      projectProps.dueDate = moment(projectProps.dueDate, 'DD/MM/YYYY').format(
-        'YYYY-MM-DD',
-      );
-    }
-    // Fetch the key name a set it to true
-    // To send back only the field that changed
-    const projection = {
-      [Object.keys(projectProps)[0]]: 1,
-    };
-    const options = { runValidators: true };
-    Project.update(
-      { _id: projectId },
-      { ...projectProps, updatedAt: new Date() },
-      options,
-      error => {
-        if (error) {
-          const apiResponse = new ApiResponse(res, 400);
-          return apiResponse.failure(error);
-        }
-      },
-    )
-      .then(() =>
-        Project.findById({ _id: projectId }, projection)
-          .populate({
-            path: 'subscribers',
-            model: 'user',
-            select: 'fullName picture tags',
-          })
-          .populate({
-            path: 'teams',
-            select: 'name',
-            populate: {
-              path: 'users.user',
-              model: 'user',
-              select: 'fullName picture',
-              options: { limit: 4 },
-            },
-          }),
-      )
-      .then(project => {
-        if ('subscribers' in projectProps) {
-          if (projectProps.subscribers.length > 0) {
-            User.update(
-              { _id: userId },
-              { $push: { subscribes: project._id } },
-            ).catch(error => {
-              const apiResponse = new ApiResponse(res, 400);
-              return apiResponse.failure(error);
-            });
-          } else if (projectProps.subscribers.length === 0) {
-            User.update(
-              { _id: userId },
-              { $pull: { subscribes: project._id } },
-            ).catch(error => {
-              const apiResponse = new ApiResponse(res, 400);
-              return apiResponse.failure(error);
-            });
+  async edit(req, res, next) {
+    const apiResponse = new ApiResponse(res);
+
+    try {
+      const projectId = req.params.id;
+      const projectProps = req.body;
+      const userId = res.locals.user._id;
+      if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
+        projectProps.dueDate = moment(
+          projectProps.dueDate,
+          'DD/MM/YYYY',
+        ).format('YYYY-MM-DD');
+      }
+      // Fetch the key name a set it to true
+      // To send back only the field that changed
+      const projection = {
+        [Object.keys(projectProps)[0]]: 1,
+      };
+      const options = { runValidators: true };
+      await Project.update(
+        { _id: projectId },
+        { ...projectProps, updatedAt: new Date() },
+        options,
+        error => {
+          if (error) {
+            return apiResponse.failure(400, error);
           }
-        }
-        const apiResponse = new ApiResponse(
-          res,
-          {
-            project: {
-              field: Object.keys(projectProps)[0],
-              value: project[Object.keys(projectProps)[0]],
-              id: project._id,
-            },
-            success: Object.keys(projectProps)[0],
+        },
+      );
+
+      const project = await Project.findById({ _id: projectId }, projection)
+        .populate({
+          path: 'subscribers',
+          model: 'user',
+          select: 'fullName picture tags',
+        })
+        .populate({
+          path: 'teams',
+          select: 'name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+            options: { limit: 4 },
           },
-          200,
-        );
-        return apiResponse.success();
-      })
-      .catch(next);
+        });
+
+      if ('subscribers' in projectProps) {
+        if (projectProps.subscribers.length > 0) {
+          User.update(
+            { _id: userId },
+            { $push: { subscribes: project._id } },
+          ).catch(error => {
+            return apiResponse.failure(400, error);
+          });
+        } else if (projectProps.subscribers.length === 0) {
+          User.update(
+            { _id: userId },
+            { $pull: { subscribes: project._id } },
+          ).catch(error => {
+            return apiResponse.failure(400, error);
+          });
+        }
+      }
+
+      return apiResponse.success(200, {
+        project: {
+          field: Object.keys(projectProps)[0],
+          value: project[Object.keys(projectProps)[0]],
+          id: project._id,
+        },
+        success: true,
+      });
+    } catch (error) {
+      return apiResponse.failure(400, error);
+    }
   },
 
   async delete(req, res, next) {

@@ -12,35 +12,26 @@ const newUser = {
 };
 
 describe('Auth Controller', () => {
-  xit('Create User', (done) => {
+  it('Create User', done => {
     request(app)
       .post('/api/register')
       .send(newUser)
       .end(() => {
-        User.findOne({ email: 'julien.moulis@moulis.me' })
-          .then((user) => {
-            assert(user.fullName === 'Julien Moulis');
-          });
+        User.findOne({ email: 'julien.moulis@moulis.me' }).then(user => {
+          assert(user.fullName === 'Julien Moulis');
+        });
         done();
       });
   });
 
-  xit('Post to /api/login requires an email and password', (done) => {
+  it('Post to /api/login requires an email and password', done => {
     request(app)
-      .post('/api/register')
-      .send(newUser)
-      .end(() => {
-        User.findOne({ email: 'julien.moulis@moulis.me' })
-          .then((user) => {
-            request(app)
-              .post('/api/login')
-              .send({ email: 'julien.moulis@moulis.me', password: 'test' })
-              .end((err, res) => {
-                assert(res.statusCode === 200);
-                assert(res.body.hasOwnProperty('token'));
-                done();
-              });
-          });
+      .post('/api/login')
+      .send({ email: 'admin@admin.com', password: 'test' })
+      .end((err, res) => {
+        assert(res.statusCode === 200);
+        assert(Object.prototype.hasOwnProperty.call(res.body, 'token'));
+        done();
       });
   });
 });
