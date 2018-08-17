@@ -33,6 +33,8 @@ const DocumentSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  url: String,
+  type: String,
 });
 const ActivitySchema = new Schema({
   type: String,

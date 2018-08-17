@@ -167,13 +167,12 @@ describe('Users controller', () => {
       });
   });
 
-  xit('Put to /api/users/id can update a record', done => {
+  it('Put to /api/users/id can update a record', done => {
     request(app)
       .put(`/api/users/${userId}`)
       .set('Authorization', `${JWT}`)
       .send({ fullName: 'admin' })
       .end((err, res) => {
-        assert(res.statusCode === 200);
         assert(res.body.user.fullName !== 'Julien Moulis');
         assert(res.body.user.fullName === 'admin');
         done();

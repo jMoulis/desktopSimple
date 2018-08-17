@@ -63,31 +63,26 @@ module.exports = {
           return apiResponse2.success(200, {
             users,
             pagination,
-            success: 'Fetch Users',
           });
         }
-        return apiResponse2.failure(404, null, {
-          error: 'No users found',
-        });
+        return apiResponse2.failure(404, null, 'No users found');
       }
 
       const users = await User.find(query);
       if (users.length !== 0) {
         return apiResponse2.success(200, {
           users,
-          success: 'Fetch Users',
         });
       }
-      return apiResponse2.failure(404, null, {
-        error: 'No users found',
-      });
+      return apiResponse2.failure(404, null, 'No users found');
     } catch (error) {
-      return apiResponse2.failure(422, error, { message: error.message });
+      return apiResponse2.failure(422, error);
     }
   },
 
   async show(req, res, next) {
     const { id } = req.params;
+    const apiResponse = new ApiResponse2(res);
     try {
       const user = await User.findById(id, { password: 0 })
         .populate({
@@ -109,24 +104,31 @@ module.exports = {
             select: 'title',
           },
         });
-      const apiResponse = new ApiResponse(res, user, 200);
-      return apiResponse.success();
+      if (!user) {
+        return apiResponse.failure(404, 'User not found');
+      }
+      return apiResponse.success(200, { user });
     } catch (error) {
-      next(error);
+      return apiResponse.failure(422, error);
     }
   },
   async edit(req, res, next) {
     const userId = req.params.id;
     const userProps = req.body;
+    const apiResponse = new ApiResponse2(res);
+
     module.exports.imageControl(req, res);
+
     const props = module.exports.buildEditProps(userProps);
     const options = { runValidators: true, upsert: true };
+
     try {
       if (res.locals.user._id.toString() !== userId) {
-        const apiResponse = new ApiResponse(res, null, 403);
-        return apiResponse.failure();
+        return apiResponse.failure(403, null, 'Not allowed');
       }
+
       await User.update({ _id: userId }, { $set: props }, options);
+
       const userUpdated = await User.findById(
         { _id: userId },
         { password: 0 },
@@ -139,18 +141,15 @@ module.exports = {
           select: 'fullName picture',
         },
       });
+
       if (!userUpdated) {
-        const apiResponse = new ApiResponse(
-          res,
-          {
-            error: 'No users found',
-          },
-          404,
-        );
-        return apiResponse.failure();
+        return apiResponse.failure(404, 'User not found');
       }
+
       const fieldUpdated = Object.keys(props)[0];
+
       const keywords = ['school', 'diploma', 'field', 'tags'];
+
       if (keywords.includes(fieldUpdated)) {
         module.exports.persistMetas(
           fieldUpdated,
@@ -159,29 +158,23 @@ module.exports = {
           next,
         );
       }
-      const apiResponse = new ApiResponse(
-        res,
-        { user: userUpdated, success: true },
-        200,
-      );
-      return apiResponse.success();
+      return apiResponse.success(200, { user: userUpdated });
     } catch (error) {
-      return next(error);
+      return apiResponse.failure(422, error);
     }
   },
 
   async delete(req, res, next) {
     const userId = req.params.id;
+    const apiResponse = new ApiResponse2(res);
     try {
       const user = await User.findByIdAndRemove({ _id: userId });
-      if (user) {
-        const apiResponse = new ApiResponse(res, { success: 'Delete' }, 404);
-        return apiResponse.success();
+      if (!user) {
+        return apiResponse.failure(422, null, 'Unable to proceed');
       }
-      return next();
+      return apiResponse.success(204);
     } catch (error) {
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return apiResponse.failure(422, error);
     }
   },
 
@@ -265,7 +258,7 @@ module.exports = {
     return true;
   },
   decodeBase64Image(dataString) {
-    const matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    const matches = dataString.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
     const response = {};
 
     if (matches.length !== 3) {

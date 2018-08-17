@@ -41,17 +41,20 @@ const toObject = arr => {
  */
 export default store => next => action => {
   const utils = new Utils();
+
   switch (action.type) {
     case CREATE_TASK: {
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
         ._id;
       const formData = new FormData();
+
       formData.append('team', teamId);
       formData.append('title', action.payload.title.value);
       formData.append('assign', action.payload.assign.value);
       action.payload.documents.forEach(document => {
         formData.append('documents', document);
       });
+
       axios({
         method: 'post',
         data: formData,

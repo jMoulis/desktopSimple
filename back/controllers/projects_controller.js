@@ -1,6 +1,5 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
-const Team = require('../models/Team');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const moment = require('moment');
 
@@ -64,9 +63,8 @@ module.exports = {
         );
       }
 
-      return apiResponse.success(200, { projects, success: true });
+      return apiResponse.success(200, { projects });
     } catch (error) {
-      console.log('Get projects:', error.message);
       return apiResponse.failure(422, error);
     }
   },
@@ -76,6 +74,7 @@ module.exports = {
     try {
       const projectProps = req.body;
       projectProps.author = { _id: res.locals.user._id };
+
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
         projectProps.dueDate = moment(
           projectProps.dueDate,
@@ -113,7 +112,8 @@ module.exports = {
           model: 'user',
           select: 'fullName picture tags',
         });
-      return apiResponse.success(200, { project, success: true });
+
+      return apiResponse.success(200, { project });
     } catch (error) {
       return apiResponse.failure(422, error);
     }
@@ -155,7 +155,7 @@ module.exports = {
       if (!project) {
         return apiResponse.failure(404, null, 'Project not found');
       }
-      return apiResponse.success(200, { project, success: true });
+      return apiResponse.success(200, { project });
     } catch (error) {
       return apiResponse.failure(422, error);
     }
@@ -168,6 +168,7 @@ module.exports = {
       const projectId = req.params.id;
       const projectProps = req.body;
       const userId = res.locals.user._id;
+
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
         projectProps.dueDate = moment(
           projectProps.dueDate,
@@ -179,17 +180,18 @@ module.exports = {
       const projection = {
         [Object.keys(projectProps)[0]]: 1,
       };
+
       const options = { runValidators: true };
-      await Project.update(
+
+      const updateProject = await Project.update(
         { _id: projectId },
         { ...projectProps, updatedAt: new Date() },
         options,
-        error => {
-          if (error) {
-            return apiResponse.failure(400, error);
-          }
-        },
       );
+
+      if (updateProject.n === 0) {
+        return apiResponse.failure(400, null, 'Cannot update project');
+      }
 
       const project = await Project.findById({ _id: projectId }, projection)
         .populate({
@@ -213,16 +215,12 @@ module.exports = {
           User.update(
             { _id: userId },
             { $push: { subscribes: project._id } },
-          ).catch(error => {
-            return apiResponse.failure(400, error);
-          });
+          ).catch(error => apiResponse.failure(400, error));
         } else if (projectProps.subscribers.length === 0) {
           User.update(
             { _id: userId },
             { $pull: { subscribes: project._id } },
-          ).catch(error => {
-            return apiResponse.failure(400, error);
-          });
+          ).catch(error => apiResponse.failure(400, error));
         }
       }
 
@@ -232,7 +230,6 @@ module.exports = {
           value: project[Object.keys(projectProps)[0]],
           id: project._id,
         },
-        success: true,
       });
     } catch (error) {
       return apiResponse.failure(400, error);
@@ -241,6 +238,7 @@ module.exports = {
 
   async delete(req, res, next) {
     const projectId = req.params.id;
+    const apiResponse = new ApiResponse(res);
     // Check later if I should delete teams after project deletion
     // Team.find({ project: projectId })
     //   .then((teams) => {
@@ -251,8 +249,13 @@ module.exports = {
     //   .catch(error => console.log(error));
     // Team.remove({ project: projectId }).then();
     try {
-      await Team.update({ project: projectId }, { $unset: { project: '' } });
-      await Project.findByIdAndRemove({ _id: projectId });
+      // await Team.update({ project: projectId }, { $unset: { project: '' } });
+      const deletedProject = await Project.findByIdAndRemove({
+        _id: projectId,
+      });
+      if (deletedProject) {
+        return apiResponse.success(201);
+      }
     } catch (error) {
       next(error);
     }

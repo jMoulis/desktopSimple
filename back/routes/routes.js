@@ -8,13 +8,14 @@ const AuthController = require('../controllers/auth_controller');
 const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
+const FilesController = require('../controllers/files_controller');
 const VerifyToken = require('../auth/VerifyToken');
-const multerTest = require('../service/multerStorage');
+const multerUtil = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 
-const { storage } = multerTest;
+const { storage } = multerUtil;
 
-const upload = multer({ storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = app => {
   app.post('/api/login', AuthController.login);
@@ -61,6 +62,9 @@ module.exports = app => {
     TasksController.create,
   );
   app.get('/api/tasks/:id', VerifyToken, TasksController.read);
-  app.put('/api/tasks/:id', TasksController.update);
+  app.put('/api/tasks/:id', upload.array('documents'), TasksController.update);
   app.delete('/api/tasks/:id', TasksController.delete);
+
+  app.get('/api/files', VerifyToken, FilesController.index);
+  app.delete('/api/files', VerifyToken, FilesController.delete);
 };

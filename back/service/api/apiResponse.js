@@ -1,4 +1,3 @@
-
 const statusText = require('./statusText');
 
 module.exports = class ApiResponse {
@@ -22,7 +21,7 @@ module.exports = class ApiResponse {
     let errorsApi = {};
     if (typeof err !== 'undefined' && err) {
       if (err.errors) {
-        Object.keys(err.errors).map((key) => {
+        Object.keys(err.errors).map(key => {
           const error = {
             status: this.statusCode,
             source: { pointer: `/data/attributes/${key}` },
@@ -55,4 +54,3 @@ module.exports = class ApiResponse {
     return this.res.status(this.statusCode).send({ errors: errorsApi });
   }
 };
-

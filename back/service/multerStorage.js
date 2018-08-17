@@ -1,6 +1,7 @@
 const multer = require('multer');
-const mime = require('mime');
+const path = require('path');
 const fs = require('fs');
+const mime = require('mime');
 
 const mimeTypesAuthorized = ['jpeg', 'jpg', 'pdf', 'doc', 'docx'];
 const validate = mimetype => {
@@ -10,7 +11,8 @@ const validate = mimetype => {
   return false;
 };
 
-const ROOT_FOLDER = 'back/uploads/';
+const ROOT_FOLDER = path.join(__dirname, '/../uploads/');
+
 module.exports = {
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -41,5 +43,4 @@ module.exports = {
       return cb(new Error('Wrong file format'));
     },
   }),
-  upload: multer({ storage: module.exports.storage }),
 };
