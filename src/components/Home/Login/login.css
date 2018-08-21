@@ -10,7 +10,8 @@
   background-color: #eee9d1; }
 
 #signin-form {
-  align-items: stretch; }
+  align-items: stretch;
+  padding-top: 5rem; }
   #signin-form .form {
     width: inherit;
     border: 5px solid #d44c00; }

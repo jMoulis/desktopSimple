@@ -112,6 +112,7 @@ module.exports = {
       return apiResponse.failure(422, error);
     }
   },
+
   async edit(req, res, next) {
     const userId = req.params.id;
     const userProps = req.body;
@@ -158,7 +159,7 @@ module.exports = {
           next,
         );
       }
-      return apiResponse.success(200, { user: userUpdated });
+      return apiResponse.success(200, { user: userUpdated }, fieldUpdated);
     } catch (error) {
       return apiResponse.failure(422, error);
     }

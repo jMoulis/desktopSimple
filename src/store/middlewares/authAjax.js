@@ -93,10 +93,11 @@ export default store => next => action => {
         url,
         data: { email: email.value, password: password.value },
       })
-        .then(data => {
-          const payload = data.data;
+        .then(({ data }) => {
+          const payload = data;
           const auth = new Auth(payload.token);
           const { user } = payload;
+
           auth.saveLocalStorage();
           const decodedToken = auth.decodeToken();
           localStorage.setItem(
@@ -106,14 +107,11 @@ export default store => next => action => {
               fullName: user.fullName,
             }),
           );
-          store.dispatch(fetchUserSuccessAction(user));
-          store.dispatch(
-            loginSuccessAction({ user: payload.user, auth: decodedToken.auth }),
-          );
+          store.dispatch(fetchUserSuccessAction(payload));
+          store.dispatch(loginSuccessAction({ user, auth: decodedToken.auth }));
         })
         .catch(error => {
           if (!error.response) {
-            console.error(error.message);
             if (error.message === 'Network Error') {
               store.dispatch(
                 loginFailureAction({
@@ -146,43 +144,36 @@ export default store => next => action => {
           reject(new Error(JSON.stringify({ auth: false })));
         }
       });
+
       rehydrate
         .then(({ user, auth }) => {
-          const handleErrors = response => {
-            if (!response.ok) {
-              response.json().then(error => {
-                store.dispatch(rehydrateFailureAction(error));
-                return error;
-              });
-              throw new Error('Auth error');
-            }
-            return response;
-          };
-
-          fetch(`${ROOT_URL}/api/users/${user._id}`, {
+          axios({
             method: 'get',
+            url: `${ROOT_URL}/api/users/${user._id}`,
             headers: {
               Authorization: `${localStorage.getItem('token')}`,
             },
           })
-            .then(handleErrors)
-            .then(response => response.json())
-            .then(userUpdated => {
+            .then(({ data }) => {
               localStorage.setItem(
                 'user',
                 JSON.stringify({
-                  _id: userUpdated._id,
-                  fullName: userUpdated.fullName,
+                  _id: data.user._id,
+                  fullName: data.user.fullName,
                 }),
               );
               setTimeout(() => {
-                store.dispatch(fetchUserSuccessAction(userUpdated));
+                store.dispatch(fetchUserSuccessAction(data));
                 store.dispatch(
-                  rehydrateSuccessAction({ user: userUpdated, auth }),
+                  rehydrateSuccessAction({ user: data.user, auth }),
                 );
               }, 300);
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+              if (error.errors) {
+                store.dispatch(rehydrateFailureAction(error.errors.error));
+              }
+            });
         })
         .catch(error => console.log(error));
       break;

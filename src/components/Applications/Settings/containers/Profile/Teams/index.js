@@ -1,9 +1,7 @@
-
 /*
  * Npm import
  */
 import { connect } from 'react-redux';
-
 
 /*
  * Local import
@@ -21,15 +19,17 @@ const mapStateToProps = ({ authReducer, mainTeamReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchTeamsAction: (userId) => {
+  fetchTeamsAction: userId => {
     dispatch(fetchTeamsAction(userId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const TeamsContainer = createContainer(Teams);
 export default TeamsContainer;

@@ -15,6 +15,7 @@ class Projects extends React.Component {
   state = {
     tab: 'projects',
     search: '',
+    asc: true,
   };
   componentDidMount() {
     const { fetchProjectsAction } = this.props;
@@ -61,6 +62,7 @@ class Projects extends React.Component {
       prevState => ({
         ...prevState,
         sorting,
+        asc: !prevState.asc,
       }),
       () =>
         fetchProjectsAction({
@@ -71,10 +73,12 @@ class Projects extends React.Component {
   };
   render() {
     const { globalActions, globalProps, loggedUser } = this.props;
+    const { asc } = this.state;
+
     return (
       <div className="project-container">
         <div
-          className="app-toolbar d-flex flex-justify-between"
+          className="app-toolbar d-flex flex-justify-between flex-align-items-center"
           key="app-toolbar"
         >
           <ul className="app-toolbar-list">
@@ -121,8 +125,14 @@ class Projects extends React.Component {
               />
               <i className="fas fa-search project-input-search-icon" />
             </form>
-            <button onClick={this.handleSorting} type="button">
-              Asc/desc
+            <button
+              className="btn-asc pointer d-flex"
+              onClick={this.handleSorting}
+              type="button"
+              title="Sorting by date"
+            >
+              <i className="absolute fas fa-sort-up fa-2x" />
+              <i className="fas fa-sort-down fa-2x" />
             </button>
           </div>
         </div>

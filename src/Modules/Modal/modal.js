@@ -8,17 +8,18 @@ class Modal extends React.Component {
   static propTypes = {
     closeFromParent: PropTypes.func,
     zIndex: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     children: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.bool,
       PropTypes.array,
     ]),
+    name: PropTypes.string,
   };
   static defaultProps = {
     children: null,
     closeFromParent: null,
+    name: '',
   };
   constructor(props) {
     super(props);

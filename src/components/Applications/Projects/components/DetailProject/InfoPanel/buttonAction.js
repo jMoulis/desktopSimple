@@ -11,7 +11,6 @@ const ButtonAction = ({
   globalProps,
   user,
 }) => {
-  console.log(user);
   return (
     <Fragment>
       {!globalProps.activeTeamProcess.team.project ? (

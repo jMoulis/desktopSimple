@@ -27,6 +27,7 @@ class Settings extends React.Component {
       document.addEventListener('click', this._resetSubMenu);
     }
   }
+
   handleShowSubMenu = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -44,6 +45,7 @@ class Settings extends React.Component {
       tab: tabName,
     }));
   };
+
   handleTabSelect = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -52,6 +54,7 @@ class Settings extends React.Component {
       subMenu: {},
     }));
   };
+
   _resetSubMenu = evt => {
     if (!evt.target.dataset.toggle) {
       this.setState(prevState => ({

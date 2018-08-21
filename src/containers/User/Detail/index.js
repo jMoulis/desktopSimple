@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -21,15 +20,17 @@ const mapStateToProps = ({ userReducer, appReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchUserAction: (userId) => {
+  fetchUserAction: userId => {
     dispatch(fetchUserAction(userId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const DetailUserContainer = createContainer(DetailUser);
 export default DetailUserContainer;

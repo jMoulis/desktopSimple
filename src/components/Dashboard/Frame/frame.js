@@ -19,12 +19,12 @@ class Frame extends React.Component {
       PropTypes.bool,
       PropTypes.array,
     ]),
-  }
+  };
   static defaultProps = {
     title: 'Application',
     activeApp: null,
     children: null,
-  }
+  };
   constructor(props) {
     super(props);
     const { innerHeight, innerWidth } = window;
@@ -32,10 +32,10 @@ class Frame extends React.Component {
     if (document.getElementById('footer')) {
       footerHeight = document.getElementById('footer').clientHeight;
     }
-    const topBottomPosition = innerHeight * 0.10;
-    const leftRightPosition = innerWidth * 0.10;
-    const width = innerWidth - (leftRightPosition * 2);
-    const height = innerHeight - (topBottomPosition * 2) - footerHeight;
+    const topBottomPosition = innerHeight * 0.1;
+    const leftRightPosition = innerWidth * 0.1;
+    const width = innerWidth - leftRightPosition * 2;
+    const height = innerHeight - topBottomPosition * 2 - footerHeight;
     this.state = {
       right: leftRightPosition,
       left: leftRightPosition,
@@ -54,27 +54,23 @@ class Frame extends React.Component {
     const drag = new Draggable(element, activeApp.appName);
     drag.dragElement();
   }
-  handleSelectApp = (event) => {
+  handleSelectApp = event => {
     const { setActiveAppAction, activeApp } = this.props;
     const appName = event.currentTarget.id;
     if (activeApp.appName !== appName) {
       setActiveAppAction({ appName, appComponent: null });
     }
-  }
+  };
+
   handleTransition = () => {
     this.setState(() => ({
       display: false,
     }));
     return true;
-  }
+  };
+
   render() {
-    const {
-      applications,
-      title,
-      appName,
-      children,
-      activeApp,
-    } = this.props;
+    const { applications, title, appName, children, activeApp } = this.props;
     const frameFullSizeClass = classNames({
       frame: true,
       'frame-full': applications[appName].fullSize,
@@ -94,7 +90,8 @@ class Frame extends React.Component {
         appear
       >
         <div
-          className={`${frameFullSizeClass} ${applications[appName].reduce && 'frame-reduce'}`}
+          className={`${frameFullSizeClass} ${applications[appName].reduce &&
+            'frame-reduce'}`}
           id={appName}
           onClick={this.handleSelectApp}
           onKeyPress={this.handleSelectApp}

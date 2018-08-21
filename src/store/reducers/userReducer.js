@@ -99,7 +99,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         userActive: {
-          user: action.payload,
+          user: action.payload.user,
           loading: false,
           error: null,
         },

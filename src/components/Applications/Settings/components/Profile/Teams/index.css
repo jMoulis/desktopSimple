@@ -33,7 +33,9 @@
   align-items: flex-start;
   padding: 1rem;
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  overflow: auto;
+  height: calc(100% - 70px); }
   .teams-new-team {
     padding-top: 1rem;
     margin: 1rem; }

@@ -117,7 +117,7 @@ class Dashboard extends React.Component {
           <Modal
             title="User"
             closeFromParent={showUserDetailModalAction}
-            name="User Detail"
+            name=""
             zIndex={200}
             small
           >

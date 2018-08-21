@@ -16,6 +16,13 @@
       transition: all 300ms; }
       .project-container .project-input-search-icon:hover {
         color: #d44c00; }
+  .project-container .btn-asc {
+    background-color: transparent;
+    border: none;
+    margin-right: 1rem;
+    outline: none;
+    display: flex;
+    position: relative; }
 
 .project-list-container {
   padding-top: 0;

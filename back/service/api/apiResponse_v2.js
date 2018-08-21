@@ -5,11 +5,11 @@ module.exports = class ApiResponse {
     this.res = res;
   }
 
-  success(code = 200, data) {
+  success(code = 200, data, success) {
     this.res.set({
       'Content-Type': 'application/json',
     });
-    return this.res.status(code).send({ ...data, success: true });
+    return this.res.status(code).send({ ...data, success });
   }
 
   failure(code = 422, err, data = null) {

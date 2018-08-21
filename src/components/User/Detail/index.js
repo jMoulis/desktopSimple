@@ -9,7 +9,7 @@ class DetailUser extends React.Component {
     userId: PropTypes.string.isRequired,
     fetchUserAction: PropTypes.func.isRequired,
     userActive: PropTypes.object.isRequired,
-  }
+  };
   componentDidMount() {
     const { fetchUserAction, userId } = this.props;
     fetchUserAction(userId);
@@ -22,7 +22,11 @@ class DetailUser extends React.Component {
     }
     return (
       <div className="user">
-        <img className="user-picture" src={`${user.picture || '/img/avatar.png'}`} alt="User" />
+        <img
+          className="user-picture"
+          src={`${user.picture || '/img/avatar.png'}`}
+          alt="User"
+        />
         <h1>{user.fullName}</h1>
         <ul className="user-detail-list">
           <li>
@@ -31,32 +35,49 @@ class DetailUser extends React.Component {
           </li>
           <li>
             <span>Email: </span>
-            <a href={`mailto:${user.email || ''}`}>
-              {user.email}
-            </a>
+            <a href={`mailto:${user.email || ''}`}>{user.email}</a>
           </li>
           <li>
-            <span>School: </span>{user.school || ''}
+            <span>School: </span>
+            {user.school || ''}
           </li>
           <li>
-            <span>Diploma: </span>{user.diploma || ''}
+            <span>Diploma: </span>
+            {user.diploma || ''}
           </li>
           <li>
-            <span>Location: </span>{user.location || ''}
+            <span>Location: </span>
+            {user.location || ''}
           </li>
           <li>
             <TagList tags={user.tags} />
           </li>
           <li>
             <span>LinkedIn: </span>
-            <a target="_blank" href={`https://${user.linkedIn}` || ''}>{user.linkedIn}</a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${user.linkedIn}` || ''}
+            >
+              {user.linkedIn}
+            </a>
           </li>
           <li>
             <span>GitHub: </span>
-            <a target="_blank" href={`https://${user.gitHub}` || ''}>{user.gitHub}</a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${user.gitHub}` || ''}
+            >
+              {user.gitHub}
+            </a>
           </li>
-          <li><button type="button">Friend request</button></li>
-          <li><button type="button">Start a chat</button></li>
+          <li>
+            <button type="button">Friend request</button>
+          </li>
+          <li>
+            <button type="button">Start a chat</button>
+          </li>
         </ul>
       </div>
     );

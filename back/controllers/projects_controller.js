@@ -224,13 +224,17 @@ module.exports = {
         }
       }
 
-      return apiResponse.success(200, {
-        project: {
-          field: Object.keys(projectProps)[0],
-          value: project[Object.keys(projectProps)[0]],
-          id: project._id,
+      return apiResponse.success(
+        200,
+        {
+          project: {
+            field: Object.keys(projectProps)[0],
+            value: project[Object.keys(projectProps)[0]],
+            id: project._id,
+          },
         },
-      });
+        Object.keys(projectProps)[0],
+      );
     } catch (error) {
       return apiResponse.failure(400, error);
     }
