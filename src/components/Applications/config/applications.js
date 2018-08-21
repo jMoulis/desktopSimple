@@ -53,4 +53,14 @@ export default {
     reduce: false,
     typeUser: ['all'],
   },
+  AddressBook: {
+    appName: 'AddressBook',
+    title: 'AddressBook',
+    fullSize: false,
+    display: false,
+    zIndex: 0,
+    icon: 'far fa-address-book fa-2x',
+    reduce: false,
+    typeUser: ['all'],
+  },
 };

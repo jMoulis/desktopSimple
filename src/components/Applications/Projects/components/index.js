@@ -16,6 +16,7 @@ class Projects extends React.Component {
     tab: 'projects',
     search: '',
     asc: true,
+    sorting: 1,
   };
   componentDidMount() {
     const { fetchProjectsAction } = this.props;
@@ -73,7 +74,6 @@ class Projects extends React.Component {
   };
   render() {
     const { globalActions, globalProps, loggedUser } = this.props;
-    const { asc } = this.state;
 
     return (
       <div className="project-container">

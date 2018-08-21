@@ -27,7 +27,7 @@ module.exports = {
       } else if (req.query.filter) {
         const usersTotal = await User.find({
           ...query,
-          tags: { $in: [req.query.fi3lter] },
+          tags: { $in: [req.query.filter] },
         }).count();
         // Pagination
         const LIMIT = 50;

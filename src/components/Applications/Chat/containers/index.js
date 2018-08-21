@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -20,7 +19,7 @@ const getLoggedUser = () => {
   return null;
 };
 // State
-const mapStateToProps =  state => ({
+const mapStateToProps = state => ({
   loggedUserId: getLoggedUser(),
 });
 
@@ -31,10 +30,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const ChatContainer = createContainer(Chat);
 export default ChatContainer;
