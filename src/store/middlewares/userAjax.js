@@ -1,11 +1,5 @@
-/*
- * Npm import
- */
 import axios from 'axios';
 
-/*
- * Local import
- */
 import { ROOT_URL } from '../../Utils/config';
 import {
   FETCH_USER,
@@ -18,19 +12,16 @@ import {
   fetchUsersCountSuccessAction,
 } from '../reducers/userReducer';
 import { logoutAction } from '../reducers/authReducer';
-/*
- * Code
- */
+import Utils from '../../Utils/utils';
 
-/*
- * Middleware
- */
 export default store => next => action => {
+  const utils = new Utils();
   switch (action.type) {
-    case FETCH_USERS:
+    case FETCH_USERS: {
+      const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?filter=${action.payload}`,
+        url: `${ROOT_URL}/api/users?${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -39,9 +30,10 @@ export default store => next => action => {
           store.dispatch(fetchUsersSuccessAction(data));
         })
         .catch(({ response }) => {
-          store.dispatch(fetchUsersFailureAction(response.statusText));
+          store.dispatch(fetchUsersFailureAction(response.data.errors.error));
         });
       break;
+    }
 
     case FETCH_USER:
       axios({
@@ -68,10 +60,11 @@ export default store => next => action => {
         });
       break;
 
-    case FETCH_USERS_COUNT:
+    case FETCH_USERS_COUNT: {
+      const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?filter=${action.payload}&count=true`,
+        url: `${ROOT_URL}/api/users?${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -83,6 +76,7 @@ export default store => next => action => {
           console.error(response.statusText);
         });
       break;
+    }
     default:
   }
 

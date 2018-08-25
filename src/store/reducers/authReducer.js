@@ -46,7 +46,7 @@ const initialState = {
     loggedUser: null,
     logging: false,
     error: null,
-    loading: true,
+    loading: false,
   },
   editUser: {
     editing: false,
@@ -131,9 +131,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loginProcess: {
           loggedUser: null,
-          logging: true,
           error: null,
-          loading: true,
         },
         auth: false,
       };

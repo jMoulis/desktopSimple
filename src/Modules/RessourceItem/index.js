@@ -9,10 +9,8 @@ const RessourceItem = ({ config }) => {
   return (
     <li data-name={config.value}>
       <div
-        className={
-          `ressource-item ${config.specAlreadySelected === config.value &&
-          'ressource-item-already-selected'}`
-        }
+        className={`ressource-item ${config.specAlreadySelected ===
+          config.value && 'ressource-item-already-selected'}`}
       >
         <button
           className="btn-delete"
@@ -22,17 +20,20 @@ const RessourceItem = ({ config }) => {
         >
           X
         </button>
-        {!config.selectedUsers[config.value] && <img src="/img/anonymous.png" alt="expert" />}
-        <UserIcon user={{
-          user: config.selectedUsers[config.value],
-        }}
+        {!config.selectedUsers[config.value] && (
+          <img src="/img/anonymous.png" alt="expert" />
+        )}
+        <UserIcon
+          user={{
+            user: config.selectedUsers[config.value],
+          }}
         />
         <span className="ressource-label">{config.value}</span>
         {
           <span>
-            {config.selected && config.selectedUsers[config.value] ?
-              config.selectedUsers[config.value].fullName :
-              config.counters[config.value]}
+            {config.selected && config.selectedUsers[config.value]
+              ? config.selectedUsers[config.value].fullName
+              : config.counters[config.value]}
           </span>
         }
         <Button

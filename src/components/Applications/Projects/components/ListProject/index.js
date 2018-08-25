@@ -92,7 +92,7 @@ class ListProject extends React.Component {
     if (loggedUser.typeUser && loggedUser.typeUser === 'student' && error) {
       return (
         <div className="notFound">
-          <span>{error}</span>
+          <span>{error.detail}</span>
         </div>
       );
     }

@@ -146,7 +146,12 @@ class EditTeam extends React.Component {
         tag => tag.value === value,
       );
       if (!isAlreadySelected) {
-        fetchUsersCountAction(this.state.ressources.value.toLowerCase());
+        const filter = {
+          filter: this.state.ressources.value.toLowerCase(),
+          type: 'student',
+          count: 'true',
+        };
+        fetchUsersCountAction(filter);
         this.setState(prevState => ({
           ressources: '',
           selectedTags: [

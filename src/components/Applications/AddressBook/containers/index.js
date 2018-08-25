@@ -4,7 +4,7 @@ import AddressBook from '../components/index';
 import { fetchUsersAction } from '../../../../store/reducers/userReducer';
 
 const mapStateToProps = ({ userReducer }) => ({
-  users: userReducer.userList.users,
+  usersProcess: userReducer.userList,
 });
 
 // Actions

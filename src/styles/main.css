@@ -111,6 +111,15 @@ h1 {
 .flex-align-items-center {
   align-items: center; }
 
+.flex-wrap {
+  flex-wrap: wrap; }
+
+.overflow {
+  overflow: auto; }
+
+.height-overflow {
+  height: calc(100% - 40px); }
+
 .pointer {
   cursor: pointer; }
 

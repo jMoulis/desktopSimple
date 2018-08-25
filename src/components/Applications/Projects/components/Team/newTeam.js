@@ -85,7 +85,12 @@ class NewTeam extends React.Component {
     const { fetchUsersCountAction } = this.props;
     const { value } = evt.target;
     if (evt.key === 'Enter') {
-      fetchUsersCountAction(this.state.ressources.toLowerCase());
+      const filter = {
+        filter: this.state.ressources.toLowerCase(),
+        type: 'student',
+        count: 'true',
+      };
+      fetchUsersCountAction(filter);
       this.setState(prevState => ({
         ressources: '',
         selectedTags: [

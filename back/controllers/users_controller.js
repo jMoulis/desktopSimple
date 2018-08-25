@@ -7,15 +7,16 @@ module.exports = {
   async index(req, res) {
     const apiResponse2 = new ApiResponse2(res);
     try {
-      const query = {
+      let query = {
         available: true,
-        typeUser: 'student',
       };
-
+      if (req.query.type) {
+        query = { ...query, typeUser: req.query.type };
+      }
       if (req.query.count && req.query.filter) {
         const usersCount = await User.find({
           ...query,
-          tags: { $in: [req.query.filter] },
+          $text: { $search: req.query.filter, $caseSensitive: false },
         }).count();
         return apiResponse2.success(200, {
           count: {
@@ -27,8 +28,9 @@ module.exports = {
       } else if (req.query.filter) {
         const usersTotal = await User.find({
           ...query,
-          tags: { $in: [req.query.filter] },
+          $text: { $search: req.query.filter, $caseSensitive: false },
         }).count();
+
         // Pagination
         const LIMIT = 50;
         let SKIP = 0;
@@ -53,9 +55,10 @@ module.exports = {
           nextPage,
           prevPage,
         };
+
         const users = await User.find({
           ...query,
-          tags: { $in: [req.query.filter] },
+          $text: { $search: req.query.filter, $caseSensitive: false },
         })
           .skip(SKIP)
           .limit(LIMIT);
@@ -68,6 +71,7 @@ module.exports = {
         return apiResponse2.failure(404, null, 'No users found');
       }
 
+      console.log(query);
       const users = await User.find(query);
       if (users.length !== 0) {
         return apiResponse2.success(200, {

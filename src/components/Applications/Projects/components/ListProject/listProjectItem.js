@@ -14,86 +14,82 @@ const truncateDescription = text => {
   return `${newText} ...`;
 };
 
-const ListProjectItem = ({ project, showDetailModal }) => {
-  return (
-    <li className="project-list-item">
-      <span
-        className={`online ${
-          project.isOnline ? 'online--green' : 'online--red'
-        }`}
-        title={project.isOnline ? 'online' : 'offline'}
-      >
-        {project.isOnline ? 'online' : 'offline'}
-      </span>
-      <div className="company">
-        <img
-          className="company-logo"
-          src={project.author.company.picture || '/img/company-generic.png'}
-          alt="logo company"
-        />
-        <div className="company-info">
-          <p className="company-info-name">
-            {project.author.company.companyName}
-          </p>
-          <div className="company-author">
-            <UserIconContainer
-              user={{ user: project.author }}
-              classCss="middle"
-            />
-            <p>{project.author.fullName}</p>
+const ListProjectItem = ({ project, showDetailModal }) => (
+  <li className="project-list-item">
+    <span
+      className={`online ${project.isOnline ? 'online--green' : 'online--red'}`}
+      title={project.isOnline ? 'online' : 'offline'}
+    >
+      {project.isOnline ? 'online' : 'offline'}
+    </span>
+    <div className="company">
+      <img
+        className="company-logo"
+        src={project.author.company.picture || '/img/company-generic.png'}
+        alt="logo company"
+      />
+      <div className="company-info">
+        <p className="company-info-name">
+          {project.author.company.companyName}
+        </p>
+        <div className="company-author">
+          <UserIconContainer
+            user={{ user: project.author }}
+            classCss="middle"
+          />
+          <p>{project.author.fullName}</p>
+        </div>
+      </div>
+    </div>
+    <div className="content">
+      <h2>{project.title}</h2>
+      <ul>
+        <li>
+          <div>
+            <span className="title">Due Date:</span>{' '}
+            {project.dueDate && (
+              <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>
+            )}
           </div>
-        </div>
+        </li>
+        <li>
+          <div>
+            <span className="title">Teams registered:</span>{' '}
+            {project.teams.length > 0 ? (
+              project.teams.length
+            ) : (
+              <span>No Teams yet</span>
+            )}
+          </div>
+        </li>
+        <li>
+          <div>
+            <span className="title">Description:</span>
+            <p>{truncateDescription(project.description)}</p>
+          </div>
+        </li>
+        <li>
+          <TagList tags={project.tags} />
+        </li>
+      </ul>
+      <div>
+        <button
+          type="button"
+          data-projectid={project._id}
+          data-tab="project-detail"
+          onClick={showDetailModal}
+          className="btn btn-primary"
+          style={{
+            width: '100%',
+            marginTop: '.5rem',
+          }}
+        >
+          Check me out
+        </button>
       </div>
-      <div className="content">
-        <h2>{project.title}</h2>
-        <ul>
-          <li>
-            <div>
-              <span className="title">Due Date:</span>{' '}
-              {project.dueDate && (
-                <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>
-              )}
-            </div>
-          </li>
-          <li>
-            <div>
-              <span className="title">Teams registered:</span>{' '}
-              {project.teams.length > 0 ? (
-                project.teams.length
-              ) : (
-                <span>No Teams yet</span>
-              )}
-            </div>
-          </li>
-          <li>
-            <div>
-              <span className="title">Description:</span>
-              <p>{truncateDescription(project.description)}</p>
-            </div>
-          </li>
-          <li>
-            <TagList tags={project.tags} />
-          </li>
-        </ul>
-        <div>
-          <button
-            type="button"
-            data-projectid={project._id}
-            data-tab="project-detail"
-            onClick={showDetailModal}
-            className="btn btn-primary"
-            style={{
-              width: '100%',
-              marginTop: '.5rem',
-            }}
-          >
-            Check me out
-          </button>
-        </div>
-      </div>
-    </li>
-  );
-};
+    </div>
+  </li>
+);
 
 ListProjectItem.propTypes = {
   project: PropTypes.object.isRequired,
