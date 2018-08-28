@@ -4,31 +4,25 @@ import './inputFile.css';
 import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputFile = ({ config }) => {
-  const {
-    field,
-    onChange,
-    style,
-    styleContainer,
-    styleLabelContainer,
-  } = config;
+  const { field, onChange, style, styleContainer } = config;
   return (
     <div className="form-group" style={styleContainer}>
-      <div className="input-file-label-container" style={styleLabelContainer}>
-        <label className="input-file-label" htmlFor={field.name}>
-          {field.label}
-        </label>
-      </div>
-      <input
-        name={field.name}
-        id={field.name}
-        className="form-control picture-upload"
-        type="file"
-        onChange={onChange}
-        onBlur={config.blur}
-        onFocus={config.focus}
-        accept={config.typeFileAccepted}
-        style={style}
-      />
+      <label className="btn btn-success input-file-label" htmlFor={field.name}>
+        {field.label}
+        <input
+          name={field.name}
+          id={field.name}
+          className="form-control"
+          type="file"
+          onChange={onChange}
+          onBlur={config.blur}
+          onFocus={config.focus}
+          accept={config.typeFileAccepted}
+          style={style}
+          onClick={onChange}
+        />
+      </label>
+
       {config.success === config.field.name && <SuccessIcon />}
       {config.error && <small className="error-message">{config.error}</small>}
     </div>

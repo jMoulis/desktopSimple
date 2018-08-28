@@ -105,9 +105,11 @@ class Profile extends React.Component {
       evt.target.value = '';
     }
   };
+
   handleInputFileChange = evt => {
     this.readUrl(evt.target);
   };
+
   readUrl = input => {
     if (input.files && input.files[0]) {
       const { editUserAction, loggedUser } = this.props;
@@ -128,6 +130,7 @@ class Profile extends React.Component {
       reader.readAsDataURL(input.files[0]);
     }
   };
+
   handleSelectChange = evt => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
@@ -139,6 +142,7 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
@@ -156,6 +160,7 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleOnFocus = evt => {
     // Save the input field
     const { name } = evt.target;
@@ -167,6 +172,7 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleRemove = evt => {
     evt.preventDefault();
     const { editUserAction, loggedUser } = this.props;
@@ -185,6 +191,7 @@ class Profile extends React.Component {
     this.setState(() => newtags);
     editUserAction(loggedUser._id, newtags);
   };
+
   handleDocsChange = docs => {
     this.setState(prevState => ({
       ...prevState,
@@ -194,13 +201,16 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
   };
+
   handleCloseCropImageModal = img => {
     // Server crashes on modal close if img undefined... Without response back
+    console.log('Close image', img);
     if (img) {
       const { state } = this;
       const { editUserAction, loggedUser } = this.props;
@@ -222,6 +232,7 @@ class Profile extends React.Component {
       }));
     }
   };
+
   handleInputSearch = (inputValue, inputName) => {
     const { editUserAction, loggedUser, clearMessageAction } = this.props;
     this.setState(
@@ -245,6 +256,7 @@ class Profile extends React.Component {
       },
     );
   };
+
   render() {
     const { editUser, editUserAction, loggedUser } = this.props;
     const { error, success, editing } = editUser;
@@ -453,6 +465,7 @@ class Profile extends React.Component {
             name="imageCropper"
             title="Image Cropper"
             closeFromParent={this.handleCloseCropImageModal}
+            noParamsOnClose
           >
             <Crop
               picture={this.state.picture.value}

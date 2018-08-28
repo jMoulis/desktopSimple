@@ -7,75 +7,70 @@ module.exports = {
   async index(req, res) {
     const apiResponse2 = new ApiResponse2(res);
     try {
+      const LIMIT = 5;
+      let SKIP = 0;
+
       let query = {
         available: true,
       };
+
+      if (req.query.filter) {
+        query = {
+          ...query,
+          $text: { $search: req.query.filter, $caseSensitive: false },
+        };
+      }
+
       if (req.query.type) {
         query = { ...query, typeUser: req.query.type };
       }
+
+      const usersTotal = await User.find(query).count();
+      const totalPage = Math.ceil(usersTotal / LIMIT);
+
+      let nextPage = 2;
+      let prevPage = null;
+
+      if (req.query.page) {
+        if (Number(req.query.page) + 1 > totalPage) {
+          nextPage = null;
+        } else {
+          nextPage = Number(req.query.page) + 1;
+        }
+        if (Number(req.query.page) - 1 === 0) {
+          prevPage = null;
+        } else {
+          prevPage = Number(req.query.page) - 1;
+        }
+        SKIP = (req.query.page - 1) * LIMIT;
+      }
+      const pagination = {
+        nextPage,
+        prevPage,
+      };
+
       if (req.query.count && req.query.filter) {
-        const usersCount = await User.find({
-          ...query,
-          $text: { $search: req.query.filter, $caseSensitive: false },
-        }).count();
         return apiResponse2.success(200, {
           count: {
             key: req.query.filter,
-            count: usersCount,
+            count: usersTotal,
           },
           success: 'Count',
         });
-      } else if (req.query.filter) {
-        const usersTotal = await User.find({
-          ...query,
-          $text: { $search: req.query.filter, $caseSensitive: false },
-        }).count();
-
-        // Pagination
-        const LIMIT = 50;
-        let SKIP = 0;
-
-        if (req.query.page) {
-          SKIP = Number(req.query.page);
-        }
-        const totalPage = usersTotal / LIMIT;
-        let nextPage = `&page=${SKIP + LIMIT}`;
-        let prevPage = null;
-
-        if (SKIP >= usersTotal) {
-          nextPage = null;
-        }
-        if (SKIP + LIMIT >= totalPage) {
-          nextPage = null;
-        }
-        if (SKIP > 0) {
-          prevPage = `&page=${SKIP - LIMIT}`;
-        }
-        const pagination = {
-          nextPage,
-          prevPage,
-        };
-
-        const users = await User.find({
-          ...query,
-          $text: { $search: req.query.filter, $caseSensitive: false },
-        })
-          .skip(SKIP)
-          .limit(LIMIT);
-        if (users.length !== 0) {
-          return apiResponse2.success(200, {
-            users,
-            pagination,
-          });
-        }
-        return apiResponse2.failure(404, null, 'No users found');
       }
+      const users = await User.find(query)
+        .sort(
+          req.query.sorting
+            ? { createdAt: req.query.sorting }
+            : { createdAt: 1 },
+        )
+        .skip(SKIP)
+        .limit(LIMIT);
 
-      console.log(query);
-      const users = await User.find(query);
       if (users.length !== 0) {
         return apiResponse2.success(200, {
           users,
+          pagination,
         });
       }
       return apiResponse2.failure(404, null, 'No users found');

@@ -11,6 +11,7 @@ import Checkbox from '../../../../Form/checkbox';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import UserIcon from '../../../../../Modules/UserIcon';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
+import CompanyHeader from '../../../../../Modules/CompanyHeader';
 
 class EditFormProject extends Component {
   static propTypes = {
@@ -239,20 +240,7 @@ class EditFormProject extends Component {
         noValidate="true"
       >
         <div className="form-content">
-          <div className="company">
-            <img
-              className="company-logo"
-              src={author.company.picture || '/img/company-generic.png'}
-              alt="logo company"
-            />
-            <div className="company-info">
-              <p className="company-info-name">{author.company.companyName}</p>
-              <div className="company-author">
-                <UserIcon user={{ user: author }} classCss="middle" />
-                <p>{author.fullName}</p>
-              </div>
-            </div>
-          </div>
+          <CompanyHeader user={author} />
           <Input
             config={{
               field: Model.title,

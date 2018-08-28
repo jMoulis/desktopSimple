@@ -6,9 +6,11 @@
   padding: .5rem
   border: 3px solid $darkestblue
   display: flex
+  flex-direction: column
   min-width: 15rem
   transition: all 200ms
   margin: .5rem
+  height: 10rem
   justify-content: space-between
   &:hover
     box-shadow: 0 0 10px 0 $darkestblue
@@ -18,9 +20,3 @@
   & .company-header-reset
     padding: 0
     margin: 0
-  &-footer
-    display: flex
-    flex-direction: column
-    justify-content: space-around
-    & button
-      width: 100%

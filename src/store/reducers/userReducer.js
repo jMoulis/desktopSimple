@@ -28,7 +28,7 @@ const initialState = {
     users: [],
     loading: false,
     error: null,
-    page: {},
+    pagination: {},
   },
   userActive: {
     user: {},
@@ -50,6 +50,7 @@ const reducer = (state = initialState, action = {}) => {
           users: [],
           loading: true,
           error: null,
+          pagination: {},
         },
       };
     }
@@ -71,6 +72,7 @@ const reducer = (state = initialState, action = {}) => {
           users: [],
           loading: false,
           error: action.payload,
+          pagination: {},
         },
       };
     }

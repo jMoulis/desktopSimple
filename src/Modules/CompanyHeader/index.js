@@ -1,0 +1,34 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import './index.css';
+import UserIconContainer from '../UserIcon';
+
+const CompanyHeader = ({ user, classNameContainer }) => (
+  <div className={classNames('company', classNameContainer)}>
+    <img
+      className="company-logo"
+      src={user.company.picture || '/img/company-generic.png'}
+      alt="logo company"
+    />
+    <div className="company-info">
+      <p className="company-info-name">{user.company.companyName}</p>
+      <div className="company-author">
+        <UserIconContainer user={{ user }} classCss="middle" />
+        <span>{user.fullName}</span>
+      </div>
+    </div>
+  </div>
+);
+
+CompanyHeader.propTypes = {
+  user: PropTypes.object.isRequired,
+  classNameContainer: PropTypes.object,
+};
+
+CompanyHeader.defaultProps = {
+  classNameContainer: '',
+};
+
+export default CompanyHeader;

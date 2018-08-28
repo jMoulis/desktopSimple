@@ -13,7 +13,7 @@ const mapStateToProps = ({ projectReducer, userReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchUsers: (filter) => {
+  fetchUsers: filter => {
     dispatch(fetchUsersAction(filter));
   },
 });
@@ -26,10 +26,10 @@ class UsersLoader extends React.Component {
       error: PropTypes.object,
       loading: PropTypes.bool,
     }).isRequired,
-    filter: PropTypes.string.isRequired,
+    filter: PropTypes.object.isRequired,
     select: PropTypes.func.isRequired,
     closeFromParent: PropTypes.func.isRequired,
-  }
+  };
   componentDidMount() {
     const { fetchUsers, filter } = this.props;
     fetchUsers(filter);
@@ -37,88 +37,97 @@ class UsersLoader extends React.Component {
   componentWillUnmount() {
     this.props.closeFromParent();
   }
-  handlePagination = (evt) => {
+  handlePagination = evt => {
     const { filter, fetchUsers } = this.props;
     const { pagination } = evt.target.dataset;
     fetchUsers(`${filter}${pagination}`);
-  }
+  };
   render() {
     // filter and select from parent
     const { userList, select, filter } = this.props;
-    const {
-      loading,
-      error,
-      users,
-      pagination,
-    } = userList;
+    const { loading, error, users, pagination } = userList;
     if (loading) {
       return <Loader />;
     }
     return (
       <div className="users">
         {error && <span>Error</span>}
-        {pagination &&
+        {pagination && (
           <div className="users-pagination">
-            {pagination.prevPage &&
+            {pagination.prevPage && (
               <button
                 className="btn btn-primary"
                 key="prev"
                 type="button"
                 onClick={this.handlePagination}
                 data-pagination={pagination.prevPage}
-              >prev
+              >
+                prev
               </button>
-            }
-            {pagination.nextPage &&
+            )}
+            {pagination.nextPage && (
               <button
                 className="btn btn-primary"
                 key="next"
                 type="button"
                 onClick={this.handlePagination}
                 data-pagination={pagination.nextPage}
-              >next
+              >
+                next
               </button>
-            }
-          </div>}
+            )}
+          </div>
+        )}
         <ul className="ul-unstyled users-list">
           {users.map(user => (
             <li key={user._id} className="users-list-item">
               <div className="thumbnail-container">
                 <button
                   className="btn btn-primary"
-                  data-user={
-                    JSON.stringify({
-                      spec: filter,
-                      user: {
-                        picture: user.picture,
-                        fullName: user.fullName,
-                        _id: user._id,
-                      },
-                    })}
+                  data-user={JSON.stringify({
+                    spec: filter.filter,
+                    user: {
+                      picture: user.picture,
+                      fullName: user.fullName,
+                      _id: user._id,
+                    },
+                  })}
                   onClick={select}
-                >Select
+                >
+                  Select
                 </button>
                 <div className="thumbnail-content">
-                  <img className="thumbnail" src={user.picture} alt={user.fullName} />
+                  <img
+                    className="thumbnail"
+                    src={user.picture}
+                    alt={user.fullName}
+                  />
                   <div className="user-detail">
-                    <span className="user-detail-fullname">{user.fullName}</span>
+                    <span className="user-detail-fullname">
+                      {user.fullName}
+                    </span>
                     <ul className="tag-list">
                       {user.tags.map((tag, index) => (
-                        <li key={index} className="tag-list-item">{tag}</li>
+                        <li key={index} className="tag-list-item">
+                          {tag}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 </div>
               </div>
             </li>
-            ))}
+          ))}
         </ul>
       </div>
     );
   }
 }
 
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const UsersLoaderContainer = createContainer(UsersLoader);
 
 export default UsersLoaderContainer;

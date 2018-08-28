@@ -7,7 +7,6 @@ class Utils {
     return formData;
   };
   buildUrlFilter = filter => {
-    console.log(filter);
     let filters = [];
     Object.keys(filter).forEach(key => {
       filters = [...filters, `${key}=${filter[key]}`];

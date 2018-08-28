@@ -15,11 +15,13 @@ class Modal extends React.Component {
       PropTypes.array,
     ]),
     name: PropTypes.string,
+    noParamsOnClose: PropTypes.bool,
   };
   static defaultProps = {
     children: null,
     closeFromParent: null,
     name: '',
+    noParamsOnClose: false,
   };
   constructor(props) {
     super(props);
@@ -61,6 +63,7 @@ class Modal extends React.Component {
       title,
       zIndex,
       small,
+      noParamsOnClose,
     } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, { closeFromParent }),
@@ -75,7 +78,12 @@ class Modal extends React.Component {
         }}
         classNames="modal-overlay"
         appear
-        onExited={() => closeFromParent(name)}
+        onExited={() => {
+          if (noParamsOnClose) {
+            return closeFromParent();
+          }
+          return closeFromParent(name);
+        }}
       >
         <div className="modal-overlay" style={{ zIndex }}>
           <div

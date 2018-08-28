@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import UserIconContainer from '../../../../../Modules/UserIcon';
 import './listProject.css';
 import TagList from '../../../../../Modules/Tag/tagList';
+import CompanyHeader from '../../../../../Modules/CompanyHeader';
 
 const truncateDescription = text => {
   const maxWord = 25;
@@ -22,25 +23,7 @@ const ListProjectItem = ({ project, showDetailModal }) => (
     >
       {project.isOnline ? 'online' : 'offline'}
     </span>
-    <div className="company">
-      <img
-        className="company-logo"
-        src={project.author.company.picture || '/img/company-generic.png'}
-        alt="logo company"
-      />
-      <div className="company-info">
-        <p className="company-info-name">
-          {project.author.company.companyName}
-        </p>
-        <div className="company-author">
-          <UserIconContainer
-            user={{ user: project.author }}
-            classCss="middle"
-          />
-          <p>{project.author.fullName}</p>
-        </div>
-      </div>
-    </div>
+    <CompanyHeader user={project.author} />
     <div className="content">
       <h2>{project.title}</h2>
       <ul>

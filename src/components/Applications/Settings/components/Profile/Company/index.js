@@ -257,8 +257,8 @@ class CompanyProfile extends React.Component {
               <img
                 className="profile-picture"
                 src={`${(company &&
-                  company.company &&
-                  company.company.picture.value) ||
+                  company['company.picture'] &&
+                  company['company.picture'].value) ||
                   '/img/company-generic.png'}`}
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}

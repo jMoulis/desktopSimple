@@ -3,7 +3,8 @@
   align-items: center; }
   .app-toolbar-list-item-form {
     padding-right: 2rem;
-    position: relative; }
+    position: relative;
+    width: 100%; }
     .app-toolbar-list-item-form-input-search {
       padding: 0 !important;
       background-color: transparent; }

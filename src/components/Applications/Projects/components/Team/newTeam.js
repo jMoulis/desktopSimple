@@ -131,7 +131,9 @@ class NewTeam extends React.Component {
     const { filter } = evt.target.dataset;
     this.setState(() => ({
       modal: true,
-      filter,
+      filter: {
+        filter,
+      },
     }));
   };
   handleRemove = ({ target }) => {
