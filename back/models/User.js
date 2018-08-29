@@ -89,6 +89,24 @@ const UserSchema = new Schema({
   ],
   helper: Boolean,
   isActive: Boolean,
+  sentRequest: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
+  receivedRequest: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
 });
 
 UserSchema.pre('save', function preSave(next) {

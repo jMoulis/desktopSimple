@@ -47,6 +47,7 @@ module.exports = {
       const pagination = {
         nextPage,
         prevPage,
+        count: usersTotal,
       };
 
       if (req.query.count && req.query.filter) {
@@ -58,11 +59,9 @@ module.exports = {
           success: 'Count',
         });
       }
-      const users = await User.find(query)
+      const users = await User.find(query, { password: 0 })
         .sort(
-          req.query.sorting
-            ? { createdAt: req.query.sorting }
-            : { createdAt: 1 },
+          req.query.sorting ? { fullName: req.query.sorting } : { fullName: 1 },
         )
         .skip(SKIP)
         .limit(LIMIT);
@@ -178,6 +177,49 @@ module.exports = {
     }
   },
 
+  async friendsRequest(req, res) {
+    const sender = res.locals.user._id;
+    const { friend } = req.body;
+    const apiResponse = new ApiResponse2(res);
+    // Cases:
+    // Ask friend = add receiver to sender sentRequest & add sender to receiver receivedRequest
+    // Accept request = remove receiver receiveRequest & add sender to friend & remove sender sentRequest
+    // Decline request = update
+    // Cancel request
+    // Fetch id of friend request
+    // Add friend id to sentFriendRquest
+    try {
+      await User.update(
+        {
+          _id: sender,
+          sentRequest: {
+            $nin: [friend],
+          },
+        },
+        {
+          $push: {
+            sentRequest: friend,
+          },
+        },
+      );
+      await User.update(
+        {
+          _id: friend,
+          receivedRequest: {
+            $nin: [sender],
+          },
+        },
+        {
+          $push: {
+            receivedRequest: sender,
+          },
+        },
+      );
+      return apiResponse.success(201, { userId: friend }, true);
+    } catch (error) {
+      return apiResponse.failure(422, error);
+    }
+  },
   async persistMetas(fieldUpdated, value, keywords, next) {
     if (keywords.includes(fieldUpdated)) {
       try {

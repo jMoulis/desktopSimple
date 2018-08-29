@@ -13,13 +13,12 @@ const verifyToken = (req, res, next) => {
     }
     jwt.verify(token, config.secret, async (err, decoded) => {
       if (err) {
-        return res.status(401)
-          .send({
-            auth: false,
-            login: {
-              detail: 'You have been disconnected, please logIn',
-            },
-          });
+        return res.status(401).send({
+          auth: false,
+          login: {
+            detail: 'You have been disconnected, please logIn',
+          },
+        });
       }
       req.userId = decoded.user.id;
       const user = await User.findOne(

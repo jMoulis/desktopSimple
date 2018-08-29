@@ -24,7 +24,7 @@ const CompanyHeader = ({ user, classNameContainer }) => (
 
 CompanyHeader.propTypes = {
   user: PropTypes.object.isRequired,
-  classNameContainer: PropTypes.object,
+  classNameContainer: PropTypes.string,
 };
 
 CompanyHeader.defaultProps = {

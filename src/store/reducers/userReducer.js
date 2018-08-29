@@ -19,6 +19,9 @@ export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
 export const FETCH_USERS_COUNT = 'FETCH_USERS_COUNT';
 export const FETCH_USERS_COUNT_SUCCESS = 'FETCH_USERS_COUNT_SUCCESS';
 
+export const SEND_FRIEND_REQUEST = 'SEND_FRIEND_REQUEST';
+export const SEND_FRIEND_REQUEST_SUCCESS = 'SEND_FRIEND_REQUEST_SUCCESS';
+
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 /*
  * State
@@ -36,6 +39,7 @@ const initialState = {
     error: null,
   },
   usersCount: {},
+  requestStatus: {},
 };
 
 /*
@@ -47,10 +51,9 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         userList: {
-          users: [],
+          ...state.userList,
           loading: true,
           error: null,
-          pagination: {},
         },
       };
     }
@@ -132,6 +135,18 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case SEND_FRIEND_REQUEST: {
+      return {
+        ...state,
+        requestStatus: {},
+      };
+    }
+    case SEND_FRIEND_REQUEST_SUCCESS: {
+      return {
+        ...state,
+        requestStatus: action.payload,
+      };
+    }
     default:
       return {
         ...state,
@@ -177,6 +192,14 @@ export const fetchUserFailureAction = error => ({
 });
 export const clearMessageAction = () => ({
   type: CLEAR_MESSAGE,
+});
+export const sendFriendRequest = friend => ({
+  type: SEND_FRIEND_REQUEST,
+  payload: friend,
+});
+export const sendFriendRequestSuccessAction = payload => ({
+  type: SEND_FRIEND_REQUEST_SUCCESS,
+  payload,
 });
 /*
  * Export default

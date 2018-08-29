@@ -10,6 +10,8 @@ import {
   fetchUsersFailureAction,
   FETCH_USERS_COUNT,
   fetchUsersCountSuccessAction,
+  SEND_FRIEND_REQUEST,
+  sendFriendRequestSuccessAction,
 } from '../reducers/userReducer';
 import { logoutAction } from '../reducers/authReducer';
 import Utils from '../../Utils/utils';
@@ -71,6 +73,23 @@ export default store => next => action => {
       })
         .then(({ data }) => {
           store.dispatch(fetchUsersCountSuccessAction(data));
+        })
+        .catch(({ response }) => {
+          console.error(response.statusText);
+        });
+      break;
+    }
+    case SEND_FRIEND_REQUEST: {
+      axios({
+        method: 'put',
+        url: `${ROOT_URL}/api/friendrequest`,
+        data: { friend: action.payload },
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(sendFriendRequestSuccessAction(data));
         })
         .catch(({ response }) => {
           console.error(response.statusText);

@@ -32,6 +32,8 @@ module.exports = app => {
   );
   app.delete('/api/users/:id', VerifyToken, UsersController.delete);
 
+  app.put('/api/friendrequest', VerifyToken, UsersController.friendsRequest);
+
   app.get('/api/projects', VerifyToken, ProjectsController.index);
   app.post(
     '/api/projects',
