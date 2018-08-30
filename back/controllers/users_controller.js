@@ -16,7 +16,10 @@ module.exports = {
       if (req.query.filter) {
         query = {
           ...query,
-          $text: { $search: req.query.filter, $caseSensitive: false },
+          $text: {
+            $search: req.query.filter,
+            $caseSensitive: false,
+          },
         };
       }
 
@@ -24,12 +27,20 @@ module.exports = {
         query = { ...query, typeUser: req.query.type };
       }
 
+      if (req.query.friends) {
+        query = {
+          ...query,
+          friends: { $in: [res.locals.user._id] },
+        };
+      }
       const usersTotal = await User.find(query).count();
       const totalPage = Math.ceil(usersTotal / LIMIT);
+      let nextPage;
+      let prevPage;
 
-      let nextPage = 2;
-      let prevPage = null;
-
+      if (totalPage !== 1) {
+        nextPage = 2;
+      }
       if (req.query.page) {
         if (Number(req.query.page) + 1 > totalPage) {
           nextPage = null;
@@ -183,125 +194,142 @@ module.exports = {
     let querySender = {};
     let queryFriend = {};
     try {
-      if (type === 'cancel') {
-        querySender = {
-          query: {
-            _id: sender,
-          },
-          action: {
-            $pull: {
-              sentRequest: userId,
+      switch (type) {
+        case 'cancel': {
+          querySender = {
+            query: {
+              _id: sender,
             },
-          },
-        };
+            action: {
+              $pull: {
+                sentRequest: userId,
+              },
+            },
+          };
 
-        queryFriend = {
-          query: {
-            _id: userId,
-          },
-          action: {
-            $pull: {
-              receivedRequest: sender,
+          queryFriend = {
+            query: {
+              _id: userId,
             },
-          },
-        };
-      } else if (type === 'request') {
-        querySender = {
-          query: {
-            _id: sender,
-            sentRequest: {
-              $nin: [userId],
+            action: {
+              $pull: {
+                receivedRequest: sender,
+              },
             },
-          },
-          action: {
-            $push: {
-              sentRequest: userId,
+          };
+          break;
+        }
+        case 'request': {
+          querySender = {
+            query: {
+              _id: sender,
+              sentRequest: {
+                $nin: [userId],
+              },
             },
-          },
-        };
-        queryFriend = {
-          query: {
-            _id: userId,
-            receivedRequest: {
-              $nin: [sender],
+            action: {
+              $push: {
+                sentRequest: userId,
+              },
             },
-          },
-          action: {
-            $push: {
-              receivedRequest: sender,
+          };
+          queryFriend = {
+            query: {
+              _id: userId,
+              receivedRequest: {
+                $nin: [sender],
+              },
             },
-          },
-        };
-      } else if (type === 'decline') {
-        querySender = {
-          query: {
-            _id: sender,
-          },
-          action: {
-            $pull: {
-              receivedRequest: userId,
+            action: {
+              $push: {
+                receivedRequest: sender,
+              },
             },
-          },
-        };
-        queryFriend = {
-          query: {
-            _id: userId,
-          },
-          action: {
-            $pull: {
-              sentRequest: sender,
+          };
+          break;
+        }
+        case 'decline': {
+          querySender = {
+            query: {
+              _id: sender,
             },
-          },
-        };
-      } else if (type === 'accept') {
-        querySender = {
-          query: {
-            _id: sender,
-          },
-          action: {
-            $push: {
-              friends: userId,
+            action: {
+              $pull: {
+                receivedRequest: userId,
+              },
+              $push: {
+                declinedRequest: userId,
+              },
             },
-            $pull: {
-              receivedRequest: userId,
+          };
+          queryFriend = {
+            query: {
+              _id: userId,
             },
-          },
-        };
-        queryFriend = {
-          query: {
-            _id: userId,
-          },
-          action: {
-            $pull: {
-              sentRequest: sender,
+            action: {
+              $pull: {
+                sentRequest: sender,
+              },
             },
-            $push: {
-              friends: sender,
+          };
+          break;
+        }
+        case 'accept': {
+          querySender = {
+            query: {
+              _id: sender,
             },
-          },
-        };
-      } else if (type === 'delete') {
-        querySender = {
-          query: {
-            _id: sender,
-          },
-          action: {
-            $pull: {
-              friends: userId,
+            action: {
+              $push: {
+                friends: userId,
+              },
+              $pull: {
+                receivedRequest: userId,
+                declinedRequest: userId,
+              },
             },
-          },
-        };
-        queryFriend = {
-          query: {
-            _id: userId,
-          },
-          action: {
-            $pull: {
-              friends: sender,
+          };
+          queryFriend = {
+            query: {
+              _id: userId,
             },
-          },
-        };
+            action: {
+              $pull: {
+                sentRequest: sender,
+              },
+              $push: {
+                friends: sender,
+              },
+            },
+          };
+          break;
+        }
+        case 'delete': {
+          querySender = {
+            query: {
+              _id: sender,
+            },
+            action: {
+              $pull: {
+                friends: userId,
+              },
+            },
+          };
+          queryFriend = {
+            query: {
+              _id: userId,
+            },
+            action: {
+              $pull: {
+                friends: sender,
+              },
+            },
+          };
+          break;
+        }
+        default:
       }
+
       await User.update(querySender.query, querySender.action);
 
       await User.update(queryFriend.query, queryFriend.action);
@@ -317,6 +345,7 @@ module.exports = {
       return apiResponse.failure(422, null, error.message);
     }
   },
+
   async persistMetas(fieldUpdated, value, keywords, next) {
     if (keywords.includes(fieldUpdated)) {
       try {

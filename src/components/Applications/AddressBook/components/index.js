@@ -4,6 +4,7 @@ import AppToolbar from '../../../../Modules/AppToolbar';
 import UserListItem from '../containers/Users/UserListItem';
 import Pagination from './Pagination';
 import './index.css';
+import Filters from './Filters';
 
 class AddressBook extends Component {
   static propTypes = {
@@ -16,25 +17,81 @@ class AddressBook extends Component {
     usersProcess: null,
   };
 
+  state = {
+    filterParams: {
+      filter: '',
+    },
+    repertory: 'All',
+    filters: [],
+  };
+
   componentDidMount() {
     const { fetchUsersAction } = this.props;
-    const filter = {
-      filter: '',
-    };
-    fetchUsersAction(filter);
+    fetchUsersAction(this.state.filterParams);
   }
+
+  handleFetchUsers = (filter, { filterName }) => {
+    const { fetchUsersAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filterParams: {
+          ...prevState.filterParams,
+          ...filter,
+        },
+        repertory: filterName.label,
+        filters: this.addValueToStateFilters(prevState.filters, filterName),
+      }),
+      () => {
+        fetchUsersAction(this.state.filterParams);
+      },
+    );
+  };
+
+  handleAppToolBarSearch = filter => {
+    const { fetchUsersAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filterParams: {
+          ...prevState.filterParams,
+          ...filter,
+        },
+        filters: this.addValueToStateFilters(prevState.filters, {
+          label: Object.values(filter)[0],
+          type: '',
+        }),
+      }),
+      () => {
+        fetchUsersAction(this.state.filterParams);
+      },
+    );
+  };
+
   handleFetchPage = evt => {
     const { fetchUsersAction } = this.props;
     const { page } = evt.target.dataset;
     fetchUsersAction({ page });
   };
+
+  addValueToStateFilters = (filters, filterName) => {
+    if (filters.some(filter => filter.label === filterName.label)) {
+      return filters;
+    }
+    if (filterName.type === 'main') {
+      return [...filters.filter(filter => filter.type !== filterName.type)];
+    }
+    return [...filters, filterName];
+  };
+
   render() {
-    const { usersProcess, fetchUsersAction, loggedUser } = this.props;
+    const { usersProcess, loggedUser } = this.props;
+    const { filters } = this.state;
     if (usersProcess.users) {
       return (
         <Fragment>
           <AppToolbar
-            sortingAction={fetchUsersAction}
+            sortingAction={this.handleAppToolBarSearch}
             menus={[
               // {
               //   label: 'Student',
@@ -43,21 +100,49 @@ class AddressBook extends Component {
               // },
               {
                 searchField: true,
-                action: fetchUsersAction,
+                action: this.handleAppToolBarSearch,
                 searchFieldLabel: 'Spec, name, location, company...',
               },
             ]}
           />
 
-          {usersProcess.error && (
-            <div className="notFound">
-              <span>{usersProcess.error.detail}</span>
-            </div>
-          )}
           <div className="address-book d-flex full-height">
             <ul className="address-book-aside">
               <li>
-                <button className="address-book-aside-btn" type="button">
+                <button
+                  onClick={() =>
+                    this.handleFetchUsers(
+                      { friends: '' },
+                      {
+                        filterName: {
+                          label: 'All',
+                          type: 'main',
+                        },
+                      },
+                    )
+                  }
+                  className="address-book-aside-btn"
+                  type="button"
+                >
+                  All Contacts
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() =>
+                    this.handleFetchUsers(
+                      { friends: true },
+                      {
+                        filterName: {
+                          label: 'My Contacts',
+                          type: 'main',
+                        },
+                      },
+                    )
+                  }
+                  className="address-book-aside-btn"
+                  type="button"
+                >
                   My Contacts
                 </button>
               </li>
@@ -68,7 +153,14 @@ class AddressBook extends Component {
               </li>
             </ul>
             <ul className="overflow height-overflow flex1">
-              <li>
+              <li
+                className="d-flex flex-align-items-center flex-justify-between"
+                style={{
+                  margin: '.5rem',
+                }}
+              >
+                <span>Search in: {this.state.repertory}</span>
+                {/* <Filters filters={filters} /> */}
                 <Pagination
                   prevPage={usersProcess.pagination.prevPage}
                   nextPage={usersProcess.pagination.nextPage}
@@ -77,13 +169,19 @@ class AddressBook extends Component {
                   count={usersProcess.pagination.count}
                 />
               </li>
-              {usersProcess.users.map(user => (
-                <UserListItem
-                  key={user._id}
-                  user={user}
-                  loggedUser={loggedUser}
-                />
-              ))}
+              {usersProcess.error ? (
+                <div className="notFound">
+                  <span>{usersProcess.error.detail}</span>
+                </div>
+              ) : (
+                usersProcess.users.map(user => (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    loggedUser={loggedUser}
+                  />
+                ))
+              )}
             </ul>
           </div>
         </Fragment>

@@ -159,6 +159,9 @@ const reducer = (state = initialState, action = {}) => {
           ...state.userList,
           users,
         },
+        userActive: {
+          user: action.payload.user,
+        },
       };
     }
     default:
@@ -215,6 +218,7 @@ export const sendFriendRequestSuccessAction = payload => ({
   type: SEND_FRIEND_REQUEST_SUCCESS,
   payload,
 });
+
 /*
  * Export default
 */

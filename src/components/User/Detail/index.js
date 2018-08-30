@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './index.css';
 import Loader from '../../../Modules/Loader';
 import TagList from '../../../Modules/Tag/tagList';
+import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
 
 class DetailUser extends React.Component {
   static propTypes = {
@@ -72,12 +73,7 @@ class DetailUser extends React.Component {
               {user.gitHub}
             </a>
           </li>
-          <li>
-            <button type="button">Friend request</button>
-          </li>
-          <li>
-            <button type="button">Start a chat</button>
-          </li>
+          <FriendRequestButtonsContainer user={user} />
         </ul>
       </div>
     );

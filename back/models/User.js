@@ -107,6 +107,12 @@ const UserSchema = new Schema({
       ref: 'user',
     },
   ],
+  declinedRequest: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
 });
 
 UserSchema.pre('save', function preSave(next) {
