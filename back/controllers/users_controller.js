@@ -1,11 +1,10 @@
 const User = require('../models/User');
 const Meta = require('../models/Meta');
-const ApiResponse = require('../service/api/apiResponse');
-const ApiResponse2 = require('../service/api/apiResponse_v2');
+const ApiResponse = require('../service/api/apiResponse_v2');
 
 module.exports = {
   async index(req, res) {
-    const apiResponse2 = new ApiResponse2(res);
+    const apiResponse = new ApiResponse(res);
     try {
       const LIMIT = 5;
       let SKIP = 0;
@@ -51,7 +50,7 @@ module.exports = {
       };
 
       if (req.query.count && req.query.filter) {
-        return apiResponse2.success(200, {
+        return apiResponse.success(200, {
           count: {
             key: req.query.filter,
             count: usersTotal,
@@ -67,20 +66,20 @@ module.exports = {
         .limit(LIMIT);
 
       if (users.length !== 0) {
-        return apiResponse2.success(200, {
+        return apiResponse.success(200, {
           users,
           pagination,
         });
       }
-      return apiResponse2.failure(404, null, 'No users found');
+      return apiResponse.failure(404, null, 'No users found');
     } catch (error) {
-      return apiResponse2.failure(422, error);
+      return apiResponse.failure(422, error);
     }
   },
 
-  async show(req, res, next) {
+  async show(req, res) {
     const { id } = req.params;
-    const apiResponse = new ApiResponse2(res);
+    const apiResponse = new ApiResponse(res);
     try {
       const user = await User.findById(id, { password: 0 })
         .populate({
@@ -114,7 +113,7 @@ module.exports = {
   async edit(req, res, next) {
     const userId = req.params.id;
     const userProps = req.body;
-    const apiResponse = new ApiResponse2(res);
+    const apiResponse = new ApiResponse(res);
 
     module.exports.imageControl(req, res);
 
@@ -163,9 +162,9 @@ module.exports = {
     }
   },
 
-  async delete(req, res, next) {
+  async delete(req, res) {
     const userId = req.params.id;
-    const apiResponse = new ApiResponse2(res);
+    const apiResponse = new ApiResponse(res);
     try {
       const user = await User.findByIdAndRemove({ _id: userId });
       if (!user) {
@@ -180,15 +179,7 @@ module.exports = {
   async friendsRequest(req, res) {
     const sender = res.locals.user._id;
     const { userId, type } = req.body;
-    const apiResponse = new ApiResponse2(res);
-    console.log(req.body);
-    // Cases:
-    // Ask friend = add receiver to sender sentRequest & add sender to receiver receivedRequest
-    // Accept request = remove receiver receiveRequest & add sender to friend & remove sender sentRequest
-    // Decline request = update
-    // Cancel request
-    // Fetch id of friend request
-    // Add friend id to sentFriendRquest
+    const apiResponse = new ApiResponse(res);
     let querySender = {};
     let queryFriend = {};
     try {
@@ -241,10 +232,86 @@ module.exports = {
             },
           },
         };
+      } else if (type === 'decline') {
+        querySender = {
+          query: {
+            _id: sender,
+          },
+          action: {
+            $pull: {
+              receivedRequest: userId,
+            },
+          },
+        };
+        queryFriend = {
+          query: {
+            _id: userId,
+          },
+          action: {
+            $pull: {
+              sentRequest: sender,
+            },
+          },
+        };
+      } else if (type === 'accept') {
+        querySender = {
+          query: {
+            _id: sender,
+          },
+          action: {
+            $push: {
+              friends: userId,
+            },
+            $pull: {
+              receivedRequest: userId,
+            },
+          },
+        };
+        queryFriend = {
+          query: {
+            _id: userId,
+          },
+          action: {
+            $pull: {
+              sentRequest: sender,
+            },
+            $push: {
+              friends: sender,
+            },
+          },
+        };
+      } else if (type === 'delete') {
+        querySender = {
+          query: {
+            _id: sender,
+          },
+          action: {
+            $pull: {
+              friends: userId,
+            },
+          },
+        };
+        queryFriend = {
+          query: {
+            _id: userId,
+          },
+          action: {
+            $pull: {
+              friends: sender,
+            },
+          },
+        };
       }
       await User.update(querySender.query, querySender.action);
+
       await User.update(queryFriend.query, queryFriend.action);
+
       const userChanged = await User.findOne({ _id: userId }, { password: 0 });
+
+      if (!userChanged) {
+        return apiResponse.failure(404, 'User not found');
+      }
+
       return apiResponse.success(201, { user: userChanged }, true);
     } catch (error) {
       return apiResponse.failure(422, null, error.message);
