@@ -39,7 +39,6 @@ const initialState = {
     error: null,
   },
   usersCount: {},
-  requestStatus: {},
 };
 
 /*
@@ -142,9 +141,24 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case SEND_FRIEND_REQUEST_SUCCESS: {
+      // go in state.users
+      // find the user that changed and change it
+      const users = state.userList.users.map(user => {
+        if (user._id === action.payload.user._id) {
+          return {
+            ...action.payload.user,
+          };
+        }
+        return {
+          ...user,
+        };
+      });
       return {
         ...state,
-        requestStatus: action.payload,
+        userList: {
+          ...state.userList,
+          users,
+        },
       };
     }
     default:
@@ -193,9 +207,9 @@ export const fetchUserFailureAction = error => ({
 export const clearMessageAction = () => ({
   type: CLEAR_MESSAGE,
 });
-export const sendFriendRequest = friend => ({
+export const sendFriendRequest = request => ({
   type: SEND_FRIEND_REQUEST,
-  payload: friend,
+  payload: request,
 });
 export const sendFriendRequestSuccessAction = payload => ({
   type: SEND_FRIEND_REQUEST_SUCCESS,

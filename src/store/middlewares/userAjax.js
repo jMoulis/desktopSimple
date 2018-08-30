@@ -83,7 +83,7 @@ export default store => next => action => {
       axios({
         method: 'put',
         url: `${ROOT_URL}/api/friendrequest`,
-        data: { friend: action.payload },
+        data: { ...action.payload },
         headers: {
           Authorization: localStorage.getItem('token'),
         },

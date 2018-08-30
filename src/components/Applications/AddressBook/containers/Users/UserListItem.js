@@ -5,7 +5,6 @@ import UserListItem from '../../components/Users/UserListItem';
 
 const mapStateToProps = ({ userReducer }) => ({
   usersProcess: userReducer.userList,
-  requestStatus: userReducer.requestStatus,
 });
 
 // Actions

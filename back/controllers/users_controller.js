@@ -179,8 +179,9 @@ module.exports = {
 
   async friendsRequest(req, res) {
     const sender = res.locals.user._id;
-    const { friend } = req.body;
+    const { userId, type } = req.body;
     const apiResponse = new ApiResponse2(res);
+    console.log(req.body);
     // Cases:
     // Ask friend = add receiver to sender sentRequest & add sender to receiver receivedRequest
     // Accept request = remove receiver receiveRequest & add sender to friend & remove sender sentRequest
@@ -188,36 +189,65 @@ module.exports = {
     // Cancel request
     // Fetch id of friend request
     // Add friend id to sentFriendRquest
+    let querySender = {};
+    let queryFriend = {};
     try {
-      await User.update(
-        {
-          _id: sender,
-          sentRequest: {
-            $nin: [friend],
+      if (type === 'cancel') {
+        querySender = {
+          query: {
+            _id: sender,
           },
-        },
-        {
-          $push: {
-            sentRequest: friend,
+          action: {
+            $pull: {
+              sentRequest: userId,
+            },
           },
-        },
-      );
-      await User.update(
-        {
-          _id: friend,
-          receivedRequest: {
-            $nin: [sender],
+        };
+
+        queryFriend = {
+          query: {
+            _id: userId,
           },
-        },
-        {
-          $push: {
-            receivedRequest: sender,
+          action: {
+            $pull: {
+              receivedRequest: sender,
+            },
           },
-        },
-      );
-      return apiResponse.success(201, { userId: friend }, true);
+        };
+      } else if (type === 'request') {
+        querySender = {
+          query: {
+            _id: sender,
+            sentRequest: {
+              $nin: [userId],
+            },
+          },
+          action: {
+            $push: {
+              sentRequest: userId,
+            },
+          },
+        };
+        queryFriend = {
+          query: {
+            _id: userId,
+            receivedRequest: {
+              $nin: [sender],
+            },
+          },
+          action: {
+            $push: {
+              receivedRequest: sender,
+            },
+          },
+        };
+      }
+      await User.update(querySender.query, querySender.action);
+      await User.update(queryFriend.query, queryFriend.action);
+      const userChanged = await User.findOne({ _id: userId }, { password: 0 });
+      return apiResponse.success(201, { user: userChanged }, true);
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
   async persistMetas(fieldUpdated, value, keywords, next) {
