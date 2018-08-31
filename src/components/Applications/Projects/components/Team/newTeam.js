@@ -49,10 +49,8 @@ class NewTeam extends React.Component {
   componentDidUpdate() {
     const { teamCreation, closeFromParent } = this.props;
     const { success } = teamCreation;
-    if (success && success.status) {
-      setTimeout(() => {
-        closeFromParent('createTeamModal');
-      }, 300);
+    if (success) {
+      closeFromParent('createTeamModal');
     }
     return true;
   }

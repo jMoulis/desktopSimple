@@ -3,7 +3,10 @@
  */
 import { connect } from 'react-redux';
 import { fetchUsersCountAction } from '../../../../../store/reducers/userReducer';
-import { createTeamAction, clearTeamMessageAction } from '../../store/reducers/teamReducer';
+import {
+  createTeamAction,
+  clearTeamMessageAction,
+} from '../../store/reducers/teamReducer';
 
 /*
  * Local import
@@ -21,10 +24,10 @@ const mapStateToProps = ({ userReducer, projectReducer, teamReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchUsersCountAction: (filter) => {
+  fetchUsersCountAction: filter => {
     dispatch(fetchUsersCountAction(filter));
   },
-  createTeamAction: (values) => {
+  createTeamAction: values => {
     dispatch(createTeamAction(values));
   },
   clearTeamMessageAction: () => {
@@ -32,10 +35,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const NewTeamContainer = createContainer(NewTeam);
 export default NewTeamContainer;

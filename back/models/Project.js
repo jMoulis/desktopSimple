@@ -50,6 +50,10 @@ const ProjectSchema = new Schema({
       ref: 'user',
     },
   ],
+  roomLeft: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 ProjectSchema.pre('save', function preSave(next) {
@@ -60,7 +64,7 @@ ProjectSchema.pre('save', function preSave(next) {
   }
   return next();
 });
-ProjectSchema.pre('update', function preSave(next) {
+ProjectSchema.pre('update', function preUpdate(next) {
   this.update({}, { $set: { updatedAt: new Date() } });
   return next();
 });

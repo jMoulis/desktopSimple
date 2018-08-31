@@ -51,7 +51,7 @@ module.exports = {
       return apiResponse.failure(422, error);
     }
   },
-  async create(req, res, next) {
+  async create(req, res) {
     const teamProps = req.body;
     const manager = res.locals.user && res.locals.user._id;
     const apiResponse = new ApiResponse(res);
@@ -94,12 +94,12 @@ module.exports = {
           $push: { teams: team._id },
         },
       );
-      return apiResponse.success(201, { team });
+      return apiResponse.success(201, { team }, true);
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
-  async show(req, res, next) {
+  async show(req, res) {
     const { id } = req.params;
     const apiResponse = new ApiResponse(res);
     try {
@@ -128,11 +128,11 @@ module.exports = {
       }
       return apiResponse.success(200, { team });
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
 
-  async edit(req, res, next) {
+  async edit(req, res) {
     const teamId = req.params.id;
     const teamProps = req.body;
     const apiResponse = new ApiResponse(res);
@@ -200,12 +200,13 @@ module.exports = {
             $pull: {
               teams: team._id,
             },
+            roomLeft: true,
           },
         );
       }
       return apiResponse.success(200, { team });
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
 
@@ -225,6 +226,16 @@ module.exports = {
           },
         },
       );
+
+      await Project.update(
+        { teams: { $in: teamToRemove._id } },
+        {
+          $pull: {
+            teams: { $in: [teamToRemove._id] },
+          },
+        },
+      );
+
       const teams = await Team.find({ 'users.user': res.locals.user })
         .populate({
           path: 'manager',
@@ -240,7 +251,7 @@ module.exports = {
           model: 'user',
           select: 'fullName picture',
         });
-      return apiResponse.success(204, { teams });
+      return apiResponse.success(201, { teams });
     } catch (error) {
       next(error);
     }

@@ -11,6 +11,7 @@ module.exports = {
       if (res.locals.user.typeUser !== 'company') {
         params = {
           isOnline: true,
+          roomLeft: true,
         };
       }
       if (req.query.search) {
@@ -161,12 +162,12 @@ module.exports = {
     }
   },
 
-  async edit(req, res, next) {
+  async edit(req, res) {
     const apiResponse = new ApiResponse(res);
 
     try {
       const projectId = req.params.id;
-      const projectProps = req.body;
+      let projectProps = req.body;
       const userId = res.locals.user._id;
 
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
@@ -177,12 +178,29 @@ module.exports = {
       }
       // Fetch the key name a set it to true
       // To send back only the field that changed
+      const fieldNameChanged = Object.keys(projectProps)[0];
       const projection = {
-        [Object.keys(projectProps)[0]]: 1,
+        [fieldNameChanged]: 1,
       };
 
       const options = { runValidators: true };
-
+      if ('subscribers' in projectProps) {
+        if (projectProps.subscribers.length > 0) {
+          User.update(
+            { _id: userId },
+            { $push: { subscribes: projectId } },
+          ).catch(error => apiResponse.failure(400, error));
+        } else if (projectProps.subscribers.length === 0) {
+          User.update(
+            { _id: userId },
+            { $pull: { subscribes: projectId } },
+          ).catch(error => apiResponse.failure(400, error));
+        }
+      }
+      projectProps = {
+        ...projectProps,
+        roomLeft: await module.exports.isProjectRoomLeft(projectId),
+      };
       const updateProject = await Project.update(
         { _id: projectId },
         { ...projectProps, updatedAt: new Date() },
@@ -210,20 +228,6 @@ module.exports = {
           },
         });
 
-      if ('subscribers' in projectProps) {
-        if (projectProps.subscribers.length > 0) {
-          User.update(
-            { _id: userId },
-            { $push: { subscribes: project._id } },
-          ).catch(error => apiResponse.failure(400, error));
-        } else if (projectProps.subscribers.length === 0) {
-          User.update(
-            { _id: userId },
-            { $pull: { subscribes: project._id } },
-          ).catch(error => apiResponse.failure(400, error));
-        }
-      }
-
       return apiResponse.success(
         200,
         {
@@ -236,7 +240,7 @@ module.exports = {
         Object.keys(projectProps)[0],
       );
     } catch (error) {
-      return apiResponse.failure(400, error);
+      return apiResponse.failure(400, null, error.message);
     }
   },
 
@@ -262,6 +266,23 @@ module.exports = {
       }
     } catch (error) {
       next(error);
+    }
+  },
+  async isProjectRoomLeft(projectId) {
+    try {
+      const project = await Project.findById(projectId);
+      if (!project) {
+        throw Error('No project found');
+      }
+      console.log(project.maxTeam);
+      console.log(project.teams.length);
+      if (project.maxTeam === project.teams.length + 1) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      return error;
     }
   },
 };

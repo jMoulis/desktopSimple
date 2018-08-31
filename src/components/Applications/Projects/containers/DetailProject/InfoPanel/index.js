@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -18,13 +17,14 @@ const mapStateToProps = ({ projectReducer }) => ({
 });
 
 // Actions
-const mapDispatchToProps = dispatch => ({
-});
-
+const mapDispatchToProps = dispatch => ({});
 
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const InfoPanelContainer = createContainer(InfoPanel);
 export default InfoPanelContainer;
