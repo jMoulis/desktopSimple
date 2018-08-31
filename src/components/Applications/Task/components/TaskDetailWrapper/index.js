@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import TaskDetail from '../../containers/TaskDetailWrapper/TaskDetail';
 import TaskActivity from './TaskActivity';
@@ -14,7 +13,5 @@ const TaskDetailWrapper = () => (
     <TaskInfo />
   </div>
 );
-
-TaskDetailWrapper.propTypes = {};
 
 export default TaskDetailWrapper;

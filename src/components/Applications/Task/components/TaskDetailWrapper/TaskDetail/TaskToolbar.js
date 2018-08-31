@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const TaskToolbar = () => (
   <ul className="ul-nav">
@@ -10,7 +9,5 @@ const TaskToolbar = () => (
     <li>Start</li>
   </ul>
 );
-
-TaskToolbar.propTypes = {};
 
 export default TaskToolbar;

@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+
 import AppToolbar from '../../../../Modules/AppToolbar';
 import UserListItem from '../containers/Users/UserListItem';
 import Pagination from './Pagination';
+import LeftNavBar from './LeftNavBar';
 import './index.css';
-import Filters from './Filters';
 
 class AddressBook extends Component {
   static propTypes = {
@@ -38,6 +39,8 @@ class AddressBook extends Component {
         filterParams: {
           ...prevState.filterParams,
           ...filter,
+          repository:
+            filterName.type === 'main' ? { ...filter.repository } : '',
         },
         repertory: filterName.label,
         filters: this.addValueToStateFilters(prevState.filters, filterName),
@@ -86,72 +89,23 @@ class AddressBook extends Component {
 
   render() {
     const { usersProcess, loggedUser } = this.props;
-    const { filters } = this.state;
     if (usersProcess.users) {
       return (
         <Fragment>
           <AppToolbar
             sortingAction={this.handleAppToolBarSearch}
             menus={[
-              // {
-              //   label: 'Student',
-              //   filterValue: { type: 'student' },
-              //   action: fetchUsersAction,
-              // },
               {
                 searchField: true,
                 action: this.handleAppToolBarSearch,
-                searchFieldLabel: 'Spec, name, location, company...',
+                searchFieldLabel:
+                  'Spec, Student name, Company name, Description',
               },
             ]}
           />
 
           <div className="address-book d-flex full-height">
-            <ul className="address-book-aside">
-              <li>
-                <button
-                  onClick={() =>
-                    this.handleFetchUsers(
-                      { friends: '' },
-                      {
-                        filterName: {
-                          label: 'All',
-                          type: 'main',
-                        },
-                      },
-                    )
-                  }
-                  className="address-book-aside-btn"
-                  type="button"
-                >
-                  All Contacts
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() =>
-                    this.handleFetchUsers(
-                      { friends: true },
-                      {
-                        filterName: {
-                          label: 'My Contacts',
-                          type: 'main',
-                        },
-                      },
-                    )
-                  }
-                  className="address-book-aside-btn"
-                  type="button"
-                >
-                  My Contacts
-                </button>
-              </li>
-              <li>
-                <button className="address-book-aside-btn" type="button">
-                  Pending request
-                </button>
-              </li>
-            </ul>
+            <LeftNavBar fetchUsersAction={this.handleFetchUsers} />
             <ul className="overflow height-overflow flex1">
               <li
                 className="d-flex flex-align-items-center flex-justify-between"
@@ -160,7 +114,6 @@ class AddressBook extends Component {
                 }}
               >
                 <span>Search in: {this.state.repertory}</span>
-                {/* <Filters filters={filters} /> */}
                 <Pagination
                   prevPage={usersProcess.pagination.prevPage}
                   nextPage={usersProcess.pagination.nextPage}
@@ -170,7 +123,7 @@ class AddressBook extends Component {
                 />
               </li>
               {usersProcess.error ? (
-                <div className="notFound">
+                <div className="not-found">
                   <span>{usersProcess.error.detail}</span>
                 </div>
               ) : (

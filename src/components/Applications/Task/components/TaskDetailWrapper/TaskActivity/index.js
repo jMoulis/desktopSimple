@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const TaskActivity = () => (
   <div id="task-activity">
@@ -11,7 +10,5 @@ const TaskActivity = () => (
     <div>Tab Content</div>
   </div>
 );
-
-TaskActivity.propTypes = {};
 
 export default TaskActivity;

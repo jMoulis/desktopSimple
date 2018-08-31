@@ -128,3 +128,10 @@ h1 {
 
 .absolute {
   position: absolute; }
+
+.not-found {
+  display: flex;
+  padding-top: 3rem;
+  justify-content: center;
+  align-items: center;
+    align-items-margin: .5rem; }

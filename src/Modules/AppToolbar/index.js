@@ -134,13 +134,7 @@ class AppToolbar extends React.Component {
                   </li>
                 );
               }
-              // return (
-              //   <li key={index} className="app-toolbar-list-item">
-              //     <button onClick={() => this.handleSearchOption(menu)}>
-              //       {menu.label}
-              //     </button>
-              //   </li>
-              // );
+              return null;
             })}
         </ul>
       </div>

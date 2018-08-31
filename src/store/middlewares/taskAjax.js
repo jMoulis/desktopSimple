@@ -25,7 +25,6 @@ import {
   deleteTaskFailureAction,
 } from '../reducers/taskReducer';
 import { logoutAction } from '../reducers/authReducer';
-import Utils from '../../Utils/utils';
 /*
  * Code
  */
@@ -40,8 +39,6 @@ const toObject = arr => {
  * Middleware
  */
 export default store => next => action => {
-  const utils = new Utils();
-
   switch (action.type) {
     case CREATE_TASK: {
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team

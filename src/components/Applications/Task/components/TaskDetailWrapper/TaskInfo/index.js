@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const TaskInfo = () => (
   <div id="task-info">
@@ -27,7 +26,5 @@ const TaskInfo = () => (
     </ul>
   </div>
 );
-
-TaskInfo.propTypes = {};
 
 export default TaskInfo;

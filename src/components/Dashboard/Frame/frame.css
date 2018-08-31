@@ -56,11 +56,3 @@
         outline: none; }
         .frame .child-app .app-toolbar .btn-app-toolbar:hover {
           border-bottom: 2px solid #0a1c28; }
-      .frame .child-app .app-toolbar-list {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding-left: 1rem; }
-        .frame .child-app .app-toolbar-list-item {
-          padding: 0 1rem;
-          position: relative; }

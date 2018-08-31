@@ -33,6 +33,13 @@ module.exports = {
           friends: { $in: [res.locals.user._id] },
         };
       }
+
+      if (req.query.sent) {
+        query = { ...query, receivedRequest: { $in: [res.locals.user._id] } };
+      }
+      if (req.query.received) {
+        query = { ...query, sentRequest: { $in: [res.locals.user._id] } };
+      }
       const usersTotal = await User.find(query).count();
       const totalPage = Math.ceil(usersTotal / LIMIT);
       let nextPage;

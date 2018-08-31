@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import Input from '../../../../../../Form/input';
 import taskModel from './task-model';
-import AddFilesInput from '../../../../../../../Modules/filesHandler/addFilesInput';
 import Textarea from '../../../../../../Form/textarea';
 import FormButtonsContainer from '../../../../../../Form/formButtonContainer';
 import './index.css';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import UserIconContainer from '../../../../../Modules/UserIcon';
+
 import './listProject.css';
 import TagList from '../../../../../Modules/Tag/tagList';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import AlertBox from '../../../../Modules/AlertBox';
 import './index.css';
-import UserIcon from '../../../../Modules/UserIcon';
 import AddFilesInput from '../../../../Modules/filesHandler/addFilesInput';
 import TagList from '../../../../Modules/Tag/tagList';
 import CompanyHeader from '../../../../Modules/CompanyHeader';

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import './project-info.css';
-import UserIcon from '../../../../../Modules/UserIcon';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
 
 const ProjectInfo = ({ project }) => (

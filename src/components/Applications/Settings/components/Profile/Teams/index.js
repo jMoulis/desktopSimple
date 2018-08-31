@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 
-import Modal from '../../../../../../Modules/Modal/modal';
 import UserIcon from '../../../../../../Modules/UserIcon';
-import NewTeamContainer from '../../../containers/Profile/Teams/NewTeam';
 import Loader from '../../../../../../Modules/Loader';
 
 class TeamProfile extends React.Component {
   static propTypes = {
-    loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
     fetchTeamsAction: PropTypes.func.isRequired,
     teamsProcess: PropTypes.object.isRequired,

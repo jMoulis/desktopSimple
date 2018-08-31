@@ -9,7 +9,6 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import Checkbox from '../../../../Form/checkbox';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
-import UserIcon from '../../../../../Modules/UserIcon';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
 
