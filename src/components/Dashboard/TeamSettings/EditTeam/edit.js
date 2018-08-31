@@ -179,7 +179,6 @@ class EditTeam extends React.Component {
   };
   handleSearch = evt => {
     const { filter } = evt.target.dataset;
-    console.log(filter);
     this.setState(() => ({
       modal: true,
       filter: {
