@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import './userLoader.css';
 import Loader from '../../Modules/Loader';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
+import Pagination from '../../components/Applications/AddressBook/components/Pagination';
 
 const mapStateToProps = ({ projectReducer, userReducer }) => ({
   project: projectReducer.activeProjectProcess.project,
@@ -37,47 +38,26 @@ class UsersLoader extends React.Component {
   componentWillUnmount() {
     this.props.closeFromParent();
   }
-  handlePagination = evt => {
+  handleFetchPage = evt => {
     const { filter, fetchUsers } = this.props;
-    const { pagination } = evt.target.dataset;
-    fetchUsers(`${filter}${pagination}`);
+    const { page } = evt.target.dataset;
+    fetchUsers({ page, ...filter });
   };
   render() {
     // filter and select from parent
     const { userList, select, filter } = this.props;
-    const { loading, error, users, pagination } = userList;
-    if (loading) {
-      return <Loader />;
-    }
+    const { loading, error, users } = userList;
     return (
       <div className="users">
         {error && <span>Error</span>}
-        {pagination && (
-          <div className="users-pagination">
-            {pagination.prevPage && (
-              <button
-                className="btn btn-primary"
-                key="prev"
-                type="button"
-                onClick={this.handlePagination}
-                data-pagination={pagination.prevPage}
-              >
-                prev
-              </button>
-            )}
-            {pagination.nextPage && (
-              <button
-                className="btn btn-primary"
-                key="next"
-                type="button"
-                onClick={this.handlePagination}
-                data-pagination={pagination.nextPage}
-              >
-                next
-              </button>
-            )}
-          </div>
-        )}
+        <Pagination
+          prevPage={userList.pagination.prevPage}
+          nextPage={userList.pagination.nextPage}
+          loading={userList.loading}
+          action={this.handleFetchPage}
+          count={userList.pagination.count}
+        />
+
         <ul className="ul-unstyled users-list">
           {users.map(user => (
             <li key={user._id} className="users-list-item">

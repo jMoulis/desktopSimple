@@ -40,6 +40,7 @@ module.exports = {
       if (req.query.received) {
         query = { ...query, sentRequest: { $in: [res.locals.user._id] } };
       }
+
       const usersTotal = await User.find(query).count();
       const totalPage = Math.ceil(usersTotal / LIMIT);
       let nextPage;
@@ -48,6 +49,7 @@ module.exports = {
       if (totalPage !== 1) {
         nextPage = 2;
       }
+
       if (req.query.page) {
         if (Number(req.query.page) + 1 > totalPage) {
           nextPage = null;
@@ -61,6 +63,7 @@ module.exports = {
         }
         SKIP = (req.query.page - 1) * LIMIT;
       }
+
       const pagination = {
         nextPage,
         prevPage,
@@ -76,6 +79,7 @@ module.exports = {
           success: 'Count',
         });
       }
+
       const users = await User.find(query, { password: 0 })
         .sort(
           req.query.sorting ? { fullName: req.query.sorting } : { fullName: 1 },

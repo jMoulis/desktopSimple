@@ -265,7 +265,7 @@ class NewTeam extends React.Component {
               closeFromParent={this.handleClose}
             >
               <UsersLoader
-                filter={this.state.filter}
+                filter={{ ...this.state.filter, type: 'student' }}
                 select={this.handleSelectUser}
               />
             </Modal>

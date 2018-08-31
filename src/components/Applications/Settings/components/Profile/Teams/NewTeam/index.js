@@ -115,7 +115,6 @@ class NewTeam extends React.Component {
   };
   handleSearch = evt => {
     const { filter } = evt.target.dataset;
-    console.log(filter);
     this.setState(() => ({
       modal: true,
       filter: {
@@ -253,7 +252,7 @@ class NewTeam extends React.Component {
               closeFromParent={this.handleClose}
             >
               <UsersLoader
-                filter={this.state.filter}
+                filter={{ ...this.state.filter, type: 'student' }}
                 select={this.handleSelectUser}
               />
             </Modal>

@@ -2,7 +2,7 @@ const fullNames = require('./fakeName');
 const images = require('./fakeImageB64');
 const bcrypt = require('bcryptjs');
 
-const numberUser = 20;
+const numberUser = 500;
 
 let index = 1;
 const Users = [];

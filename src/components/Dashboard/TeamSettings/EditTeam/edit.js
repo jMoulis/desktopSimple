@@ -151,6 +151,7 @@ class EditTeam extends React.Component {
           type: 'student',
           count: 'true',
         };
+        console.log(filter);
         fetchUsersCountAction(filter);
         this.setState(prevState => ({
           ressources: '',
@@ -178,9 +179,12 @@ class EditTeam extends React.Component {
   };
   handleSearch = evt => {
     const { filter } = evt.target.dataset;
+    console.log(filter);
     this.setState(() => ({
       modal: true,
-      filter,
+      filter: {
+        filter,
+      },
     }));
   };
   handleRemove = ({ target }) => {
@@ -375,7 +379,7 @@ class EditTeam extends React.Component {
             closeFromParent={this.handleClose}
           >
             <UsersLoader
-              filter={this.state.filter}
+              filter={{ ...this.state.filter, type: 'student' }}
               select={this.handleSelectUser}
             />
           </Modal>
