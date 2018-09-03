@@ -35,7 +35,9 @@ const DocumentSchema = new Schema({
   },
   url: String,
   type: String,
+  originalName: String,
 });
+
 const ActivitySchema = new Schema({
   type: String,
   author: {
@@ -51,13 +53,17 @@ const ActivitySchema = new Schema({
 const TaskSchema = new Schema({
   title: {
     type: String,
-    required: [true, 'Message required'],
+    required: [true, 'Title required'],
   },
   description: String,
   status: {
     type: String,
+    default: 'new',
   },
-  priority: String,
+  priority: {
+    type: String,
+    default: 'low',
+  },
   labels: Array,
   documents: [DocumentSchema],
   comments: [CommentSchema],

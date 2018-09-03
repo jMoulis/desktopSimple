@@ -8,8 +8,8 @@ const mapStateToProps = ({ taskReducer }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchTasksAction: () => {
-    dispatch(fetchTasksAction());
+  fetchTasksAction: filter => {
+    dispatch(fetchTasksAction(filter));
   },
 });
 

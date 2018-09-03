@@ -12,7 +12,9 @@ import TaskDetailWrapper from '../../components/TaskDetailWrapper';
  * Code
  */
 // State
-const mapStateToProps = state => ({});
+const mapStateToProps = ({ taskReducer }) => ({
+  activeTaskProcess: taskReducer.activeTaskProcess,
+});
 
 // Actions
 const mapDispatchToProps = dispatch => ({});

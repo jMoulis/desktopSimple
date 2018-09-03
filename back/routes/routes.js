@@ -64,7 +64,12 @@ module.exports = app => {
     TasksController.create,
   );
   app.get('/api/tasks/:id', VerifyToken, TasksController.read);
-  app.put('/api/tasks/:id', upload.array('documents'), TasksController.update);
+  app.put(
+    '/api/tasks/:id',
+    VerifyToken,
+    upload.array('documents'),
+    TasksController.update,
+  );
   app.delete('/api/tasks/:id', TasksController.delete);
 
   app.get('/api/files', VerifyToken, FilesController.index);

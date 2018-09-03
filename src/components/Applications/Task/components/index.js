@@ -21,7 +21,7 @@ class Task extends React.Component {
 
   componentDidMount() {
     const { fetchTasksAction } = this.props;
-    fetchTasksAction();
+    fetchTasksAction({ filter: '' });
   }
   handleShowCreateModal = () => {
     this.setState(prevState => ({
@@ -32,8 +32,9 @@ class Task extends React.Component {
 
   render() {
     const { showCreateModal } = this.state;
+    const { fetchTasksAction } = this.props;
     return (
-      <div id="task" className="d-flex flex-column">
+      <div id="task" className="d-flex flex-column full-height">
         <ul className="ul-nav">
           <li>
             <button onClick={this.handleShowCreateModal}>Create</button>
@@ -41,8 +42,8 @@ class Task extends React.Component {
           <li>Display Card</li>
           <li>Display list</li>
         </ul>
-        <div className="d-flex">
-          <TaskFilter />
+        <div className="d-flex full-height">
+          <TaskFilter fetchTasksAction={fetchTasksAction} />
           <TaskList />
           <TaskDetailWrapperContainer />
         </div>

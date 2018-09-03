@@ -13,13 +13,13 @@ export default {
   status: {
     type: 'text',
     label: 'Status',
-    placeholder: 'Status',
+    defaultOption: 'Select a status',
     name: 'status',
   },
   priority: {
     type: 'text',
     label: 'Priority',
-    placeholder: 'Priority',
+    defaultOption: 'Priority',
     name: 'priority',
   },
   labels: {

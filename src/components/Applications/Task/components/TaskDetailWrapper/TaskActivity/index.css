@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-activity {
+  margin: .5rem;
+  border: 2px solid #0a1c28;
+  max-height: 400px;
+  overflow: hidden; }

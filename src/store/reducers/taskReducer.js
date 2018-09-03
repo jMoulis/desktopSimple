@@ -96,7 +96,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         taskListProcess: {
-          tasks: [],
+          ...state.taskListProcess,
           success: null,
           loading: true,
           error: null,
@@ -135,7 +135,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         activeTaskProcess: {
-          task: {},
+          ...state.activeTaskProcess,
           success: null,
           loading: true,
           error: null,
@@ -256,9 +256,9 @@ export const fetchSingleTaskFailureAction = error => ({
   type: FETCH_SINGLE_TASK_FAILURE,
   payload: error,
 });
-export const fetchTasksAction = id => ({
+export const fetchTasksAction = filter => ({
   type: FETCH_TASKS,
-  id,
+  payload: filter,
 });
 export const fetchTasksSuccessAction = data => ({
   type: FETCH_TASKS_SUCCESS,

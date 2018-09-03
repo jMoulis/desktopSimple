@@ -1,17 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import TaskDetail from '../../containers/TaskDetailWrapper/TaskDetail';
+import TaskDetail from './TaskDetail';
 import TaskActivity from './TaskActivity';
 import TaskInfo from './TaskInfo';
+import './index.css';
 
-const TaskDetailWrapper = () => (
-  <div id="task-detail-wrapper" className="d-flex">
-    <div className="task-detail-wrapper-main">
-      <TaskDetail />
-      <TaskActivity />
+const TaskDetailWrapper = ({ activeTaskProcess }) => (
+  <div className="d-flex flex1">
+    <div className="task-detail-wrapper flex1">
+      <TaskDetail task={activeTaskProcess.task} />
+      <TaskActivity task={activeTaskProcess.task} />
     </div>
     <TaskInfo />
   </div>
 );
+
+TaskDetailWrapper.propTypes = {
+  activeTaskProcess: PropTypes.object.isRequired,
+};
 
 export default TaskDetailWrapper;

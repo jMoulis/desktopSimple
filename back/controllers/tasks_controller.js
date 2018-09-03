@@ -11,8 +11,37 @@ const ROOT_FOLDER = path.join(__dirname, '/../uploads/');
 module.exports = {
   index: async (req, res) => {
     const apiResponse = new ApiResponse(res);
+    let query = {
+      team: req.params.id,
+    };
+    if (req.query.myTask) {
+      query = {
+        ...query,
+        assign: res.locals.user._id,
+      };
+    }
     try {
-      const tasks = await Task.find({ team: req.params.id });
+      const tasks = await Task.find(query)
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'comments.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'documents.author',
+          model: 'user',
+          select: 'fullName picture',
+        });
       if (!tasks || tasks.length === 0) {
         return apiResponse.failure(404, null, 'No task found');
       }
@@ -51,6 +80,7 @@ module.exports = {
           }
 
           return {
+            originalName: document.originalname,
             name: fileName,
             mimetype: document.mimetype,
             folder: req.headers.folder,
@@ -63,7 +93,21 @@ module.exports = {
           };
         });
       }
-      const newTask = await Task.create({ ...req.body, documents: docs });
+      const newTask = await Task.create({
+        ...req.body,
+        author: res.locals.user._id,
+        documents: docs,
+      })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'documents.author',
+          model: 'user',
+          select: 'fullName picture',
+        });
       return apiResponse.success(201, { task: newTask });
     } catch (error) {
       return apiResponse.failure(422, error);
@@ -73,7 +117,22 @@ module.exports = {
   read: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
-      const task = await Task.findOne({ _id: req.params.id });
+      const task = await Task.findOne({ _id: req.params.id })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'comments.author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'documents.author',
+          model: 'user',
+          select: 'fullName picture',
+        });
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
       }

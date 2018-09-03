@@ -24,7 +24,7 @@ const TaskDisplayListInput = ({ task }) => (
         </li>
         <li>
           <label>Description:</label>
-          {task.description}
+          <p>{task.description}</p>
         </li>
       </ul>
     )}

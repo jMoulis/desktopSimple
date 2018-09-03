@@ -151,8 +151,9 @@ class EditTeam extends React.Component {
           type: 'student',
           count: 'true',
         };
-        console.log(filter);
+
         fetchUsersCountAction(filter);
+
         this.setState(prevState => ({
           ressources: '',
           selectedTags: [

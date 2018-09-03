@@ -42,11 +42,11 @@ class SelectBoxUser extends Component {
                 <li
                   className="d-flex flex-align-items-center pointer"
                   onClick={() => {
-                    callback(user._id);
+                    callback(user.user._id);
                     this.handleShowList();
                   }}
                   onKeyPress={() => {
-                    callback(user._id);
+                    callback(user.user._id);
                     this.handleShowList();
                   }}
                 >

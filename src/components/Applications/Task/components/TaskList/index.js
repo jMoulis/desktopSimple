@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './index.css';
+
 const TaskList = ({ tasks, fetchSingleTaskAction }) => (
-  <ul id="task-list">
+  <ul className="task-list">
     {tasks &&
       tasks.length !== 0 &&
       tasks.map(task => (
         <li
+          className="task-list-item"
           key={task._id}
           onClick={() => {
             fetchSingleTaskAction(task._id);

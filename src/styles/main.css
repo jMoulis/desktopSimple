@@ -96,6 +96,9 @@ h1 {
   .online--green {
     background-color: #7fbf7f; }
 
+.small {
+  font-size: .7rem; }
+
 .d-flex {
   display: flex; }
 
@@ -103,7 +106,7 @@ h1 {
   flex-direction: column; }
 
 .flex1 {
-  flex: 1 0 auto; }
+  flex: 1 1 0%; }
 
 .flex-justify-between {
   justify-content: space-between; }
@@ -128,6 +131,14 @@ h1 {
 
 .absolute {
   position: absolute; }
+
+.btn-toolbar {
+  border: none;
+  background-color: transparent;
+  font-family: "Nunito", sans-serif;
+  padding: .5rem 0;
+  cursor: pointer;
+  outline: none; }
 
 .not-found {
   display: flex;

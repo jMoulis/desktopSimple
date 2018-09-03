@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Input from '../../../../../../Form/input';
+import Select from '../../../../../../Form/select';
 import taskModel from './task-model';
 import Textarea from '../../../../../../Form/textarea';
 import FormButtonsContainer from '../../../../../../Form/formButtonContainer';
@@ -144,17 +145,25 @@ class TaskCreateForm extends React.Component {
             error: error && error.description && error.description.detail,
           }}
         />
-        <Input
+        <Select
           config={{
             field: taskModel.status,
             onChange: this.handleInputChange,
             value: status.value,
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
+            options: [
+              'To Do',
+              'In Progress',
+              'Reopened',
+              'Need Testing',
+              'On Hold',
+              'Closed',
+            ],
             error: error && error.status && error.status.detail,
           }}
         />
-        <Input
+        <Select
           config={{
             field: taskModel.priority,
             onChange: this.handleInputChange,
@@ -162,6 +171,7 @@ class TaskCreateForm extends React.Component {
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
             error: error && error.priority && error.priority.detail,
+            options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
           }}
         />
         {/* <Input
@@ -174,18 +184,8 @@ class TaskCreateForm extends React.Component {
             error: error && error.labels && error.labels.detail,
           }}
         /> */}
-        {/* <AddFilesInput
-          error={error && error.documents && error.documents.detail}
-          docs={documents}
-          onFileChange={this.handleInputFileChange}
-          blur={this.handleOnBlur}
-        /> */}
         <input type="file" multiple onChange={this.handleInputFileChange} />
-        <ul>
-          {documents.map(document => {
-            return <li>{document.name}</li>;
-          })}
-        </ul>
+        <ul>{documents.map(document => <li>{document.name}</li>)}</ul>
         {documents.length === 0 && <h2>No Documents available</h2>}
         <Input
           config={{
