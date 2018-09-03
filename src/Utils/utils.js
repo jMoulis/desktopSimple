@@ -21,6 +21,17 @@ class Utils {
     });
     return filters.toString().replace(/,/g, '&');
   };
+  simulateClickEvent = file => {
+    const element = document.createElement('a');
+    element.href = file.href;
+    element.setAttribute('download', `${file.fileName}`);
+    return this._linkClick(element, 'click');
+  };
+  _linkClick = element => {
+    const eventObject = new MouseEvent('click');
+    element.addEventListener('click', null);
+    element.dispatchEvent(eventObject);
+  };
 }
 
 export default Utils;

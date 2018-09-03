@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TaskToolbar from './TaskToolbar';
 import TaskDisplayListInput from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDisplayListInput';
-import TaskDisplayDocuments from './TaskDisplayDocuments';
+import TaskDisplayDocument from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDisplayDocument';
 
 class TaskDetail extends React.Component {
   handleAssignTask = () => {};
@@ -24,7 +24,7 @@ class TaskDetail extends React.Component {
           closeAction={this.handleCloseTask}
         />
         <TaskDisplayListInput />
-        <TaskDisplayDocuments documents={task.documents} />
+        <TaskDisplayDocument documents={task.documents} />
       </div>
     );
   }

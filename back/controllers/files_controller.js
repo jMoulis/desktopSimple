@@ -22,9 +22,14 @@ module.exports = {
         fs.existsSync(FILE)
       ) {
         const fileBase64 = fs.readFileSync(FILE, { encoding: 'base64' });
-        return apiResponse.success(200, {
-          file: `data:${mimeType};base64,${fileBase64}`,
-        });
+        return apiResponse.success(
+          200,
+          {
+            fileContent: `data:${mimeType};base64,${fileBase64}`,
+            fileName,
+          },
+          true,
+        );
       }
     } catch (error) {
       return apiResponse.failure(422, null, error.message);

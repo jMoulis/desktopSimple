@@ -61,10 +61,10 @@ class TeamToolbar extends React.Component {
               </Button>
             </li>
             <li className="team-list">
-              <ul>
-                {team.users.map((user, index) => {
-                  return <UserIcon key={index} user={user} />;
-                })}
+              <ul className="d-flex">
+                {team.users.map((user, index) => (
+                  <UserIcon key={index} user={user} />
+                ))}
               </ul>
             </li>
           </ul>
