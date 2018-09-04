@@ -26,7 +26,10 @@ const UserIcon = ({
     return null;
   }
   return (
-    <div className="d-flex flex-align-items-center" style={containerCss}>
+    <div
+      className="d-flex flex-align-items-center user-icon"
+      style={containerCss}
+    >
       <img
         className={`mini-thumbnail mini-thumbnail-${classCss}`}
         src={user.user.picture || '/img/avatar.png'}

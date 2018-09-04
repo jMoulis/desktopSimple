@@ -4,9 +4,6 @@
   .task-content {
     padding: .5rem; }
 
-.task-activity {
-  padding: 1rem;
-  margin-top: .5rem;
-  border: 2px solid #0a1c28;
-  max-height: 300px;
-  overflow: hidden; }
+.task-navbar {
+  padding: .5rem;
+  background-color: #97c0b7; }

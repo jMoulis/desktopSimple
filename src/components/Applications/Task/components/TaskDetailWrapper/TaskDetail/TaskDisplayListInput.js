@@ -116,8 +116,8 @@ class TaskDisplayListInput extends React.Component {
         ) : (
           <ul>
             <li>
-              <label>
-                Type:
+              <label className="d-flex flex-align-items-center">
+                <span className="left-label-form">Type:</span>
                 <span>{task.type}</span>
               </label>
             </li>
@@ -126,8 +126,9 @@ class TaskDisplayListInput extends React.Component {
                 onKeyPress={this.handleLabelClick}
                 onClick={this.handleLabelClick}
                 data-name="status"
+                className="d-flex flex-align-items-center"
               >
-                Status:
+                <span className="left-label-form">Status:</span>
                 {status && status.selected ? (
                   <Select
                     config={{
@@ -142,6 +143,7 @@ class TaskDisplayListInput extends React.Component {
                         'On Hold',
                         'Closed',
                       ],
+                      small: true,
                       error: error && error.status && error.status.detail,
                     }}
                   />
@@ -155,8 +157,9 @@ class TaskDisplayListInput extends React.Component {
                 onKeyPress={this.handleLabelClick}
                 onClick={this.handleLabelClick}
                 data-name="priority"
+                className="d-flex flex-align-items-center"
               >
-                Priority:
+                <span className="left-label-form">Priority:</span>
                 {priority && priority.selected ? (
                   <Select
                     config={{
@@ -165,6 +168,7 @@ class TaskDisplayListInput extends React.Component {
                       value: priority.value,
                       blur: this.handleOnBlur,
                       focus: this.handleOnFocus,
+                      small: true,
                       error: error && error.priority && error.priority.detail,
                       options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
                     }}
@@ -179,8 +183,9 @@ class TaskDisplayListInput extends React.Component {
                 onKeyPress={this.handleLabelClick}
                 onClick={this.handleLabelClick}
                 data-name="labels"
+                className="d-flex flex-align-items-center"
               >
-                Labels:
+                <span className="left-label-form">Labels:</span>
                 {labels && labels.selected ? (
                   <Select
                     config={{
@@ -190,8 +195,9 @@ class TaskDisplayListInput extends React.Component {
                       blur: this.handleOnBlur,
                       multiple: true,
                       focus: this.handleOnFocus,
-                      error: error && error.labels && error.labels.detail,
+                      small: true,
                       options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+                      error: error && error.labels && error.labels.detail,
                     }}
                   />
                 ) : (
@@ -200,7 +206,7 @@ class TaskDisplayListInput extends React.Component {
               </label>
             </li>
             <li>
-              <label>Description:</label>
+              <label className="left-label-form">Description:</label>
               <p>{task.description}</p>
             </li>
           </ul>

@@ -1,7 +1,9 @@
 @import '../../../../../styles/charte.sass'
 .task-list
+  overflow: auto
   &-item
-    padding: 1rem
-    border-top: 2px solid $darkestblue
-    border-bottom: 2px solid $darkestblue
     cursor: pointer
+    transition: all 150ms
+    &-selected
+      & button
+        color: $orange

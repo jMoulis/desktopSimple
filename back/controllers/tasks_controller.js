@@ -41,9 +41,10 @@ module.exports = {
           path: 'documents.author',
           model: 'user',
           select: 'fullName picture',
-        });
+        })
+        .sort({ createdAt: -1 });
       if (!tasks || tasks.length === 0) {
-        return apiResponse.failure(404, null, 'No task found');
+        return apiResponse.failure(404, null, 'Oups! No tasks found');
       }
       return apiResponse.success(200, { tasks });
     } catch (error) {
@@ -82,6 +83,7 @@ module.exports = {
           return {
             originalName: document.originalname,
             name: fileName,
+            extension: mime.extension(document.mimetype),
             mimetype: document.mimetype,
             folder: req.headers.folder,
             author: res.locals.user._id,

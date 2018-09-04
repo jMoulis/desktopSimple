@@ -17,6 +17,7 @@ class TaskCreateForm extends React.Component {
     taskCreation: PropTypes.object.isRequired,
     teamId: PropTypes.string.isRequired,
     clearTaskMessageAction: PropTypes.func.isRequired,
+    fetchTasksAction: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -51,8 +52,10 @@ class TaskCreateForm extends React.Component {
     const {
       taskCreation: { success },
       closeFromParent,
+      fetchTasksAction,
     } = this.props;
     if (success) {
+      fetchTasksAction({ filter: '' });
       return closeFromParent();
     }
     return true;

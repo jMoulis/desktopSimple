@@ -55,7 +55,7 @@ class TaskDisplayDocument extends React.Component {
               </li>
             ))
           ) : (
-            <div>
+            <div className="d-flex flex-column">
               <span>No Documents available</span>
               <input type="file" multiple placeholder="Select a file" />
             </div>

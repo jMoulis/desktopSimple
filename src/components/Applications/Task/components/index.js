@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import './index.css';
@@ -6,8 +6,9 @@ import TaskFilter from '../containers/TaskFilter';
 import TaskList from '../containers/TaskList';
 import TaskDetailWrapperContainer from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
+import MaskLoader from '../../../../Modules/MaskLoader';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
-import Loader from '../../../../Modules/Loader';
+import TaskNavBar from './TaskNavBar';
 
 class Task extends React.Component {
   static propTypes = {
@@ -35,22 +36,22 @@ class Task extends React.Component {
   render() {
     const { showCreateModal } = this.state;
     const { fetchTasksAction, taskListProcess } = this.props;
-    if (taskListProcess.loading) {
-      return <Loader />;
-    }
     return (
-      <div id="task" className="d-flex flex-column full-height">
-        <ul className="ul-nav">
-          <li>
-            <button onClick={this.handleShowCreateModal}>Create</button>
-          </li>
-          <li>Display Card</li>
-          <li>Display list</li>
-        </ul>
-        <div className="d-flex full-height">
+      <div className="task d-flex flex-column full-height">
+        <TaskNavBar onClick={this.handleShowCreateModal} />
+        <div className="task-content d-flex full-height relative overflow">
           <TaskFilter fetchTasksAction={fetchTasksAction} />
-          <TaskList />
-          <TaskDetailWrapperContainer />
+          {taskListProcess.tasks.length !== 0 ? (
+            <Fragment>
+              <TaskList />
+              <TaskDetailWrapperContainer />
+            </Fragment>
+          ) : (
+            <div className="d-flex flex1 flex-justify-center flex-align-items-center">
+              <h1>{taskListProcess.error && taskListProcess.error.detail}</h1>
+            </div>
+          )}
+          {taskListProcess.loading && <MaskLoader />}
         </div>
         {showCreateModal && (
           <Modal

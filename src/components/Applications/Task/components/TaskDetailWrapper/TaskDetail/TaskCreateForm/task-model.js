@@ -12,18 +12,15 @@ export default {
   },
   status: {
     type: 'text',
-    label: 'Status',
     defaultOption: 'Select a status',
     name: 'status',
   },
   priority: {
     type: 'text',
-    label: 'Priority',
     defaultOption: 'Priority',
     name: 'priority',
   },
   labels: {
-    label: 'Labels',
     name: 'labels',
     isArray: true,
   },

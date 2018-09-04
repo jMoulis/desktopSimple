@@ -14,30 +14,32 @@
     width: 100%
     border: none
     overflow: auto
-    .form-header
+    &-header
       display: flex
       justify-content: flex-start
       background-color: $blue
       h1
         margin: 0
         padding: 1rem
-    .form-content-wrapper
+    &-content-wrapper
       display: flex
       justify-content: space-around
       flex-wrap: wrap
-    .form-content
+    &-content
       background-color: $beige
       padding: .5rem
       flex: 1
-      .form-group
-        padding: 0.5rem 0
-        .form-control-error
-          border-bottom: 2px solid #f8d7da
       .error-login
         text-align: center
       label
         color: $darkestblue
         font-weight: bold
+.form-group
+  padding: 0.5rem 0
+  &-small
+    padding: 0
+  .form-control-error
+    border-bottom: 2px solid #f8d7da
 .error-message
   padding-top: .3rem
   color: #721c24

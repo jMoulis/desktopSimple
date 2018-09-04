@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task {
+  position: relative; }
+  .task-content {
+    padding: .5rem; }
+
 .tab-nav {
   display: flex;
   margin-bottom: .5rem; }

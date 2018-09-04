@@ -4,6 +4,7 @@ import TaskCreateForm from '../../../../components/TaskDetailWrapper/TaskDetail/
 import {
   createTaskAction,
   clearTaskMessageAction,
+  fetchTasksAction,
 } from '../../../../../../../store/reducers/taskReducer';
 
 const mapStateToProps = ({ taskReducer, mainTeamReducer }) => ({
@@ -14,6 +15,9 @@ const mapStateToProps = ({ taskReducer, mainTeamReducer }) => ({
 const mapDispatchToProps = dispatch => ({
   createTaskAction: values => {
     dispatch(createTaskAction(values));
+  },
+  fetchTasksAction: filter => {
+    dispatch(fetchTasksAction(filter));
   },
   clearTaskMessageAction: () => {
     dispatch(clearTaskMessageAction());

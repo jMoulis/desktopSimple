@@ -1,16 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
-.left-navbar {
-  padding-top: 1rem;
-  border-right: 2px solid #0a1c28;
-  background-color: #97c0b7; }
-  .left-navbar-btn {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-family: 'Nunito', sans-serif;
-    font-weight: bold;
-    outline: none;
-    padding: .5rem;
-    transition: all 300ms; }
-    .left-navbar-btn:hover {
-      color: #d44c00; }
+.left-navbar-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  outline: none;
+  padding: .5rem;
+  transition: all 300ms; }
+  .left-navbar-btn:hover {
+    color: #d44c00; }

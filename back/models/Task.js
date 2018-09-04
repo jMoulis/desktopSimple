@@ -36,6 +36,7 @@ const DocumentSchema = new Schema({
   url: String,
   type: String,
   originalName: String,
+  extension: String,
 });
 
 const ActivitySchema = new Schema({
@@ -58,11 +59,11 @@ const TaskSchema = new Schema({
   description: String,
   status: {
     type: String,
-    default: 'new',
+    default: 'To Do',
   },
   priority: {
     type: String,
-    default: 'low',
+    default: 'Medium',
   },
   labels: Array,
   documents: [DocumentSchema],
