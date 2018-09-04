@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import TaskDisplayDocument from '../../../components/TaskDetailWrapper/TaskDetail/TaskDisplayDocument';
-import { fetchFileAction } from '../../../../../../store/reducers/fileReducer';
+import TaskDisplayDocument from '../../../../components/TaskDetailWrapper/TaskDetail/TaskDocument';
+import { fetchFileAction } from '../../../../../../../store/reducers/fileReducer';
 
 const mapStateToProps = ({ fileReducer }) => ({
   fileProcess: fileReducer.fileProcess,

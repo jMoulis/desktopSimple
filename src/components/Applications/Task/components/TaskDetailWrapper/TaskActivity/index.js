@@ -25,7 +25,7 @@ class TaskActivity extends React.Component {
       <div className="task-activity height-overflow">
         <TabNav onClick={this.handleTabClick} type={type} />
         {type === 'activities' ? (
-          <ul className="overflow">
+          <ul className="overflow height-overflow">
             {task &&
               task.activities &&
               task.activities.map((activity, index) => (

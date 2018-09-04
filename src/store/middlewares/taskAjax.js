@@ -81,16 +81,16 @@ export default store => next => action => {
       break;
     }
     case EDIT_TASK: {
+      const taskId = store.getState().taskReducer.activeTaskProcess.task._id;
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
       const formData = toObject(filteredArray);
-      formData.users = action.payload.users;
 
       axios({
         method: 'put',
         data: formData,
-        // url: `${ROOT_URL}/api/tasks/${taskId}`,
+        url: `${ROOT_URL}/api/tasks/${taskId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
           type: 'task',

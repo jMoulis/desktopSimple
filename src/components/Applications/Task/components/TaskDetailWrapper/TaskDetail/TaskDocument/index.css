@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail-wrapper {
+  margin-left: 1rem;
+  margin-right: 1rem; }
+
+.document {
+  flex-wrap: wrap; }
+  .document li {
+    margin: .5rem; }
+  .document-item {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: fade; }

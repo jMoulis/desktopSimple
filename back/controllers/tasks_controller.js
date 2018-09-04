@@ -97,7 +97,16 @@ module.exports = {
         ...req.body,
         author: res.locals.user._id,
         documents: docs,
-      })
+        activities: [
+          {
+            type: 'new task',
+            author: res.locals.user._id,
+            createdAt: new Date(),
+          },
+        ],
+      });
+
+      const task = await Task.findOne({ _id: newTask._id })
         .populate({
           path: 'author',
           model: 'user',
@@ -107,8 +116,14 @@ module.exports = {
           path: 'documents.author',
           model: 'user',
           select: 'fullName picture',
+        })
+        .populate({
+          path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
         });
-      return apiResponse.success(201, { task: newTask });
+
+      return apiResponse.success(201, { task }, true);
     } catch (error) {
       return apiResponse.failure(422, error);
     }
@@ -132,6 +147,11 @@ module.exports = {
           path: 'documents.author',
           model: 'user',
           select: 'fullName picture',
+        })
+        .populate({
+          path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
         });
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
@@ -144,17 +164,51 @@ module.exports = {
 
   update: async (req, res) => {
     const apiResponse = new ApiResponse(res);
+
     try {
       const task = await Task.findOne({ _id: req.params.id });
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
       }
-      const updateTask = await Task.update({ _id: req.params.id }, req.body);
+      const fieldname = Object.keys(req.body).map(key => key)[0];
+      const updateTask = await Task.update(
+        { _id: req.params.id },
+        {
+          ...req.body,
+          $push: {
+            activities: {
+              type: `modification to ${fieldname}`,
+              author: res.locals.user._id,
+              createdAt: new Date(),
+            },
+          },
+        },
+      );
       if (updateTask.n === 0) {
         return apiResponse.success(422, null, 'Unable to update');
       }
 
-      const updatedTask = await Task.findOne({ _id: req.params.id });
+      const updatedTask = await Task.findOne({ _id: req.params.id })
+        .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'comments.author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
+          path: 'documents.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
+        });
 
       return apiResponse.success(201, { task: updatedTask });
     } catch (error) {

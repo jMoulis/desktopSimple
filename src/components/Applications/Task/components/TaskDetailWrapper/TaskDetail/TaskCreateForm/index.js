@@ -8,6 +8,7 @@ import Textarea from '../../../../../../Form/textarea';
 import FormButtonsContainer from '../../../../../../Form/formButtonContainer';
 import './index.css';
 import SelectBoxUser from '../../../../../../../Modules/SelectBoxUser';
+import autoTextAreaResizing from '../../../../../../../Utils/autoTextAreaResizing';
 
 class TaskCreateForm extends React.Component {
   static propTypes = {
@@ -85,6 +86,19 @@ class TaskCreateForm extends React.Component {
     }));
   };
 
+  handleTextAreaChange = evt => {
+    const { value, name } = evt.target;
+    autoTextAreaResizing(evt.target);
+    this.setState(prevState => ({
+      ...prevState,
+      [name]: {
+        ...prevState[name],
+        value,
+        changed: true,
+      },
+    }));
+  };
+
   handleAssignSelected = userId => {
     this.setState(() => ({
       assign: {
@@ -138,7 +152,7 @@ class TaskCreateForm extends React.Component {
         <Textarea
           config={{
             field: taskModel.description,
-            onChange: this.handleInputChange,
+            onChange: this.handleTextAreaChange,
             value: description.value,
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,

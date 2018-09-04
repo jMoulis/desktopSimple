@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './index.css';
 import TaskFilter from '../containers/TaskFilter';
 import TaskList from '../containers/TaskList';
 import TaskDetailWrapperContainer from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
-import './index.css';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
+import Loader from '../../../../Modules/Loader';
 
 class Task extends React.Component {
   static propTypes = {
     fetchTasksAction: PropTypes.func.isRequired,
+    taskListProcess: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
@@ -32,7 +34,10 @@ class Task extends React.Component {
 
   render() {
     const { showCreateModal } = this.state;
-    const { fetchTasksAction } = this.props;
+    const { fetchTasksAction, taskListProcess } = this.props;
+    if (taskListProcess.loading) {
+      return <Loader />;
+    }
     return (
       <div id="task" className="d-flex flex-column full-height">
         <ul className="ul-nav">

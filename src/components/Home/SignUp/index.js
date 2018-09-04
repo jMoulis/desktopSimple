@@ -17,7 +17,7 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = { ...field, [key]: '' };
       return field;
     });
@@ -29,30 +29,34 @@ class Signup extends React.Component {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
-  handleSubmit = (evt) => {
+  handleSubmit = evt => {
     evt.preventDefault();
     const { createUserAction } = this.props;
     createUserAction(evt.target);
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(() => ({
       [name]: value,
     }));
-  }
-  handleSelectChange = (evt) => {
+  };
+  handleSelectChange = evt => {
     const { value, name } = evt.target;
     this.setState(() => ({
       [name]: value,
     }));
-  }
+  };
   render() {
     const { createUserProcess } = this.props;
     const { error, creating } = createUserProcess;
@@ -118,12 +122,22 @@ class Signup extends React.Component {
               }}
             />
             <div className="form-group">
-              <Button type="submit" category="primary" label="Sign Up" loading={creating} />
+              <Button
+                type="submit"
+                category="primary"
+                label="Sign Up"
+                loading={creating}
+              />
             </div>
           </div>
         </form>
         <div>
-          <p>Already have an account? <Link href="/signin" to="/signin">Sign In</Link></p>
+          <p>
+            Already have an account?{' '}
+            <Link href="/signin" to="/signin">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     );

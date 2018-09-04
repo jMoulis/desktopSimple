@@ -210,7 +210,6 @@ class Profile extends React.Component {
 
   handleCloseCropImageModal = img => {
     // Server crashes on modal close if img undefined... Without response back
-    console.log('Close image', img);
     if (img) {
       const { state } = this;
       const { editUserAction, loggedUser } = this.props;
