@@ -76,7 +76,6 @@ class Crop extends React.Component {
     const { closeFromParent } = this.props;
     if (this.state.cropper.getCroppedCanvas()) {
       const imgurl = this.state.cropper.getCroppedCanvas().toDataURL();
-      console.log(imgurl);
       closeFromParent(imgurl);
     }
   };

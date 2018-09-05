@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import './userLoader.css';
-import Loader from '../../Modules/Loader';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
 import Pagination from '../../components/Applications/AddressBook/components/Pagination';
 
@@ -12,7 +11,6 @@ const mapStateToProps = ({ projectReducer, userReducer }) => ({
   userList: userReducer.userList,
 });
 
-// Actions
 const mapDispatchToProps = dispatch => ({
   fetchUsers: filter => {
     dispatch(fetchUsersAction(filter));
@@ -46,7 +44,7 @@ class UsersLoader extends React.Component {
   render() {
     // filter and select from parent
     const { userList, select, filter } = this.props;
-    const { loading, error, users } = userList;
+    const { error, users } = userList;
     return (
       <div className="users">
         {error && <span>Error</span>}

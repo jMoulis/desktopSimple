@@ -82,11 +82,16 @@ export default store => next => action => {
     }
     case EDIT_TASK: {
       const taskId = store.getState().taskReducer.activeTaskProcess.task._id;
+      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
+        ._id;
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
-      const formData = toObject(filteredArray);
-
+      const form = toObject(filteredArray);
+      const formData = new FormData();
+      Object.keys(form).forEach(key => {
+        return formData.append([key], form[key]);
+      });
       axios({
         method: 'put',
         data: formData,
@@ -94,6 +99,7 @@ export default store => next => action => {
         headers: {
           Authorization: localStorage.getItem('token'),
           type: 'task',
+          folder: teamId,
         },
       })
         .then(({ data }) => {

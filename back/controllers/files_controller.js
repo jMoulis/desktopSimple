@@ -66,4 +66,9 @@ module.exports = {
       fs.rmdirSync(folder);
     }
   },
+
+  test: async (req, res) => {
+    const apiResponse = new ApiResponse(res);
+    return apiResponse.success(200, { message: 'you reached it' }, true);
+  },
 };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TaskFilter from '../containers/TaskFilter';
 import TaskList from '../containers/TaskList';
-import TaskDetailWrapperContainer from '../containers/TaskDetailWrapper';
+import TaskDetailWrapper from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
 import MaskLoader from '../../../../Modules/MaskLoader';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
@@ -14,6 +14,7 @@ class Task extends React.Component {
   static propTypes = {
     fetchTasksAction: PropTypes.func.isRequired,
     taskListProcess: PropTypes.object.isRequired,
+    showOverflow: PropTypes.bool.isRequired,
   };
   constructor(props) {
     super(props);
@@ -33,18 +34,28 @@ class Task extends React.Component {
     }));
   };
 
+  showOverflow = () => {
+    this.setState(prevState => ({
+      showOverflow: !prevState.showOverflow,
+    }));
+  };
+
   render() {
     const { showCreateModal } = this.state;
-    const { fetchTasksAction, taskListProcess } = this.props;
+    const { fetchTasksAction, taskListProcess, showOverflow } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
         <TaskNavBar onClick={this.handleShowCreateModal} />
-        <div className="task-content d-flex full-height relative overflow">
+        <div
+          className={`task-content d-flex full-height relative${
+            showOverflow ? ' overflow' : ''
+          }`}
+        >
           <TaskFilter fetchTasksAction={fetchTasksAction} />
           {taskListProcess.tasks.length !== 0 ? (
             <Fragment>
               <TaskList />
-              <TaskDetailWrapperContainer />
+              <TaskDetailWrapper />
             </Fragment>
           ) : (
             <div className="d-flex flex1 flex-justify-center flex-align-items-center">

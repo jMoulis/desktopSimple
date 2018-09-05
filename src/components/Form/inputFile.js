@@ -4,7 +4,17 @@ import './inputFile.css';
 import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputFile = ({ config }) => {
-  const { field, onChange, style, styleContainer } = config;
+  const {
+    field,
+    onChange,
+    style,
+    styleContainer,
+    blur,
+    focus,
+    success,
+    error,
+    typeFileAccepted,
+  } = config;
   return (
     <div className="form-group" style={styleContainer}>
       <label className="btn btn-success input-file-label" htmlFor={field.name}>
@@ -15,16 +25,16 @@ const InputFile = ({ config }) => {
           className="form-control"
           type="file"
           onChange={onChange}
-          onBlur={config.blur}
-          onFocus={config.focus}
-          accept={config.typeFileAccepted}
+          onBlur={blur}
+          onFocus={focus}
+          accept={typeFileAccepted}
           style={style}
           onClick={onChange}
         />
       </label>
 
-      {config.success === config.field.name && <SuccessIcon />}
-      {config.error && <small className="error-message">{config.error}</small>}
+      {success && success === field.name && <SuccessIcon />}
+      {error && <small className="error-message">{error}</small>}
     </div>
   );
 };

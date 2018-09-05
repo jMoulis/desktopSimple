@@ -119,7 +119,7 @@ const reducer = (state = initialState, action = {}) => {
         activeTaskProcess: {
           task: action.payload.tasks && action.payload.tasks[0],
           success: null,
-          loading: true,
+          loading: false,
           error: null,
         },
       };
@@ -136,7 +136,7 @@ const reducer = (state = initialState, action = {}) => {
         activeTaskProcess: {
           task: {},
           success: null,
-          loading: true,
+          loading: false,
           error: null,
         },
       };

@@ -1,0 +1,7 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.file-info {
+  display: flex;
+  padding: .5rem 0;
+  flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden; }

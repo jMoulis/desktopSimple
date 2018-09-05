@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TaskToolbar from './TaskToolbar';
 import TaskDisplayListInput from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDisplayListInput';
-import TaskDisplayDocument from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDocument';
 
 class TaskDetail extends React.Component {
+  static propTypes = {
+    task: PropTypes.object.isRequired,
+  };
+
   handleAssignTask = () => {};
   handleCloseTask = () => {};
   handleEditTask = () => {};
@@ -23,14 +26,9 @@ class TaskDetail extends React.Component {
           closeAction={this.handleCloseTask}
         />
         <TaskDisplayListInput />
-        <TaskDisplayDocument documents={task.documents} />
       </div>
     );
   }
 }
-
-TaskDetail.propTypes = {
-  task: PropTypes.object.isRequired,
-};
 
 export default TaskDetail;

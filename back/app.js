@@ -35,8 +35,9 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use('/users', express.static(`${__dirname}/uploads/users`));
 routes(app);
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const apiResponse = new ApiResponse(res);
   return apiResponse.failure(422, null, err.message);
 });

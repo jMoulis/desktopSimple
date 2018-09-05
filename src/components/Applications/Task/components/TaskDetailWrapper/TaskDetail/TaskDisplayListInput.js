@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Select from '../../../../../Form/select';
 import taskModel from './TaskCreateForm/task-model';
+import FileUploader from '../../../../../../Modules/FileUploader/addFilesInput';
+import TaskDisplayDocument from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDocument';
 
 // Needs to be outside of the class to be used in the getDerivedProps
 const setStateFromProps = (object, model) => {
@@ -52,6 +54,9 @@ class TaskDisplayListInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { activeTaskProcess } = props;
     const { task } = activeTaskProcess;
+    if (task.documents.length !== state.form.documents.value.length) {
+      return { ...setStateFromProps(task, taskModel) };
+    }
     if (task && task._id !== state.id) {
       const fields = setStateFromProps(task, taskModel);
       return {
@@ -105,8 +110,36 @@ class TaskDisplayListInput extends React.Component {
     );
   };
 
+  handleInputFileChange = file => {
+    const { editTaskAction } = this.props;
+    if (file) {
+      editTaskAction({
+        documents: {
+          value: file,
+          changed: true,
+        },
+      });
+    }
+  };
+
+  handleRemoveFile = file => {
+    const { editTaskAction } = this.props;
+    if (file) {
+      editTaskAction({
+        documents: {
+          value: file._id,
+          changed: true,
+        },
+      });
+    }
+  };
+
+  handleDownloadFile = file => {
+    console.log(file);
+  };
+
   render() {
-    const { activeTaskProcess } = this.props;
+    const { activeTaskProcess, fetchFileAction, editTaskAction } = this.props;
     const { task, error } = activeTaskProcess;
     const { status, priority, labels } = this.state.form;
     return (
@@ -208,6 +241,21 @@ class TaskDisplayListInput extends React.Component {
             <li>
               <label className="left-label-form">Description:</label>
               <p>{task.description}</p>
+            </li>
+            <li>
+              <TaskDisplayDocument
+                fetchFileAction={fetchFileAction}
+                update={editTaskAction}
+                fileProcess={activeTaskProcess}
+                documents={task.documents}
+              />
+              {/* <FileUploader
+                error={error && error.documents && error.documents.detail}
+                docs={task.documents}
+                onFileChange={this.handleInputFileChange}
+                onFileDelete={this.handleRemoveFile}
+                handleDownloadFile={this.handleDownloadFile}
+              /> */}
             </li>
           </ul>
         )}

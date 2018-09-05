@@ -73,5 +73,6 @@ module.exports = app => {
   app.delete('/api/tasks/:id', TasksController.delete);
 
   app.get('/api/files', VerifyToken, FilesController.index);
+  app.get('/api/files/avatar', FilesController.test);
   app.delete('/api/files', VerifyToken, FilesController.delete);
 };

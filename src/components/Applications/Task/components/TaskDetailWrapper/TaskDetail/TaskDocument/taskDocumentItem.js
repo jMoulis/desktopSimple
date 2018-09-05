@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import UserIconContainer from '../../../../../../../Modules/UserIcon';
 import './index.css';
 
 const extension = ext => {
@@ -34,7 +33,6 @@ const TaskDocumentItem = ({ onClick, document }) => {
       <small className="small">
         {moment(document.createdAt).format('DD/MM/YYYY')}
       </small>
-      <UserIconContainer user={{ user: document.author }} />
     </div>
   );
 };

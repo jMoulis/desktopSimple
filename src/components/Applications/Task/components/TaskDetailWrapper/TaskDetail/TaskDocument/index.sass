@@ -1,11 +1,18 @@
 @import '../../index.sass'
 .document
   flex-wrap: wrap
+  margin-top: .5rem
   & li
     margin: .5rem
   &-item
     max-width: 100px
     white-space: nowrap
     overflow: hidden
-    text-overflow: fade
-    & .small
+.drag-drop
+  min-height: 100px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: $lightblue
+  &-over
+    background-color: $orange

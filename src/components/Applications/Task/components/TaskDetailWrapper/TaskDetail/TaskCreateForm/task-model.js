@@ -17,7 +17,7 @@ export default {
   },
   priority: {
     type: 'text',
-    defaultOption: 'Priority',
+    defaultOption: 'Select a priority',
     name: 'priority',
   },
   labels: {

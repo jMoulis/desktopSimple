@@ -17,9 +17,10 @@ import {
 export default store => next => action => {
   switch (action.type) {
     case FETCH_FILE: {
+      console.log(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}${action.payload}`,
+        url: `${ROOT_URL}/api/files?file=${action.payload}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
