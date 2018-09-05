@@ -134,12 +134,8 @@ class TaskDisplayListInput extends React.Component {
     }
   };
 
-  handleDownloadFile = file => {
-    console.log(file);
-  };
-
   render() {
-    const { activeTaskProcess, fetchFileAction, editTaskAction } = this.props;
+    const { activeTaskProcess, editTaskAction } = this.props;
     const { task, error } = activeTaskProcess;
     const { status, priority, labels } = this.state.form;
     return (
@@ -244,7 +240,6 @@ class TaskDisplayListInput extends React.Component {
             </li>
             <li>
               <TaskDisplayDocument
-                fetchFileAction={fetchFileAction}
                 update={editTaskAction}
                 fileProcess={activeTaskProcess}
                 documents={task.documents}

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import './userLoader.css';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
 import Pagination from '../../components/Applications/AddressBook/components/Pagination';
+import { ROOT_URL } from '../../Utils/config';
 
 const mapStateToProps = ({ projectReducer, userReducer }) => ({
   project: projectReducer.activeProjectProcess.project,
@@ -77,7 +78,7 @@ class UsersLoader extends React.Component {
                 <div className="thumbnail-content">
                   <img
                     className="thumbnail"
-                    src={user.picture}
+                    src={`${ROOT_URL}${user.picture}`}
                     alt={user.fullName}
                   />
                   <div className="user-detail">

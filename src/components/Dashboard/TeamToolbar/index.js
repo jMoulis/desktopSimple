@@ -8,10 +8,19 @@ import UserIcon from '../../../Modules/UserIcon';
 class TeamToolbar extends React.Component {
   static propTypes = {
     team: PropTypes.object.isRequired,
+    editUser: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showSettings: PropTypes.func.isRequired,
+    fetchSingleTeamAction: PropTypes.func.isRequired,
   };
-  componentDidMount() {}
+
+  shouldComponentUpdate(nextProps) {
+    const { editUser, fetchSingleTeamAction, team } = nextProps;
+    if (editUser.editing) {
+      fetchSingleTeamAction(team._id);
+    }
+    return true;
+  }
   render() {
     const { team, showSelectTeamPanel, showSettings } = this.props;
     if (team && Object.keys(team).length === 0) {

@@ -77,9 +77,6 @@ class TaskDisplayDocument extends React.Component {
         },
       });
     }
-    this.setState(() => ({
-      dragState: '',
-    }));
   };
   render() {
     const { documents } = this.props;

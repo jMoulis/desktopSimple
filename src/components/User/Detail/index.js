@@ -4,6 +4,7 @@ import './index.css';
 import Loader from '../../../Modules/Loader';
 import TagList from '../../../Modules/Tag/tagList';
 import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
+import { ROOT_URL } from '../../../Utils/config';
 
 class DetailUser extends React.Component {
   static propTypes = {
@@ -25,7 +26,7 @@ class DetailUser extends React.Component {
       <div className="user">
         <img
           className="user-picture"
-          src={`${user.picture || '/img/avatar.png'}`}
+          src={`${ROOT_URL}${user.picture || '/img/avatar.png'}`}
           alt="User"
         />
         <h1>{user.fullName}</h1>

@@ -12,6 +12,7 @@ import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
+import { ROOT_URL } from '../../../../../Utils/config';
 
 class Profile extends React.Component {
   static propTypes = {
@@ -20,6 +21,7 @@ class Profile extends React.Component {
     editUser: PropTypes.object.isRequired,
     clearMessageAction: PropTypes.func.isRequired,
   };
+
   constructor(props) {
     super(props);
     const { loggedUser } = this.props;
@@ -38,6 +40,20 @@ class Profile extends React.Component {
       cropModal: false,
     };
   }
+  static getDerivedStateFromProps(props, state) {
+    if (props.loggedUser.picture) {
+      return {
+        ...state,
+        picture: {
+          ...state.picture,
+          value: props.loggedUser.picture,
+        },
+      };
+    }
+    return {
+      ...state,
+    };
+  }
   componentDidUpdate(prevProps, prevState) {
     const { editUserAction, loggedUser, clearMessageAction } = prevProps;
     // Dealing with documents
@@ -48,10 +64,12 @@ class Profile extends React.Component {
       }
     }
   }
+
   componentWillUnmount() {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
+
   handleFormKeyPress = evt => {
     if (
       evt.key === 'Enter' &&
@@ -63,6 +81,7 @@ class Profile extends React.Component {
     }
     return true;
   };
+
   handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(prevState => ({
@@ -74,6 +93,7 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
@@ -86,6 +106,7 @@ class Profile extends React.Component {
       },
     }));
   };
+
   handleInputSelectCompetencesChange = evt => {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
@@ -232,33 +253,26 @@ class Profile extends React.Component {
     }
   };
 
-  handleInputSearch = (inputValue, inputName) => {
-    const { editUserAction, loggedUser, clearMessageAction } = this.props;
-    this.setState(
-      prevState => ({
-        ...prevState,
-        [inputName]: inputValue,
-      }),
-      () => {
-        if (this.state[inputName].changed) {
-          editUserAction(loggedUser._id, this.state);
-          clearMessageAction();
-          this.setState(prevState => ({
-            ...prevState,
-            [inputName]: {
-              ...prevState[inputName],
-              focus: false,
-              changed: false,
-            },
-          }));
-        }
-      },
-    );
-  };
-
   render() {
-    const { editUser, editUserAction, loggedUser } = this.props;
+    const { editUser, loggedUser } = this.props;
     const { error, success, editing } = editUser;
+    const {
+      picture,
+      fullName,
+      email,
+      jobDescription,
+      location,
+      school,
+      diploma,
+      field,
+      tags,
+      description,
+      website,
+      linkedIn,
+      gitHub,
+      docs,
+      cropModal,
+    } = this.state;
     return (
       <div id="profile" className="form-container" key="app-content">
         <form
@@ -271,7 +285,7 @@ class Profile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${this.state.picture.value || '/img/avatar.png'}`}
+                src={`${ROOT_URL}${picture.value || '/img/avatar.png'}`}
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
@@ -296,7 +310,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.fullName,
                   onChange: this.handleInputChange,
-                  value: this.state.fullName.value,
+                  value: fullName.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -309,7 +323,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.email,
                   onChange: this.handleInputChange,
-                  value: this.state.email.value,
+                  value: email.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -323,7 +337,7 @@ class Profile extends React.Component {
                   config={{
                     field: Model.jobDescription,
                     onChange: this.handleInputChange,
-                    value: this.state.jobDescription.value,
+                    value: jobDescription.value,
                     type: 'text',
                     blur: this.handleOnBlur,
                     focus: this.handleOnFocus,
@@ -340,7 +354,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.location,
                   onChange: this.handleInputChange,
-                  value: this.state.location.value,
+                  value: location.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -353,7 +367,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.school,
                   onChange: this.handleInputChange,
-                  value: this.state.school.value,
+                  value: school.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -366,7 +380,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.diploma,
                   onChange: this.handleInputChange,
-                  value: this.state.diploma.value,
+                  value: diploma.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -379,7 +393,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.field,
                   onChange: this.handleInputChange,
-                  value: this.state.field.value,
+                  value: field.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -395,7 +409,7 @@ class Profile extends React.Component {
                   field: Model.tags,
                   onChange: this.handleInputSelectCompetencesChange,
                   keyPress: this.handleInputSelectCompetencesChange,
-                  values: this.state.tags.value,
+                  values: tags.value,
                   focus: this.handleOnFocus,
                   blur: this.handleOnBlur,
                   error: error && error.tags && error.tags.detail,
@@ -407,7 +421,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.description,
                   onChange: this.handleTextAreaChange,
-                  value: this.state.description.value,
+                  value: description.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.description && error.description.detail,
@@ -418,7 +432,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.website,
                   onChange: this.handleInputChange,
-                  value: this.state.website.value,
+                  value: website.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -430,7 +444,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.linkedIn,
                   onChange: this.handleInputChange,
-                  value: this.state.linkedIn.value,
+                  value: linkedIn.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -442,7 +456,7 @@ class Profile extends React.Component {
                 config={{
                   field: Model.gitHub,
                   onChange: this.handleInputChange,
-                  value: this.state.gitHub.value,
+                  value: gitHub.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
@@ -452,13 +466,13 @@ class Profile extends React.Component {
               />
               <AddFilesInput
                 error={error && error.docs && error.docs.detail}
-                docs={this.state.docs.value}
+                docs={docs.value}
                 onFileChange={this.handleDocsChange}
               />
             </div>
           </div>
         </form>
-        {this.state.cropModal && (
+        {cropModal && (
           <Modal
             zIndex={100}
             name="imageCropper"
@@ -467,10 +481,9 @@ class Profile extends React.Component {
             noParamsOnClose
           >
             <Crop
-              picture={this.state.picture.value}
+              picture={`${ROOT_URL}${picture.value}`}
               parentConfig={{
                 user: loggedUser,
-                update: editUserAction,
                 error,
                 model: Model,
               }}

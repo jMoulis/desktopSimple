@@ -135,7 +135,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         activeTeamProcess: {
-          team: {},
+          ...state.activeTeamProcess,
           success: null,
           loading: true,
           error: null,

@@ -6,6 +6,7 @@ import './index.css';
 
 // Action from global app... I think it might be a little spaghetti code
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
+import { ROOT_URL } from '../../Utils/config';
 
 // Actions
 const mapDispatchToProps = dispatch => ({
@@ -32,7 +33,7 @@ const UserIcon = ({
     >
       <img
         className={`mini-thumbnail mini-thumbnail-${classCss}`}
-        src={user.user.picture || '/img/avatar.png'}
+        src={`${ROOT_URL}${user.user.picture}` || '/img/avatar.png'}
         alt="Student"
         title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
         onClick={() => active && showUserDetailModal(user.user._id)}

@@ -10,9 +10,11 @@ class Crop extends React.Component {
     closeFromParent: PropTypes.func,
     parentConfig: PropTypes.object.isRequired,
   };
+
   static defaultProps = {
     closeFromParent: null,
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,11 +27,13 @@ class Crop extends React.Component {
   componentDidMount() {
     this.setCropperToState();
   }
+
   componentDidUpdate(prevState) {
     if (prevState.picture !== this.state.picture) {
       this.state.cropper.replace(this.state.picture);
     }
   }
+
   setCropperToState = async () => {
     const image = this.picRef.current;
     const cropper = new Cropper(image, {
@@ -44,10 +48,11 @@ class Crop extends React.Component {
       cropper,
     });
   };
+
   handleInputFileChange = evt => {
-    console.log('inputfile');
     this.readUrl(evt.target);
   };
+
   readUrl = input => {
     if (input.files && input.files[0]) {
       const { state } = this;
@@ -62,23 +67,28 @@ class Crop extends React.Component {
       reader.readAsDataURL(input.files[0]);
     }
   };
+
   handleRotate = () => {
     if (this.state.cropper) {
       this.state.cropper.rotate(90);
     }
   };
+
   handleRotateBack = () => {
     if (this.state.cropper) {
       this.state.cropper.rotate(-90);
     }
   };
+
   handleCrop = () => {
     const { closeFromParent } = this.props;
-    if (this.state.cropper.getCroppedCanvas()) {
-      const imgurl = this.state.cropper.getCroppedCanvas().toDataURL();
+    const { cropper } = this.state;
+    if (cropper.getCroppedCanvas()) {
+      const imgurl = cropper.getCroppedCanvas().toDataURL();
       closeFromParent(imgurl);
     }
   };
+
   render() {
     const { parentConfig } = this.props;
     return (

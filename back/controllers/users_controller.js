@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const uuidv4 = require('uuid/v4');
 const User = require('../models/User');
 const Meta = require('../models/Meta');
 const ApiResponse = require('../service/api/apiResponse_v2');
@@ -133,17 +136,19 @@ module.exports = {
   },
 
   async edit(req, res, next) {
-    const userId = req.params.id;
-    const userProps = req.body;
     const apiResponse = new ApiResponse(res);
 
-    module.exports.imageControl(req, res);
-
-    const props = module.exports.buildEditProps(userProps);
-
-    const options = { runValidators: true, upsert: true };
-
     try {
+      const userId = req.params.id;
+      const options = { runValidators: true, upsert: true };
+      let props = module.exports.buildEditProps(req.body);
+      const pictureUrl = module.exports.imageControl(req, res);
+      if (pictureUrl) {
+        props = {
+          ...props,
+          picture: pictureUrl,
+        };
+      }
       if (res.locals.user._id.toString() !== userId) {
         return apiResponse.failure(403, null, 'Not allowed');
       }
@@ -409,34 +414,47 @@ module.exports = {
   //     return next(error.message);
   //   }
   // },
+
   // Utils Function
   imageControl(req, res) {
     const imageTypeRegularExpression = /\/(.*?)$/;
+    const validImageType = ['image/png', 'image/jpeg', 'image/jpg'];
     if (req.body.picture) {
       const imageBuffer = module.exports.decodeBase64Image(req.body.picture);
       const typeUploadedFile = imageBuffer.type.match(
         imageTypeRegularExpression,
       )[1];
-      const validFormat = ['jpeg', 'png'];
-      if (!validFormat.includes(typeUploadedFile)) {
-        const apiResponse = new ApiResponse(
-          res,
-          {
-            picture: {
-              status: 400,
-              source: { pointer: '/data/attributes/picture' },
-              title: 'Bad Request',
-              detail: 'Wrong format. Valid format jpg/jpeg/png',
-            },
-          },
-          400,
+
+      if (!validImageType.includes(imageBuffer.type)) {
+        const apiResponse = new ApiResponse();
+        return apiResponse.failure(
+          422,
+          null,
+          'Wrong format. Valid format jpg/jpeg/png',
         );
-        return apiResponse.failure();
       }
-      return true;
+
+      const ROOT_FOLDER = path.join(__dirname, '/../uploads/');
+      const root = `${ROOT_FOLDER}/users`;
+      const destination = `${root}/${res.locals.user._id}`;
+      const fileName = `avatar-${uuidv4()}.${typeUploadedFile}`;
+      if (fs.existsSync(root)) {
+        if (fs.existsSync(destination)) {
+          fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
+        } else {
+          fs.mkdirSync(destination);
+          fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
+        }
+      } else {
+        fs.mkdirSync(root);
+        fs.mkdirSync(destination);
+        fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
+      }
+      return `/users/${res.locals.user._id}/${fileName}`;
     }
-    return true;
+    return null;
   },
+
   decodeBase64Image(dataString) {
     const matches = dataString.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
     const response = {};
@@ -449,6 +467,7 @@ module.exports = {
 
     return response;
   },
+
   buildEditProps(userProps) {
     const hasCompanyProperty = Object.prototype.hasOwnProperty.call(
       userProps,

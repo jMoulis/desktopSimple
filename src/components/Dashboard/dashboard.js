@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
     const { user } = loggedUser;
     return (
       <main id="dashboard" className="dashboard">
-        {globalProps.activeTeamProcess.loading === false &&
+        {globalProps.activeTeamProcess.team &&
           user.typeUser !== 'company' && (
             <TeamToolbar
               showSettings={this.handleShowSettings}
