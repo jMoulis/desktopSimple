@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import './app.css';
-import Dashboard from '../../containers/Dashboard/dashboard';
+import Dashboard from '../../containers/Dashboard';
 import Footer from '../../containers/Dashboard/Footer/footer';
 import Home from '../../containers/Home/home';
 import LoginForm from '../../containers/Home/Login/login';

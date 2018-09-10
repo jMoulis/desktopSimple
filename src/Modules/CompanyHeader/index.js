@@ -4,12 +4,13 @@ import classNames from 'classnames';
 
 import './index.css';
 import UserIconContainer from '../UserIcon';
+import { ROOT_URL } from '../../Utils/config';
 
 const CompanyHeader = ({ user, classNameContainer }) => (
   <div className={classNames('company', classNameContainer)}>
     <img
       className="company-logo"
-      src={user.company.picture || '/img/company-generic.png'}
+      src={`${ROOT_URL}${user.company.picture}` || '/img/company-generic.png'}
       alt="logo company"
     />
     <div className="company-info">

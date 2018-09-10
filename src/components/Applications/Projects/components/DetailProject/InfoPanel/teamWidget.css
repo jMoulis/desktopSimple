@@ -83,26 +83,26 @@
     font-weight: bold; }
   .team-widget .mini-container {
     position: relative;
-    height: calc(30px * 2);
+    height: calc(40px * 2);
     display: flex;
     align-items: center;
-    width: calc(30px * 2); }
-    .team-widget .mini-container .mini-thumbnail:nth-of-type(even) {
+    width: calc(40px * 2); }
+    .team-widget .mini-container .user-icon:nth-of-type(even) {
+      padding: 0;
       position: absolute;
       top: 0px;
-      left: calc(30px / 2); }
-    .team-widget .mini-container .mini-thumbnail:nth-of-type(even):last-child {
+      left: calc(40px / 2); }
+    .team-widget .mini-container .user-icon:nth-of-type(even):last-child {
       position: absolute;
       bottom: 0px;
-      left: calc(30px / 2);
-      top: 30px; }
-  .team-widget .mini-thumbnail {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 300ms; }
-    .team-widget .mini-thumbnail:hover {
-      border: 2px solid #d44c00;
-      z-index: 1; }
+      left: calc(40px / 2);
+      top: 40px; }
+    .team-widget .mini-container .user-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 300ms; }
+      .team-widget .mini-container .user-icon:hover {
+        z-index: 1; }

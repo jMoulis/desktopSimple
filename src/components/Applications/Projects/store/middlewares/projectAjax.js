@@ -24,6 +24,7 @@ import {
 } from '../reducers/projectReducer';
 
 import { logoutAction } from '../../../../../store/reducers/authReducer';
+import Utils from '../../../../../Utils/utils';
 /*
  * Code
  */
@@ -38,6 +39,7 @@ const toObject = arr => {
  * Middleware
  */
 export default store => next => action => {
+  const utils = new Utils();
   switch (action.type) {
     case CREATE_PROJECT: {
       const formData = toObject(
@@ -103,20 +105,11 @@ export default store => next => action => {
       break;
     }
     case FETCH_PROJECTS: {
-      let query = null;
-      if (action.payload) {
-        if (action.payload.search) {
-          query = `search=${action.payload.search}`;
-        }
-        if (action.payload.sorting) {
-          query = `${query ? `${query}&` : ''}sorting=${
-            action.payload.sorting
-          }`;
-        }
-      }
+      const filter = utils.buildUrlFilter(action.payload);
+
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects${query ? `?${query}` : ''}`,
+        url: `${ROOT_URL}/api/projects?${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

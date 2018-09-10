@@ -5,8 +5,8 @@ import './settings.css';
 import CompanyProfile from '../../containers/Profile/Company';
 import AccountProfile from '../../containers/Profile/Account';
 import TeamProfile from '../../containers/Profile/Teams';
-import SubMenu from '../../../../../Modules/Submenu';
 import NewTeamContainer from '../../containers/Profile/Teams/NewTeam';
+import AppToolbar from '../../../../../Modules/AppToolbar';
 
 class Settings extends React.Component {
   static propTypes = {
@@ -68,75 +68,57 @@ class Settings extends React.Component {
     const { subMenu } = this.state;
     return (
       <div className="settings-container">
-        <div className="app-toolbar" key="app-toolbar">
-          <ul className="app-toolbar-list">
-            <li className="app-toolbar-list-item">
-              <button
-                className="btn-app-toolbar unselectable"
-                name="profile"
-                onClick={this.handleTabSelect}
-              >
-                Profile
-              </button>
-            </li>
-            {loggedUser.typeUser !== 'student' && (
-              <li className="app-toolbar-list-item">
-                <button
-                  className="btn-app-toolbar unselectable"
-                  data-toggle="toggle"
-                  name="company"
-                  onClick={this.handleTabSelect}
-                >
-                  Company
-                </button>
-              </li>
-            )}
-            {loggedUser.typeUser !== 'company' && (
-              <li className="app-toolbar-list-item">
-                <button
-                  className="btn-app-toolbar unselectable"
-                  data-toggle="toggle"
-                  name="newTeam"
-                  onClick={this.handleShowSubMenu}
-                >
-                  Teams
-                </button>
-                {subMenu.newTeam && (
-                  <SubMenu
-                    menus={[
-                      {
-                        label: 'Create Team',
-                        disabled: false,
-                        name: 'newTeam',
-                        action: evt => {
-                          this.handleTabSelect(evt);
-                        },
-                      },
-                      {
-                        label: 'Teams List',
-                        disabled: false,
-                        name: 'teams',
-                        action: evt => {
-                          this.handleTabSelect(evt);
-                        },
-                      },
-                    ]}
-                  />
-                )}
-              </li>
-            )}
-            <li className="app-toolbar-list-item">
-              <button
-                className="btn-app-toolbar unselectable"
-                name="account"
-                data-toggle="toggle"
-                onClick={this.handleTabSelect}
-              >
-                Touchy Info
-              </button>
-            </li>
-          </ul>
-        </div>
+        <AppToolbar
+          sortingAction={this.handleAppToolBarSearch}
+          menus={[
+            {
+              label: 'Profile',
+              action: this.handleTabSelect,
+              name: 'profile',
+              show: true,
+            },
+            {
+              label: 'Company',
+              action: this.handleTabSelect,
+              name: 'company',
+              show: loggedUser.typeUser !== 'student',
+            },
+            {
+              label: 'Teams',
+              action: this.handleShowSubMenu,
+              name: 'newTeam',
+              show: loggedUser.typeUser !== 'company',
+              showSubMenu: subMenu,
+              subMenu: [
+                {
+                  label: 'Create Team',
+                  disabled: false,
+                  name: 'newTeam',
+                  action: evt => {
+                    this.handleTabSelect(evt);
+                  },
+                },
+                {
+                  label: 'Teams List',
+                  disabled: false,
+                  name: 'teams',
+                  action: evt => {
+                    this.handleTabSelect(evt);
+                  },
+                },
+              ],
+            },
+            {
+              label: 'Touchy Info',
+              action: this.handleTabSelect,
+              name: 'account',
+              show: true,
+            },
+          ]}
+          liStyle={{
+            width: '50%',
+          }}
+        />
         {this.state.tab === 'profile' && <Profile key="profile" />}
         {this.state.tab === 'teams' &&
           loggedUser.typeUser !== 'company' && (

@@ -53,6 +53,7 @@ class AddressBook extends Component {
 
   handleAppToolBarSearch = filter => {
     const { fetchUsersAction } = this.props;
+    console.log(filter);
     this.setState(
       prevState => ({
         ...prevState,
@@ -96,12 +97,16 @@ class AddressBook extends Component {
             sortingAction={this.handleAppToolBarSearch}
             menus={[
               {
+                show: true,
                 searchField: true,
                 action: this.handleAppToolBarSearch,
                 searchFieldLabel:
                   'Spec, Student name, Company name, Description',
               },
             ]}
+            liStyle={{
+              width: '50%',
+            }}
           />
 
           <div className="address-book d-flex full-height">

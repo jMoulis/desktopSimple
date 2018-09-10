@@ -1,5 +1,5 @@
 @import '../index.sass'
-$height: 30px
+$height: 40px
 $heightDouble: calc(#{$height} * 2)
 $heightHalf: calc(#{$height} / 2)
 .team-widget
@@ -18,23 +18,23 @@ $heightHalf: calc(#{$height} / 2)
     display: flex
     align-items: center
     width: $heightDouble
-    & .mini-thumbnail:nth-of-type(even)
+    & .user-icon:nth-of-type(even)
+      padding: 0
       position: absolute
       top: 0px
       left: $heightHalf
-    & .mini-thumbnail:nth-of-type(even)
+    & .user-icon:nth-of-type(even)
       &:last-child
         position: absolute
         bottom: 0px
         left: $heightHalf
         top: $height
-  .mini-thumbnail
-    width: $height
-    height: $height
-    border-radius: 50%
-    border: 2px solid transparent
-    cursor: pointer
-    transition: all 300ms
-    &:hover
-      border: 2px solid $orange
-      z-index: 1
+    & .user-icon
+      width: $height
+      height: $height
+      border-radius: 50%
+      border: 2px solid transparent
+      cursor: pointer
+      transition: all 300ms
+      &:hover
+        z-index: 1

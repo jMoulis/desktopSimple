@@ -34,27 +34,29 @@ class TeamProfile extends React.Component {
     }
     return (
       <ul className="ul-nav teams">
-        {teams.map(team => (
-          <li
-            key={team._id}
-            className="team-container"
-            onClick={() => globalActions.selectTeam(team._id)}
-            onKeyPress={() => globalActions.selectTeam(team._id)}
-            title="Select Team"
-          >
-            <div>
-              <h2>{team.name}</h2>
-              <ul>
-                {team.users.map((teamMate, index) => (
-                  <li key={index}>
-                    <UserIcon user={teamMate} />
-                    <p>{teamMate.user.fullName}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-        ))}
+        {teams.length > 0 &&
+          teams.map(team => (
+            <li
+              key={team._id}
+              className="team-container"
+              onClick={() => globalActions.selectTeam(team._id)}
+              onKeyPress={() => globalActions.selectTeam(team._id)}
+              title="Select Team"
+            >
+              <div>
+                <h2>{team.name}</h2>
+                <ul>
+                  {team.users.length > 0 &&
+                    team.users.map((teamMate, index) => (
+                      <li key={index}>
+                        <UserIcon user={teamMate} />
+                        <p>{teamMate.user.fullName}</p>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </li>
+          ))}
       </ul>
     );
   }

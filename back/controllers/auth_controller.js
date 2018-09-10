@@ -12,10 +12,7 @@ module.exports = {
 
       const existingUser = await User.findOne({ email });
       // if (process.env.NODE_ENV !== 'test') {
-      //   const fakeUsers = loadFakeUser();
-      //   User.deleteMany({ fake: true }).then(() => {
-      //     User.insertMany(fakeUsers);
-      //   });
+      //   User.deleteMany({ fake: true }).then(() => loadFakeUser());
       // }
       if (!existingUser) {
         const apiResponse = new ApiResponse(
@@ -84,6 +81,16 @@ module.exports = {
             model: 'project',
             select: 'title',
           },
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'company.legalDocs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
       const apiResponse = new ApiResponse(
         res,

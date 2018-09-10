@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.label-list-item {
+  display: flex;
+  align-items: center; }
+  .label-list-item-content {
+    display: flex;
+    border-radius: 3px;
+    cursor: pointer; }
+    .label-list-item-content span {
+      padding: .5rem; }
+  .label-list-item-edit {
+    margin: .5rem;
+    cursor: pointer; }

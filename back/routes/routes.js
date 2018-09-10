@@ -1,6 +1,4 @@
 const multer = require('multer');
-const mime = require('mime');
-const fs = require('fs');
 
 const UsersController = require('../controllers/users_controller');
 const ProjectsController = require('../controllers/projects_controller');
@@ -12,6 +10,7 @@ const FilesController = require('../controllers/files_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const multerUtil = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
+const ApiResponse = require('../service/api/apiResponse_v2');
 
 const { storage } = multerUtil;
 
@@ -26,7 +25,7 @@ module.exports = app => {
   app.get('/api/users/:id', VerifyToken, UsersController.show);
   app.put(
     '/api/users/:id',
-    upload.single('picture'),
+    upload.fields([{ name: 'company.legalDocs' }, { name: 'docs' }]),
     VerifyToken,
     UsersController.edit,
   );
@@ -72,7 +71,12 @@ module.exports = app => {
   );
   app.delete('/api/tasks/:id', TasksController.delete);
 
-  app.get('/api/files', VerifyToken, FilesController.index);
+  app.post('/api/files', VerifyToken, FilesController.index);
   app.get('/api/files/avatar', FilesController.test);
   app.delete('/api/files', VerifyToken, FilesController.delete);
+
+  app.get('*', (req, res) => {
+    const apiResponse = new ApiResponse(res);
+    return apiResponse.failure(404, null, 'Route not found');
+  });
 };

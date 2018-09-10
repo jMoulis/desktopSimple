@@ -28,6 +28,7 @@ const reducer = (state = initialState, action = {}) => {
         fileProcess: {
           ...state.fileProcess,
           file: action.payload,
+          loading: false,
           success: action.payload.success,
         },
       };

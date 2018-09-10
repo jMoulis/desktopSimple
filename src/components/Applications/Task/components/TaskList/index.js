@@ -4,25 +4,9 @@ import PropTypes from 'prop-types';
 import './index.css';
 
 class TaskList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedTask: null,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.tasks && props.tasks.length > 0 && !state.selectedTask) {
-      return {
-        ...state,
-        selectedTask: props.tasks[0]._id,
-      };
-    }
-    return {
-      ...state,
-    };
-  }
-
+  static propTypes = {
+    activeTask: PropTypes.object.isRequired,
+  };
   handleLinkClicked = evt => {
     const { fetchSingleTaskAction } = this.props;
     const { id } = evt.target.dataset;
@@ -33,8 +17,7 @@ class TaskList extends React.Component {
   };
 
   render() {
-    const { tasks } = this.props;
-    const { selectedTask } = this.state;
+    const { tasks, activeTask } = this.props;
     return (
       <ul className="task-list">
         {tasks &&
@@ -42,7 +25,7 @@ class TaskList extends React.Component {
           tasks.map(task => (
             <li
               className={`task-list-item ${
-                task._id === selectedTask ? 'task-list-item-selected' : ''
+                task._id === activeTask._id ? 'task-list-item-selected' : ''
               }`}
               key={task._id}
             >

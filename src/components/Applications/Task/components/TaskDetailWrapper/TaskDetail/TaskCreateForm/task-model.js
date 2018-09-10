@@ -20,20 +20,15 @@ export default {
     defaultOption: 'Select a priority',
     name: 'priority',
   },
-  labels: {
-    name: 'labels',
+  tags: {
+    name: 'tags',
+    placeholder: 'Select tags',
     isArray: true,
   },
   documents: {
     label: 'Documents',
     name: 'documents',
     isArray: true,
-  },
-  type: {
-    type: 'text',
-    label: 'Type',
-    name: 'type',
-    placeholder: 'Type',
   },
   assign: {
     type: 'select',

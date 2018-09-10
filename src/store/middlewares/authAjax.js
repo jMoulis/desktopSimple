@@ -175,31 +175,43 @@ export default store => next => action => {
               }
             });
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
       break;
     }
     case EDIT_USER: {
-      let formData = {};
+      let filteredArray;
+      const formData = new FormData();
       const hasCompanyProperty = Object.prototype.hasOwnProperty.call(
         action.payload,
         'company',
       );
+
       if (hasCompanyProperty) {
-        formData = {
-          company: toObject(
-            Object.entries(action.payload.company).filter(
-              field => field[1].changed,
-            ),
-          ),
-        };
+        filteredArray = Object.entries(action.payload.company).filter(
+          field => field[1].changed,
+        );
+        console.log(action.payload);
+        if (action.payload.company['company.legalDocs'].changed) {
+          formData.append(
+            'company.legalDocs',
+            action.payload.company['company.legalDocs'].value,
+          );
+        } else {
+          Object.keys(toObject(filteredArray)).forEach(key =>
+            formData.append([key], toObject(filteredArray)[key]),
+          );
+        }
       } else {
-        formData = toObject(
-          Object.entries(action.payload).filter(field => field[1].changed),
+        filteredArray = Object.entries(action.payload).filter(
+          field => field[1].changed,
+        );
+        Object.keys(toObject(filteredArray)).forEach(key =>
+          formData.append([key], toObject(filteredArray)[key]),
         );
       }
       axios({
         method: 'put',
-        data: { ...formData },
+        data: formData,
         url: `${ROOT_URL}/api/users/${action.id}`,
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -233,7 +245,7 @@ export default store => next => action => {
         })
         .catch(error => {
           if (!error.response) {
-            return console.log(error.message);
+            return console.error(error.message);
           }
           return store.dispatch(
             changePasswordFailureAction(error.response.data.errors),
@@ -255,7 +267,7 @@ export default store => next => action => {
         .catch(error => {
           console.error(error);
           if (!error.response) {
-            return console.log(error.message);
+            return console.error(error.message);
           }
           return store.dispatch(
             deleteUserFailureAction(error.response.data.errors),

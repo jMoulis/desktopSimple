@@ -219,14 +219,12 @@ class EditTeam extends React.Component {
       },
     );
   };
-  handleSelectUser = ({ target }) => {
-    const { user } = target.dataset;
-    const userParsed = JSON.parse(user);
+  handleSelectUser = user => {
     const { editTeamAction } = this.props;
     this.setState(
       prevState => {
         const filteredselectedTags = prevState.selectedTags.map(ressource => {
-          if (ressource.value === userParsed.spec) {
+          if (ressource.value === user.spec) {
             return {
               ...ressource,
               selected: true,
@@ -238,7 +236,7 @@ class EditTeam extends React.Component {
           modal: false,
           selectedUsers: {
             ...prevState.selectedUsers,
-            [userParsed.spec]: userParsed.user,
+            [user.spec]: user.user,
           },
           selectedTags: filteredselectedTags,
         };

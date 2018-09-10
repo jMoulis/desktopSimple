@@ -29,6 +29,7 @@ const verifyToken = (req, res, next) => {
           picture: 1,
           available: 1,
           rooms: 1,
+          company: 1,
         },
       );
       res.locals.user = user;

@@ -45,15 +45,16 @@ export default store => next => action => {
     case CREATE_TASK: {
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
         ._id;
+      const filteredArray = Object.entries(action.payload).filter(
+        field => field[1].changed,
+      );
+      const form = toObject(filteredArray);
       const formData = new FormData();
-      formData.append('team', teamId);
-      formData.append('title', action.payload.title.value);
-      formData.append('assign', action.payload.assign.value);
-      formData.append('description', action.payload.description.value);
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
       action.payload.documents.forEach(document => {
         formData.append('documents', document);
       });
-
+      formData.append('team', teamId);
       axios({
         method: 'post',
         data: formData,
@@ -89,9 +90,8 @@ export default store => next => action => {
       );
       const form = toObject(filteredArray);
       const formData = new FormData();
-      Object.keys(form).forEach(key => {
-        return formData.append([key], form[key]);
-      });
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
+      formData.append('team', teamId);
       axios({
         method: 'put',
         data: formData,

@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail-wrapper {
+  margin-left: 1rem;
+  margin-right: 1rem; }
+
+.task-detail {
+  border: 2px solid #0a1c28;
+  padding: 1rem;
+  position: relative; }
+  .task-detail-list-item {
+    position: relative; }
+    .task-detail-list-item .left-label-form {
+      display: flex;
+      align-items: center;
+      width: 120px;
+      height: 28px; }
+    .task-detail-list-item .tags {
+      margin: 0; }
+    .task-detail-list-item-tags {
+      padding: 0;
+      padding-bottom: .5rem; }
+      .task-detail-list-item-tags .input-auto {
+        padding: 0; }
+    .task-detail-list-item--textarea {
+      min-height: 150px; }

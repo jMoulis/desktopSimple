@@ -7,8 +7,7 @@
   flex: 1; }
   .app-toolbar-list-item {
     padding: 0 1rem;
-    position: relative;
-    width: 50%; }
+    position: relative; }
     .app-toolbar-list-item-form {
       padding-right: 2rem;
       position: relative;

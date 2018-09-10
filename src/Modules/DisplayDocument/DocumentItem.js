@@ -13,37 +13,50 @@ const extension = ext => {
   if (excel.includes(ext)) return 'excel';
   if (powerpoint.includes(ext)) return 'powerpoint';
   if (image.includes(ext)) return 'image';
-  return ext;
+  return 'alt';
 };
 
-const TaskDocumentItem = ({ onClick, document }) => {
-  return (
-    <div className="document-item d-flex flex-column">
+const DocumentItem = ({ document, onClick, readOnly, onDelete }) => (
+  <div className="document-item d-flex flex-column">
+    {!readOnly && (
       <button
+        id={document._id}
         type="button"
-        className="btn-toolbar"
-        onClick={onClick}
-        data-url={document.url}
-        data-filename={document.originalName || document.name}
-        title={document.originalName || document.name}
+        className="document-item-delete"
+        onClick={() => {
+          onDelete(document._id);
+        }}
       >
-        <i className={`far fa-file-${extension(document.extension)} fa-3x`} />
+        X
       </button>
+    )}
+    <button
+      type="button"
+      className="btn-toolbar"
+      onClick={() => onClick(document)}
+      title={document.originalName || document.name}
+    >
+      <i className={`far fa-file-${extension(document.extension)} fa-3x`} />
+    </button>
+    <p className="document-item-infos">
       <small className="small">{document.originalName || document.name}</small>
       <small className="small">
         {moment(document.createdAt).format('DD/MM/YYYY')}
       </small>
-    </div>
-  );
-};
+    </p>
+  </div>
+);
 
-TaskDocumentItem.propTypes = {
+DocumentItem.propTypes = {
   onClick: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
   document: PropTypes.object,
 };
 
-TaskDocumentItem.defaultProps = {
+DocumentItem.defaultProps = {
   document: {},
+  readOnly: false,
 };
 
-export default TaskDocumentItem;
+export default DocumentItem;

@@ -8,7 +8,7 @@ import TaskDetailWrapper from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
 import MaskLoader from '../../../../Modules/MaskLoader';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
-import TaskNavBar from './TaskNavBar';
+import AppToolbar from '../../../../Modules/AppToolbar';
 
 class Task extends React.Component {
   static propTypes = {
@@ -45,7 +45,15 @@ class Task extends React.Component {
     const { fetchTasksAction, taskListProcess, showOverflow } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
-        <TaskNavBar onClick={this.handleShowCreateModal} />
+        <AppToolbar
+          menus={[
+            {
+              label: 'New Task',
+              action: this.handleShowCreateModal,
+              show: true,
+            },
+          ]}
+        />
         <div
           className={`task-content d-flex full-height relative${
             showOverflow ? ' overflow' : ''

@@ -12,7 +12,8 @@
   .form-container .form {
     width: 100%;
     border: none;
-    overflow: auto; }
+    overflow: auto;
+    height: 100%; }
     .form-container .form-header {
       display: flex;
       justify-content: flex-start;

@@ -36,8 +36,9 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use('/users', express.static(`${__dirname}/uploads/users`));
+app.use('/task', express.static(`${__dirname}/uploads/task`));
 routes(app);
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const apiResponse = new ApiResponse(res);
   return apiResponse.failure(422, null, err.message);
 });

@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
 
 import TaskDetail from '../../../components/TaskDetailWrapper/TaskDetail';
-import { editTaskAction } from '../../../../../../store/reducers/taskReducer';
+import {
+  editTaskAction,
+  deleteTaskAction,
+} from '../../../../../../store/reducers/taskReducer';
 
 const mapStateToProps = ({ taskReducer }) => ({
   task: taskReducer.activeTaskProcess.task,
@@ -10,6 +13,9 @@ const mapStateToProps = ({ taskReducer }) => ({
 const mapDispatchProps = dispatch => ({
   editTaskAction: values => {
     dispatch(editTaskAction(values));
+  },
+  deleteTaskAction: id => {
+    dispatch(deleteTaskAction(id));
   },
 });
 

@@ -4,20 +4,20 @@ const ApiResponse = require('../service/api/apiResponse_v2');
 const moment = require('moment');
 
 module.exports = {
-  async index(req, res) {
-    const apiResponse = new ApiResponse(res);
+  async index(req, res, next) {
+    const apiResponse = new ApiResponse(res, next);
     try {
-      let params = { author: res.locals.user._id };
+      let params = { 'author._id': res.locals.user._id };
       if (res.locals.user.typeUser !== 'company') {
         params = {
           isOnline: true,
           roomLeft: true,
         };
       }
-      if (req.query.search) {
+      if (req.query.filter) {
         params = {
           ...params,
-          $text: { $search: req.query.search, $caseSensitive: false },
+          $text: { $search: req.query.filter, $caseSensitive: false },
         };
       }
       const projects = await Project.find({ ...params })
@@ -46,11 +46,6 @@ module.exports = {
           },
         })
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture company',
-        })
-        .populate({
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
@@ -66,7 +61,7 @@ module.exports = {
 
       return apiResponse.success(200, { projects });
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, error, error.message);
     }
   },
 
@@ -74,7 +69,17 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
     try {
       const projectProps = req.body;
-      projectProps.author = { _id: res.locals.user._id };
+      projectProps.author = {
+        _id: res.locals.user._id,
+        fullName: res.locals.user.fullName,
+        picture: res.locals.user.picture,
+        company: res.locals.user.company && {
+          companyName: res.locals.user.company.companyName,
+          description: res.locals.user.company.description,
+          tags: res.locals.user.company.tags,
+          picture: res.locals.user.company.picture,
+        },
+      };
 
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
         projectProps.dueDate = moment(
@@ -104,11 +109,6 @@ module.exports = {
           },
         })
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture company',
-        })
-        .populate({
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
@@ -116,7 +116,7 @@ module.exports = {
 
       return apiResponse.success(200, { project });
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
 
@@ -144,11 +144,6 @@ module.exports = {
           },
         })
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture company',
-        })
-        .populate({
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
@@ -158,7 +153,7 @@ module.exports = {
       }
       return apiResponse.success(200, { project });
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, null, error.message);
     }
   },
 

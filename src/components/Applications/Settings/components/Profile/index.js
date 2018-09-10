@@ -9,10 +9,10 @@ import Input from '../../../../Form/input';
 import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
 import { ROOT_URL } from '../../../../../Utils/config';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 class Profile extends React.Component {
   static propTypes = {
@@ -110,7 +110,6 @@ class Profile extends React.Component {
   handleInputSelectCompetencesChange = evt => {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
-
     if (evt.keyCode === 13) {
       const { state } = this;
       const newTags = {
@@ -214,19 +213,27 @@ class Profile extends React.Component {
   };
 
   handleDocsChange = docs => {
-    this.setState(prevState => ({
-      ...prevState,
-      docs: {
-        value: docs,
-        changed: true,
-      },
-    }));
+    console.log(docs);
+    const { editUserAction, loggedUser } = this.props;
+    editUserAction(loggedUser._id, docs);
   };
 
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
+  };
+
+  handleRemoveFile = file => {
+    const { editUserAction, loggedUser } = this.props;
+    if (file) {
+      editUserAction(loggedUser._id, {
+        docs: {
+          value: file,
+          changed: true,
+        },
+      });
+    }
   };
 
   handleCloseCropImageModal = img => {
@@ -270,7 +277,6 @@ class Profile extends React.Component {
       website,
       linkedIn,
       gitHub,
-      docs,
       cropModal,
     } = this.state;
     return (
@@ -464,10 +470,11 @@ class Profile extends React.Component {
                   success,
                 }}
               />
-              <AddFilesInput
-                error={error && error.docs && error.docs.detail}
-                docs={docs.value}
-                onFileChange={this.handleDocsChange}
+              <DisplayDocument
+                update={this.handleDocsChange}
+                keyToUpdate="docs"
+                documents={loggedUser.docs}
+                onDelete={this.handleRemoveFile}
               />
             </div>
           </div>

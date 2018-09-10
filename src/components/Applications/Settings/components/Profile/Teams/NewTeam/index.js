@@ -75,6 +75,8 @@ class NewTeam extends React.Component {
         filter: this.state.ressources.toLowerCase(),
         type: 'student',
         count: 'true',
+        tags: true,
+        available: true,
       };
       fetchUsersCountAction(filter);
       this.setState(prevState => ({
@@ -113,8 +115,7 @@ class NewTeam extends React.Component {
     createTeamAction(values);
     onSuccess(tabName);
   };
-  handleSearch = evt => {
-    const { filter } = evt.target.dataset;
+  handleSearch = filter => {
     this.setState(() => ({
       modal: true,
       filter: {
@@ -135,12 +136,10 @@ class NewTeam extends React.Component {
       };
     });
   };
-  handleSelectUser = ({ target }) => {
-    const { user } = target.dataset;
-    const userParsed = JSON.parse(user);
+  handleSelectUser = user => {
     this.setState(prevState => {
       const filteredselectedTags = prevState.selectedTags.map(ressource => {
-        if (ressource.value === userParsed.spec) {
+        if (ressource.value === user.spec) {
           return {
             ...ressource,
             selected: true,
@@ -152,7 +151,7 @@ class NewTeam extends React.Component {
         modal: false,
         selectedUsers: {
           ...prevState.selectedUsers,
-          [userParsed.spec]: userParsed.user,
+          [user.spec]: user.user,
         },
         selectedTags: filteredselectedTags,
       };

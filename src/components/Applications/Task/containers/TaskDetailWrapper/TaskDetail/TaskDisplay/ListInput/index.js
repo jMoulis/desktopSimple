@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import TaskDisplayListInput from '../../../components/TaskDetailWrapper/TaskDetail/TaskDisplayListInput';
-import { editTaskAction } from '../../../../../../store/reducers/taskReducer';
+import { editTaskAction } from '../../../../../../../../store/reducers/taskReducer';
+import ListInput from '../../../../../components/TaskDetailWrapper/TaskDetail/TaskDisplay/ListInput';
 
 const mapStateToProps = ({ taskReducer }) => ({
   activeTaskProcess: taskReducer.activeTaskProcess,
@@ -17,5 +17,5 @@ const createContainer = connect(
   mapStateToProps,
   mapDispatchProps,
 );
-const TaskDisplayListInputContainer = createContainer(TaskDisplayListInput);
-export default TaskDisplayListInputContainer;
+const ListInputContainer = createContainer(ListInput);
+export default ListInputContainer;

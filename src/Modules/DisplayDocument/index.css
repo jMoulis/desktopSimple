@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.document {
+  flex-wrap: wrap;
+  margin-top: .5rem; }
+  .document li {
+    margin: .5rem; }
+  .document-item {
+    position: relative;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden; }
+    .document-item-link {
+      text-align: center;
+      color: #0a1c28;
+      transition: color 300ms; }
+      .document-item-link:hover {
+        color: #d44c00; }
+    .document-item-infos {
+      display: flex;
+      flex-direction: column;
+      padding-top: .5rem; }
+    .document-item-delete {
+      position: absolute;
+      right: 0;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      background-color: #ff6666;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      outline: none;
+      transition: background-color 200ms; }
+      .document-item-delete:hover, .document-item-delete:focus {
+        background-color: red; }
+      .document-item-delete:active {
+        background-color: #990000; }

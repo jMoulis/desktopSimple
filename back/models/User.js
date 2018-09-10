@@ -2,6 +2,24 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
+const DocumentSchema = new Schema({
+  name: String,
+  folder: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  mimetype: String,
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+  url: String,
+  type: String,
+  originalName: String,
+  extension: String,
+});
+
 const CompanySchema = new Schema({
   companyName: String,
   picture: String,
@@ -12,10 +30,7 @@ const CompanySchema = new Schema({
   tags: Array,
   projects: Array,
   website: String,
-  legalDocs: {
-    type: Array,
-    default: [],
-  },
+  legalDocs: [DocumentSchema],
   industry: String,
   linkedIn: String,
 });
@@ -77,10 +92,7 @@ const UserSchema = new Schema({
   available: Boolean,
   fake: Boolean,
   location: String,
-  docs: {
-    type: Array,
-    default: [],
-  },
+  docs: [DocumentSchema],
   subscribes: [
     {
       type: Schema.Types.ObjectId,

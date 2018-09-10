@@ -5,6 +5,7 @@ import { fetchSingleTaskAction } from '../../../../../store/reducers/taskReducer
 
 const mapStateToProps = ({ taskReducer }) => ({
   tasks: taskReducer.taskListProcess.tasks,
+  activeTask: taskReducer.activeTaskProcess.task,
 });
 
 const mapDispatchToProps = dispatch => ({

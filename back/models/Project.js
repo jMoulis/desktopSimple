@@ -29,10 +29,7 @@ const ProjectSchema = new Schema({
   updatedAt: {
     type: Date,
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  },
+  author: Object,
   teams: [
     {
       type: Schema.Types.ObjectId,

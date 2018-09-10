@@ -23,7 +23,7 @@ const CommentSchema = new Schema({
 
 const DocumentSchema = new Schema({
   name: String,
-  folder: String,
+  path: String,
   author: {
     type: Schema.Types.ObjectId,
     ref: 'user',
@@ -37,6 +37,7 @@ const DocumentSchema = new Schema({
   type: String,
   originalName: String,
   extension: String,
+  folder: String,
 });
 
 const ActivitySchema = new Schema({
@@ -52,6 +53,7 @@ const ActivitySchema = new Schema({
 });
 
 const TaskSchema = new Schema({
+  taskIdFolder: String,
   title: {
     type: String,
     required: [true, 'Title required'],
@@ -65,7 +67,7 @@ const TaskSchema = new Schema({
     type: String,
     default: 'Medium',
   },
-  labels: Array,
+  tags: Array,
   documents: [DocumentSchema],
   comments: [CommentSchema],
   team: {
@@ -77,7 +79,6 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'project',
   },
-  type: String,
   activities: [ActivitySchema],
   createdAt: {
     type: Date,

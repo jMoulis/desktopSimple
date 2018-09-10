@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../components/Form/input';
 import './index.css';
+import SubMenu from '../Submenu';
 
 /**
  * A toolbar has many menus and subMenus
@@ -12,11 +13,13 @@ class AppToolbar extends React.Component {
     menus: PropTypes.array.isRequired,
     children: PropTypes.shape(PropTypes.array, PropTypes.object),
     sortingAction: PropTypes.func,
+    liStyle: PropTypes.object,
   };
 
   static defaultProps = {
     children: null,
     sortingAction: null,
+    liStyle: null,
   };
 
   state = {
@@ -25,6 +28,33 @@ class AppToolbar extends React.Component {
     },
     sorting: 1,
     asc: true,
+    subMenu: {},
+  };
+
+  componentDidUpdate() {
+    if (Object.keys(this.state.subMenu).length !== 0) {
+      document.addEventListener('click', this._resetSubMenu);
+    }
+  }
+
+  handleShowSubMenu = evt => {
+    const { name } = evt.target;
+    this.setState(prevState => ({
+      ...prevState,
+      subMenu: {
+        ...prevState.subMenu,
+        [name]: !prevState.subMenu[name],
+      },
+    }));
+  };
+
+  _resetSubMenu = evt => {
+    if (!evt.target.dataset.toggle) {
+      this.setState(prevState => ({
+        ...prevState,
+        subMenu: {},
+      }));
+    }
   };
 
   handleSearchOption = menu => {
@@ -77,17 +107,21 @@ class AppToolbar extends React.Component {
     );
   };
   render() {
-    const { menus, children } = this.props;
-    const { search } = this.state;
+    const { menus, children, liStyle } = this.props;
+    const { search, subMenu } = this.state;
     return (
       <div className="app-toolbar d-flex flex-justify-between flex-align-items-center">
         {children}
         <ul className="app-toolbar-list">
           {menus &&
             menus.map((menu, index) => {
-              if (menu.searchField) {
+              if (menu.searchField && menu.show) {
                 return (
-                  <li key={index} className="app-toolbar-list-item">
+                  <li
+                    key={index}
+                    className="app-toolbar-list-item"
+                    style={liStyle}
+                  >
                     <form
                       onSubmit={evt => {
                         evt.preventDefault();
@@ -103,7 +137,7 @@ class AppToolbar extends React.Component {
                             placeholder: menu.searchFieldLabel,
                           },
                           onChange: this.handleInputChange,
-                          value: this.state.search.filter,
+                          value: search.filter,
                           className: 'app-toolbar-list-item-form-input-search',
                           parentClassName:
                             'app-toolbar-list-item-form-input-search-container',
@@ -119,9 +153,9 @@ class AppToolbar extends React.Component {
                   </li>
                 );
               }
-              if (menu.sorting) {
+              if (menu.sorting && menu.show) {
                 return (
-                  <li key={index}>
+                  <li key={index} style={liStyle}>
                     <button
                       className="btn-asc pointer d-flex"
                       onClick={this.handleSorting}
@@ -130,6 +164,35 @@ class AppToolbar extends React.Component {
                     >
                       <i className="absolute fas fa-sort-up fa-2x" />
                       <i className="fas fa-sort-down fa-2x" />
+                    </button>
+                  </li>
+                );
+              }
+              if (menu.subMenu && menu.show) {
+                return (
+                  <li key={index} className="app-toolbar-list-item">
+                    <button
+                      className="btn-app-toolbar unselectable"
+                      name={menu.name}
+                      data-toggle="toggle"
+                      onClick={this.handleShowSubMenu}
+                    >
+                      {menu.label}
+                    </button>
+                    {subMenu[menu.name] && <SubMenu menus={menu.subMenu} />}
+                  </li>
+                );
+              }
+              if (menu.show) {
+                return (
+                  <li key={index} className="app-toolbar-list-item">
+                    <button
+                      className="btn-app-toolbar unselectable"
+                      name={menu.name}
+                      data-toggle="toggle"
+                      onClick={menu.action}
+                    >
+                      {menu.label}
                     </button>
                   </li>
                 );

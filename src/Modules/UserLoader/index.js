@@ -6,6 +6,7 @@ import './userLoader.css';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
 import Pagination from '../../components/Applications/AddressBook/components/Pagination';
 import { ROOT_URL } from '../../Utils/config';
+import UserIconContainer from '../UserIcon';
 
 const mapStateToProps = ({ projectReducer, userReducer }) => ({
   project: projectReducer.activeProjectProcess.project,
@@ -30,15 +31,24 @@ class UsersLoader extends React.Component {
     select: PropTypes.func.isRequired,
     closeFromParent: PropTypes.func.isRequired,
   };
+  state = {
+    filter: {
+      ...this.props.filter,
+      available: true,
+      tags: true,
+    },
+  };
   componentDidMount() {
-    const { fetchUsers, filter } = this.props;
-    fetchUsers(filter);
+    const { fetchUsers } = this.props;
+    const { filter } = this.state;
+    fetchUsers({ ...filter });
   }
   componentWillUnmount() {
     this.props.closeFromParent();
   }
   handleFetchPage = evt => {
-    const { filter, fetchUsers } = this.props;
+    const { fetchUsers } = this.props;
+    const { filter } = this.state;
     const { page } = evt.target.dataset;
     fetchUsers({ page, ...filter });
   };
@@ -63,24 +73,22 @@ class UsersLoader extends React.Component {
               <div className="thumbnail-container">
                 <button
                   className="btn btn-primary"
-                  data-user={JSON.stringify({
-                    spec: filter.filter,
-                    user: {
-                      picture: user.picture,
-                      fullName: user.fullName,
-                      _id: user._id,
-                    },
-                  })}
-                  onClick={select}
+                  data-user={JSON.stringify()}
+                  onClick={() => {
+                    select({
+                      spec: filter.filter,
+                      user: {
+                        picture: user.picture,
+                        fullName: user.fullName,
+                        _id: user._id,
+                      },
+                    });
+                  }}
                 >
                   Select
                 </button>
                 <div className="thumbnail-content">
-                  <img
-                    className="thumbnail"
-                    src={`${ROOT_URL}${user.picture}`}
-                    alt={user.fullName}
-                  />
+                  <UserIconContainer user={{ user }} classCss="big" />
                   <div className="user-detail">
                     <span className="user-detail-fullname">
                       {user.fullName}

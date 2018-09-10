@@ -9,6 +9,7 @@ import FormButtonsContainer from '../../../../../../Form/formButtonContainer';
 import './index.css';
 import SelectBoxUser from '../../../../../../../Modules/SelectBoxUser';
 import autoTextAreaResizing from '../../../../../../../Utils/autoTextAreaResizing';
+import InputAutoComplete from '../../../../../../Form/inputAutoComplete';
 
 class TaskCreateForm extends React.Component {
   static propTypes = {
@@ -85,7 +86,6 @@ class TaskCreateForm extends React.Component {
         value,
         changed: true,
       },
-      disabled: true,
     }));
   };
 
@@ -117,17 +117,33 @@ class TaskCreateForm extends React.Component {
       documents: [...prevState.documents, file],
     }));
   };
-  // handleInputFileChange = docs => {
-  //   this.setState(
-  //     prevState => ({
-  //       ...prevState,
-  //       documents: docs,
-  //     }),
-  //     () => {
-  //       console.log(this.state.documents);
-  //     },
-  //   );
-  // };
+
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
+      evt.preventDefault();
+      return false;
+    }
+    return true;
+  };
+
+  handleInputSelectTagsChange = evt => {
+    const { value } = evt.target;
+    if (evt.keyCode === 13) {
+      this.setState(prevState => ({
+        ...prevState,
+        tags: {
+          ...prevState.tags,
+          value: [...prevState.tags.value, value.toLowerCase()],
+          changed: true,
+        },
+      }));
+      evt.target.value = '';
+    }
+  };
 
   render() {
     const {
@@ -136,12 +152,17 @@ class TaskCreateForm extends React.Component {
       status,
       priority,
       documents,
-      type,
+      tags,
     } = this.state;
     const { closeFromParent, taskCreation } = this.props;
     const { error } = taskCreation;
     return (
-      <form id="task-form-create" className="form" onSubmit={this.handleSubmit}>
+      <form
+        id="task-form-create"
+        className="form"
+        onSubmit={this.handleSubmit}
+        onKeyPress={this.handleFormKeyPress}
+      >
         <Input
           config={{
             field: taskModel.title,
@@ -191,29 +212,22 @@ class TaskCreateForm extends React.Component {
             options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
           }}
         />
-        {/* <Input
+        <InputAutoComplete
           config={{
-            field: taskModel.labels,
-            onChange: this.handleInputChange,
-            value: labels.value,
+            field: taskModel.tags,
+            onChange: this.handleInputSelectTagsChange,
+            keyPress: this.handleInputSelectTagsChange,
+            values: tags.value,
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
-            error: error && error.labels && error.labels.detail,
+            remove: this.handleRemove,
+            isFocused: tags.focus,
+            error: error && error.tags && error.tags.detail,
           }}
-        /> */}
+        />
         <input type="file" multiple onChange={this.handleInputFileChange} />
         <ul>{documents.map(document => <li>{document.name}</li>)}</ul>
         {documents.length === 0 && <h2>No Documents available</h2>}
-        <Input
-          config={{
-            field: taskModel.type,
-            onChange: this.handleInputChange,
-            value: type.value,
-            blur: this.handleOnBlur,
-            focus: this.handleOnFocus,
-            error: error && error.type && error.type.detail,
-          }}
-        />
         <SelectBoxUser callback={this.handleAssignSelected} />
         <FormButtonsContainer onCancel={{ action: closeFromParent }} onCreate />
       </form>

@@ -7,9 +7,10 @@ import Input from '../../../../../Form/input';
 import TextArea from '../../../../../Form/textarea';
 import InputAutoComplete from '../../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
-import AddFilesInput from '../../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../../Modules/Modal/modal';
 import Crop from '../../../../../../Modules/Crop';
+import { ROOT_URL } from '../../../../../../Utils/config';
+import DisplayDocument from '../../../../../../Modules/DisplayDocument';
 
 class CompanyProfile extends React.Component {
   static propTypes = {
@@ -18,9 +19,11 @@ class CompanyProfile extends React.Component {
     clearMessageAction: PropTypes.func.isRequired,
     editUser: PropTypes.object,
   };
+
   static defaultProps = {
     editUser: null,
   };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -49,6 +52,24 @@ class CompanyProfile extends React.Component {
       },
     };
   }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.loggedUser.company.picture) {
+      return {
+        ...state,
+        company: {
+          ...state.company,
+          'company.picture': {
+            value: props.loggedUser.company.picture,
+          },
+        },
+      };
+    }
+    return {
+      ...state,
+    };
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { editUserAction, loggedUser } = prevProps;
     // Dealing with documents
@@ -61,10 +82,12 @@ class CompanyProfile extends React.Component {
       }
     }
   }
+
   componentWillUnmount() {
     const { clearMessageAction } = this.props;
     clearMessageAction();
   }
+
   handleFormKeyPress = evt => {
     if (
       evt.key === 'Enter' &&
@@ -76,6 +99,7 @@ class CompanyProfile extends React.Component {
     }
     return true;
   };
+
   handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(prevState => ({
@@ -90,6 +114,7 @@ class CompanyProfile extends React.Component {
       },
     }));
   };
+
   handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
@@ -105,9 +130,11 @@ class CompanyProfile extends React.Component {
       },
     }));
   };
+
   handlePictureChange = evt => {
     this.readUrl(evt.target);
   };
+
   readUrl = input => {
     if (input.files && input.files[0]) {
       const { editUserAction, loggedUser } = this.props;
@@ -131,6 +158,7 @@ class CompanyProfile extends React.Component {
       reader.readAsDataURL(input.files[0]);
     }
   };
+
   handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
@@ -151,6 +179,7 @@ class CompanyProfile extends React.Component {
       },
     }));
   };
+
   handleInputSelectTagsChange = evt => {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
@@ -175,6 +204,7 @@ class CompanyProfile extends React.Component {
       evt.target.value = '';
     }
   };
+
   handleRemove = evt => {
     evt.preventDefault();
     const { editUserAction, loggedUser } = this.props;
@@ -197,23 +227,34 @@ class CompanyProfile extends React.Component {
     this.setState(() => newTags);
     editUserAction(loggedUser._id, newTags);
   };
+
   handleDocsChange = docs => {
-    this.setState(prevState => ({
-      ...prevState,
-      company: {
-        ...prevState.company,
-        'company.legalDocs': {
-          value: docs,
-          changed: true,
-        },
-      },
-    }));
+    const { editUserAction, loggedUser } = this.props;
+    editUserAction(loggedUser._id, {
+      company: { ...docs },
+    });
   };
+
+  handleRemoveFile = file => {
+    const { editUserAction, loggedUser } = this.props;
+    if (file) {
+      editUserAction(loggedUser._id, {
+        company: {
+          'company.legalDocs': {
+            value: file,
+            changed: true,
+          },
+        },
+      });
+    }
+  };
+
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
   };
+
   handleCloseCropImageModal = img => {
     // Server crashes on modal close if img undefined... Without response back
     if (img) {
@@ -240,6 +281,7 @@ class CompanyProfile extends React.Component {
       }));
     }
   };
+
   render() {
     const { editUser, loggedUser, editUserAction } = this.props;
     const { error, success, editing } = editUser;
@@ -256,10 +298,11 @@ class CompanyProfile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${(company &&
-                  company['company.picture'] &&
-                  company['company.picture'].value) ||
-                  '/img/company-generic.png'}`}
+                src={
+                  company['company.picture'].value
+                    ? `${ROOT_URL}${company['company.picture'].value}`
+                    : '/img/company-generic.png'
+                }
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
@@ -383,11 +426,11 @@ class CompanyProfile extends React.Component {
                   editing,
                 }}
               />
-              <AddFilesInput
-                error={error && error.legalDocs && error.legalDocs.detail}
-                docs={company['company.legalDocs'].value || []}
-                onFileChange={this.handleDocsChange}
-                onBlur={this.handleOnBlur}
+              <DisplayDocument
+                update={this.handleDocsChange}
+                keyToUpdate="company.legalDocs"
+                documents={loggedUser.company.legalDocs}
+                onDelete={this.handleRemoveFile}
               />
             </div>
           </div>
@@ -400,7 +443,11 @@ class CompanyProfile extends React.Component {
             closeFromParent={this.handleCloseCropImageModal}
           >
             <Crop
-              picture={company['company.picture'].value}
+              picture={
+                company['company.picture'].value
+                  ? `${ROOT_URL}${company['company.picture'].value}`
+                  : '/img/company-generic.png'
+              }
               parentConfig={{
                 user: loggedUser,
                 update: editUserAction,

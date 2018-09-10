@@ -25,8 +25,8 @@ class Utils {
   };
   simulateClickEvent = file => {
     const element = document.createElement('a');
-    element.href = file.href;
-    element.setAttribute('download', `${file.fileName}`);
+    element.href = file.fileContent;
+    element.setAttribute('download', `${file.originalName}`);
     return this._linkClick(element, 'click');
   };
   _linkClick = element => {

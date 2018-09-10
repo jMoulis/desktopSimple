@@ -1,9 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
+const mime = require('mime');
+const shell = require('shelljs');
+
+const { isObjectEmpty } = require('../service/utils');
+
 const User = require('../models/User');
 const Meta = require('../models/Meta');
 const ApiResponse = require('../service/api/apiResponse_v2');
+
+const ROOT_FOLDER = path.join(__dirname, '/../uploads');
 
 module.exports = {
   async index(req, res) {
@@ -11,12 +18,8 @@ module.exports = {
     try {
       const LIMIT = 5;
       let SKIP = 0;
-
-      let query = {
-        available: true,
-      };
-
-      if (req.query.filter) {
+      let query = {};
+      if (req.query.filter && !req.query.tags) {
         query = {
           ...query,
           $text: {
@@ -25,7 +28,18 @@ module.exports = {
           },
         };
       }
-
+      if (req.query.tags) {
+        query = {
+          ...query,
+          tags: req.query.filter,
+        };
+      }
+      if (req.query.available) {
+        query = {
+          ...query,
+          available: true,
+        };
+      }
       if (req.query.type) {
         query = { ...query, typeUser: req.query.type };
       }
@@ -125,6 +139,16 @@ module.exports = {
             model: 'project',
             select: 'title',
           },
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'company.legalDocs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
       if (!user) {
         return apiResponse.failure(404, 'User not found');
@@ -137,36 +161,134 @@ module.exports = {
 
   async edit(req, res, next) {
     const apiResponse = new ApiResponse(res);
-
     try {
       const userId = req.params.id;
+      let docRemoveUrl;
       const options = { runValidators: true, upsert: true };
       let props = module.exports.buildEditProps(req.body);
-      const pictureUrl = module.exports.imageControl(req, res);
-      if (pictureUrl) {
-        props = {
-          ...props,
-          picture: pictureUrl,
-        };
+      let pictureUrl;
+
+      if (req.body.picture) {
+        pictureUrl = module.exports.imageControl(
+          req.body.picture,
+          res.locals.user._id,
+          'avatar',
+        );
+        if (pictureUrl) {
+          props = {
+            ...props,
+            picture: pictureUrl,
+          };
+        }
+      }
+      if (req.body['company.picture']) {
+        pictureUrl = module.exports.imageControl(
+          req.body['company.picture'],
+          res.locals.user._id,
+          'logo',
+        );
+        if (pictureUrl) {
+          props = {
+            ...props,
+            'company.picture': pictureUrl,
+          };
+        }
       }
       if (res.locals.user._id.toString() !== userId) {
         return apiResponse.failure(403, null, 'Not allowed');
       }
 
-      await User.update({ _id: userId }, { $set: props }, options);
+      if (Object.prototype.hasOwnProperty.call(req.body, 'docs')) {
+        const deleteDocumentQuery = await module.exports.deleteFile(
+          req.body,
+          'docs',
+        );
+        props = deleteDocumentQuery.query;
+        docRemoveUrl = deleteDocumentQuery.docUrl;
+      }
 
-      const userUpdated = await User.findById(
-        { _id: userId },
-        { password: 0 },
-      ).populate({
-        path: 'teams',
-        select: 'users name',
-        populate: {
-          path: 'users.user',
+      if (Object.prototype.hasOwnProperty.call(req.body, 'company.legalDocs')) {
+        const deleteDocumentQuery = await module.exports.deleteFile(
+          req.body,
+          'legalDocs',
+          'company',
+        );
+        props = deleteDocumentQuery.query;
+        docRemoveUrl = deleteDocumentQuery.docUrl;
+      }
+
+      if (req.files && !isObjectEmpty(req.files)) {
+        const filesKey = Object.keys(req.files)[0];
+        let documents = [];
+        documents = await req.files[filesKey].map(document => {
+          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
+            document.mimetype,
+          )}`;
+
+          const fullPath = `${ROOT_FOLDER}/users/${res.locals.user._id}/files`;
+
+          if (fs.existsSync(fullPath)) {
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          } else {
+            shell.mkdir('-p', fullPath);
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          }
+
+          return {
+            originalName: document.originalname,
+            name: fileName,
+            extension: mime.extension(document.mimetype),
+            mimetype: document.mimetype,
+            folder: `/users/${res.locals.user._id}/files/${fileName}`,
+            author: res.locals.user._id,
+            createdAt: new Date(),
+            url: `/users/${userId}/files/${fileName}`,
+            type: 'users',
+          };
+        });
+        props = {
+          ...props,
+          $push: {
+            [filesKey]: [...documents],
+          },
+        };
+      }
+      // Dealing with Tags
+      if (props.tags || props['company.tags']) {
+        const key = props.tags ? 'tags' : 'company.tags';
+        props = {
+          ...props,
+          [key]: props[key].split(','),
+        };
+      }
+
+      await User.update({ _id: userId }, props, options);
+
+      // Remove file from filesystem after updating
+      if (docRemoveUrl) {
+        shell.rm(`${ROOT_FOLDER}${docRemoveUrl}`);
+      }
+
+      const userUpdated = await User.findById({ _id: userId }, { password: 0 })
+        .populate({
+          path: 'teams',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
+        })
+        .populate({
+          path: 'docs.author',
           model: 'user',
           select: 'fullName picture',
-        },
-      });
+        })
+        .populate({
+          path: 'company.legalDocs.author',
+          model: 'user',
+          select: 'fullName picture',
+        });
 
       if (!userUpdated) {
         return apiResponse.failure(404, 'User not found');
@@ -186,10 +308,43 @@ module.exports = {
       }
       return apiResponse.success(200, { user: userUpdated }, fieldUpdated);
     } catch (error) {
-      return apiResponse.failure(422, error);
+      return apiResponse.failure(422, error, error.message);
     }
   },
 
+  async deleteFile(body, keyDocs, subDocument) {
+    let key = `${keyDocs}`;
+
+    if (subDocument) {
+      key = `${subDocument}.${keyDocs}`;
+    }
+    const documentUser = await User.findOne(
+      {
+        [`${key}._id`]: body[key],
+      },
+      { [key]: 1 },
+    );
+    if (!documentUser) return Error('No user found');
+
+    let arrayToFindIn = documentUser[keyDocs];
+    if (subDocument) {
+      arrayToFindIn = documentUser[subDocument][keyDocs];
+    }
+    const document = arrayToFindIn.find(
+      doc => doc._id.toString() === body[key],
+    );
+    if (!document) return Error('No document found');
+    return {
+      query: {
+        $pull: {
+          [key]: {
+            _id: body[key],
+          },
+        },
+      },
+      docUrl: document.url,
+    };
+  },
   async delete(req, res) {
     const userId = req.params.id;
     const apiResponse = new ApiResponse(res);
@@ -416,11 +571,11 @@ module.exports = {
   // },
 
   // Utils Function
-  imageControl(req, res) {
+  imageControl(picture, userId, type) {
     const imageTypeRegularExpression = /\/(.*?)$/;
     const validImageType = ['image/png', 'image/jpeg', 'image/jpg'];
-    if (req.body.picture) {
-      const imageBuffer = module.exports.decodeBase64Image(req.body.picture);
+    if (picture) {
+      const imageBuffer = module.exports.decodeBase64Image(picture);
       const typeUploadedFile = imageBuffer.type.match(
         imageTypeRegularExpression,
       )[1];
@@ -434,11 +589,9 @@ module.exports = {
         );
       }
 
-      const ROOT_FOLDER = path.join(__dirname, '/../uploads/');
-      const root = `${ROOT_FOLDER}/users`;
-      const destination = `${root}/${res.locals.user._id}`;
-      const fileName = `avatar-${uuidv4()}.${typeUploadedFile}`;
-      if (fs.existsSync(root)) {
+      const destination = `${ROOT_FOLDER}/${userId}`;
+      const fileName = `${type}-${uuidv4()}.${typeUploadedFile}`;
+      if (fs.existsSync(ROOT_FOLDER)) {
         if (fs.existsSync(destination)) {
           fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
         } else {
@@ -446,11 +599,11 @@ module.exports = {
           fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
         }
       } else {
-        fs.mkdirSync(root);
+        fs.mkdirSync(ROOT_FOLDER);
         fs.mkdirSync(destination);
         fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
       }
-      return `/users/${res.locals.user._id}/${fileName}`;
+      return `/users/${userId}/${fileName}`;
     }
     return null;
   },

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './project.css';
 import ListProject from '../containers/ListProject';
 import NewProject from '../containers/NewProject/newProject';
-import Input from '../../../Form/input';
+import AppToolBar from '../../../../Modules/AppToolbar';
 
 class Projects extends React.Component {
   static propTypes = {
@@ -17,10 +17,13 @@ class Projects extends React.Component {
     search: '',
     asc: true,
     sorting: 1,
+    filterParams: {
+      filter: '',
+    },
   };
   componentDidMount() {
     const { fetchProjectsAction } = this.props;
-    fetchProjectsAction();
+    fetchProjectsAction(this.state.filterParams);
   }
   handleSuccessCreation = tabName => {
     this.setState(prevState => ({
@@ -40,17 +43,51 @@ class Projects extends React.Component {
       [name]: value,
     }));
   };
+  // handleTabSelect = evt => {
+  //   const { dataset } = evt.currentTarget;
+  //   console.log(dataset);
+  //   let dataSetToState = {};
+  //   Object.keys(dataset).map(key => {
+  //     dataSetToState = { ...dataSetToState, [key]: dataset[key] };
+  //     return dataSetToState;
+  //   });
+  //   this.setState(() => ({
+  //     ...dataSetToState,
+  //   }));
+  // };
   handleTabSelect = evt => {
-    const { dataset } = evt.currentTarget;
-    let dataSetToState = {};
-    Object.keys(dataset).map(key => {
-      dataSetToState = { ...dataSetToState, [key]: dataset[key] };
-      return dataSetToState;
-    });
-    this.setState(() => ({
-      ...dataSetToState,
+    const { name } = evt.target;
+    this.setState(prevState => ({
+      ...prevState,
+      tab: name,
+      subMenu: {},
     }));
   };
+  addValueToStateFilters = (filters, filterName) => {
+    if (filters.some(filter => filter.label === filterName.label)) {
+      return filters;
+    }
+    if (filterName.type === 'main') {
+      return [...filters.filter(filter => filter.type !== filterName.type)];
+    }
+    return [...filters, filterName];
+  };
+  handleAppToolBarSearch = filter => {
+    const { fetchProjectsAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filterParams: {
+          ...prevState.filterParams,
+          ...filter,
+        },
+      }),
+      () => {
+        fetchProjectsAction(this.state.filterParams);
+      },
+    );
+  };
+
   handleSorting = () => {
     const { fetchProjectsAction } = this.props;
     let sorting = -1;
@@ -77,34 +114,32 @@ class Projects extends React.Component {
 
     return (
       <div className="project-container">
-        <div
+        <AppToolBar
+          menus={[
+            {
+              label: 'Projects',
+              action: this.handleTabSelect,
+              name: 'projects',
+              show: true,
+            },
+            {
+              label: 'New Project',
+              action: this.handleTabSelect,
+              name: 'create-project',
+              show: loggedUser.typeUser === 'company',
+            },
+            {
+              searchField: true,
+              action: this.handleAppToolBarSearch,
+              searchFieldLabel: 'Spec, Student name, Company name, Description',
+              show: true,
+            },
+          ]}
+        />
+        {/* <div
           className="app-toolbar d-flex flex-justify-between flex-align-items-center"
           key="app-toolbar"
         >
-          <ul className="app-toolbar-list">
-            <li className="app-toolbar-list-item">
-              <button
-                className="btn-app-toolbar unselectable"
-                name="projects"
-                data-tab="projects"
-                onClick={this.handleTabSelect}
-              >
-                Projects
-              </button>
-            </li>
-            {loggedUser.typeUser === 'company' && (
-              <li className="app-toolbar-list-item">
-                <button
-                  className="btn-app-toolbar unselectable"
-                  name="create-project"
-                  data-tab="create-project"
-                  onClick={this.handleTabSelect}
-                >
-                  New Project
-                </button>
-              </li>
-            )}
-          </ul>
           <div className="d-flex">
             <form
               onSubmit={this.handleSubmit}
@@ -135,7 +170,7 @@ class Projects extends React.Component {
               <i className="fas fa-sort-down fa-2x" />
             </button>
           </div>
-        </div>
+        </div> */}
         {this.state.tab === 'projects' && (
           <ListProject
             selectTab={this.handleTabSelect}

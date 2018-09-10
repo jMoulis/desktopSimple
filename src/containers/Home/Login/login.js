@@ -3,12 +3,14 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import Login from '../../../components/Home/Login/login';
-import { loginAction, clearMessageAction } from '../../../store/reducers/authReducer';
+import {
+  loginAction,
+  clearMessageAction,
+} from '../../../store/reducers/authReducer';
 
 /*
  * Code
@@ -20,7 +22,7 @@ const mapStateToProps = ({ authReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  loginAction: (formData) => {
+  loginAction: formData => {
     dispatch(loginAction(formData));
   },
   clearMessageAction: () => {
@@ -28,10 +30,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const LoginContainer = createContainer(Login);
 export default LoginContainer;

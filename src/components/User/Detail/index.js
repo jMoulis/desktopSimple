@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 import Loader from '../../../Modules/Loader';
@@ -32,6 +32,12 @@ class DetailUser extends React.Component {
         <h1>{user.fullName}</h1>
         <ul className="user-detail-list">
           <li>
+            <span>Available: </span>
+            <span>
+              {user.available === 'false' ? 'Non available' : 'Available'}
+            </span>
+          </li>
+          <li>
             <span>Description: </span>
             <p>{user.description || ''}</p>
           </li>
@@ -52,6 +58,7 @@ class DetailUser extends React.Component {
             {user.location || ''}
           </li>
           <li>
+            <span>Tags:</span>
             <TagList tags={user.tags} />
           </li>
           <li>
@@ -74,6 +81,22 @@ class DetailUser extends React.Component {
               {user.gitHub}
             </a>
           </li>
+          {user.company && (
+            <Fragment>
+              <li>
+                <span>Company Name: </span>
+                {user.company.companyName}
+              </li>
+              <li>
+                <span>Description: </span>
+                {user.company.companyName}
+              </li>
+              <li>
+                <span>Tags: </span>
+                <TagList tags={user.company.tags} />
+              </li>
+            </Fragment>
+          )}
           <FriendRequestButtonsContainer user={user} />
         </ul>
       </div>

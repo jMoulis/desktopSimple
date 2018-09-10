@@ -4,6 +4,8 @@ import './inputFile.css';
 import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputFile = ({ config }) => {
+  const textInput = React.createRef();
+
   const {
     field,
     onChange,
@@ -20,6 +22,7 @@ const InputFile = ({ config }) => {
       <label className="btn btn-success input-file-label" htmlFor={field.name}>
         {field.label}
         <input
+          ref={textInput}
           name={field.name}
           id={field.name}
           className="form-control"
@@ -30,6 +33,7 @@ const InputFile = ({ config }) => {
           accept={typeFileAccepted}
           style={style}
           onClick={onChange}
+          value={field.value}
         />
       </label>
 

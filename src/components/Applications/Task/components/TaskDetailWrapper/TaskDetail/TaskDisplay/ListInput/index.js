@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Select from '../../../../../Form/select';
-import taskModel from './TaskCreateForm/task-model';
-import FileUploader from '../../../../../../Modules/FileUploader/addFilesInput';
-import TaskDisplayDocument from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDocument';
+import Select from '../../../../../../../Form/select';
+import taskModel from '../../TaskCreateForm/task-model';
+import DisplayDocument from '../../../../../../../../Modules/DisplayDocument';
+import InputAutoComplete from '../../../../../../../Form/inputAutoComplete';
+import SuccessIcon from '../../../../../../../../assets/successIcon/successIcon';
+import './index.css';
 
 // Needs to be outside of the class to be used in the getDerivedProps
 const setStateFromProps = (object, model) => {
@@ -35,7 +37,7 @@ const setStateFromProps = (object, model) => {
   };
 };
 
-class TaskDisplayListInput extends React.Component {
+class ListInput extends React.Component {
   static propTypes = {
     activeTaskProcess: PropTypes.object.isRequired,
     editTaskAction: PropTypes.func.isRequired,
@@ -48,6 +50,7 @@ class TaskDisplayListInput extends React.Component {
     const fields = setStateFromProps(task, taskModel);
     this.state = {
       ...fields,
+      showLabelsModal: false,
     };
   }
 
@@ -68,8 +71,7 @@ class TaskDisplayListInput extends React.Component {
     };
   }
 
-  handleLabelClick = evt => {
-    const { name } = evt.currentTarget.dataset;
+  handleLabelClick = name => {
     this.setState(prevState => ({
       form: {
         ...prevState.form,
@@ -110,7 +112,14 @@ class TaskDisplayListInput extends React.Component {
     );
   };
 
-  handleInputFileChange = file => {
+  handleInputFileChange = documents => {
+    const { editTaskAction } = this.props;
+    if (documents) {
+      editTaskAction(documents);
+    }
+  };
+
+  handleRemoveFile = file => {
     const { editTaskAction } = this.props;
     if (file) {
       editTaskAction({
@@ -122,38 +131,63 @@ class TaskDisplayListInput extends React.Component {
     }
   };
 
-  handleRemoveFile = file => {
+  handleInputSelectLablelsChange = evt => {
     const { editTaskAction } = this.props;
-    if (file) {
-      editTaskAction({
-        documents: {
-          value: file._id,
-          changed: true,
+    const { value } = evt.target;
+    if (evt.keyCode === 13) {
+      this.setState(
+        prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            tags: {
+              ...prevState.form.tags,
+              value: [...prevState.form.tags.value, value.toLowerCase()],
+              changed: true,
+            },
+          },
+        }),
+        () => {
+          editTaskAction(this.state.form);
         },
-      });
+      );
+      evt.target.value = '';
     }
   };
 
+  handleDisplayLabelsModal = () => {
+    this.setState(prevState => ({
+      showLabelsModal: !prevState.showLabelsModal,
+    }));
+  };
+
+  handleOnBlur = field => {
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        [field]: {
+          ...prevState.form[field],
+          selected: false,
+        },
+      },
+    }));
+  };
+
   render() {
-    const { activeTaskProcess, editTaskAction } = this.props;
-    const { task, error } = activeTaskProcess;
-    const { status, priority, labels } = this.state.form;
+    const { activeTaskProcess } = this.props;
+    const { task, error, success } = activeTaskProcess;
+    const { form } = this.state;
+    const { status, priority, tags } = form;
     return (
       <Fragment>
         {!task ? (
           <div>Loading</div>
         ) : (
-          <ul>
-            <li>
-              <label className="d-flex flex-align-items-center">
-                <span className="left-label-form">Type:</span>
-                <span>{task.type}</span>
-              </label>
-            </li>
-            <li>
+          <ul className="task-detail-list">
+            <li className="task-detail-list-item">
               <label
-                onKeyPress={this.handleLabelClick}
-                onClick={this.handleLabelClick}
+                onKeyPress={() => this.handleLabelClick('status')}
+                onClick={() => this.handleLabelClick('status')}
                 data-name="status"
                 className="d-flex flex-align-items-center"
               >
@@ -164,6 +198,7 @@ class TaskDisplayListInput extends React.Component {
                       field: taskModel.status,
                       onChange: this.handleSelectChange,
                       value: status.value,
+                      blur: () => this.handleOnBlur(taskModel.status.name),
                       options: [
                         'To Do',
                         'In Progress',
@@ -179,12 +214,19 @@ class TaskDisplayListInput extends React.Component {
                 ) : (
                   <span>{status.value}</span>
                 )}
+                {success === 'status' && (
+                  <SuccessIcon
+                    style={{
+                      top: 0,
+                    }}
+                  />
+                )}
               </label>
             </li>
-            <li>
+            <li className="task-detail-list-item">
               <label
-                onKeyPress={this.handleLabelClick}
-                onClick={this.handleLabelClick}
+                onKeyPress={() => this.handleLabelClick('priority')}
+                onClick={() => this.handleLabelClick('priority')}
                 data-name="priority"
                 className="d-flex flex-align-items-center"
               >
@@ -194,10 +236,12 @@ class TaskDisplayListInput extends React.Component {
                     config={{
                       field: taskModel.priority,
                       onChange: this.handleSelectChange,
+                      keyPress: this.handleSelectChange,
                       value: priority.value,
-                      blur: this.handleOnBlur,
+                      blur: () => this.handleOnBlur(taskModel.priority.name),
                       focus: this.handleOnFocus,
                       small: true,
+                      success,
                       error: error && error.priority && error.priority.detail,
                       options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
                     }}
@@ -205,52 +249,49 @@ class TaskDisplayListInput extends React.Component {
                 ) : (
                   <span>{priority.value}</span>
                 )}
+                {success === 'priority' && (
+                  <SuccessIcon
+                    style={{
+                      top: 0,
+                    }}
+                  />
+                )}
               </label>
             </li>
-            <li>
+            <li className="task-detail-list-item task-detail-list-item--tags">
               <label
-                onKeyPress={this.handleLabelClick}
-                onClick={this.handleLabelClick}
                 data-name="labels"
                 className="d-flex flex-align-items-center"
               >
                 <span className="left-label-form">Labels:</span>
-                {labels && labels.selected ? (
-                  <Select
-                    config={{
-                      field: taskModel.labels,
-                      onChange: this.handleSelectChange,
-                      value: labels.value,
-                      blur: this.handleOnBlur,
-                      multiple: true,
-                      focus: this.handleOnFocus,
-                      small: true,
-                      options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
-                      error: error && error.labels && error.labels.detail,
-                    }}
-                  />
-                ) : (
-                  <span>{labels.value}</span>
-                )}
               </label>
-            </li>
-            <li>
-              <label className="left-label-form">Description:</label>
-              <p>{task.description}</p>
-            </li>
-            <li>
-              <TaskDisplayDocument
-                update={editTaskAction}
-                fileProcess={activeTaskProcess}
-                documents={task.documents}
+              <InputAutoComplete
+                config={{
+                  field: taskModel.tags,
+                  onChange: this.handleInputSelectLablelsChange,
+                  keyPress: this.handleInputSelectLablelsChange,
+                  values: tags.value,
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  remove: this.handleRemove,
+                  isFocused: tags.focus,
+                  error: error && error.tags && error.tags.detail,
+                }}
               />
-              {/* <FileUploader
-                error={error && error.documents && error.documents.detail}
-                docs={task.documents}
-                onFileChange={this.handleInputFileChange}
-                onFileDelete={this.handleRemoveFile}
-                handleDownloadFile={this.handleDownloadFile}
-              /> */}
+            </li>
+            <li className="task-detail-list-item">
+              <span className="left-label-form">Description:</span>
+              <p className="task-detail-list-item--textarea">
+                {task.description}
+              </p>
+            </li>
+            <li className="task-detail-list-item">
+              <DisplayDocument
+                update={this.handleInputFileChange}
+                keyToUpdate="documents"
+                documents={task.documents}
+                onDelete={this.handleRemoveFile}
+              />
             </li>
           </ul>
         )}
@@ -259,4 +300,4 @@ class TaskDisplayListInput extends React.Component {
   }
 }
 
-export default TaskDisplayListInput;
+export default ListInput;

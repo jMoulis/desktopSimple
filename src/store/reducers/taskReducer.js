@@ -184,7 +184,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         activeTaskProcess: {
           task: action.payload.task,
-          success: null,
+          success: action.payload.success,
           loading: false,
           error: null,
         },
@@ -305,9 +305,9 @@ export const createTaskFailureAction = error => ({
 export const clearTaskMessageAction = () => ({
   type: CLEAR_TASK_MESSAGE,
 });
-export const deleteTaskAction = TASKId => ({
+export const deleteTaskAction = taskId => ({
   type: DELETE_TASK,
-  TASKId,
+  taskId,
 });
 export const deleteTaskSuccessAction = data => ({
   type: DELETE_TASK_SUCCESS,
