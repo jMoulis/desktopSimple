@@ -70,10 +70,14 @@ class ListProject extends React.Component {
     }));
   };
   handleCloseModal = modalName => {
-    this.setState(() => ({
+    this.setState(prevState => ({
       [modalName]: {
         display: false,
         zIndex: 0,
+      },
+      detailProjectModal: {
+        ...prevState.detailProjectModal,
+        display: false,
       },
     }));
   };

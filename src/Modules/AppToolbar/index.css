@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.app-toolbar .search {
+  min-width: 40%;
+  padding-right: 1rem; }
+
 .app-toolbar-list {
   align-items: center;
   display: flex;

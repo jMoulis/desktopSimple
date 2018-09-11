@@ -64,13 +64,13 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
+          path: 'project.author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
           path: 'project',
           model: 'project',
-          populate: {
-            path: 'author',
-            model: 'user',
-            select: 'fullName picture company',
-          },
         })
         .populate({
           path: 'users.user',
@@ -110,13 +110,13 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
+          path: 'project.author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
           path: 'project',
           model: 'project',
-          populate: {
-            path: 'author',
-            model: 'user',
-            select: 'fullName picture company',
-          },
         })
         .populate({
           path: 'users.user',
@@ -167,13 +167,13 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
+          path: 'project.author',
+          model: 'user',
+          select: 'fullName picture company',
+        })
+        .populate({
           path: 'project',
           model: 'project',
-          populate: {
-            path: 'author',
-            model: 'user',
-            select: 'fullName picture company',
-          },
         })
         .populate({
           path: 'users.user',

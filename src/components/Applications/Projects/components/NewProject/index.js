@@ -10,6 +10,7 @@ import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 class NewProject extends React.Component {
   static propTypes = {
@@ -39,7 +40,10 @@ class NewProject extends React.Component {
     });
     this.state = {
       ...field,
-      docs: [],
+      docs: {
+        changed: false,
+        value: [],
+      },
       isContest: false,
       isPrice: false,
     };
@@ -184,6 +188,28 @@ class NewProject extends React.Component {
       return false;
     }
   };
+  handleDocsChange = ({ docs }) => {
+    this.setState(prevState => ({
+      ...prevState,
+      docs: {
+        changed: true,
+        value: [...prevState.docs.value, docs.value],
+      },
+    }));
+  };
+  handleRemoveFile = file => {
+    if (file) {
+      this.setState(prevState => ({
+        ...prevState,
+        docs: {
+          changed: true,
+          value: prevState.docs.value.filter(
+            document => document.name !== file,
+          ),
+        },
+      }));
+    }
+  };
   render() {
     const {
       projectCreation: { error },
@@ -297,12 +323,18 @@ class NewProject extends React.Component {
               error: error && error.tags && error.tags.detail,
             }}
           />
-          <AddFilesInput
+          <DisplayDocument
+            update={this.handleDocsChange}
+            keyToUpdate="docs"
+            documents={this.state.docs.value}
+            onDelete={this.handleRemoveFile}
+          />
+          {/* <AddFilesInput
             error={error && error.docs && error.docs.detail}
             docs={this.state.docs}
             onFileChange={this.handleInputFileChange}
             id="newProject"
-          />
+          /> */}
           <div className="new-project-btn-container">
             <Button
               type="button"

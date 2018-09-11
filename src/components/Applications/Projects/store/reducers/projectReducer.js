@@ -30,7 +30,6 @@ export const DELETE_PROJECT_FAILURE = 'DELETE_PROJECT_FAILURE';
 
 export const CLEAR_PROJECT_MESSAGE = 'CLEAR_PROJECT_MESSAGE';
 
-
 /*
  * State
 */
@@ -176,15 +175,14 @@ const reducer = (state = initialState, action = {}) => {
       /**
        * The response is only the field modify
        */
-      const { field, value, id } = action.payload.project;
+      const { id } = action.payload.project;
       const { projects } = state.projectListProcess;
       // Update the project in the projects list
       // to update the projects list page
-      const projectsUpdated = projects.map((project) => {
+      const projectsUpdated = projects.map(project => {
         if (project._id === id) {
           return {
             ...project,
-            [field]: value,
           };
         }
         return project;
@@ -192,10 +190,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         activeProjectProcess: {
-          project: {
-            ...state.activeProjectProcess.project,
-            [field]: value,
-          },
+          project: action.payload.project,
           loading: false,
           error: null,
           success: action.payload.success,
@@ -222,7 +217,9 @@ const reducer = (state = initialState, action = {}) => {
       const { projects } = state.projectListProcess;
       // Update the project in the projects list
       // to update the projects list page
-      const projectsUpdated = projects.filter(project => project._id !== action.projectId);
+      const projectsUpdated = projects.filter(
+        project => project._id !== action.projectId,
+      );
       return {
         ...state,
         activeProjectProcess: {

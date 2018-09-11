@@ -8,6 +8,7 @@ import Input from '../../../../Form/input';
 import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import Checkbox from '../../../../Form/checkbox';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
@@ -50,17 +51,7 @@ class EditFormProject extends Component {
       author: project.author,
     };
   }
-  componentDidUpdate(prevProps, prevState) {
-    const { editProjectAction } = prevProps;
-    // Dealing with documents
-    if (prevState.form.docs.value) {
-      if (
-        prevState.form.docs.value.length !== this.state.form.docs.value.length
-      ) {
-        editProjectAction(this.state.form);
-      }
-    }
-  }
+
   handleInputChange = evt => {
     const { value, name } = evt.target;
     return this.setState(prevState => ({
@@ -226,6 +217,21 @@ class EditFormProject extends Component {
     }));
     editProjectAction(newTags);
   };
+  handleDocsChange = docs => {
+    const { editProjectAction } = this.props;
+    editProjectAction(docs);
+  };
+  handleRemoveFile = file => {
+    const { editProjectAction } = this.props;
+    if (file) {
+      editProjectAction({
+        docs: {
+          value: file,
+          changed: true,
+        },
+      });
+    }
+  };
   render() {
     const { activeProjectProcess, loggedUser } = this.props;
     const { author } = this.state;
@@ -356,16 +362,19 @@ class EditFormProject extends Component {
               remove: this.handleRemove,
             }}
           />
-          <AddFilesInput
+          <DisplayDocument
+            update={this.handleDocsChange}
+            keyToUpdate="docs"
+            documents={project.docs}
+            onDelete={this.handleRemoveFile}
+          />
+          {/* <AddFilesInput
             error={error && error.docs && error.docs.detail}
             docs={this.state.form.docs.value}
             onFileChange={this.handleInputFileChange}
             blur={this.handleOnBlur}
             readOnly={author._id !== user._id}
-          />
-          {this.state.form.docs.value.length === 0 && (
-            <h2>No Documents available</h2>
-          )}
+          /> */}
         </div>
       </form>
     );

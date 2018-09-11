@@ -48,7 +48,9 @@ const ListProjectItem = ({ project, showDetailModal }) => (
         <li>
           <div>
             <span className="title">Description:</span>
-            <p>{truncateDescription(project.description)}</p>
+            <p>
+              {project.description && truncateDescription(project.description)}
+            </p>
           </div>
         </li>
         <li>

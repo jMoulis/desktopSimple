@@ -43,18 +43,6 @@ class Projects extends React.Component {
       [name]: value,
     }));
   };
-  // handleTabSelect = evt => {
-  //   const { dataset } = evt.currentTarget;
-  //   console.log(dataset);
-  //   let dataSetToState = {};
-  //   Object.keys(dataset).map(key => {
-  //     dataSetToState = { ...dataSetToState, [key]: dataset[key] };
-  //     return dataSetToState;
-  //   });
-  //   this.setState(() => ({
-  //     ...dataSetToState,
-  //   }));
-  // };
   handleTabSelect = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -115,6 +103,12 @@ class Projects extends React.Component {
     return (
       <div className="project-container">
         <AppToolBar
+          search={{
+            searchField: true,
+            action: this.handleAppToolBarSearch,
+            searchFieldLabel: 'Spec, Student name, Company name, Description',
+            show: true,
+          }}
           menus={[
             {
               label: 'Projects',
@@ -127,12 +121,6 @@ class Projects extends React.Component {
               action: this.handleTabSelect,
               name: 'create-project',
               show: loggedUser.typeUser === 'company',
-            },
-            {
-              searchField: true,
-              action: this.handleAppToolBarSearch,
-              searchFieldLabel: 'Spec, Student name, Company name, Description',
-              show: true,
             },
           ]}
         />
@@ -169,7 +157,7 @@ class Projects extends React.Component {
               <i className="absolute fas fa-sort-up fa-2x" />
               <i className="fas fa-sort-down fa-2x" />
             </button>
-          </div>
+          </div> 
         </div> */}
         {this.state.tab === 'projects' && (
           <ListProject

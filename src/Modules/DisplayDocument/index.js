@@ -126,16 +126,23 @@ class DisplayDocument extends React.Component {
         </div>
         <ul className="d-flex document">
           {documents && documents.length > 0 ? (
-            documents.map(document => (
-              <li key={document.name}>
-                <DocumentItem
-                  document={document}
-                  onClick={this.handleDownloadFile}
-                  readOnly={loggedUser._id !== document.author._id}
-                  onDelete={onDelete}
-                />
-              </li>
-            ))
+            documents.map(document => {
+              if (document) {
+                return (
+                  <li key={document.name}>
+                    <DocumentItem
+                      document={document}
+                      onClick={this.handleDownloadFile}
+                      readOnly={
+                        document.author &&
+                        loggedUser._id !== document.author._id
+                      }
+                      onDelete={onDelete}
+                    />
+                  </li>
+                );
+              }
+            })
           ) : (
             <div className="d-flex flex-column">
               <span>No Documents available</span>

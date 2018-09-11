@@ -1,8 +1,26 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-
+const DocumentSchema = new Schema({
+  name: String,
+  path: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  mimetype: String,
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+  url: String,
+  type: String,
+  originalName: String,
+  extension: String,
+  folder: String,
+});
 const ProjectSchema = new Schema({
+  projectIdFolder: String,
   title: {
     type: String,
     required: [true, 'Please give a title to your project'],
@@ -36,7 +54,7 @@ const ProjectSchema = new Schema({
       ref: 'team',
     },
   ],
-  docs: Array,
+  docs: [DocumentSchema],
   isOnline: {
     type: Boolean,
     default: false,

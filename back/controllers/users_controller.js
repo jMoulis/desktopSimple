@@ -167,7 +167,6 @@ module.exports = {
       const options = { runValidators: true, upsert: true };
       let props = module.exports.buildEditProps(req.body);
       let pictureUrl;
-
       if (req.body.picture) {
         pictureUrl = module.exports.imageControl(
           req.body.picture,

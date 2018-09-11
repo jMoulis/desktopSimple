@@ -190,7 +190,6 @@ export default store => next => action => {
         filteredArray = Object.entries(action.payload.company).filter(
           field => field[1].changed,
         );
-        console.log(action.payload);
         if (action.payload.company['company.legalDocs'].changed) {
           formData.append(
             'company.legalDocs',
@@ -205,6 +204,7 @@ export default store => next => action => {
         filteredArray = Object.entries(action.payload).filter(
           field => field[1].changed,
         );
+
         Object.keys(toObject(filteredArray)).forEach(key =>
           formData.append([key], toObject(filteredArray)[key]),
         );

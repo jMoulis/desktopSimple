@@ -2,7 +2,14 @@ const Project = require('../models/Project');
 const User = require('../models/User');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const moment = require('moment');
+const fs = require('fs');
+const mime = require('mime');
+const uuidv4 = require('uuid/v4');
+const shell = require('shelljs');
+const path = require('path');
+const { isObjectEmpty } = require('../service/utils');
 
+const ROOT_FOLDER = path.join(__dirname, '/../uploads');
 module.exports = {
   async index(req, res, next) {
     const apiResponse = new ApiResponse(res, next);
@@ -49,6 +56,11 @@ module.exports = {
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
 
       if (projects.length <= 0) {
@@ -67,17 +79,22 @@ module.exports = {
 
   async create(req, res) {
     const apiResponse = new ApiResponse(res);
+    const folder = uuidv4();
     try {
-      const projectProps = req.body;
-      projectProps.author = {
-        _id: res.locals.user._id,
-        fullName: res.locals.user.fullName,
-        picture: res.locals.user.picture,
-        company: res.locals.user.company && {
-          companyName: res.locals.user.company.companyName,
-          description: res.locals.user.company.description,
-          tags: res.locals.user.company.tags,
-          picture: res.locals.user.company.picture,
+      let projectProps = req.body;
+      projectProps = {
+        ...projectProps,
+        projectIdFolder: folder,
+        author: {
+          _id: res.locals.user._id,
+          fullName: res.locals.user.fullName,
+          picture: res.locals.user.picture,
+          company: res.locals.user.company && {
+            companyName: res.locals.user.company.companyName,
+            description: res.locals.user.company.description,
+            tags: res.locals.user.company.tags,
+            picture: res.locals.user.company.picture,
+          },
         },
       };
 
@@ -87,7 +104,45 @@ module.exports = {
           'DD/MM/YYYY',
         ).format('YYYY-MM-DD');
       }
+      if (req.files && !isObjectEmpty(req.files)) {
+        let documents = [];
+        documents = await req.files.map(document => {
+          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
+            document.mimetype,
+          )}`;
+
+          const fullPath = `${ROOT_FOLDER}/users/${
+            res.locals.user._id
+          }/projects/${folder}`;
+
+          if (fs.existsSync(fullPath)) {
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          } else {
+            shell.mkdir('-p', fullPath);
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          }
+
+          return {
+            originalName: document.originalname,
+            name: fileName,
+            extension: mime.extension(document.mimetype),
+            mimetype: document.mimetype,
+            folder: `/users/${
+              res.locals.user._id
+            }/projects/${folder}/${fileName}`,
+            author: res.locals.user._id,
+            createdAt: new Date(),
+            url: `/users/${res.locals.user._id}/projects/${folder}/${fileName}`,
+            type: 'projects',
+          };
+        });
+        projectProps = {
+          ...projectProps,
+          docs: [...documents],
+        };
+      }
       const newProject = await Project.create(projectProps);
+
       const project = await Project.findOne({ _id: newProject._id })
         .populate({
           path: 'teams',
@@ -112,11 +167,16 @@ module.exports = {
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
 
       return apiResponse.success(200, { project });
     } catch (error) {
-      return apiResponse.failure(422, null, error.message);
+      return apiResponse.failure(422, error, null);
     }
   },
 
@@ -147,6 +207,11 @@ module.exports = {
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
       if (!project) {
         return apiResponse.failure(404, null, 'Project not found');
@@ -159,7 +224,7 @@ module.exports = {
 
   async edit(req, res) {
     const apiResponse = new ApiResponse(res);
-
+    let docRemoveUrl;
     try {
       const projectId = req.params.id;
       let projectProps = req.body;
@@ -171,12 +236,6 @@ module.exports = {
           'DD/MM/YYYY',
         ).format('YYYY-MM-DD');
       }
-      // Fetch the key name a set it to true
-      // To send back only the field that changed
-      const fieldNameChanged = Object.keys(projectProps)[0];
-      const projection = {
-        [fieldNameChanged]: 1,
-      };
 
       const options = { runValidators: true };
       if ('subscribers' in projectProps) {
@@ -192,10 +251,63 @@ module.exports = {
           ).catch(error => apiResponse.failure(400, error));
         }
       }
+
+      if (Object.prototype.hasOwnProperty.call(req.body, 'docs')) {
+        const deleteDocumentQuery = await module.exports.deleteFile(
+          req.body,
+          'docs',
+        );
+        projectProps = deleteDocumentQuery.query;
+        docRemoveUrl = deleteDocumentQuery.docUrl;
+      }
+
+      const projectFolder = await Project.findOne({ _id: projectId });
+      const folder = projectFolder.projectIdFolder;
+      if (req.files && !isObjectEmpty(req.files)) {
+        let documents = [];
+        documents = await req.files.map(document => {
+          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
+            document.mimetype,
+          )}`;
+
+          const fullPath = `${ROOT_FOLDER}/users/${
+            res.locals.user._id
+          }/projects/${folder}`;
+
+          if (fs.existsSync(fullPath)) {
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          } else {
+            shell.mkdir('-p', fullPath);
+            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+          }
+
+          return {
+            originalName: document.originalname,
+            name: fileName,
+            extension: mime.extension(document.mimetype),
+            mimetype: document.mimetype,
+            folder: `/users/${
+              res.locals.user._id
+            }/projects/${folder}/${fileName}`,
+            author: res.locals.user._id,
+            createdAt: new Date(),
+            url: `/users/${res.locals.user._id}/projects/${folder}/${fileName}`,
+            type: 'projects',
+          };
+        });
+        projectProps = {
+          ...projectProps,
+          $push: {
+            docs: [...documents],
+          },
+        };
+      }
+
       projectProps = {
         ...projectProps,
         roomLeft: await module.exports.isProjectRoomLeft(projectId),
       };
+
       const updateProject = await Project.update(
         { _id: projectId },
         { ...projectProps, updatedAt: new Date() },
@@ -205,8 +317,10 @@ module.exports = {
       if (updateProject.n === 0) {
         return apiResponse.failure(400, null, 'Cannot update project');
       }
-
-      const project = await Project.findById({ _id: projectId }, projection)
+      if (docRemoveUrl) {
+        shell.rm(`${ROOT_FOLDER}${docRemoveUrl}`);
+      }
+      const project = await Project.findById({ _id: projectId })
         .populate({
           path: 'subscribers',
           model: 'user',
@@ -221,16 +335,17 @@ module.exports = {
             select: 'fullName picture',
             options: { limit: 4 },
           },
+        })
+        .populate({
+          path: 'docs.author',
+          model: 'user',
+          select: 'fullName picture',
         });
-
+      console.log(project);
       return apiResponse.success(
         200,
         {
-          project: {
-            field: Object.keys(projectProps)[0],
-            value: project[Object.keys(projectProps)[0]],
-            id: project._id,
-          },
+          project,
         },
         Object.keys(projectProps)[0],
       );
@@ -238,7 +353,6 @@ module.exports = {
       return apiResponse.failure(400, null, error.message);
     }
   },
-
   async delete(req, res, next) {
     const projectId = req.params.id;
     const apiResponse = new ApiResponse(res);
@@ -263,20 +377,50 @@ module.exports = {
       next(error);
     }
   },
+  async deleteFile(body, keyDocs, subDocument) {
+    let key = `${keyDocs}`;
+
+    if (subDocument) {
+      key = `${subDocument}.${keyDocs}`;
+    }
+    const documentUser = await Project.findOne(
+      {
+        [`${key}._id`]: body[key],
+      },
+      { [key]: 1 },
+    );
+    if (!documentUser) return Error('No project found');
+
+    let arrayToFindIn = documentUser[keyDocs];
+    if (subDocument) {
+      arrayToFindIn = documentUser[subDocument][keyDocs];
+    }
+    const document = arrayToFindIn.find(
+      doc => doc._id.toString() === body[key],
+    );
+    if (!document) return Error('No document found');
+    return {
+      query: {
+        $pull: {
+          [key]: {
+            _id: body[key],
+          },
+        },
+      },
+      docUrl: document.url,
+    };
+  },
   async isProjectRoomLeft(projectId) {
     try {
       const project = await Project.findById(projectId);
       if (!project) {
         throw Error('No project found');
       }
-      console.log(project.maxTeam);
-      console.log(project.teams.length);
       if (project.maxTeam === project.teams.length + 1) {
         return false;
       }
       return true;
     } catch (error) {
-      console.log(error);
       return error;
     }
   },

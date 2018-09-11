@@ -213,7 +213,6 @@ class Profile extends React.Component {
   };
 
   handleDocsChange = docs => {
-    console.log(docs);
     const { editUserAction, loggedUser } = this.props;
     editUserAction(loggedUser._id, docs);
   };
@@ -225,6 +224,7 @@ class Profile extends React.Component {
   };
 
   handleRemoveFile = file => {
+    console.log(file);
     const { editUserAction, loggedUser } = this.props;
     if (file) {
       editUserAction(loggedUser._id, {

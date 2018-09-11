@@ -42,10 +42,17 @@ export default store => next => action => {
   const utils = new Utils();
   switch (action.type) {
     case CREATE_PROJECT: {
-      const formData = toObject(
-        Object.entries(action.payload).filter(field => field),
+      const filteredArray = Object.entries(action.payload).filter(
+        field => field[1].changed,
       );
-      formData.docs = action.payload.docs;
+      const formData = new FormData();
+      const form = toObject(filteredArray);
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
+      if (action.payload.docs) {
+        action.payload.docs.value.forEach(document => {
+          formData.append('docs', document);
+        });
+      }
       axios({
         method: 'post',
         data: formData,
@@ -71,13 +78,14 @@ export default store => next => action => {
       break;
     }
     case EDIT_PROJECT: {
-      // 1- the action.payload is the state with all fields.
-      // I filter to get only those who changed
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
-      // 2- I transform my array to an object
-      const formData = toObject(filteredArray);
+
+      const formData = new FormData();
+      const form = toObject(filteredArray);
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
+
       axios({
         method: 'put',
         data: formData,

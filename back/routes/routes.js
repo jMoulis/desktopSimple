@@ -38,10 +38,16 @@ module.exports = app => {
     '/api/projects',
     VerifyToken,
     CompanyIsAllowedToPost,
+    upload.array('docs'),
     ProjectsController.create,
   );
   app.get('/api/projects/:id', VerifyToken, ProjectsController.show);
-  app.put('/api/projects/:id', VerifyToken, ProjectsController.edit);
+  app.put(
+    '/api/projects/:id',
+    VerifyToken,
+    upload.array('docs'),
+    ProjectsController.edit,
+  );
   app.delete('/api/projects/:id', VerifyToken, ProjectsController.delete);
 
   app.get('/api/teams', VerifyToken, TeamsController.index);

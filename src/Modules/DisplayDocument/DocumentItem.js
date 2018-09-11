@@ -16,36 +16,41 @@ const extension = ext => {
   return 'alt';
 };
 
-const DocumentItem = ({ document, onClick, readOnly, onDelete }) => (
-  <div className="document-item d-flex flex-column">
-    {!readOnly && (
+const DocumentItem = ({ document, onClick, readOnly, onDelete }) => {
+  console.log(document);
+  return (
+    <div className="document-item d-flex flex-column">
+      {!readOnly && (
+        <button
+          id={document._id}
+          type="button"
+          className="document-item-delete"
+          onClick={() => {
+            onDelete(document._id || document.name);
+          }}
+        >
+          X
+        </button>
+      )}
       <button
-        id={document._id}
         type="button"
-        className="document-item-delete"
-        onClick={() => {
-          onDelete(document._id);
-        }}
+        className="btn-toolbar"
+        onClick={() => onClick(document)}
+        title={document.originalName || document.name}
       >
-        X
+        <i className={`far fa-file-${extension(document.extension)} fa-3x`} />
       </button>
-    )}
-    <button
-      type="button"
-      className="btn-toolbar"
-      onClick={() => onClick(document)}
-      title={document.originalName || document.name}
-    >
-      <i className={`far fa-file-${extension(document.extension)} fa-3x`} />
-    </button>
-    <p className="document-item-infos">
-      <small className="small">{document.originalName || document.name}</small>
-      <small className="small">
-        {moment(document.createdAt).format('DD/MM/YYYY')}
-      </small>
-    </p>
-  </div>
-);
+      <p className="document-item-infos">
+        <small className="small">
+          {document.originalName || document.name}
+        </small>
+        <small className="small">
+          {moment(document.createdAt).format('DD/MM/YYYY')}
+        </small>
+      </p>
+    </div>
+  );
+};
 
 DocumentItem.propTypes = {
   onClick: PropTypes.func.isRequired,

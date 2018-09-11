@@ -3,12 +3,14 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import NewProject from '../../components/NewProject/index';
-import { createProjectAction, clearProjectMessageAction } from '../../store/reducers/projectReducer';
+import {
+  createProjectAction,
+  clearProjectMessageAction,
+} from '../../store/reducers/projectReducer';
 /*
  * Code
  */
@@ -19,7 +21,7 @@ const mapStateToProps = ({ projectReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  createProjectAction: (values) => {
+  createProjectAction: values => {
     dispatch(createProjectAction(values));
   },
   clearProjectMessageAction: () => {
@@ -27,10 +29,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const NewProjectContainer = createContainer(NewProject);
 export default NewProjectContainer;

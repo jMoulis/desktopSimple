@@ -10,20 +10,23 @@ import SubMenu from '../Submenu';
  */
 class AppToolbar extends React.Component {
   static propTypes = {
-    menus: PropTypes.array.isRequired,
+    menus: PropTypes.array,
     children: PropTypes.shape(PropTypes.array, PropTypes.object),
     sortingAction: PropTypes.func,
     liStyle: PropTypes.object,
+    search: PropTypes.object,
   };
 
   static defaultProps = {
+    menus: [],
     children: null,
     sortingAction: null,
     liStyle: null,
+    search: null,
   };
 
   state = {
-    search: {
+    searchValue: {
       filter: '',
     },
     sorting: 1,
@@ -57,29 +60,12 @@ class AppToolbar extends React.Component {
     }
   };
 
-  handleSearchOption = menu => {
-    this.setState(
-      prevState => ({
-        ...prevState,
-        search: {
-          ...prevState.search,
-          [Object.keys(menu.filterValue)[0]]: Object.values(
-            menu.filterValue,
-          )[0],
-        },
-      }),
-      () => {
-        menu.action({ ...this.state.search });
-      },
-    );
-  };
-
   handleInputChange = evt => {
     const { value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
-      search: {
-        ...prevState.search,
+      searchValue: {
+        ...prevState.searchValue,
         filter: value,
       },
     }));
@@ -101,58 +87,20 @@ class AppToolbar extends React.Component {
       }),
       () =>
         sortingAction({
-          ...this.state.search,
+          ...this.state.searchValue,
           sorting: this.state.sorting,
         }),
     );
   };
   render() {
-    const { menus, children, liStyle } = this.props;
-    const { search, subMenu } = this.state;
+    const { menus, children, liStyle, search } = this.props;
+    const { searchValue, subMenu } = this.state;
     return (
       <div className="app-toolbar d-flex flex-justify-between flex-align-items-center">
         {children}
         <ul className="app-toolbar-list">
           {menus &&
             menus.map((menu, index) => {
-              if (menu.searchField && menu.show) {
-                return (
-                  <li
-                    key={index}
-                    className="app-toolbar-list-item"
-                    style={liStyle}
-                  >
-                    <form
-                      onSubmit={evt => {
-                        evt.preventDefault();
-                        menu.action({ ...search });
-                      }}
-                      className="app-toolbar-list-item-form"
-                    >
-                      <Input
-                        config={{
-                          field: {
-                            type: 'text',
-                            name: 'search',
-                            placeholder: menu.searchFieldLabel,
-                          },
-                          onChange: this.handleInputChange,
-                          value: search.filter,
-                          className: 'app-toolbar-list-item-form-input-search',
-                          parentClassName:
-                            'app-toolbar-list-item-form-input-search-container',
-                        }}
-                      />
-                      <button
-                        className="app-toolbar-list-item-form-input-search-icon"
-                        type="submit"
-                      >
-                        <i className="fas fa-search" />
-                      </button>
-                    </form>
-                  </li>
-                );
-              }
               if (menu.sorting && menu.show) {
                 return (
                   <li key={index} style={liStyle}>
@@ -200,6 +148,39 @@ class AppToolbar extends React.Component {
               return null;
             })}
         </ul>
+        {search &&
+          search.show && (
+            <div className="search" style={liStyle}>
+              <form
+                onSubmit={evt => {
+                  evt.preventDefault();
+                  search.action({ ...searchValue });
+                }}
+                className="app-toolbar-list-item-form"
+              >
+                <Input
+                  config={{
+                    field: {
+                      type: 'text',
+                      name: 'search',
+                      placeholder: search.searchFieldLabel,
+                    },
+                    onChange: this.handleInputChange,
+                    value: searchValue.filter,
+                    className: 'app-toolbar-list-item-form-input-search',
+                    parentClassName:
+                      'app-toolbar-list-item-form-input-search-container',
+                  }}
+                />
+                <button
+                  className="app-toolbar-list-item-form-input-search-icon"
+                  type="submit"
+                >
+                  <i className="fas fa-search" />
+                </button>
+              </form>
+            </div>
+          )}
       </div>
     );
   }
