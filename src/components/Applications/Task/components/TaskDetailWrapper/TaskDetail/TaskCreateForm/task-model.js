@@ -25,9 +25,9 @@ export default {
     placeholder: 'Select tags',
     isArray: true,
   },
-  documents: {
-    label: 'Documents',
-    name: 'documents',
+  files: {
+    label: 'Files',
+    name: 'files',
     isArray: true,
   },
   assign: {

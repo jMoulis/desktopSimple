@@ -57,8 +57,8 @@ class Profile extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { editUserAction, loggedUser, clearMessageAction } = prevProps;
     // Dealing with documents
-    if (prevState.docs.value) {
-      if (prevState.docs.value.length !== this.state.docs.value.length) {
+    if (prevState.files.value) {
+      if (prevState.files.value.length !== this.state.files.value.length) {
         editUserAction(loggedUser._id, this.state);
         clearMessageAction();
       }
@@ -212,9 +212,9 @@ class Profile extends React.Component {
     editUserAction(loggedUser._id, newtags);
   };
 
-  handleDocsChange = docs => {
+  handleFilesChange = files => {
     const { editUserAction, loggedUser } = this.props;
-    editUserAction(loggedUser._id, docs);
+    editUserAction(loggedUser._id, files);
   };
 
   handleShowCropImageModal = () => {
@@ -224,11 +224,10 @@ class Profile extends React.Component {
   };
 
   handleRemoveFile = file => {
-    console.log(file);
     const { editUserAction, loggedUser } = this.props;
     if (file) {
       editUserAction(loggedUser._id, {
-        docs: {
+        files: {
           value: file,
           changed: true,
         },
@@ -291,7 +290,11 @@ class Profile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${ROOT_URL}${picture.value || '/img/avatar.png'}`}
+                src={
+                  picture.value
+                    ? `${ROOT_URL}${picture.value}`
+                    : '/img/avatar.png'
+                }
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
@@ -471,10 +474,11 @@ class Profile extends React.Component {
                 }}
               />
               <DisplayDocument
-                update={this.handleDocsChange}
-                keyToUpdate="docs"
-                documents={loggedUser.docs}
+                update={this.handleFilesChange}
+                keyToUpdate="files"
+                files={loggedUser.files}
                 onDelete={this.handleRemoveFile}
+                editable
               />
             </div>
           </div>
@@ -488,7 +492,7 @@ class Profile extends React.Component {
             noParamsOnClose
           >
             <Crop
-              picture={`${ROOT_URL}${picture.value}`}
+              picture={picture.value && `${ROOT_URL}${picture.value}`}
               parentConfig={{
                 user: loggedUser,
                 error,

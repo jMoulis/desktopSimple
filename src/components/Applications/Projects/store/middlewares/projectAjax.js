@@ -48,9 +48,9 @@ export default store => next => action => {
       const formData = new FormData();
       const form = toObject(filteredArray);
       Object.keys(form).forEach(key => formData.append([key], form[key]));
-      if (action.payload.docs) {
-        action.payload.docs.value.forEach(document => {
-          formData.append('docs', document);
+      if (action.payload.files) {
+        action.payload.files.value.forEach(file => {
+          formData.append('files', file);
         });
       }
       axios({

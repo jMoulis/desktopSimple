@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const DocumentSchema = new Schema({
+const FileSchema = new Schema({
   name: String,
   path: String,
   author: {
@@ -47,14 +47,17 @@ const ProjectSchema = new Schema({
   updatedAt: {
     type: Date,
   },
-  author: Object,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
   teams: [
     {
       type: Schema.Types.ObjectId,
       ref: 'team',
     },
   ],
-  docs: [DocumentSchema],
+  files: [FileSchema],
   isOnline: {
     type: Boolean,
     default: false,

@@ -13,8 +13,9 @@ const ROOT_FOLDER = path.join(__dirname, '/../uploads');
 module.exports = {
   async index(req, res, next) {
     const apiResponse = new ApiResponse(res, next);
+    console.log();
     try {
-      let params = { 'author._id': res.locals.user._id };
+      let params = { author: res.locals.user._id };
       if (res.locals.user.typeUser !== 'company') {
         params = {
           isOnline: true,
@@ -53,12 +54,17 @@ module.exports = {
           },
         })
         .populate({
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture tags company',
+        })
+        .populate({
           path: 'subscribers',
           model: 'user',
           select: 'fullName picture tags',
         })
         .populate({
-          path: 'docs.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         });
@@ -85,17 +91,7 @@ module.exports = {
       projectProps = {
         ...projectProps,
         projectIdFolder: folder,
-        author: {
-          _id: res.locals.user._id,
-          fullName: res.locals.user.fullName,
-          picture: res.locals.user.picture,
-          company: res.locals.user.company && {
-            companyName: res.locals.user.company.companyName,
-            description: res.locals.user.company.description,
-            tags: res.locals.user.company.tags,
-            picture: res.locals.user.company.picture,
-          },
-        },
+        author: res.locals.user._id,
       };
 
       if (moment(projectProps.dueDate, 'DD/MM/YYYY').isValid()) {
@@ -104,43 +100,25 @@ module.exports = {
           'DD/MM/YYYY',
         ).format('YYYY-MM-DD');
       }
-      if (req.files && !isObjectEmpty(req.files)) {
-        let documents = [];
-        documents = await req.files.map(document => {
-          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
-            document.mimetype,
-          )}`;
+      const filesProjectProps = await module.exports.buildingDocumentsObject(
+        req,
+        res.locals.user._id,
+        folder,
+        true,
+      );
 
-          const fullPath = `${ROOT_FOLDER}/users/${
-            res.locals.user._id
-          }/projects/${folder}`;
-
-          if (fs.existsSync(fullPath)) {
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
-          } else {
-            shell.mkdir('-p', fullPath);
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
-          }
-
-          return {
-            originalName: document.originalname,
-            name: fileName,
-            extension: mime.extension(document.mimetype),
-            mimetype: document.mimetype,
-            folder: `/users/${
-              res.locals.user._id
-            }/projects/${folder}/${fileName}`,
-            author: res.locals.user._id,
-            createdAt: new Date(),
-            url: `/users/${res.locals.user._id}/projects/${folder}/${fileName}`,
-            type: 'projects',
-          };
-        });
+      // Dealing with Tags
+      if (projectProps.tags) {
         projectProps = {
           ...projectProps,
-          docs: [...documents],
+          tags: projectProps.tags.split(','),
         };
       }
+
+      projectProps = {
+        ...projectProps,
+        ...(filesProjectProps || null),
+      };
       const newProject = await Project.create(projectProps);
 
       const project = await Project.findOne({ _id: newProject._id })
@@ -169,7 +147,12 @@ module.exports = {
           select: 'fullName picture tags',
         })
         .populate({
-          path: 'docs.author',
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture tags company',
+        })
+        .populate({
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         });
@@ -209,7 +192,12 @@ module.exports = {
           select: 'fullName picture tags',
         })
         .populate({
-          path: 'docs.author',
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture tags company',
+        })
+        .populate({
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         });
@@ -238,7 +226,13 @@ module.exports = {
       }
 
       const options = { runValidators: true };
+
       if ('subscribers' in projectProps) {
+        projectProps = {
+          ...projectProps,
+          subscribers: JSON.parse(projectProps.subscribers),
+        };
+
         if (projectProps.subscribers.length > 0) {
           User.update(
             { _id: userId },
@@ -252,59 +246,31 @@ module.exports = {
         }
       }
 
-      if (Object.prototype.hasOwnProperty.call(req.body, 'docs')) {
+      if (Object.prototype.hasOwnProperty.call(req.body, 'files')) {
         const deleteDocumentQuery = await module.exports.deleteFile(
           req.body,
-          'docs',
+          'files',
         );
         projectProps = deleteDocumentQuery.query;
         docRemoveUrl = deleteDocumentQuery.docUrl;
       }
 
       const projectFolder = await Project.findOne({ _id: projectId });
-      const folder = projectFolder.projectIdFolder;
-      if (req.files && !isObjectEmpty(req.files)) {
-        let documents = [];
-        documents = await req.files.map(document => {
-          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
-            document.mimetype,
-          )}`;
+      const filesProjectProps = await module.exports.buildingDocumentsObject(
+        req,
+        res.locals.user._id,
+        projectFolder.projectIdFolder,
+      );
 
-          const fullPath = `${ROOT_FOLDER}/users/${
-            res.locals.user._id
-          }/projects/${folder}`;
-
-          if (fs.existsSync(fullPath)) {
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
-          } else {
-            shell.mkdir('-p', fullPath);
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
-          }
-
-          return {
-            originalName: document.originalname,
-            name: fileName,
-            extension: mime.extension(document.mimetype),
-            mimetype: document.mimetype,
-            folder: `/users/${
-              res.locals.user._id
-            }/projects/${folder}/${fileName}`,
-            author: res.locals.user._id,
-            createdAt: new Date(),
-            url: `/users/${res.locals.user._id}/projects/${folder}/${fileName}`,
-            type: 'projects',
-          };
-        });
+      if (projectProps.tags) {
         projectProps = {
           ...projectProps,
-          $push: {
-            docs: [...documents],
-          },
+          tags: projectProps.tags.split(','),
         };
       }
-
       projectProps = {
         ...projectProps,
+        ...(filesProjectProps || null),
         roomLeft: await module.exports.isProjectRoomLeft(projectId),
       };
 
@@ -337,11 +303,15 @@ module.exports = {
           },
         })
         .populate({
-          path: 'docs.author',
+          path: 'author',
+          model: 'user',
+          select: 'fullName picture tags company',
+        })
+        .populate({
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         });
-      console.log(project);
       return apiResponse.success(
         200,
         {
@@ -370,6 +340,12 @@ module.exports = {
       const deletedProject = await Project.findByIdAndRemove({
         _id: projectId,
       });
+      await shell.rm(
+        '-R',
+        `${ROOT_FOLDER}/users/${res.locals.user._id}/projects/${
+          deletedProject.projectIdFolder
+        }`,
+      );
       if (deletedProject) {
         return apiResponse.success(201);
       }
@@ -377,11 +353,11 @@ module.exports = {
       next(error);
     }
   },
-  async deleteFile(body, keyDocs, subDocument) {
-    let key = `${keyDocs}`;
+  async deleteFile(body, keyFiles, subDocument) {
+    let key = `${keyFiles}`;
 
     if (subDocument) {
-      key = `${subDocument}.${keyDocs}`;
+      key = `${subDocument}.${keyFiles}`;
     }
     const documentUser = await Project.findOne(
       {
@@ -391,14 +367,14 @@ module.exports = {
     );
     if (!documentUser) return Error('No project found');
 
-    let arrayToFindIn = documentUser[keyDocs];
+    let arrayToFindIn = documentUser[keyFiles];
     if (subDocument) {
-      arrayToFindIn = documentUser[subDocument][keyDocs];
+      arrayToFindIn = documentUser[subDocument][keyFiles];
     }
     const document = arrayToFindIn.find(
       doc => doc._id.toString() === body[key],
     );
-    if (!document) return Error('No document found');
+    if (!document) return Error('No file found');
     return {
       query: {
         $pull: {
@@ -423,5 +399,47 @@ module.exports = {
     } catch (error) {
       return error;
     }
+  },
+  async buildingDocumentsObject(req, userId, folder, isNewDocument) {
+    if (req.files && !isObjectEmpty(req.files)) {
+      let files = [];
+      files = await req.files.map(file => {
+        const fileName = `${file.fieldname}-${uuidv4()}.${mime.extension(
+          file.mimetype,
+        )}`;
+
+        const fullPath = `${ROOT_FOLDER}/users/${userId}/projects/${folder}`;
+
+        if (fs.existsSync(fullPath)) {
+          fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
+        } else {
+          shell.mkdir('-p', fullPath);
+          fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
+        }
+
+        return {
+          originalName: file.originalname,
+          name: fileName,
+          extension: mime.extension(file.mimetype),
+          mimetype: file.mimetype,
+          folder: `/users/${userId}/projects/${folder}/${fileName}`,
+          author: userId,
+          createdAt: new Date(),
+          url: `/users/${userId}/projects/${folder}/${fileName}`,
+          type: 'projects',
+        };
+      });
+      if (isNewDocument) {
+        return {
+          files: [...files],
+        };
+      }
+      return {
+        $push: {
+          files: [...files],
+        },
+      };
+    }
+    return false;
   },
 };

@@ -73,7 +73,6 @@ class UsersLoader extends React.Component {
               <div className="thumbnail-container">
                 <button
                   className="btn btn-primary"
-                  data-user={JSON.stringify()}
                   onClick={() => {
                     select({
                       spec: filter.filter,

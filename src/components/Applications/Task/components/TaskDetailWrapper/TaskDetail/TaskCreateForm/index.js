@@ -43,7 +43,7 @@ class TaskCreateForm extends React.Component {
     });
     this.state = {
       ...fields,
-      documents: [],
+      files: [],
       team: {
         value: props.teamId,
       },
@@ -114,7 +114,7 @@ class TaskCreateForm extends React.Component {
     const file = evt.target.files[0];
     this.setState(prevState => ({
       ...prevState,
-      documents: [...prevState.documents, file],
+      files: [...prevState.files, file],
     }));
   };
 
@@ -146,14 +146,7 @@ class TaskCreateForm extends React.Component {
   };
 
   render() {
-    const {
-      title,
-      description,
-      status,
-      priority,
-      documents,
-      tags,
-    } = this.state;
+    const { title, description, status, priority, files, tags } = this.state;
     const { closeFromParent, taskCreation } = this.props;
     const { error } = taskCreation;
     return (
@@ -226,8 +219,8 @@ class TaskCreateForm extends React.Component {
           }}
         />
         <input type="file" multiple onChange={this.handleInputFileChange} />
-        <ul>{documents.map(document => <li>{document.name}</li>)}</ul>
-        {documents.length === 0 && <h2>No Documents available</h2>}
+        <ul>{files.map(document => <li>{document.name}</li>)}</ul>
+        {files.length === 0 && <h2>No files available</h2>}
         <SelectBoxUser callback={this.handleAssignSelected} />
         <FormButtonsContainer onCancel={{ action: closeFromParent }} onCreate />
       </form>

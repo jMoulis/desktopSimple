@@ -54,7 +54,7 @@ class CompanyProfile extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.loggedUser.company.picture) {
+    if (props.loggedUser.company && props.loggedUser.company.picture) {
       return {
         ...state,
         company: {
@@ -73,10 +73,10 @@ class CompanyProfile extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { editUserAction, loggedUser } = prevProps;
     // Dealing with documents
-    if (prevState.company['company.legalDocs'].value) {
+    if (prevState.company['company.files'].value) {
       if (
-        prevState.company['company.legalDocs'].value.length !==
-        this.state.company['company.legalDocs'].value.length
+        prevState.company['company.files'].value.length !==
+        this.state.company['company.files'].value.length
       ) {
         editUserAction(loggedUser._id, this.state);
       }
@@ -228,10 +228,10 @@ class CompanyProfile extends React.Component {
     editUserAction(loggedUser._id, newTags);
   };
 
-  handleDocsChange = docs => {
+  handleDocsChange = files => {
     const { editUserAction, loggedUser } = this.props;
     editUserAction(loggedUser._id, {
-      company: { ...docs },
+      company: { ...files },
     });
   };
 
@@ -240,7 +240,7 @@ class CompanyProfile extends React.Component {
     if (file) {
       editUserAction(loggedUser._id, {
         company: {
-          'company.legalDocs': {
+          'company.files': {
             value: file,
             changed: true,
           },
@@ -428,9 +428,10 @@ class CompanyProfile extends React.Component {
               />
               <DisplayDocument
                 update={this.handleDocsChange}
-                keyToUpdate="company.legalDocs"
-                documents={loggedUser.company.legalDocs}
+                keyToUpdate="company.files"
+                files={loggedUser.company && loggedUser.company.files}
                 onDelete={this.handleRemoveFile}
+                editable
               />
             </div>
           </div>

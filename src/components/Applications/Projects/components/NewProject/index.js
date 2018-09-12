@@ -9,7 +9,6 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 class NewProject extends React.Component {
@@ -40,7 +39,7 @@ class NewProject extends React.Component {
     });
     this.state = {
       ...field,
-      docs: {
+      files: {
         changed: false,
         value: [],
       },
@@ -139,10 +138,10 @@ class NewProject extends React.Component {
       evt.target.value = '';
     }
   };
-  handleInputFileChange = docs => {
+  handleInputFileChange = files => {
     this.setState(prevState => ({
       ...prevState,
-      docs,
+      files,
     }));
   };
   handleRemove = evt => {
@@ -188,12 +187,12 @@ class NewProject extends React.Component {
       return false;
     }
   };
-  handleDocsChange = ({ docs }) => {
+  handlefilesChange = ({ files }) => {
     this.setState(prevState => ({
       ...prevState,
-      docs: {
+      files: {
         changed: true,
-        value: [...prevState.docs.value, docs.value],
+        value: [...prevState.files.value, files.value],
       },
     }));
   };
@@ -201,9 +200,9 @@ class NewProject extends React.Component {
     if (file) {
       this.setState(prevState => ({
         ...prevState,
-        docs: {
+        files: {
           changed: true,
-          value: prevState.docs.value.filter(
+          value: prevState.files.value.filter(
             document => document.name !== file,
           ),
         },
@@ -217,6 +216,7 @@ class NewProject extends React.Component {
       tabName,
     } = this.props;
 
+    const { files } = this.state;
     return (
       <div id="newProject" className="form-container" key="app-content">
         <form
@@ -324,17 +324,12 @@ class NewProject extends React.Component {
             }}
           />
           <DisplayDocument
-            update={this.handleDocsChange}
-            keyToUpdate="docs"
-            documents={this.state.docs.value}
+            update={this.handlefilesChange}
+            keyToUpdate="files"
+            files={files.value}
             onDelete={this.handleRemoveFile}
+            editable
           />
-          {/* <AddFilesInput
-            error={error && error.docs && error.docs.detail}
-            docs={this.state.docs}
-            onFileChange={this.handleInputFileChange}
-            id="newProject"
-          /> */}
           <div className="new-project-btn-container">
             <Button
               type="button"

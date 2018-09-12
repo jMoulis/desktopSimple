@@ -25,8 +25,8 @@ module.exports = app => {
   app.get('/api/users/:id', VerifyToken, UsersController.show);
   app.put(
     '/api/users/:id',
-    upload.fields([{ name: 'company.legalDocs' }, { name: 'docs' }]),
     VerifyToken,
+    upload.fields([{ name: 'company.files' }, { name: 'files' }]),
     UsersController.edit,
   );
   app.delete('/api/users/:id', VerifyToken, UsersController.delete);
@@ -38,14 +38,14 @@ module.exports = app => {
     '/api/projects',
     VerifyToken,
     CompanyIsAllowedToPost,
-    upload.array('docs'),
+    upload.array('files'),
     ProjectsController.create,
   );
   app.get('/api/projects/:id', VerifyToken, ProjectsController.show);
   app.put(
     '/api/projects/:id',
     VerifyToken,
-    upload.array('docs'),
+    upload.array('files'),
     ProjectsController.edit,
   );
   app.delete('/api/projects/:id', VerifyToken, ProjectsController.delete);
@@ -64,7 +64,7 @@ module.exports = app => {
   app.get('/api/tasks/team/:id', VerifyToken, TasksController.index);
   app.post(
     '/api/tasks',
-    upload.array('documents'),
+    upload.array('files'),
     VerifyToken,
     TasksController.create,
   );
@@ -72,7 +72,7 @@ module.exports = app => {
   app.put(
     '/api/tasks/:id',
     VerifyToken,
-    upload.array('documents'),
+    upload.array('files'),
     TasksController.update,
   );
   app.delete('/api/tasks/:id', TasksController.delete);

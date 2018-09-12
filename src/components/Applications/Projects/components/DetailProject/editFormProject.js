@@ -9,7 +9,6 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import Checkbox from '../../../../Form/checkbox';
 import DisplayDocument from '../../../../../Modules/DisplayDocument';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
 
@@ -174,13 +173,13 @@ class EditFormProject extends Component {
       }));
     }
   };
-  handleInputFileChange = docs => {
+  handleInputFileChange = files => {
     this.setState(prevState => ({
       ...prevState,
       form: {
         ...prevState.form,
-        docs: {
-          value: docs,
+        files: {
+          value: files,
           changed: true,
         },
       },
@@ -217,15 +216,15 @@ class EditFormProject extends Component {
     }));
     editProjectAction(newTags);
   };
-  handleDocsChange = docs => {
+  handleFilesChange = files => {
     const { editProjectAction } = this.props;
-    editProjectAction(docs);
+    editProjectAction(files);
   };
   handleRemoveFile = file => {
     const { editProjectAction } = this.props;
     if (file) {
       editProjectAction({
-        docs: {
+        files: {
           value: file,
           changed: true,
         },
@@ -363,18 +362,12 @@ class EditFormProject extends Component {
             }}
           />
           <DisplayDocument
-            update={this.handleDocsChange}
-            keyToUpdate="docs"
-            documents={project.docs}
+            editable={loggedUser._id === project.author._id}
+            update={this.handleFilesChange}
+            keyToUpdate="files"
+            files={project.files}
             onDelete={this.handleRemoveFile}
           />
-          {/* <AddFilesInput
-            error={error && error.docs && error.docs.detail}
-            docs={this.state.form.docs.value}
-            onFileChange={this.handleInputFileChange}
-            blur={this.handleOnBlur}
-            readOnly={author._id !== user._id}
-          /> */}
         </div>
       </form>
     );

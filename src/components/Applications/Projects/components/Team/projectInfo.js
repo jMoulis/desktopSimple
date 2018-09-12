@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import './project-info.css';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 const ProjectInfo = ({ project }) => (
   <div className="project-info">
@@ -42,7 +42,7 @@ const ProjectInfo = ({ project }) => (
         </div>
       </li>
       <li>
-        <AddFilesInput docs={project.docs} readOnly />
+        <DisplayDocument files={project.files} />
       </li>
     </ul>
   </div>

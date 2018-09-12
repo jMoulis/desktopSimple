@@ -21,7 +21,7 @@ const CommentSchema = new Schema({
   },
 });
 
-const DocumentSchema = new Schema({
+const FileSchema = new Schema({
   name: String,
   path: String,
   author: {
@@ -68,7 +68,7 @@ const TaskSchema = new Schema({
     default: 'Medium',
   },
   tags: Array,
-  documents: [DocumentSchema],
+  files: [FileSchema],
   comments: [CommentSchema],
   team: {
     type: Schema.Types.ObjectId,

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import AlertBox from '../../../../Modules/AlertBox';
 import './index.css';
-import AddFilesInput from '../../../../Modules/filesHandler/addFilesInput';
 import TagList from '../../../../Modules/Tag/tagList';
 import CompanyHeader from '../../../../Modules/CompanyHeader';
+import DisplayDocument from '../../../../Modules/DisplayDocument';
 
 class TeamProject extends React.Component {
   static propTypes = {
@@ -110,10 +110,10 @@ class TeamProject extends React.Component {
             <TagList tags={project.tags} />
           </li>
           <li>
-            {project.docs.length === 0 ? (
+            {project.files.length === 0 ? (
               <p>No Documents</p>
             ) : (
-              <AddFilesInput docs={project.docs} readOnly />
+              <DisplayDocument files={project.files} />
             )}
           </li>
         </ul>

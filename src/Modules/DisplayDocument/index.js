@@ -22,14 +22,21 @@ const mapDispatchToProps = dispatch => ({
 
 class DisplayDocument extends React.Component {
   static propTypes = {
-    documents: PropTypes.array,
-    keyToUpdate: PropTypes.string.isRequired,
+    files: PropTypes.array,
     fetchFile: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     fileProcess: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired,
+    keyToUpdate: PropTypes.string,
+    update: PropTypes.func,
+    onDelete: PropTypes.func,
+    editable: PropTypes.bool,
   };
   static defaultProps = {
-    documents: [],
+    files: [],
+    editable: false,
+    keyToUpdate: null,
+    update: null,
+    onDelete: null,
   };
   constructor(props) {
     super(props);
@@ -96,46 +103,47 @@ class DisplayDocument extends React.Component {
   };
 
   render() {
-    const { documents, onDelete, loggedUser } = this.props;
+    const { files, onDelete, loggedUser, editable } = this.props;
     const { dragState, inputFile } = this.state;
     return (
       <Fragment>
-        <label>Documents:</label>
-        <div className="d-flex flex-column">
-          <DropZone
-            dragAction={this.handleDrag}
-            dropAction={this.handleDrop}
-            dragState={dragState}
-          >
-            <p>Drop your file</p>
-          </DropZone>
-          <InputFile
-            ref={this.inputFileRef}
-            config={{
-              styleContainer: {
-                padding: 0,
-              },
-              field: {
-                label: 'Add File',
-                name: 'uploadFile',
-                value: inputFile,
-              },
-              onChange: this.handleInputFileChange,
-            }}
-          />
-        </div>
+        <label>Files:</label>
+        {editable && (
+          <div className="d-flex flex-column">
+            <DropZone
+              dragAction={this.handleDrag}
+              dropAction={this.handleDrop}
+              dragState={dragState}
+            >
+              <p>Drop your file</p>
+            </DropZone>
+            <InputFile
+              ref={this.inputFileRef}
+              config={{
+                styleContainer: {
+                  padding: 0,
+                },
+                field: {
+                  label: 'Add File',
+                  name: 'uploadFile',
+                  value: inputFile,
+                },
+                onChange: this.handleInputFileChange,
+              }}
+            />
+          </div>
+        )}
         <ul className="d-flex document">
-          {documents && documents.length > 0 ? (
-            documents.map(document => {
-              if (document) {
+          {files && files.length > 0 ? (
+            files.map(file => {
+              if (file) {
                 return (
-                  <li key={document.name}>
+                  <li key={file.name}>
                     <DocumentItem
-                      document={document}
+                      file={file}
                       onClick={this.handleDownloadFile}
                       readOnly={
-                        document.author &&
-                        loggedUser._id !== document.author._id
+                        file.author && loggedUser._id !== file.author._id
                       }
                       onDelete={onDelete}
                     />
@@ -145,7 +153,7 @@ class DisplayDocument extends React.Component {
             })
           ) : (
             <div className="d-flex flex-column">
-              <span>No Documents available</span>
+              <span>No files available</span>
             </div>
           )}
         </ul>

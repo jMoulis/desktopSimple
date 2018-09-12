@@ -56,9 +56,9 @@ export default {
     name: 'company.linkedIn',
     type: 'url',
   },
-  legalDocs: {
-    label: 'legalDocs',
-    placeholder: 'legalDocs',
-    name: 'company.legalDocs',
+  files: {
+    label: 'files',
+    placeholder: 'files',
+    name: 'company.files',
   },
 };

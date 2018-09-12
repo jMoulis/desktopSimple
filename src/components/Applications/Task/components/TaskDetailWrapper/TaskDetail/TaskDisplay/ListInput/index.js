@@ -57,7 +57,7 @@ class ListInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { activeTaskProcess } = props;
     const { task } = activeTaskProcess;
-    if (task.documents.length !== state.form.documents.value.length) {
+    if (task.files.length !== state.form.files.value.length) {
       return { ...setStateFromProps(task, taskModel) };
     }
     if (task && task._id !== state.id) {
@@ -112,10 +112,10 @@ class ListInput extends React.Component {
     );
   };
 
-  handleInputFileChange = documents => {
+  handleInputFileChange = files => {
     const { editTaskAction } = this.props;
-    if (documents) {
-      editTaskAction(documents);
+    if (files) {
+      editTaskAction(files);
     }
   };
 
@@ -123,7 +123,7 @@ class ListInput extends React.Component {
     const { editTaskAction } = this.props;
     if (file) {
       editTaskAction({
-        documents: {
+        files: {
           value: file,
           changed: true,
         },
@@ -178,6 +178,7 @@ class ListInput extends React.Component {
     const { task, error, success } = activeTaskProcess;
     const { form } = this.state;
     const { status, priority, tags } = form;
+    console.log(task.files);
     return (
       <Fragment>
         {!task ? (
@@ -288,9 +289,10 @@ class ListInput extends React.Component {
             <li className="task-detail-list-item">
               <DisplayDocument
                 update={this.handleInputFileChange}
-                keyToUpdate="documents"
-                documents={task.documents}
+                keyToUpdate="files"
+                files={task.files}
                 onDelete={this.handleRemoveFile}
+                editable
               />
             </li>
           </ul>

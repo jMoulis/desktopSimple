@@ -17,7 +17,7 @@ class TeamToolbar extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { editUser, fetchSingleTeamAction, team } = nextProps;
     if (editUser.editing) {
-      fetchSingleTeamAction(team._id);
+      // fetchSingleTeamAction(team._id);
     }
     return true;
   }

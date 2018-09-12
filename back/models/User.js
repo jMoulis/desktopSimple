@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const DocumentSchema = new Schema({
+const FileSchema = new Schema({
   name: String,
   folder: String,
   author: {
@@ -30,7 +30,7 @@ const CompanySchema = new Schema({
   tags: Array,
   projects: Array,
   website: String,
-  legalDocs: [DocumentSchema],
+  files: [FileSchema],
   industry: String,
   linkedIn: String,
 });
@@ -92,7 +92,7 @@ const UserSchema = new Schema({
   available: Boolean,
   fake: Boolean,
   location: String,
-  docs: [DocumentSchema],
+  files: [FileSchema],
   subscribes: [
     {
       type: Schema.Types.ObjectId,

@@ -64,7 +64,10 @@ class DetailProject extends React.Component {
             form: {
               ...prevState.form,
               subscribers: {
-                value: [...stateSubscribers, { _id: loggedUser._id }],
+                value: JSON.stringify([
+                  ...stateSubscribers,
+                  { _id: loggedUser._id },
+                ]),
                 changed: true,
               },
             },
@@ -81,7 +84,7 @@ class DetailProject extends React.Component {
             form: {
               ...prevState.form,
               subscribers: {
-                value: subscribers,
+                value: JSON.stringify(subscribers),
                 changed: true,
               },
             },

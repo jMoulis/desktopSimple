@@ -175,18 +175,19 @@ const reducer = (state = initialState, action = {}) => {
       /**
        * The response is only the field modify
        */
-      const { id } = action.payload.project;
+      const { _id } = action.payload.project;
       const { projects } = state.projectListProcess;
       // Update the project in the projects list
       // to update the projects list page
       const projectsUpdated = projects.map(project => {
-        if (project._id === id) {
+        if (project._id === _id) {
           return {
-            ...project,
+            ...action.payload.project,
           };
         }
         return project;
       });
+
       return {
         ...state,
         activeProjectProcess: {

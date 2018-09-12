@@ -3,10 +3,11 @@ const path = require('path');
 const uuidv4 = require('uuid/v4');
 const mime = require('mime');
 const shell = require('shelljs');
-
+const mongoose = require('mongoose');
 const { isObjectEmpty } = require('../service/utils');
 
 const User = require('../models/User');
+const Team = require('../models/Team');
 const Meta = require('../models/Meta');
 const ApiResponse = require('../service/api/apiResponse_v2');
 
@@ -141,12 +142,12 @@ module.exports = {
           },
         })
         .populate({
-          path: 'docs.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })
         .populate({
-          path: 'company.legalDocs.author',
+          path: 'company.files.author',
           model: 'user',
           select: 'fullName picture',
         });
@@ -197,19 +198,19 @@ module.exports = {
         return apiResponse.failure(403, null, 'Not allowed');
       }
 
-      if (Object.prototype.hasOwnProperty.call(req.body, 'docs')) {
+      if (Object.prototype.hasOwnProperty.call(req.body, 'files')) {
         const deleteDocumentQuery = await module.exports.deleteFile(
           req.body,
-          'docs',
+          'files',
         );
         props = deleteDocumentQuery.query;
         docRemoveUrl = deleteDocumentQuery.docUrl;
       }
 
-      if (Object.prototype.hasOwnProperty.call(req.body, 'company.legalDocs')) {
+      if (Object.prototype.hasOwnProperty.call(req.body, 'company.files')) {
         const deleteDocumentQuery = await module.exports.deleteFile(
           req.body,
-          'legalDocs',
+          'files',
           'company',
         );
         props = deleteDocumentQuery.query;
@@ -218,8 +219,8 @@ module.exports = {
 
       if (req.files && !isObjectEmpty(req.files)) {
         const filesKey = Object.keys(req.files)[0];
-        let documents = [];
-        documents = await req.files[filesKey].map(document => {
+        let files = [];
+        files = await req.files[filesKey].map(document => {
           const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
             document.mimetype,
           )}`;
@@ -248,7 +249,7 @@ module.exports = {
         props = {
           ...props,
           $push: {
-            [filesKey]: [...documents],
+            [filesKey]: [...files],
           },
         };
       }
@@ -279,12 +280,12 @@ module.exports = {
           },
         })
         .populate({
-          path: 'docs.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })
         .populate({
-          path: 'company.legalDocs.author',
+          path: 'company.files.author',
           model: 'user',
           select: 'fullName picture',
         });
@@ -348,12 +349,43 @@ module.exports = {
     const userId = req.params.id;
     const apiResponse = new ApiResponse(res);
     try {
+      await Team.update(
+        {
+          'users.user': mongoose.Types.ObjectId(userId),
+        },
+        {
+          $pull: {
+            users: { user: mongoose.Types.ObjectId(userId) },
+          },
+        },
+      );
+
+      await User.updateMany(
+        {
+          $or: [
+            { receivedRequest: { $in: userId } },
+            { friends: { $in: userId } },
+          ],
+        },
+        {
+          $pull: {
+            receivedRequest: userId,
+            friends: userId,
+          },
+        },
+      );
+
       const user = await User.findByIdAndRemove({ _id: userId });
+
       if (!user) {
         return apiResponse.failure(422, null, 'Unable to proceed');
       }
+
+      await shell.rm('-R', `${ROOT_FOLDER}/users/${user._id}`);
+      // return apiResponse.failure(422);
       return apiResponse.success(204);
     } catch (error) {
+      console.log(error.message);
       return apiResponse.failure(422, error);
     }
   },
@@ -573,6 +605,7 @@ module.exports = {
   imageControl(picture, userId, type) {
     const imageTypeRegularExpression = /\/(.*?)$/;
     const validImageType = ['image/png', 'image/jpeg', 'image/jpg'];
+
     if (picture) {
       const imageBuffer = module.exports.decodeBase64Image(picture);
       const typeUploadedFile = imageBuffer.type.match(
@@ -588,20 +621,19 @@ module.exports = {
         );
       }
 
-      const destination = `${ROOT_FOLDER}/${userId}`;
+      const destination = `${ROOT_FOLDER}/users/${userId}`;
       const fileName = `${type}-${uuidv4()}.${typeUploadedFile}`;
-      if (fs.existsSync(ROOT_FOLDER)) {
+      try {
         if (fs.existsSync(destination)) {
           fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
         } else {
-          fs.mkdirSync(destination);
+          shell.mkdir('-p', destination);
           fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
         }
-      } else {
-        fs.mkdirSync(ROOT_FOLDER);
-        fs.mkdirSync(destination);
-        fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
+      } catch (error) {
+        console.log(error.message);
       }
+
       return `/users/${userId}/${fileName}`;
     }
     return null;

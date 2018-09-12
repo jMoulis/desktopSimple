@@ -57,12 +57,9 @@ module.exports = {
   create: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
-      const documents = req.files;
-      let docs = [];
       const folder = uuidv4();
       let queryValues = {
         ...req.body,
-        author: res.locals.user._id,
         activities: [
           {
             type: 'new task',
@@ -72,35 +69,43 @@ module.exports = {
         ],
         taskIdFolder: folder,
       };
-      if (documents) {
-        docs = await documents.map(document => {
+      if (req.files) {
+        let files = [];
+        files = await req.files.map(file => {
           const fullPath = `${ROOT_FOLDER}/teams/${
             req.body.team
           }/tasks/${folder}`;
-          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
-            document.mimetype,
+
+          const fileName = `${file.fieldname}-${uuidv4()}.${mime.extension(
+            file.mimetype,
           )}`;
 
           if (fs.existsSync(fullPath)) {
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+            fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           } else {
             shell.mkdir('-p', fullPath);
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+            fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           }
 
+          const url = `/teams/${req.body.team}/tasks/${folder}/${fileName}`;
+
           return {
-            originalName: document.originalname,
+            originalName: file.originalname,
             name: fileName,
-            extension: mime.extension(document.mimetype),
-            mimetype: document.mimetype,
-            folder,
+            extension: mime.extension(file.mimetype),
+            mimetype: file.mimetype,
             path: `/teams/${req.body.team}/tasks/${folder}`,
+            folder,
             author: res.locals.user._id,
             createdAt: new Date(),
-            url: `/teams/${req.body.team}/tasks/${folder}/${fileName}`,
+            url,
             type: 'task',
           };
         });
+        queryValues = {
+          ...queryValues,
+          files: [...files],
+        };
       }
       if (queryValues.tags) {
         queryValues = {
@@ -108,10 +113,7 @@ module.exports = {
           tags: queryValues.tags.split(','),
         };
       }
-      const newTask = await Task.create({
-        ...queryValues,
-        documents: docs,
-      });
+      const newTask = await Task.create(queryValues);
 
       const task = await Task.findOne({ _id: newTask._id }, { taskIdFolder: 0 })
         .populate({
@@ -177,30 +179,40 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
 
     try {
-      const { files } = req;
-      let docs = [];
-      let updateQuery = {};
+      let updateQuery = {
+        author: {
+          _id: res.locals.user._id,
+          fullName: res.locals.user.fullName,
+          picture: res.locals.user.picture,
+          company: res.locals.user.company && {
+            companyName: res.locals.user.company.companyName,
+            description: res.locals.user.company.description,
+            tags: res.locals.user.company.tags,
+            picture: res.locals.user.company.picture,
+          },
+        },
+      };
       let docRemoveUrl;
       let updateType = Object.keys(req.body).map(key => key)[0];
       // Deal with document remove action
 
-      if (Object.prototype.hasOwnProperty.call(req.body, 'documents')) {
+      if (Object.prototype.hasOwnProperty.call(req.body, 'files')) {
         const documentTask = await Task.findOne(
-          { 'documents._id': req.body.documents },
-          { documents: 1 },
+          { 'files._id': req.body.files },
+          { files: 1 },
         );
-        const document = documentTask.documents.find(
-          doc => doc._id.toString() === req.body.documents,
+        const document = documentTask.files.find(
+          doc => doc._id.toString() === req.body.files,
         );
         if (document) {
           docRemoveUrl = document.url;
         }
-        updateType = 'remove a document';
+        updateType = 'remove a file';
         updateQuery = {
           ...updateQuery,
           $pull: {
-            documents: {
-              _id: req.body.documents,
+            files: {
+              _id: req.body.files,
             },
           },
         };
@@ -217,30 +229,31 @@ module.exports = {
       // Dealing if files upload
       const folder = task.taskIdFolder;
 
-      if (files && files.length > 0) {
-        docs = await files.map(document => {
+      if (req.files && req.files.length > 0) {
+        let files = [];
+        files = await req.files.map(file => {
           const fullPath = `${ROOT_FOLDER}/teams/${
             req.body.team
           }/tasks/${folder}`;
 
-          const fileName = `${document.fieldname}-${uuidv4()}.${mime.extension(
-            document.mimetype,
+          const fileName = `${file.fieldname}-${uuidv4()}.${mime.extension(
+            file.mimetype,
           )}`;
 
           if (fs.existsSync(fullPath)) {
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+            fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           } else {
             shell.mkdir('-p', fullPath);
-            fs.writeFileSync(`${fullPath}/${fileName}`, document.buffer);
+            fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           }
 
           const url = `/teams/${req.body.team}/tasks/${folder}/${fileName}`;
 
           return {
-            originalName: document.originalname,
+            originalName: file.originalname,
             name: fileName,
-            extension: mime.extension(document.mimetype),
-            mimetype: document.mimetype,
+            extension: mime.extension(file.mimetype),
+            mimetype: file.mimetype,
             path: `/teams/${req.body.team}/tasks/${folder}`,
             folder,
             author: res.locals.user._id,
@@ -249,11 +262,11 @@ module.exports = {
             type: 'task',
           };
         });
-        updateType = 'add a new document';
+        updateType = 'add a new file';
         updateQuery = {
           ...updateQuery,
           $push: {
-            documents: [...docs],
+            files: [...files],
           },
         };
       }

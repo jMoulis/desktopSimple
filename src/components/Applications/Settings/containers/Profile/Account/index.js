@@ -3,12 +3,15 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import Account from '../../../components/Profile/Account';
-import { changePasswordAction, clearMessageAction, deleteUserAction } from '../../../../../../store/reducers/authReducer';
+import {
+  changePasswordAction,
+  clearMessageAction,
+  deleteUserAction,
+} from '../../../../../../store/reducers/authReducer';
 /*
  * Code
  */
@@ -25,15 +28,17 @@ const mapDispatchToProps = dispatch => ({
   clearMessageAction: () => {
     dispatch(clearMessageAction());
   },
-  deleteUserAction: (userId) => {
+  deleteUserAction: userId => {
     dispatch(deleteUserAction(userId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const AccountContainer = createContainer(Account);
 export default AccountContainer;

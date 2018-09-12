@@ -50,10 +50,10 @@ export default {
     name: 'tags',
     type: 'text',
   },
-  docs: {
-    label: 'Docs',
-    placeholder: 'Upload docs',
-    name: 'docs',
+  files: {
+    label: 'Files',
+    placeholder: 'Upload files',
+    name: 'files',
   },
   school: {
     label: 'Your school',
