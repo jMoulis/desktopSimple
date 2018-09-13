@@ -163,7 +163,6 @@ class DisplayDocument extends React.Component {
                 },
                 styleLabel: {
                   padding: '0.5rem',
-                  cursor: 'pointer',
                 },
                 onChange: this.handleInputFileChange,
               }}
