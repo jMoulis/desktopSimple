@@ -1,4 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .task-detail-wrapper {
   margin-left: 1rem;
-  margin-right: 1rem; }
+  overflow: auto; }

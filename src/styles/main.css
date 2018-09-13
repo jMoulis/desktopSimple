@@ -99,6 +99,9 @@ h1 {
 .small {
   font-size: .7rem; }
 
+.bold {
+  font-weight: bold; }
+
 .d-flex {
   display: flex; }
 

@@ -1,12 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .task {
   position: relative; }
-  .task-content {
-    padding: .5rem; }
 
 .task-activity {
-  padding: 1rem;
-  margin-top: .5rem;
-  border: 2px solid #0a1c28;
-  max-height: 300px;
-  overflow: hidden; }
+  margin-top: 1.5rem;
+  padding-right: .5rem; }

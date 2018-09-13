@@ -14,7 +14,7 @@ const Button = ({
   loading,
   disabled,
   type,
-  size,
+  small,
   category,
   children,
   onClick,
@@ -27,7 +27,7 @@ const Button = ({
     disabled={disabled && true}
     style={style && style}
     className={`btn${disabled ? ' btn-disabled' : ''} btn-${category} ${
-      size ? `btn-${size}` : ''
+      small ? `btn-small` : ''
     }`}
     onClick={onClick}
     title={title}

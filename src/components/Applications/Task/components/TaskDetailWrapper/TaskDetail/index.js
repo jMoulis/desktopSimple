@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import moment from 'moment';
 import './index.css';
-import TaskToolbar from './TaskToolbar';
 import ListInputContainer from '../../../containers/TaskDetailWrapper/TaskDetail/TaskDisplay/ListInput';
 
 class TaskDetail extends React.Component {
@@ -12,8 +11,6 @@ class TaskDetail extends React.Component {
   };
 
   handleAssignTask = () => {};
-  handleCloseTask = () => {};
-  handleEditTask = () => {};
   handleNewComment = () => {};
   handleDeleteTask = id => {
     const { deleteTaskAction } = this.props;
@@ -23,15 +20,26 @@ class TaskDetail extends React.Component {
     const { task } = this.props;
     return (
       <div className="task-detail">
-        <h1>{task ? task.title : 'Loading'}</h1>
-        <TaskToolbar
-          assignAction={this.handleAssignTask}
-          editAction={this.handleEditTask}
-          commentAction={this.handleNewComment}
-          closeAction={this.handleCloseTask}
-          deleteAction={this.handleDeleteTask}
-          data={task}
-        />
+        <header>
+          <h1>{task ? task.title : 'Loading'}</h1>
+          <div>
+            {task.createdAt && (
+              <span className="small">
+                created:
+                {moment(task.createdAt).format('DD/MM/YYYY hh:mm')}
+              </span>
+            )}
+          </div>
+          <div>
+            {task.createdAt && (
+              <span className="small">
+                {' '}
+                updated:
+                {moment(task.updatedAt).format('DD/MM/YYYY hh:mm')}
+              </span>
+            )}
+          </div>
+        </header>
         <ListInputContainer />
       </div>
     );

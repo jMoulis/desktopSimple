@@ -107,32 +107,13 @@ class DisplayDocument extends React.Component {
     const { dragState, inputFile } = this.state;
     return (
       <Fragment>
-        <label>Files:</label>
-        {editable && (
-          <div className="d-flex flex-column">
-            <DropZone
-              dragAction={this.handleDrag}
-              dropAction={this.handleDrop}
-              dragState={dragState}
-            >
-              <p>Drop your file</p>
-            </DropZone>
-            <InputFile
-              ref={this.inputFileRef}
-              config={{
-                styleContainer: {
-                  padding: 0,
-                },
-                field: {
-                  label: 'Add File',
-                  name: 'uploadFile',
-                  value: inputFile,
-                },
-                onChange: this.handleInputFileChange,
-              }}
-            />
-          </div>
-        )}
+        <label
+          style={{
+            fontWeight: 'bold',
+          }}
+        >
+          Files:
+        </label>
         <ul className="d-flex document">
           {files && files.length > 0 ? (
             files.map(file => {
@@ -152,11 +133,43 @@ class DisplayDocument extends React.Component {
               }
             })
           ) : (
-            <div className="d-flex flex-column">
+            <div>
               <span>No files available</span>
             </div>
           )}
         </ul>
+        {editable && (
+          <div>
+            {/* <DropZone
+              dragAction={this.handleDrag}
+              dropAction={this.handleDrop}
+              dragState={dragState}
+            >
+              <p>Drop your file</p>
+            </DropZone> */}
+            <InputFile
+              config={{
+                styleContainer: {
+                  padding: 0,
+                  flexDirection: 'row',
+                },
+                field: {
+                  label: 'Add File',
+                  name: 'uploadFile',
+                  value: inputFile,
+                },
+                style: {
+                  padding: 0,
+                },
+                styleLabel: {
+                  padding: '0.5rem',
+                  cursor: 'pointer',
+                },
+                onChange: this.handleInputFileChange,
+              }}
+            />
+          </div>
+        )}
       </Fragment>
     );
   }

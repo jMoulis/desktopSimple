@@ -1,22 +1,20 @@
 @import '../../../index.sass'
-.task-detail
-  border: 2px solid $darkestblue
-  padding: 1rem
-  position: relative
-  &-list
-    &-item
-      position: relative
-      & .left-label-form
-        display: flex
-        align-items: center
-        width: 120px
-        height: 28px
-      & .tags
-        margin: 0
-      &-tags
+.task-detail-list
+  &-item
+    position: relative
+    & .left-label-form
+      display: flex
+      align-items: center
+      width: 120px
+      height: 28px
+    & .tags
+      margin: 0
+    &--tags
+      padding: 0
+      padding-bottom: .5rem
+      & .input-auto
         padding: 0
-        padding-bottom: .5rem
-        & .input-auto
-          padding: 0
-      &--textarea
-        min-height: 150px
+    &--description
+      margin-bottom: .5rem
+      & .form-group
+        padding: 0

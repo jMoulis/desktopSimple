@@ -37,5 +37,7 @@
     .team-toolbar-list-item {
       border: 2px solid transparent;
       margin-right: .3rem; }
+    .team-toolbar-list .user-icon {
+      padding: 0; }
   .team-toolbar .team-list {
     margin-left: .5rem; }

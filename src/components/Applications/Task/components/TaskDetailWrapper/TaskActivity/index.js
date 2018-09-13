@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TabContent from './TabContent';
 import TabNav from './TabNav';
+import TaskComment from '../TaskDetail/TaskComment';
+import TaskCommentFormContainer from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentForm';
 
 class TaskActivity extends React.Component {
   static propTypes = {
@@ -22,10 +24,10 @@ class TaskActivity extends React.Component {
     const { task } = this.props;
     const { type } = this.state;
     return (
-      <div className="task-activity height-overflow">
+      <div className="task-activity">
         <TabNav onClick={this.handleTabClick} type={type} />
         {type === 'activities' ? (
-          <ul className="overflow height-overflow">
+          <ul>
             {task &&
               task.activities &&
               task.activities.map((activity, index) => (
@@ -33,12 +35,21 @@ class TaskActivity extends React.Component {
               ))}
           </ul>
         ) : (
-          <ul className="overflow height-overflow">
+          <ul>
+            <li>{<TaskCommentFormContainer />}</li>
             {task &&
               task.comments &&
               task.comments.map((comment, index) => (
                 <TabContent key={index} data={comment} type="comment">
                   {comment.message}
+                  <ul className="d-flex">
+                    <li>
+                      <button>Delete</button>
+                    </li>
+                    <li>
+                      <button>Edit</button>
+                    </li>
+                  </ul>
                 </TabContent>
               ))}
           </ul>

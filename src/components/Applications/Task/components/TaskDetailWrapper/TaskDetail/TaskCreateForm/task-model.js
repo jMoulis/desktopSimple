@@ -35,4 +35,8 @@ export default {
     name: 'assign',
     label: 'Assign',
   },
+  dueDate: {
+    type: 'input',
+    name: 'dueDate',
+  },
 };

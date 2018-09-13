@@ -1,4 +1,13 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail {
+  position: relative;
+  padding-top: .5rem;
+  padding-right: .5rem; }
+  .task-detail header {
+    margin-bottom: 1rem; }
+  .task-detail .modal-container {
+    height: 50%; }
+
 .labels-modal {
   position: absolute;
   top: 25px;

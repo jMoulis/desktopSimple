@@ -11,6 +11,7 @@ const InputFile = ({ config }) => {
     onChange,
     style,
     styleContainer,
+    styleLabel,
     blur,
     focus,
     success,
@@ -19,13 +20,17 @@ const InputFile = ({ config }) => {
   } = config;
   return (
     <div className="form-group" style={styleContainer}>
-      <label className="btn btn-success input-file-label" htmlFor={field.name}>
+      <label
+        style={styleLabel}
+        className="btn btn-success input-file-label  pointer"
+        htmlFor={field.name}
+      >
         {field.label}
         <input
           ref={textInput}
           name={field.name}
           id={field.name}
-          className="form-control"
+          className="form-control pointer"
           type="file"
           onChange={onChange}
           onBlur={blur}

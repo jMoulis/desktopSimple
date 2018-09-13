@@ -66,6 +66,9 @@
   margin-right: .5rem;
   margin-top: 1rem;
   margin-bottom: 1rem; }
+  .btn-small {
+    font-size: .7rem;
+    padding: .3rem; }
   .btn-neutral {
     background-color: transparent;
     border: 2px solid transparent; }

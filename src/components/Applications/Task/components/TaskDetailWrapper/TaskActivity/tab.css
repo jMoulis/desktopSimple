@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .task {
   position: relative; }
-  .task-content {
-    padding: .5rem; }
 
 .tab-nav {
   display: flex;
@@ -24,6 +22,6 @@
       color: #eee9d1; }
 
 .tab-content {
-  padding: 1rem; }
+  padding: 1rem 0; }
   .tab-content-children {
     padding-top: .5rem; }

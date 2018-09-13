@@ -15,7 +15,7 @@ const CommentSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  editedAt: {
+  updatedAt: {
     type: Date,
     default: new Date(),
   },
@@ -84,7 +84,10 @@ const TaskSchema = new Schema({
     type: Date,
     default: new Date(),
   },
-  editedAt: {
+  dueDate: {
+    type: Date,
+  },
+  updatedAt: {
     type: Date,
     default: new Date(),
   },
@@ -96,6 +99,11 @@ const TaskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
+});
+
+TaskSchema.pre('update', function preUpdate(next) {
+  this.update({}, { $set: { updatedAt: new Date() } });
+  return next();
 });
 
 const Task = mongoose.model('task', TaskSchema);

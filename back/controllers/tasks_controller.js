@@ -26,7 +26,12 @@ module.exports = {
         .populate({
           path: 'author',
           model: 'user',
-          select: 'fullName',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'assign',
+          model: 'user',
+          select: 'fullName picture',
         })
         .populate({
           path: 'comments.author',
@@ -60,6 +65,7 @@ module.exports = {
       const folder = uuidv4();
       let queryValues = {
         ...req.body,
+        author: res.locals.user._id,
         activities: [
           {
             type: 'new task',
@@ -130,6 +136,11 @@ module.exports = {
           path: 'activities.author',
           model: 'user',
           select: 'fullName picture',
+        })
+        .populate({
+          path: 'assign',
+          model: 'user',
+          select: 'fullName picture',
         });
 
       return apiResponse.success(201, { task }, true);
@@ -148,7 +159,7 @@ module.exports = {
         .populate({
           path: 'author',
           model: 'user',
-          select: 'fullName',
+          select: 'fullName picture',
         })
         .populate({
           path: 'comments.author',
@@ -162,6 +173,11 @@ module.exports = {
         })
         .populate({
           path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'assign',
           model: 'user',
           select: 'fullName picture',
         });
@@ -184,12 +200,14 @@ module.exports = {
           _id: res.locals.user._id,
           fullName: res.locals.user.fullName,
           picture: res.locals.user.picture,
-          company: res.locals.user.company && {
-            companyName: res.locals.user.company.companyName,
-            description: res.locals.user.company.description,
-            tags: res.locals.user.company.tags,
-            picture: res.locals.user.company.picture,
-          },
+          company: res.locals.user.company
+            ? {
+                companyName: res.locals.user.company.companyName,
+                description: res.locals.user.company.description,
+                tags: res.locals.user.company.tags,
+                picture: res.locals.user.company.picture,
+              }
+            : null,
         },
       };
       let docRemoveUrl;
@@ -283,13 +301,36 @@ module.exports = {
         $push: {
           ...updateQuery.$push,
           activities: {
-            type: updateType,
-            author: res.locals.user._id,
-            createdAt: new Date(),
+            $each: [
+              {
+                type: updateType,
+                author: res.locals.user._id,
+                createdAt: new Date(),
+              },
+            ],
+            $sort: { createdAt: -1 },
           },
         },
       };
 
+      if (req.body.message) {
+        updateQuery = {
+          ...updateQuery,
+          $push: {
+            ...updateQuery.$push,
+            comments: {
+              $each: [
+                {
+                  message: updateQuery.message,
+                  author: res.locals.user._id,
+                  updatedAt: new Date(),
+                },
+              ],
+              $sort: { createdAt: -1 },
+            },
+          },
+        };
+      }
       const updateTask = await Task.update({ _id: req.params.id }, updateQuery);
 
       if (updateTask.n === 0) {
@@ -308,12 +349,12 @@ module.exports = {
         .populate({
           path: 'author',
           model: 'user',
-          select: 'fullName picture company',
+          select: 'fullName picture',
         })
         .populate({
           path: 'comments.author',
           model: 'user',
-          select: 'fullName picture company',
+          select: 'fullName picture',
         })
         .populate({
           path: 'documents.author',
@@ -322,6 +363,11 @@ module.exports = {
         })
         .populate({
           path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'assign',
           model: 'user',
           select: 'fullName picture',
         });
