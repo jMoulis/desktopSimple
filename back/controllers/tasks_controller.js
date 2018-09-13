@@ -44,7 +44,7 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'documents.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })
@@ -128,7 +128,7 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'documents.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })
@@ -167,7 +167,7 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'documents.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })
@@ -357,7 +357,7 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'documents.author',
+          path: 'files.author',
           model: 'user',
           select: 'fullName picture',
         })

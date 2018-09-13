@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TabContent from './TabContent';
 import TabNav from './TabNav';
-import TaskComment from '../TaskDetail/TaskComment';
 import TaskCommentFormContainer from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentForm';
+import Button from '../../../../../Form/button';
 
 class TaskActivity extends React.Component {
   static propTypes = {
@@ -44,10 +44,23 @@ class TaskActivity extends React.Component {
                   {comment.message}
                   <ul className="d-flex">
                     <li>
-                      <button>Delete</button>
+                      <Button
+                        style={{
+                          margin: 0,
+                        }}
+                        label="Delete"
+                        category="danger"
+                        small
+                      />
                     </li>
                     <li>
-                      <button>Edit</button>
+                      <Button
+                        style={{
+                          margin: 0,
+                        }}
+                        label="Edit"
+                        small
+                      />
                     </li>
                   </ul>
                 </TabContent>

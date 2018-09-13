@@ -3,21 +3,25 @@
   margin-left: 1rem;
   overflow: auto; }
 
-.task-detail-list-item {
-  position: relative; }
-  .task-detail-list-item .left-label-form {
-    display: flex;
-    align-items: center;
-    width: 120px;
-    height: 28px; }
-  .task-detail-list-item .tags {
-    margin: 0; }
-  .task-detail-list-item--tags {
-    padding: 0;
-    padding-bottom: .5rem; }
-    .task-detail-list-item--tags .input-auto {
-      padding: 0; }
-  .task-detail-list-item--description {
-    margin-bottom: .5rem; }
-    .task-detail-list-item--description .form-group {
-      padding: 0; }
+.task-detail-list {
+  border-bottom: 2px solid #0a1c28;
+  padding-bottom: 1rem; }
+  .task-detail-list-item {
+    position: relative; }
+    .task-detail-list-item .left-label-form {
+      display: flex;
+      align-items: center;
+      width: 120px;
+      height: 28px; }
+    .task-detail-list-item .tags {
+      margin: 0; }
+    .task-detail-list-item--tags {
+      padding: 0;
+      padding-bottom: .5rem; }
+      .task-detail-list-item--tags .input-auto {
+        padding: 0;
+        border: none; }
+    .task-detail-list-item--description {
+      margin-bottom: .5rem; }
+      .task-detail-list-item--description .form-group {
+        padding: 0; }

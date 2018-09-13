@@ -107,13 +107,6 @@ class DisplayDocument extends React.Component {
     const { dragState, inputFile } = this.state;
     return (
       <Fragment>
-        <label
-          style={{
-            fontWeight: 'bold',
-          }}
-        >
-          Files:
-        </label>
         <ul className="d-flex document">
           {files && files.length > 0 ? (
             files.map(file => {

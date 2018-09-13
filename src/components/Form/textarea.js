@@ -37,6 +37,7 @@ class Textarea extends React.Component {
           onFocus={config.focus}
           style={{ height: this.state.scrollHeight }}
           readOnly={config.readOnly}
+          placeholder={config.field.placeholder}
         />
         {config.success === config.field.name && <SuccessIcon />}
         {config.error && (

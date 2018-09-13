@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .left-navbar {
-  width: 10%; }
+  max-width: 15%; }
   .left-navbar-btn {
     background-color: transparent;
     border: none;

@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .task-list {
   overflow: auto;
-  width: 10%; }
+  max-width: 20%;
+  border-right: 2px solid #0a1c28; }
   .task-list-item {
     cursor: pointer;
     transition: all 150ms; }

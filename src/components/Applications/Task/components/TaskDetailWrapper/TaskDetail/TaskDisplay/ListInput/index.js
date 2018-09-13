@@ -65,7 +65,6 @@ class ListInput extends React.Component {
     this.state = {
       ...fields,
       showLabelsModal: false,
-      showUploadFiles: false,
     };
   }
 
@@ -185,6 +184,38 @@ class ListInput extends React.Component {
     }
   };
 
+  handleRemove = evt => {
+    evt.preventDefault();
+    const { editTaskAction } = this.props;
+    const { state } = this;
+    const values = state.form.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
+    const newTags = {
+      ...state,
+      form: {
+        ...state.form,
+        tags: {
+          ...state.form.tags,
+          value: values,
+          changed: true,
+        },
+      },
+    };
+    this.setState(prevState => ({
+      ...prevState,
+      form: {
+        ...prevState.form,
+        tags: {
+          ...state.form.tags,
+          value: values,
+          changed: true,
+        },
+      },
+    }));
+    editTaskAction(newTags);
+  };
+
   handleInputSelectLablelsChange = evt => {
     const { editTaskAction } = this.props;
     const { value } = evt.target;
@@ -248,16 +279,10 @@ class ListInput extends React.Component {
       });
   };
 
-  handleShowUploadFiles = () => {
-    this.setState(prevState => ({
-      showUploadFiles: !prevState.showUploadFiles,
-    }));
-  };
-
   render() {
     const { activeTaskProcess } = this.props;
     const { task, error, success } = activeTaskProcess;
-    const { form, showUsersAssignModal, showUploadFiles } = this.state;
+    const { form, showUsersAssignModal } = this.state;
     const { status, priority, tags, dueDate, description } = form;
     return (
       <Fragment>
@@ -382,29 +407,27 @@ class ListInput extends React.Component {
               <span className="left-label-form bold">Assignee:</span>
               <div className="d-flex">
                 <UserIconContainer user={{ user: task.assign }} name />
-                <Button type="button" onClick={this.handleReassign} small>
+                <Button
+                  type="button"
+                  category="success"
+                  onClick={this.handleReassign}
+                  small
+                >
                   Reassign
                 </Button>
               </div>
-            </li>
-            <li className="task-detail-list-item">
-              <span className="left-label-form bold">Author:</span>
-              <UserIconContainer user={{ user: task.author }} name />
             </li>
             <li className="task-detail-list-item task-detail-list-item--tags">
               <label
                 data-name="labels"
                 className="d-flex flex-align-items-center"
-              >
-                <span className="left-label-form bold">Tags:</span>
-              </label>
+              />
               <InputAutoComplete
                 config={{
                   field: taskModel.tags,
                   onChange: this.handleInputSelectLablelsChange,
                   keyPress: this.handleInputSelectLablelsChange,
                   values: tags.value,
-                  blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   remove: this.handleRemove,
                   isFocused: tags.focus,
