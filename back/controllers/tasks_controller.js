@@ -209,7 +209,6 @@ module.exports = {
       };
       let docRemoveUrl;
       let updateType = Object.keys(req.body).map(key => key)[0];
-      // Deal with document remove action
 
       if (Object.prototype.hasOwnProperty.call(req.body, 'files')) {
         const documentTask = await Task.findOne(
@@ -284,10 +283,10 @@ module.exports = {
         };
       }
 
-      if (updateQuery.tags) {
+      if (Object.prototype.hasOwnProperty.call(updateQuery, 'tags')) {
         updateQuery = {
           ...updateQuery,
-          tags: updateQuery.tags.split(','),
+          tags: updateQuery.tags ? updateQuery.tags.split(',') : [],
         };
       }
 
@@ -326,6 +325,7 @@ module.exports = {
           },
         };
       }
+      console.log(updateQuery);
       const updateTask = await Task.update({ _id: req.params.id }, updateQuery);
 
       if (updateTask.n === 0) {

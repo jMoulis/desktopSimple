@@ -253,15 +253,22 @@ module.exports = {
           },
         };
       }
-      // Dealing with Tags
-      if (props.tags || props['company.tags']) {
-        const key = props.tags ? 'tags' : 'company.tags';
+
+      console.log(props);
+      if (Object.prototype.hasOwnProperty.call(props, 'tags')) {
         props = {
           ...props,
-          [key]: props[key].split(','),
+          tags: props.tags ? props.tags.split(',') : [],
         };
       }
-
+      if (Object.prototype.hasOwnProperty.call(props, 'company.tags')) {
+        props = {
+          ...props,
+          'company.tags': props['company.tags']
+            ? props['company.tags'].split(',')
+            : [],
+        };
+      }
       await User.update({ _id: userId }, props, options);
 
       // Remove file from filesystem after updating

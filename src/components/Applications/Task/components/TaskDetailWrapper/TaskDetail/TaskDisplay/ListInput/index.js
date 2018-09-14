@@ -216,7 +216,7 @@ class ListInput extends React.Component {
     editTaskAction(newTags);
   };
 
-  handleInputSelectLablelsChange = evt => {
+  handleInputSelectTagsChange = evt => {
     const { editTaskAction } = this.props;
     const { value } = evt.target;
     if (evt.keyCode === 13) {
@@ -240,10 +240,29 @@ class ListInput extends React.Component {
     }
   };
 
-  handleDisplayLabelsModal = () => {
-    this.setState(prevState => ({
-      showLabelsModal: !prevState.showLabelsModal,
-    }));
+  handleRemoveTags = evt => {
+    evt.preventDefault();
+    const { editTaskAction } = this.props;
+    const { state } = this;
+    const values = state.form.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
+    this.setState(
+      prevState => ({
+        ...prevState,
+        form: {
+          ...prevState.form,
+          tags: {
+            ...prevState.form.tags,
+            value: values,
+            changed: true,
+          },
+        },
+      }),
+      () => {
+        editTaskAction(this.state.form);
+      },
+    );
   };
 
   handleOnBlur = field => {
@@ -287,29 +306,25 @@ class ListInput extends React.Component {
     return (
       <div className="task-detail">
         <header>
-          <h1
+          <div
             onKeyPress={() => this.handleLabelClick('title')}
             onClick={() => this.handleLabelClick('title')}
             data-name="title"
+            style={{ height: '24px', fontWeight: 'bold', fontSize: '1.5rem' }}
             className="d-flex flex-align-items-center"
           >
             {title && title.selected ? (
-              <Input
-                config={{
-                  field: {
-                    ...taskModel.title,
-                    label: '',
-                  },
-                  onChange: this.handleInputChange,
-                  keyPress: this.handleInputChange,
-                  value: title.value,
-                  blur: () => this.handleOnBlur(taskModel.title.name),
-                  focus: this.handleOnFocus,
-                  small: true,
-                  success,
-                  error: error && error.title && error.title.detail,
-                  options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+              <input
+                name="title"
+                type="text"
+                value={title.value}
+                onChange={this.handleInputChange}
+                style={{
+                  border: 'none',
+                  fontWeight: 'bold',
+                  fontSize: '1.5rem',
                 }}
+                onBlur={() => this.handleOnBlur('title')}
               />
             ) : (
               <span className="pointer">{title && title.value}</span>
@@ -321,7 +336,7 @@ class ListInput extends React.Component {
                 }}
               />
             )}
-          </h1>
+          </div>
           <div className="d-flex flex-align-items-center">
             <UserIconContainer user={{ user: task.author }} />
             {task.createdAt && (
@@ -416,21 +431,30 @@ class ListInput extends React.Component {
             >
               <span className="left-label-form bold">Due Date:</span>
               {dueDate && dueDate.selected ? (
-                <Input
-                  config={{
-                    field: taskModel.dueDate,
-                    onChange: this.handleInputChange,
-                    keyPress: this.handleInputChange,
-                    value: dueDate.value,
-                    blur: () => this.handleOnBlur(taskModel.dueDate.name),
-                    focus: this.handleOnFocus,
-                    small: true,
-                    success,
-                    error: error && error.dueDate && error.dueDate.detail,
-                    options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+                <input
+                  name="dueDate"
+                  type="text"
+                  value={dueDate.value}
+                  onChange={this.handleInputChange}
+                  style={{
+                    border: 'none',
                   }}
+                  onBlur={() => this.handleOnBlur('dueDate')}
                 />
               ) : (
+                // <Input
+                //   config={{
+                //     field: taskModel.dueDate,
+                //     onChange: this.handleInputChange,
+                //     keyPress: this.handleInputChange,
+                //     value: dueDate.value,
+                //     blur: () => this.handleOnBlur(taskModel.dueDate.name),
+                //     focus: this.handleOnFocus,
+                //     small: true,
+                //     success,
+                //     error: error && error.dueDate && error.dueDate.detail,
+                //   }}
+                // />
                 <span className="pointer">
                   {dueDate &&
                     dueDate.value &&
@@ -472,11 +496,11 @@ class ListInput extends React.Component {
             <InputAutoComplete
               config={{
                 field: taskModel.tags,
-                onChange: this.handleInputSelectLablelsChange,
-                keyPress: this.handleInputSelectLablelsChange,
+                onChange: this.handleInputSelectTagsChange,
+                keyPress: this.handleInputSelectTagsChange,
                 values: tags.value,
                 focus: this.handleOnFocus,
-                remove: this.handleRemove,
+                remove: this.handleRemoveTags,
                 isFocused: tags.focus,
                 error: error && error.tags && error.tags.detail,
               }}

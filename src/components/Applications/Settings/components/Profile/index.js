@@ -111,17 +111,17 @@ class Profile extends React.Component {
     const { value } = evt.target;
     const { editUserAction, loggedUser } = this.props;
     if (evt.keyCode === 13) {
-      const { state } = this;
-      const newTags = {
-        ...state,
-        tags: {
-          ...state.tags,
-          value: [...state.tags.value, value.toLowerCase()],
-          changed: true,
-        },
-      };
-      this.setState(() => newTags);
-      editUserAction(loggedUser._id, newTags);
+      this.setState(
+        prevState => ({
+          ...prevState,
+          tags: {
+            ...prevState.tags,
+            value: [...prevState.tags.value, value],
+            changed: true,
+          },
+        }),
+        () => editUserAction(loggedUser._id, this.state),
+      );
       evt.target.value = '';
     }
   };

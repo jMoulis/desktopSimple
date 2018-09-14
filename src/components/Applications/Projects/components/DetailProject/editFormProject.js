@@ -111,29 +111,21 @@ class EditFormProject extends Component {
     const { editProjectAction } = this.props;
     if (evt.keyCode === 13) {
       const { state } = this;
-      const newTags = {
-        ...state,
-        form: {
-          ...state.form,
-          tags: {
-            ...state.form.tags,
-            value: [...state.form.tags.value, inputValue],
-            changed: true,
+      this.setState(
+        prevState => ({
+          ...prevState,
+          form: {
+            ...prevState.form,
+            tags: {
+              ...state.form.tags,
+              value: [...state.form.tags.value, inputValue],
+              changed: true,
+            },
           },
-        },
-      };
-      this.setState(prevState => ({
-        ...prevState,
-        form: {
-          ...prevState.form,
-          tags: {
-            ...state.form.tags,
-            value: [...state.form.tags.value, inputValue],
-            changed: true,
-          },
-        },
-      }));
-      editProjectAction(newTags);
+        }),
+        () => editProjectAction(this.state.form),
+      );
+
       evt.target.value = '';
     }
   };
@@ -214,7 +206,7 @@ class EditFormProject extends Component {
         },
       },
     }));
-    editProjectAction(newTags);
+    editProjectAction(newTags.form);
   };
   handleFilesChange = files => {
     const { editProjectAction } = this.props;

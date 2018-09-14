@@ -186,6 +186,7 @@ export default store => next => action => {
         'company',
       );
 
+      console.log(action.payload);
       if (hasCompanyProperty) {
         filteredArray = Object.entries(action.payload.company).filter(
           field => field[1].changed,

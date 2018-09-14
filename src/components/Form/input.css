@@ -59,7 +59,6 @@
   position: relative; }
   .form-group .form-control {
     border: none;
-    border-bottom: 2px solid transparent;
     outline: none;
     transition: border-bottom 500ms;
     padding-bottom: .5rem;
@@ -69,13 +68,9 @@
     font-family: 'Nunito', sans-serif; }
   .form-group input, .form-group textarea, .form-group select {
     transition: border-bottom 200ms; }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-      border-bottom: 2px solid #d44c00; }
     .form-group input::placeholder, .form-group textarea::placeholder, .form-group select::placeholder {
       color: rgba(10, 28, 40, 0.54);
       font-weight: normal;
       font-size: .8rem;
       font-family: 'Nunito', sans-serif;
       font-style: italic; }
-    .form-group input:hover, .form-group textarea:hover, .form-group select:hover {
-      border-bottom: 2px solid #d44c00; }

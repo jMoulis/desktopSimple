@@ -84,6 +84,7 @@ export default store => next => action => {
       const taskId = store.getState().taskReducer.activeTaskProcess.task._id;
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
         ._id;
+      console.log(action.payload);
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );

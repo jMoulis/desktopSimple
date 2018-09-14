@@ -22,7 +22,7 @@ export default {
   },
   tags: {
     name: 'tags',
-    placeholder: 'Select tags',
+    placeholder: 'Add tags',
     isArray: true,
   },
   files: {

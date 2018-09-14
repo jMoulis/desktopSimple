@@ -13,7 +13,6 @@ const ROOT_FOLDER = path.join(__dirname, '/../uploads');
 module.exports = {
   async index(req, res, next) {
     const apiResponse = new ApiResponse(res, next);
-    console.log();
     try {
       let params = { author: res.locals.user._id };
       if (res.locals.user.typeUser !== 'company') {
@@ -107,11 +106,12 @@ module.exports = {
         true,
       );
 
+      console.log(projectProps);
       // Dealing with Tags
-      if (projectProps.tags) {
+      if (Object.prototype.hasOwnProperty.call(projectProps, 'tags')) {
         projectProps = {
           ...projectProps,
-          tags: projectProps.tags.split(','),
+          tags: projectProps.tags ? projectProps.tags.split(',') : [],
         };
       }
 
@@ -273,6 +273,15 @@ module.exports = {
         ...(filesProjectProps || null),
         roomLeft: await module.exports.isProjectRoomLeft(projectId),
       };
+
+      // Dealing with Tags
+      if (Object.prototype.hasOwnProperty.call(projectProps, 'tags')) {
+        console.log(projectProps);
+        projectProps = {
+          ...projectProps,
+          tags: projectProps.tags ? projectProps.tags.split(',') : [],
+        };
+      }
 
       const updateProject = await Project.update(
         { _id: projectId },
