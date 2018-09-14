@@ -274,7 +274,7 @@ class ListInput extends React.Component {
       return editTaskAction({
         assign: {
           changed: true,
-          value: assignee,
+          value: assignee._id,
         },
       });
   };
@@ -283,211 +283,257 @@ class ListInput extends React.Component {
     const { activeTaskProcess } = this.props;
     const { task, error, success } = activeTaskProcess;
     const { form, showUsersAssignModal } = this.state;
-    const { status, priority, tags, dueDate, description } = form;
+    const { status, priority, tags, dueDate, description, title } = form;
     return (
-      <Fragment>
-        {!task ? (
-          <div>Loading</div>
-        ) : (
-          <ul className="task-detail-list">
-            <li className="task-detail-list-item">
-              <label
-                onKeyPress={() => this.handleLabelClick('status')}
-                onClick={() => this.handleLabelClick('status')}
-                data-name="status"
-                className="d-flex flex-align-items-center"
-              >
-                <span className="left-label-form bold">Status:</span>
-                {status && status.selected ? (
-                  <Select
-                    config={{
-                      field: taskModel.status,
-                      onChange: this.handleSelectChange,
-                      value: status.value,
-                      blur: () => this.handleOnBlur(taskModel.status.name),
-                      options: [
-                        'To Do',
-                        'In Progress',
-                        'Reopened',
-                        'Need Testing',
-                        'On Hold',
-                        'Closed',
-                      ],
-                      small: true,
-                      error: error && error.status && error.status.detail,
-                    }}
-                  />
-                ) : (
-                  <span className="pointer">{status.value}</span>
-                )}
-                {success === 'status' && (
-                  <SuccessIcon
-                    style={{
-                      top: 0,
-                    }}
-                  />
-                )}
-              </label>
-            </li>
-            <li className="task-detail-list-item">
-              <label
-                onKeyPress={() => this.handleLabelClick('priority')}
-                onClick={() => this.handleLabelClick('priority')}
-                data-name="priority"
-                className="d-flex flex-align-items-center"
-              >
-                <span className="left-label-form bold">Priority:</span>
-                {priority && priority.selected ? (
-                  <Select
-                    config={{
-                      field: taskModel.priority,
-                      onChange: this.handleSelectChange,
-                      keyPress: this.handleSelectChange,
-                      value: priority.value,
-                      blur: () => this.handleOnBlur(taskModel.priority.name),
-                      focus: this.handleOnFocus,
-                      small: true,
-                      success,
-                      error: error && error.priority && error.priority.detail,
-                      options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
-                    }}
-                  />
-                ) : (
-                  <span className="pointer">{priority.value}</span>
-                )}
-                {success === 'priority' && (
-                  <SuccessIcon
-                    style={{
-                      top: 0,
-                    }}
-                  />
-                )}
-              </label>
-            </li>
-            <li className="task-detail-list-item">
-              <label
-                onKeyPress={() => this.handleLabelClick('dueDate')}
-                onClick={() => this.handleLabelClick('dueDate')}
-                data-name="dueDate"
-                className="d-flex flex-align-items-center"
-              >
-                <span className="left-label-form bold">Due Date:</span>
-                {dueDate && dueDate.selected ? (
-                  <Input
-                    config={{
-                      field: taskModel.dueDate,
-                      onChange: this.handleInputChange,
-                      keyPress: this.handleInputChange,
-                      value: dueDate.value,
-                      blur: () => this.handleOnBlur(taskModel.dueDate.name),
-                      focus: this.handleOnFocus,
-                      small: true,
-                      success,
-                      error: error && error.dueDate && error.dueDate.detail,
-                      options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
-                    }}
-                  />
-                ) : (
-                  <span className="pointer">
-                    {dueDate &&
-                      dueDate.value &&
-                      moment(dueDate.value).format('DD/MM/YYYY')}
-                  </span>
-                )}
-                {success === 'dueDate' && (
-                  <SuccessIcon
-                    style={{
-                      top: 0,
-                    }}
-                  />
-                )}
-              </label>
-            </li>
-            <li className="task-detail-list-item">
-              <span className="left-label-form bold">Assignee:</span>
-              <div className="d-flex">
-                <UserIconContainer user={{ user: task.assign }} name />
-                <Button
-                  type="button"
-                  category="success"
-                  onClick={this.handleReassign}
-                  small
-                >
-                  Reassign
-                </Button>
-              </div>
-            </li>
-            <li className="task-detail-list-item task-detail-list-item--tags">
-              <label
-                data-name="labels"
-                className="d-flex flex-align-items-center"
-              />
-              <InputAutoComplete
+      <div className="task-detail">
+        <header>
+          <h1
+            onKeyPress={() => this.handleLabelClick('title')}
+            onClick={() => this.handleLabelClick('title')}
+            data-name="title"
+            className="d-flex flex-align-items-center"
+          >
+            {title && title.selected ? (
+              <Input
                 config={{
-                  field: taskModel.tags,
-                  onChange: this.handleInputSelectLablelsChange,
-                  keyPress: this.handleInputSelectLablelsChange,
-                  values: tags.value,
+                  field: {
+                    ...taskModel.title,
+                    label: '',
+                  },
+                  onChange: this.handleInputChange,
+                  keyPress: this.handleInputChange,
+                  value: title.value,
+                  blur: () => this.handleOnBlur(taskModel.title.name),
                   focus: this.handleOnFocus,
-                  remove: this.handleRemove,
-                  isFocused: tags.focus,
-                  error: error && error.tags && error.tags.detail,
+                  small: true,
+                  success,
+                  error: error && error.title && error.title.detail,
+                  options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
                 }}
               />
-            </li>
-            <li className="task-detail-list-item task-detail-list-item--description">
-              <label
-                onKeyPress={() => this.handleLabelClick('description')}
-                onClick={() => this.handleLabelClick('description')}
-                data-name="description"
-                className="d-flex flex-column"
-              >
-                <span className="left-label-form bold">Description:</span>
-                {description && description.selected ? (
-                  <Textarea
-                    config={{
-                      field: {
-                        ...taskModel.description,
-                        label: null,
-                      },
-                      onChange: this.handleTextAreaChange,
-                      keyPress: this.handleTextAreaChange,
-                      value: description.value,
-                      blur: () => this.handleOnBlur(taskModel.description.name),
-                      focus: this.handleOnFocus,
-                      small: true,
-                      success,
-                      error:
-                        error && error.description && error.description.detail,
-                    }}
-                  />
-                ) : (
-                  <p className="task-detail-list-item pointer">
-                    {description.value}
-                  </p>
-                )}
-                {success === 'description' && (
-                  <SuccessIcon
-                    style={{
-                      position: 'absolute',
-                      left: '150px',
-                      top: 0,
-                    }}
-                  />
-                )}
-              </label>
-            </li>
-            <li className="task-detail-list-item">
-              <DisplayDocument
-                update={this.handleInputFileChange}
-                keyToUpdate="files"
-                files={task.files}
-                onDelete={this.handleRemoveFile}
-                editable
+            ) : (
+              <span className="pointer">{title && title.value}</span>
+            )}
+            {success === 'title' && (
+              <SuccessIcon
+                style={{
+                  top: 0,
+                }}
               />
-            </li>
-          </ul>
-        )}
+            )}
+          </h1>
+          <div className="d-flex flex-align-items-center">
+            <UserIconContainer user={{ user: task.author }} />
+            {task.createdAt && (
+              <p className="small">
+                created:
+                {moment(task.createdAt).format('DD/MM/YYYY hh:mm')}
+              </p>
+            )}
+          </div>
+        </header>
+        <ul className="task-detail-list">
+          <li className="task-detail-list-item">
+            <label
+              onKeyPress={() => this.handleLabelClick('status')}
+              onClick={() => this.handleLabelClick('status')}
+              data-name="status"
+              className="d-flex flex-align-items-center"
+            >
+              <span className="left-label-form bold">Status:</span>
+              {status && status.selected ? (
+                <Select
+                  config={{
+                    field: taskModel.status,
+                    onChange: this.handleSelectChange,
+                    value: status.value,
+                    blur: () => this.handleOnBlur(taskModel.status.name),
+                    options: [
+                      'To Do',
+                      'In Progress',
+                      'Reopened',
+                      'Need Testing',
+                      'On Hold',
+                      'Closed',
+                    ],
+                    small: true,
+                    error: error && error.status && error.status.detail,
+                  }}
+                />
+              ) : (
+                <span className="pointer">{status.value}</span>
+              )}
+              {success === 'status' && (
+                <SuccessIcon
+                  style={{
+                    top: 0,
+                  }}
+                />
+              )}
+            </label>
+          </li>
+          <li className="task-detail-list-item">
+            <label
+              onKeyPress={() => this.handleLabelClick('priority')}
+              onClick={() => this.handleLabelClick('priority')}
+              data-name="priority"
+              className="d-flex flex-align-items-center"
+            >
+              <span className="left-label-form bold">Priority:</span>
+              {priority && priority.selected ? (
+                <Select
+                  config={{
+                    field: taskModel.priority,
+                    onChange: this.handleSelectChange,
+                    keyPress: this.handleSelectChange,
+                    value: priority.value,
+                    blur: () => this.handleOnBlur(taskModel.priority.name),
+                    focus: this.handleOnFocus,
+                    small: true,
+                    success,
+                    error: error && error.priority && error.priority.detail,
+                    options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+                  }}
+                />
+              ) : (
+                <span className="pointer">{priority.value}</span>
+              )}
+              {success === 'priority' && (
+                <SuccessIcon
+                  style={{
+                    top: 0,
+                  }}
+                />
+              )}
+            </label>
+          </li>
+          <li className="task-detail-list-item">
+            <label
+              onKeyPress={() => this.handleLabelClick('dueDate')}
+              onClick={() => this.handleLabelClick('dueDate')}
+              data-name="dueDate"
+              className="d-flex flex-align-items-center"
+            >
+              <span className="left-label-form bold">Due Date:</span>
+              {dueDate && dueDate.selected ? (
+                <Input
+                  config={{
+                    field: taskModel.dueDate,
+                    onChange: this.handleInputChange,
+                    keyPress: this.handleInputChange,
+                    value: dueDate.value,
+                    blur: () => this.handleOnBlur(taskModel.dueDate.name),
+                    focus: this.handleOnFocus,
+                    small: true,
+                    success,
+                    error: error && error.dueDate && error.dueDate.detail,
+                    options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+                  }}
+                />
+              ) : (
+                <span className="pointer">
+                  {dueDate &&
+                    dueDate.value &&
+                    moment(dueDate.value).format('DD/MM/YYYY')}
+                </span>
+              )}
+              {success === 'dueDate' && (
+                <SuccessIcon
+                  style={{
+                    top: 0,
+                  }}
+                />
+              )}
+            </label>
+          </li>
+          <li className="task-detail-list-item d-flex flex-align-items-center">
+            <span className="left-label-form bold">Assignee:</span>
+            <div className="d-flex">
+              <UserIconContainer
+                containerCss={{ padding: 0 }}
+                user={{ user: task.assign }}
+                name
+              />
+              <Button
+                style={{
+                  margin: 0,
+                }}
+                type="button"
+                category="success"
+                onClick={this.handleReassign}
+                small
+              >
+                Reassign
+              </Button>
+            </div>
+          </li>
+          <li className="task-detail-list-item task-detail-list-item--tags">
+            <span className="left-label-form bold">Tags:</span>
+            <InputAutoComplete
+              config={{
+                field: taskModel.tags,
+                onChange: this.handleInputSelectLablelsChange,
+                keyPress: this.handleInputSelectLablelsChange,
+                values: tags.value,
+                focus: this.handleOnFocus,
+                remove: this.handleRemove,
+                isFocused: tags.focus,
+                error: error && error.tags && error.tags.detail,
+              }}
+            />
+          </li>
+          <li className="task-detail-list-item task-detail-list-item--description">
+            <label
+              onKeyPress={() => this.handleLabelClick('description')}
+              onClick={() => this.handleLabelClick('description')}
+              data-name="description"
+              className="d-flex flex-column"
+            >
+              <span className="left-label-form bold">Description:</span>
+              {description && description.selected ? (
+                <Textarea
+                  config={{
+                    field: {
+                      ...taskModel.description,
+                      label: null,
+                    },
+                    onChange: this.handleTextAreaChange,
+                    keyPress: this.handleTextAreaChange,
+                    value: description.value,
+                    blur: () => this.handleOnBlur(taskModel.description.name),
+                    focus: this.handleOnFocus,
+                    small: true,
+                    success,
+                    error:
+                      error && error.description && error.description.detail,
+                  }}
+                />
+              ) : (
+                <p className="task-detail-list-item pointer">
+                  {description.value}
+                </p>
+              )}
+              {success === 'description' && (
+                <SuccessIcon
+                  style={{
+                    position: 'absolute',
+                    left: '150px',
+                    top: 0,
+                  }}
+                />
+              )}
+            </label>
+          </li>
+          <li className="task-detail-list-item">
+            <DisplayDocument
+              update={this.handleInputFileChange}
+              keyToUpdate="files"
+              files={task.files}
+              onDelete={this.handleRemoveFile}
+              editable
+            />
+          </li>
+        </ul>
         {showUsersAssignModal && (
           <Modal
             title="Select Assignee"
@@ -497,7 +543,7 @@ class ListInput extends React.Component {
             <SelectBoxUserContainer callback={this.handleSelectAssign} />
           </Modal>
         )}
-      </Fragment>
+      </div>
     );
   }
 }

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import './userLoader.css';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
 import Pagination from '../../components/Applications/AddressBook/components/Pagination';
-import { ROOT_URL } from '../../Utils/config';
 import UserIconContainer from '../UserIcon';
 
 const mapStateToProps = ({ projectReducer, userReducer }) => ({

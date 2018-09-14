@@ -23,6 +23,8 @@ import {
   DELETE_TASK,
   deleteTaskSuccessAction,
   deleteTaskFailureAction,
+  DELETE_COMMENT_TASK,
+  EDIT_COMMENT_TASK,
 } from '../reducers/taskReducer';
 import { logoutAction } from '../reducers/authReducer';
 import Utils from '../../Utils/utils';
@@ -43,26 +45,23 @@ export default store => next => action => {
   const utils = new Utils();
   switch (action.type) {
     case CREATE_TASK: {
-      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
-        ._id;
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
       const form = toObject(filteredArray);
       const formData = new FormData();
       Object.keys(form).forEach(key => formData.append([key], form[key]));
-      action.payload.files.forEach(file => {
-        formData.append('files', file);
-      });
-      formData.append('team', teamId);
+      if (action.payload.files) {
+        action.payload.files.value.forEach(file => {
+          formData.append('files', file);
+        });
+      }
       axios({
         method: 'post',
         data: formData,
         url: `${ROOT_URL}/api/tasks`,
         headers: {
           Authorization: localStorage.getItem('token'),
-          type: 'task',
-          folder: teamId,
         },
       })
         .then(({ data }) => {
@@ -88,20 +87,18 @@ export default store => next => action => {
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
-      console.log(filteredArray);
       const form = toObject(filteredArray);
-      console.log(form);
       const formData = new FormData();
       Object.keys(form).forEach(key => formData.append([key], form[key]));
-      formData.append('team', teamId);
+      if (teamId) {
+        formData.append('team', teamId);
+      }
       axios({
         method: 'put',
         data: formData,
         url: `${ROOT_URL}/api/tasks/${taskId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
-          type: 'task',
-          folder: teamId,
         },
       })
         .then(({ data }) => {
@@ -126,7 +123,7 @@ export default store => next => action => {
       const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/tasks/team/${teamId}?${filter}`,
+        url: `${ROOT_URL}/api/tasks?${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -189,6 +186,47 @@ export default store => next => action => {
           return store.dispatch(
             deleteTaskFailureAction(error.response.data.errors),
           );
+        });
+      break;
+    }
+    case EDIT_COMMENT_TASK: {
+      const filteredArray = Object.entries(action.message).filter(
+        field => field[1].changed,
+      );
+      const form = toObject(filteredArray);
+      axios({
+        method: 'put',
+        url: `${ROOT_URL}/api/tasks/comments/${action.taskId}?comment=${
+          action.commentId
+        }`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+        data: form,
+      })
+        .then(({ data }) => {
+          store.dispatch(editTaskSuccessAction(data));
+        })
+        .catch(error => {
+          return console.error(error);
+        });
+      break;
+    }
+    case DELETE_COMMENT_TASK: {
+      axios({
+        method: 'delete',
+        url: `${ROOT_URL}/api/tasks/comments/${action.taskId}?comment=${
+          action.commentId
+        }`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(editTaskSuccessAction(data));
+        })
+        .catch(error => {
+          return console.error(error);
         });
       break;
     }

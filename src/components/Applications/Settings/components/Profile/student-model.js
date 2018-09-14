@@ -43,6 +43,7 @@ export default {
   description: {
     label: 'What about you',
     name: 'description',
+    placeholder: 'Tell us a little more about you',
   },
   tags: {
     label: 'Your Competences',

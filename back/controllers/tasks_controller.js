@@ -3,7 +3,6 @@ const mime = require('mime');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
 const shell = require('shelljs');
-
 const ApiResponse = require('../service/api/apiResponse_v2');
 const Task = require('../models/Task');
 
@@ -13,7 +12,7 @@ module.exports = {
   index: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     let query = {
-      team: req.params.id,
+      $or: [{ author: res.locals.user._id }, { assign: res.locals.user._id }],
     };
     if (req.query.myTask) {
       query = {
@@ -78,9 +77,7 @@ module.exports = {
       if (req.files) {
         let files = [];
         files = await req.files.map(file => {
-          const fullPath = `${ROOT_FOLDER}/teams/${
-            req.body.team
-          }/tasks/${folder}`;
+          const fullPath = `${ROOT_FOLDER}/tasks/${folder}`;
 
           const fileName = `${file.fieldname}-${uuidv4()}.${mime.extension(
             file.mimetype,
@@ -93,14 +90,14 @@ module.exports = {
             fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           }
 
-          const url = `/teams/${req.body.team}/tasks/${folder}/${fileName}`;
+          const url = `/tasks/${folder}/${fileName}`;
 
           return {
             originalName: file.originalname,
             name: fileName,
             extension: mime.extension(file.mimetype),
             mimetype: file.mimetype,
-            path: `/teams/${req.body.team}/tasks/${folder}`,
+            path: `/tasks/${folder}`,
             folder,
             author: res.locals.user._id,
             createdAt: new Date(),
@@ -250,9 +247,7 @@ module.exports = {
       if (req.files && req.files.length > 0) {
         let files = [];
         files = await req.files.map(file => {
-          const fullPath = `${ROOT_FOLDER}/teams/${
-            req.body.team
-          }/tasks/${folder}`;
+          const fullPath = `${ROOT_FOLDER}/tasks/${folder}`;
 
           const fileName = `${file.fieldname}-${uuidv4()}.${mime.extension(
             file.mimetype,
@@ -265,14 +260,14 @@ module.exports = {
             fs.writeFileSync(`${fullPath}/${fileName}`, file.buffer);
           }
 
-          const url = `/teams/${req.body.team}/tasks/${folder}/${fileName}`;
+          const url = `/tasks/${folder}/${fileName}`;
 
           return {
             originalName: file.originalname,
             name: fileName,
             extension: mime.extension(file.mimetype),
             mimetype: file.mimetype,
-            path: `/teams/${req.body.team}/tasks/${folder}`,
+            path: `/tasks/${folder}`,
             folder,
             author: res.locals.user._id,
             createdAt: new Date(),
@@ -391,43 +386,13 @@ module.exports = {
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
       }
-      await shell.rm(
-        '-R',
-        `${ROOT_FOLDER}/teams/${task.team}/tasks/${task.taskIdFolder}`,
-      );
+      await shell.rm('-R', `${ROOT_FOLDER}/tasks/${task.taskIdFolder}`);
       const tasks = await Task.find({ team: task.team }, { taskIdFolder: 0 });
       return apiResponse.success(201, {
         tasks,
       });
     } catch (error) {
       return apiResponse.failure(422, error);
-    }
-  },
-
-  readFile: req => {
-    const paramsFromQuery = req.split('|');
-    const folder = paramsFromQuery[0];
-    const fileName = paramsFromQuery[1];
-    const mimeType = paramsFromQuery[2];
-    const type = paramsFromQuery[3];
-
-    const TYPE_FOLDER = path.join(ROOT_FOLDER, `${type}`);
-    const FOLDER = path.join(TYPE_FOLDER, `/${folder}`);
-    const FILE = path.join(FOLDER, `/${fileName}`);
-
-    try {
-      if (
-        fs.existsSync(TYPE_FOLDER) &&
-        fs.existsSync(FOLDER) &&
-        fs.existsSync(FILE)
-      ) {
-        const fileBase64 = fs.readFileSync(FILE, { encoding: 'base64' });
-        return {
-          value: `data:${mimeType};base64,${fileBase64}`,
-        };
-      }
-    } catch (error) {
-      return error.message;
     }
   },
 };

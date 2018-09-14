@@ -28,6 +28,9 @@ export const DELETE_TASK = 'DELETE_TASK';
 export const DELETE_TASK_SUCCESS = 'DELETE_TASK_SUCCESS';
 export const DELETE_TASK_FAILURE = 'DELETE_TASK_FAILURE';
 
+export const DELETE_COMMENT_TASK = 'DELETE_COMMENT_TASK';
+export const EDIT_COMMENT_TASK = 'EDIT_COMMENT_TASK';
+
 export const CLEAR_TASK_MESSAGE = 'CLEAR_TASK_MESSAGE';
 
 /*
@@ -232,6 +235,12 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case DELETE_COMMENT_TASK: {
+      return {
+        ...state,
+      };
+    }
+
     case CLEAR_TASK_MESSAGE: {
       return {
         ...state,
@@ -316,6 +325,17 @@ export const deleteTaskSuccessAction = data => ({
 export const deleteTaskFailureAction = error => ({
   type: DELETE_TASK_FAILURE,
   payload: error,
+});
+export const deleteCommentTaskAction = (taskId, commentId) => ({
+  type: DELETE_COMMENT_TASK,
+  taskId,
+  commentId,
+});
+export const editCommentTaskAction = (taskId, commentId, message) => ({
+  type: EDIT_COMMENT_TASK,
+  taskId,
+  commentId,
+  message,
 });
 /*
  * Export default

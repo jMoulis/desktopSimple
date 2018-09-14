@@ -6,7 +6,7 @@
   position: relative
   .form-control
     border: none
-    border-bottom: 2px solid $darkestblue
+    border-bottom: 2px solid transparent
     outline: none
     transition: border-bottom 500ms
     padding-bottom: .5rem
@@ -19,7 +19,10 @@
     &:focus
       border-bottom: 2px solid $orange
     &::placeholder
-      color: $darkestblue
+      color: rgba($darkestblue, .54)
       font-weight: normal
       font-size: .8rem
       font-family: 'Nunito', sans-serif
+      font-style: italic
+    &:hover
+      border-bottom: 2px solid $orange

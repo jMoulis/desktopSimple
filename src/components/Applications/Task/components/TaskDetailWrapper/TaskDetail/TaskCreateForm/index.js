@@ -10,19 +10,25 @@ import './index.css';
 import SelectBoxUser from '../../../../../../../Modules/SelectBoxUser';
 import autoTextAreaResizing from '../../../../../../../Utils/autoTextAreaResizing';
 import InputAutoComplete from '../../../../../../Form/inputAutoComplete';
+import Modal from '../../../../../../../Modules/Modal/modal';
+import Button from '../../../../../../Form/button';
+import UserIconContainer from '../../../../../../../Modules/UserIcon';
+import DisplayDocument from '../../../../../../../Modules/DisplayDocument';
 
 class TaskCreateForm extends React.Component {
   static propTypes = {
     closeFromParent: PropTypes.func,
     createTaskAction: PropTypes.func.isRequired,
     taskCreation: PropTypes.object.isRequired,
-    teamId: PropTypes.string.isRequired,
+    teamId: PropTypes.string,
     clearTaskMessageAction: PropTypes.func.isRequired,
     fetchTasksAction: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     closeFromParent: null,
+    teamId: null,
   };
 
   constructor(props) {
@@ -43,10 +49,19 @@ class TaskCreateForm extends React.Component {
     });
     this.state = {
       ...fields,
-      files: [],
-      team: {
-        value: props.teamId,
+      files: {
+        value: [],
+        changed: false,
       },
+      assign: {
+        value: {
+          _id: props.loggedUser._id,
+          fullName: props.loggedUser.fullName,
+          picture: props.loggedUser.picture,
+        },
+        changed: true,
+      },
+      showUsersAssignModal: false,
     };
   }
   componentDidUpdate() {
@@ -69,7 +84,10 @@ class TaskCreateForm extends React.Component {
   handleSubmit = evt => {
     evt.preventDefault();
     const { createTaskAction } = this.props;
-    createTaskAction(this.state);
+    createTaskAction({
+      ...this.state,
+      assign: { value: this.state.assign.value._id, changed: true },
+    });
   };
 
   handleInputChange = evt => {
@@ -102,20 +120,43 @@ class TaskCreateForm extends React.Component {
     }));
   };
 
-  handleAssignSelected = userId => {
+  handleAssignSelected = user => {
     this.setState(() => ({
       assign: {
-        value: userId,
+        value: user,
         changed: true,
       },
     }));
   };
-  handleInputFileChange = evt => {
-    const file = evt.target.files[0];
+
+  handleReassign = () => {
+    this.setState(prevState => ({
+      showUsersAssignModal: !prevState.showUsersAssignModal,
+    }));
+  };
+
+  handleInputFileChange = ({ files }) => {
     this.setState(prevState => ({
       ...prevState,
-      files: [...prevState.files, file],
+      files: {
+        changed: true,
+        value: [...prevState.files.value, files.value],
+      },
     }));
+  };
+
+  handleRemoveFile = file => {
+    if (file) {
+      this.setState(prevState => ({
+        ...prevState,
+        files: {
+          changed: true,
+          value: prevState.files.value.filter(
+            document => document.name !== file,
+          ),
+        },
+      }));
+    }
   };
 
   handleFormKeyPress = evt => {
@@ -146,8 +187,18 @@ class TaskCreateForm extends React.Component {
   };
 
   render() {
-    const { title, description, status, priority, files, tags } = this.state;
-    const { closeFromParent, taskCreation } = this.props;
+    const {
+      title,
+      description,
+      status,
+      priority,
+      files,
+      tags,
+      showUsersAssignModal,
+      assign,
+      team,
+    } = this.state;
+    const { closeFromParent, taskCreation, loggedUser } = this.props;
     const { error } = taskCreation;
     return (
       <form
@@ -174,6 +225,20 @@ class TaskCreateForm extends React.Component {
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
             error: error && error.description && error.description.detail,
+          }}
+        />
+        <Select
+          config={{
+            field: taskModel.team,
+            onChange: this.handleInputChange,
+            value: team.value,
+            blur: this.handleOnBlur,
+            focus: this.handleOnFocus,
+            options: loggedUser.teams.map(team => ({
+              value: team._id,
+              label: team.name,
+            })),
+            error: error && error.status && error.status.detail,
           }}
         />
         <Select
@@ -218,10 +283,33 @@ class TaskCreateForm extends React.Component {
             error: error && error.tags && error.tags.detail,
           }}
         />
-        <input type="file" multiple onChange={this.handleInputFileChange} />
-        <ul>{files.map(document => <li>{document.name}</li>)}</ul>
-        {files.length === 0 && <h2>No files available</h2>}
-        <SelectBoxUser callback={this.handleAssignSelected} />
+        <DisplayDocument
+          update={this.handleInputFileChange}
+          keyToUpdate="files"
+          files={files.value}
+          onDelete={this.handleRemoveFile}
+          editable
+        />
+        {assign.value && (
+          <UserIconContainer user={{ user: assign.value }} name />
+        )}
+        {showUsersAssignModal ? (
+          <Modal
+            title="Select Assignee"
+            zIndex={1}
+            closeFromParent={this.handleReassign}
+          >
+            <SelectBoxUser callback={this.handleAssignSelected} />
+          </Modal>
+        ) : (
+          <Button
+            type="button"
+            category="success"
+            onClick={this.handleReassign}
+            small
+            label="Assign"
+          />
+        )}
         <FormButtonsContainer onCancel={{ action: closeFromParent }} onCreate />
       </form>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TaskDetail from '../../containers/TaskDetailWrapper/TaskDetail';
-import TaskActivity from './TaskActivity';
+import TaskActivity from '../../containers/TaskDetailWrapper/TaskActivity';
 import './index.css';
 
 const TaskDetailWrapper = ({ activeTaskProcess }) => (

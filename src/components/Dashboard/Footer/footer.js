@@ -11,39 +11,39 @@ class Footer extends React.Component {
     logoutAction: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
-  }
-  handleStartApp = (event) => {
-    const {
-      startAppAction,
-      setActiveAppAction,
-    } = this.props;
+  };
+  handleStartApp = event => {
+    const { startAppAction, setActiveAppAction } = this.props;
     // Fetch appName from button toolbar clicked
     const { appname } = event.currentTarget.dataset;
     // Fetch appLoader class
     const appLoader = new AppLoader(appname);
     // See applicationLoader.js
-    appLoader.applicationSelector()
-      .then((appComponent) => {
-        // Load for the first time the app
-        startAppAction(appname);
-        // See frameReducer
-        setActiveAppAction({ appName: appname, appComponent });
-      });
-  }
+    appLoader.applicationSelector().then(appComponent => {
+      // Load for the first time the app
+      startAppAction(appname);
+      // See frameReducer
+      setActiveAppAction({ appName: appname, appComponent });
+    });
+  };
   handleLogout = () => {
     const { logoutAction } = this.props;
     logoutAction();
-  }
+  };
   render() {
     const { applications, loggedUser } = this.props;
-    const objectValues = Object.keys(applications).map(itm => applications[itm]);
+    const objectValues = Object.keys(applications).map(
+      itm => applications[itm],
+    );
     return (
       <footer id="footer">
         <div className="footer-app-icon">
           {/* Loop over the applications and load icons */}
-          {objectValues.map((application) => {
-            if (!application.typeUser.includes(loggedUser.typeUser) &&
-              !application.typeUser.includes('all')) {
+          {objectValues.map(application => {
+            if (
+              !application.typeUser.includes(loggedUser.typeUser) &&
+              !application.typeUser.includes('all')
+            ) {
               return '';
             }
             if (application.appName === 'Settings') {
@@ -66,11 +66,14 @@ class Footer extends React.Component {
                     <span
                       key={`${application.appName}-2`}
                       className="btn-title"
-                    >{application.title}
+                    >
+                      {application.title}
                     </span>,
                   ]}
                 </div>
-                {applications[application.appName].reduce && <p className="active-app-circle" />}
+                {applications[application.appName].reduce && (
+                  <p className="active-app-circle" />
+                )}
               </button>
             );
           })}

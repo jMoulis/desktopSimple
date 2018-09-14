@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .task-detail-wrapper {
-  margin-left: 1rem;
   overflow: auto; }
 
 .task-detail-list {
@@ -13,14 +12,12 @@
       align-items: center;
       width: 120px;
       height: 28px; }
-    .task-detail-list-item .tags {
-      margin: 0; }
     .task-detail-list-item--tags {
-      padding: 0;
-      padding-bottom: .5rem; }
+      padding: 0; }
+      .task-detail-list-item--tags .form-group {
+        padding: 0; }
       .task-detail-list-item--tags .input-auto {
-        padding: 0;
-        border: none; }
+        padding: 0; }
     .task-detail-list-item--description {
       margin-bottom: .5rem; }
       .task-detail-list-item--description .form-group {

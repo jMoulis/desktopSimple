@@ -51,7 +51,7 @@ export default {
     zIndex: 0,
     icon: 'fas fa-tasks fa-2x',
     reduce: false,
-    typeUser: ['all'],
+    typeUser: ['student'],
   },
   AddressBook: {
     appName: 'AddressBook',

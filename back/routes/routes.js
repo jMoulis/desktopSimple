@@ -6,6 +6,7 @@ const AuthController = require('../controllers/auth_controller');
 const TeamsController = require('../controllers/teams_controller');
 const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
+const CommentsController = require('../controllers/comments_controller');
 const FilesController = require('../controllers/files_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const multerUtil = require('../service/multerStorage');
@@ -61,7 +62,8 @@ module.exports = app => {
   app.put('/api/messages/:id', VerifyToken, MessageController.edit);
   app.delete('/api/messages/:id', VerifyToken, MessageController.delete);
 
-  app.get('/api/tasks/team/:id', VerifyToken, TasksController.index);
+  // Tasks
+  app.get('/api/tasks', VerifyToken, TasksController.index);
   app.post(
     '/api/tasks',
     upload.array('files'),
@@ -75,10 +77,13 @@ module.exports = app => {
     upload.array('files'),
     TasksController.update,
   );
-  app.delete('/api/tasks/:id', TasksController.delete);
+  app.delete('/api/tasks/:id', VerifyToken, TasksController.delete);
+
+  // Comments
+  app.put('/api/tasks/comments/:id', VerifyToken, CommentsController.update);
+  app.delete('/api/tasks/comments/:id', VerifyToken, CommentsController.delete);
 
   app.post('/api/files', VerifyToken, FilesController.index);
-  app.get('/api/files/avatar', FilesController.test);
   app.delete('/api/files', VerifyToken, FilesController.delete);
 
   app.get('*', (req, res) => {

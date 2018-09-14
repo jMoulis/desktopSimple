@@ -36,7 +36,12 @@ export default {
     label: 'Assign',
   },
   dueDate: {
-    type: 'input',
+    type: 'text',
     name: 'dueDate',
+  },
+  team: {
+    type: 'select',
+    name: 'team',
+    defaultOption: 'Select a team',
   },
 };

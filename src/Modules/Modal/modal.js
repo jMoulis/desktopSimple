@@ -16,12 +16,14 @@ class Modal extends React.Component {
     ]),
     name: PropTypes.string,
     noParamsOnClose: PropTypes.bool,
+    small: PropTypes.bool,
   };
   static defaultProps = {
     children: null,
     closeFromParent: null,
     name: '',
     noParamsOnClose: false,
+    small: false,
   };
   constructor(props) {
     super(props);

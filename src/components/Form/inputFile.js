@@ -22,7 +22,7 @@ const InputFile = ({ config }) => {
     <div className="form-group" style={styleContainer}>
       <label
         style={styleLabel}
-        className="btn btn-success input-file-label  pointer"
+        className="btn btn-success input-file-label pointer"
         htmlFor={field.name}
       >
         {field.label}

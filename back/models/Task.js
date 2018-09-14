@@ -73,7 +73,6 @@ const TaskSchema = new Schema({
   team: {
     type: Schema.Types.ObjectId,
     ref: 'team',
-    required: [true, 'Team required'],
   },
   project: {
     type: Schema.Types.ObjectId,

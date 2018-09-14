@@ -14,7 +14,7 @@ const TabContent = ({ data, type, children }) => (
           alignItems: 'flex-start',
         }}
       />
-      <div className="d-flex flex-column">
+      <div className="d-flex flex-column flex1">
         <span>{data.author.fullName}</span>
         <small className="small">
           {`add a ${type} the ${moment(data.createdAt).format(

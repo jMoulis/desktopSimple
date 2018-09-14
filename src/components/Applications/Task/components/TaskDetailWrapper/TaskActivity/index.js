@@ -5,7 +5,7 @@ import './index.css';
 import TabContent from './TabContent';
 import TabNav from './TabNav';
 import TaskCommentFormContainer from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentForm';
-import Button from '../../../../../Form/button';
+import TaskCommentEditForm from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentEditForm';
 
 class TaskActivity extends React.Component {
   static propTypes = {
@@ -20,6 +20,7 @@ class TaskActivity extends React.Component {
       type,
     }));
   };
+
   render() {
     const { task } = this.props;
     const { type } = this.state;
@@ -41,28 +42,7 @@ class TaskActivity extends React.Component {
               task.comments &&
               task.comments.map((comment, index) => (
                 <TabContent key={index} data={comment} type="comment">
-                  {comment.message}
-                  <ul className="d-flex">
-                    <li>
-                      <Button
-                        style={{
-                          margin: 0,
-                        }}
-                        label="Delete"
-                        category="danger"
-                        small
-                      />
-                    </li>
-                    <li>
-                      <Button
-                        style={{
-                          margin: 0,
-                        }}
-                        label="Edit"
-                        small
-                      />
-                    </li>
-                  </ul>
+                  <TaskCommentEditForm taskId={task._id} comment={comment} />
                 </TabContent>
               ))}
           </ul>

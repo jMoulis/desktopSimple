@@ -7,6 +7,11 @@ import autoTextAreaResizing from '../../../../../../../../Utils/autoTextAreaResi
 import UserIconContainer from '../../../../../../../../Modules/UserIcon';
 
 class TaskCommentForm extends Component {
+  static propTypes = {
+    activeTaskProcess: PropTypes.object.isRequired,
+    editTaskAction: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -46,7 +51,7 @@ class TaskCommentForm extends Component {
   };
   handleBlur = () => {
     if (this.state.message.changed) return null;
-    this.setState(() => ({
+    return this.setState(() => ({
       showButton: false,
     }));
   };
@@ -94,7 +99,5 @@ class TaskCommentForm extends Component {
     );
   }
 }
-
-TaskCommentForm.propTypes = {};
 
 export default TaskCommentForm;

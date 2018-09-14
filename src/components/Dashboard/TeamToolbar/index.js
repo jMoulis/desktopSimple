@@ -14,13 +14,6 @@ class TeamToolbar extends React.Component {
     fetchSingleTeamAction: PropTypes.func.isRequired,
   };
 
-  shouldComponentUpdate(nextProps) {
-    const { editUser, fetchSingleTeamAction, team } = nextProps;
-    if (editUser.editing) {
-      // fetchSingleTeamAction(team._id);
-    }
-    return true;
-  }
   render() {
     const { team, showSelectTeamPanel, showSettings } = this.props;
     if (team && Object.keys(team).length === 0) {

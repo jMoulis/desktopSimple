@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import DocumentItem from './DocumentItem';
-import './index.css';
 import InputFile from '../../components/Form/inputFile';
-import DropZone from '../DropZone';
 import { fetchFileAction } from '../../store/reducers/fileReducer';
 import Utils from '../../Utils/utils';
+import './index.css';
 
 const mapStateToProps = ({ fileReducer, authReducer }) => ({
   fileProcess: fileReducer.fileProcess,
@@ -41,8 +40,10 @@ class DisplayDocument extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dragState: '',
       inputFile: '',
+      uniqueKey: Math.random()
+        .toString(36)
+        .substr(2, 9),
     };
   }
 
@@ -104,7 +105,7 @@ class DisplayDocument extends React.Component {
 
   render() {
     const { files, onDelete, loggedUser, editable } = this.props;
-    const { dragState, inputFile } = this.state;
+    const { inputFile, uniqueKey } = this.state;
     return (
       <Fragment>
         <ul className="d-flex document">
@@ -124,6 +125,11 @@ class DisplayDocument extends React.Component {
                   </li>
                 );
               }
+              return (
+                <div>
+                  <span>No files available</span>
+                </div>
+              );
             })
           ) : (
             <div>
@@ -132,35 +138,26 @@ class DisplayDocument extends React.Component {
           )}
         </ul>
         {editable && (
-          <div>
-            {/* <DropZone
-              dragAction={this.handleDrag}
-              dropAction={this.handleDrop}
-              dragState={dragState}
-            >
-              <p>Drop your file</p>
-            </DropZone> */}
-            <InputFile
-              config={{
-                styleContainer: {
-                  padding: 0,
-                  flexDirection: 'row',
-                },
-                field: {
-                  label: 'Add File',
-                  name: 'uploadFile',
-                  value: inputFile,
-                },
-                style: {
-                  padding: 0,
-                },
-                styleLabel: {
-                  padding: '0.5rem',
-                },
-                onChange: this.handleInputFileChange,
-              }}
-            />
-          </div>
+          <InputFile
+            config={{
+              styleContainer: {
+                padding: 0,
+                flexDirection: 'row',
+              },
+              field: {
+                label: 'Add File',
+                name: `uploadFile-${uniqueKey}`,
+                value: inputFile,
+              },
+              style: {
+                padding: 0,
+              },
+              styleLabel: {
+                padding: '0.5rem',
+              },
+              onChange: this.handleInputFileChange,
+            }}
+          />
         )}
       </Fragment>
     );
