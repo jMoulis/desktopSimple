@@ -91,12 +91,10 @@ const TaskSchema = new Schema({
     default: new Date(),
   },
   author: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
+    type: Object,
   },
   assign: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
+    type: Object,
   },
 });
 

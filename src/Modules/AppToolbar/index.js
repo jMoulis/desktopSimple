@@ -11,7 +11,7 @@ import SubMenu from '../Submenu';
 class AppToolbar extends React.Component {
   static propTypes = {
     menus: PropTypes.array,
-    children: PropTypes.shape(PropTypes.array, PropTypes.object),
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     sortingAction: PropTypes.func,
     liStyle: PropTypes.object,
     search: PropTypes.object,

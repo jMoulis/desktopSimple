@@ -1,5 +1,6 @@
 const Team = require('../models/Team');
 const User = require('../models/User');
+const Task = require('../models/Task');
 const Project = require('../models/Project');
 const ApiResponse = require('../service/api/apiResponse_v2');
 
@@ -227,6 +228,8 @@ module.exports = {
       const teamToRemove = await Team.findOne({ _id: teamId });
       const ids = teamToRemove.users.map(({ user }) => user);
       await Team.findByIdAndRemove({ _id: teamId });
+      // Delete tasks related
+      await Task.remove({ team: teamId });
       await User.updateMany(
         { _id: { $in: ids } },
         {

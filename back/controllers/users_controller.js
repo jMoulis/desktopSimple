@@ -19,7 +19,15 @@ module.exports = {
     try {
       const LIMIT = 5;
       let SKIP = 0;
-      let query = {};
+      let query = {
+        // teams: mongoose.Types.ObjectId(req.query.teams),
+      };
+      if (req.query.teams) {
+        query = {
+          ...query,
+          teams: mongoose.Types.ObjectId(req.query.teams),
+        };
+      }
       if (req.query.filter && !req.query.tags) {
         query = {
           ...query,
@@ -254,7 +262,6 @@ module.exports = {
         };
       }
 
-      console.log(props);
       if (Object.prototype.hasOwnProperty.call(props, 'tags')) {
         props = {
           ...props,

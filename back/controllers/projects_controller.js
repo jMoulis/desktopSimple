@@ -1,5 +1,6 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
+const Team = require('../models/Team');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const moment = require('moment');
 const fs = require('fs');
@@ -18,7 +19,14 @@ module.exports = {
       if (res.locals.user.typeUser !== 'company') {
         params = {
           isOnline: true,
-          roomLeft: true,
+          $expr: {
+            $lt: [
+              {
+                $size: '$teams',
+              },
+              '$maxTeam',
+            ],
+          },
         };
       }
       if (req.query.filter) {
@@ -27,7 +35,9 @@ module.exports = {
           $text: { $search: req.query.filter, $caseSensitive: false },
         };
       }
-      const projects = await Project.find({ ...params })
+      const projects = await Project.find({
+        ...params,
+      })
         .sort(
           req.query.sorting
             ? { createdAt: req.query.sorting }
@@ -106,7 +116,6 @@ module.exports = {
         true,
       );
 
-      console.log(projectProps);
       // Dealing with Tags
       if (Object.prototype.hasOwnProperty.call(projectProps, 'tags')) {
         projectProps = {
@@ -262,21 +271,13 @@ module.exports = {
         projectFolder.projectIdFolder,
       );
 
-      if (projectProps.tags) {
-        projectProps = {
-          ...projectProps,
-          tags: projectProps.tags.split(','),
-        };
-      }
       projectProps = {
         ...projectProps,
         ...(filesProjectProps || null),
-        roomLeft: await module.exports.isProjectRoomLeft(projectId),
       };
 
       // Dealing with Tags
       if (Object.prototype.hasOwnProperty.call(projectProps, 'tags')) {
-        console.log(projectProps);
         projectProps = {
           ...projectProps,
           tags: projectProps.tags ? projectProps.tags.split(',') : [],
@@ -335,17 +336,8 @@ module.exports = {
   async delete(req, res, next) {
     const projectId = req.params.id;
     const apiResponse = new ApiResponse(res);
-    // Check later if I should delete teams after project deletion
-    // Team.find({ project: projectId })
-    //   .then((teams) => {
-    //     User.updateMany({ teams: { $in: teams } }, { $pullAll: { teams } })
-    //       .then()
-    //       .catch(error => console.log(error));
-    //   })
-    //   .catch(error => console.log(error));
-    // Team.remove({ project: projectId }).then();
     try {
-      // await Team.update({ project: projectId }, { $unset: { project: '' } });
+      await Team.update({ project: projectId }, { $unset: { project: null } });
       const deletedProject = await Project.findByIdAndRemove({
         _id: projectId,
       });
@@ -394,20 +386,6 @@ module.exports = {
       },
       docUrl: document.url,
     };
-  },
-  async isProjectRoomLeft(projectId) {
-    try {
-      const project = await Project.findById(projectId);
-      if (!project) {
-        throw Error('No project found');
-      }
-      if (project.maxTeam === project.teams.length + 1) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      return error;
-    }
   },
   async buildingDocumentsObject(req, userId, folder, isNewDocument) {
     if (req.files && !isObjectEmpty(req.files)) {

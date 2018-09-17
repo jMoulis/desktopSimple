@@ -185,8 +185,6 @@ export default store => next => action => {
         action.payload,
         'company',
       );
-
-      console.log(action.payload);
       if (hasCompanyProperty) {
         filteredArray = Object.entries(action.payload.company).filter(
           field => field[1].changed,
@@ -205,10 +203,8 @@ export default store => next => action => {
         filteredArray = Object.entries(action.payload).filter(
           field => field[1].changed,
         );
-
-        Object.keys(toObject(filteredArray)).forEach(key =>
-          formData.append([key], toObject(filteredArray)[key]),
-        );
+        const form = toObject(filteredArray);
+        Object.keys(form).forEach(key => formData.append([key], form[key]));
       }
       axios({
         method: 'put',

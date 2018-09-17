@@ -8,11 +8,9 @@ class TaskFilter extends React.Component {
     selectedTab: 'All',
   };
 
-  handleClick = evt => {
-    const { filter } = evt.currentTarget.dataset;
+  handleClick = (filter, id) => {
     const { fetchTasksAction } = this.props;
-    const { id } = evt.target;
-    fetchTasksAction(JSON.parse(filter));
+    fetchTasksAction(filter);
     this.setState(() => ({
       selectedTab: id,
     }));
@@ -20,6 +18,7 @@ class TaskFilter extends React.Component {
 
   render() {
     const { selectedTab } = this.state;
+    const { loggedUser } = this.props;
     return (
       <ul className="left-navbar">
         <li
@@ -28,16 +27,8 @@ class TaskFilter extends React.Component {
           }`}
         >
           <button
-            onClick={this.handleClick}
-            data-filter={JSON.stringify(
-              { repository: { filter: '' } },
-              {
-                filterName: {
-                  label: 'All',
-                  type: 'main',
-                },
-              },
-            )}
+            onClick={() => this.handleClick({}, 'All')}
+            data-filter=""
             className="left-navbar-btn"
             type="button"
             id="All"
@@ -45,22 +36,32 @@ class TaskFilter extends React.Component {
             All Tasks
           </button>
         </li>
+        {loggedUser.teams.map(team => (
+          <li
+            key={team._id}
+            className={`task-list-item ${
+              selectedTab === team.name ? 'task-list-item-selected' : ''
+            }`}
+          >
+            <button
+              onClick={() => {
+                this.handleClick({ team: team._id }, team.name);
+              }}
+              className="left-navbar-btn"
+              type="button"
+              id={team.name}
+            >
+              {team.name}
+            </button>
+          </li>
+        ))}
         <li
           className={`task-list-item ${
             selectedTab === 'My Tasks' ? 'task-list-item-selected' : ''
           }`}
         >
           <button
-            onClick={this.handleClick}
-            data-filter={JSON.stringify(
-              { repository: { myTask: true } },
-              {
-                filterName: {
-                  label: 'My Tasks',
-                  type: 'main',
-                },
-              },
-            )}
+            onClick={() => this.handleClick({ myTask: true }, 'My Tasks')}
             className="left-navbar-btn"
             type="button"
             id="My Tasks"

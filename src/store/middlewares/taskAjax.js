@@ -50,6 +50,7 @@ export default store => next => action => {
       );
       const form = toObject(filteredArray);
       const formData = new FormData();
+
       Object.keys(form).forEach(key => formData.append([key], form[key]));
       if (action.payload.files) {
         action.payload.files.value.forEach(file => {
@@ -82,18 +83,12 @@ export default store => next => action => {
     }
     case EDIT_TASK: {
       const taskId = store.getState().taskReducer.activeTaskProcess.task._id;
-      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
-        ._id;
-      console.log(action.payload);
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
       const form = toObject(filteredArray);
       const formData = new FormData();
       Object.keys(form).forEach(key => formData.append([key], form[key]));
-      if (teamId) {
-        formData.append('team', teamId);
-      }
       axios({
         method: 'put',
         data: formData,
@@ -121,10 +116,26 @@ export default store => next => action => {
     case FETCH_TASKS: {
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
         ._id;
+      const loggedUserId = store.getState().authReducer.loginProcess.loggedUser
+        ._id;
+      let { payload } = action;
+      if (teamId) {
+        payload = {
+          ...payload,
+          team: teamId,
+        };
+      }
       const filter = utils.buildUrlFilter(action.payload);
+      let url = `${ROOT_URL}/api/tasks${!filter ? '' : filter}`;
+      if (
+        action.payload &&
+        Object.prototype.hasOwnProperty.call(action.payload, 'myTask')
+      ) {
+        url = `${ROOT_URL}/api/tasks/users/${loggedUserId}`;
+      }
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/tasks?${filter}`,
+        url,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

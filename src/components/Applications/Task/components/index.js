@@ -18,13 +18,25 @@ class Task extends React.Component {
     super(props);
     this.state = {
       showCreateModal: false,
+      filter: {},
     };
   }
 
   componentDidMount() {
     const { fetchTasksAction } = this.props;
-    fetchTasksAction({ filter: '' });
+    fetchTasksAction();
   }
+
+  handleSelectFilter = evt => {
+    const { name, value } = evt.target;
+    this.setState(prevState => ({
+      ...prevState,
+      filter: {
+        ...prevState.filter,
+        [name]: value,
+      },
+    }));
+  };
   handleShowCreateModal = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -32,9 +44,14 @@ class Task extends React.Component {
     }));
   };
 
+  handleAppToolBarSearch = filter => {
+    const { fetchTasksAction } = this.props;
+    fetchTasksAction(filter);
+  };
+
   render() {
     const { showCreateModal } = this.state;
-    const { fetchTasksAction, taskListProcess } = this.props;
+    const { taskListProcess, fetchTasksAction } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
         <AppToolbar
@@ -45,9 +62,32 @@ class Task extends React.Component {
               show: true,
             },
           ]}
-        />
+          search={{
+            show: true,
+            searchField: true,
+            action: this.handleAppToolBarSearch,
+            searchFieldLabel: 'tags, Student name, Company name, Description',
+          }}
+        >
+          <select name="status" onChange={this.handleSelectFilter}>
+            <option value="">Select Status</option>
+            <option value="to_do">To Do</option>
+            <option value="in_progress">In Progress</option>
+          </select>
+          <select name="priority" onChange={this.handleSelectFilter}>
+            <option value="">Select Priority</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+          </select>
+          <button
+            type="submit"
+            onClick={() => fetchTasksAction(this.state.filter)}
+          >
+            Filter
+          </button>
+        </AppToolbar>
         <div className="task-content d-flex full-height relative">
-          <TaskFilter fetchTasksAction={fetchTasksAction} />
+          <TaskFilter />
           {taskListProcess.tasks.length !== 0 ? (
             <Fragment>
               <TaskList />

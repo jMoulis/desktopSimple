@@ -3,6 +3,7 @@ const mime = require('mime');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
 const shell = require('shelljs');
+const mongoose = require('mongoose');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const Task = require('../models/Task');
 
@@ -12,26 +13,21 @@ module.exports = {
   index: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     let query = {
-      $or: [{ author: res.locals.user._id }, { assign: res.locals.user._id }],
+      ...req.query,
     };
-    if (req.query.myTask) {
+    if (query.filter) {
+      delete query.filter;
       query = {
         ...query,
-        assign: res.locals.user._id,
+        $text: {
+          $search: req.query.filter,
+          $caseSensitive: false,
+        },
       };
     }
+
     try {
       const tasks = await Task.find(query, { taskIdFolder: 0 })
-        .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
-          path: 'assign',
-          model: 'user',
-          select: 'fullName picture',
-        })
         .populate({
           path: 'comments.author',
           model: 'user',
@@ -47,6 +43,16 @@ module.exports = {
           model: 'user',
           select: 'fullName picture',
         })
+        .populate({
+          path: 'team',
+          model: 'team',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
+        })
         .sort({ createdAt: -1 });
       if (!tasks || tasks.length === 0) {
         return apiResponse.failure(404, null, 'Oups! No tasks found');
@@ -57,18 +63,68 @@ module.exports = {
       return apiResponse.failure(422, null, error.message);
     }
   },
+  getUserTask: async (req, res) => {
+    const apiResponse = new ApiResponse(res);
+    try {
+      const tasks = await Task.find(
+        { 'assign._id': res.locals.user._id.toString() },
+        { taskIdFolder: 0 },
+      )
+        .populate({
+          path: 'comments.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'activities.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'files.author',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'team',
+          model: 'team',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
+        })
+        .sort({ createdAt: -1 });
+      if (!tasks || tasks.length === 0) {
+        return apiResponse.failure(404, null, 'Oups! No tasks found');
+      }
 
+      return apiResponse.success(200, { tasks });
+    } catch (error) {
+      return apiResponse.failure(422, null, error.message);
+    }
+  },
   create: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
       const folder = uuidv4();
       let queryValues = {
         ...req.body,
-        author: res.locals.user._id,
+        assign: JSON.parse(req.body.assign),
+        author: {
+          _id: res.locals.user._id.toString(),
+          fullName: res.locals.user.fullName,
+          picture: res.locals.user.picture,
+        },
         activities: [
           {
             type: 'new task',
-            author: res.locals.user._id,
+            author: {
+              _id: res.locals.user._id.toString(),
+              fullName: res.locals.user.fullName,
+              picture: res.locals.user.picture,
+            },
             createdAt: new Date(),
           },
         ],
@@ -99,7 +155,11 @@ module.exports = {
             mimetype: file.mimetype,
             path: `/tasks/${folder}`,
             folder,
-            author: res.locals.user._id,
+            author: {
+              _id: res.locals.user._id,
+              fullName: res.locals.user.fullName,
+              picture: res.locals.user.picture,
+            },
             createdAt: new Date(),
             url,
             type: 'task',
@@ -120,11 +180,6 @@ module.exports = {
 
       const task = await Task.findOne({ _id: newTask._id }, { taskIdFolder: 0 })
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
           path: 'files.author',
           model: 'user',
           select: 'fullName picture',
@@ -135,9 +190,14 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'assign',
-          model: 'user',
-          select: 'fullName picture',
+          path: 'team',
+          model: 'team',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
         });
 
       return apiResponse.success(201, { task }, true);
@@ -154,11 +214,6 @@ module.exports = {
         { taskIdFolder: 0 },
       )
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
           path: 'comments.author',
           model: 'user',
           select: 'fullName picture',
@@ -174,9 +229,14 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'assign',
-          model: 'user',
-          select: 'fullName picture',
+          path: 'team',
+          model: 'team',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
         });
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
@@ -190,7 +250,6 @@ module.exports = {
 
   update: async (req, res) => {
     const apiResponse = new ApiResponse(res);
-
     try {
       let updateQuery = {
         author: {
@@ -207,6 +266,7 @@ module.exports = {
             : null,
         },
       };
+
       let docRemoveUrl;
       let updateType = Object.keys(req.body).map(key => key)[0];
 
@@ -235,7 +295,6 @@ module.exports = {
           ...req.body,
         };
       }
-
       const task = await Task.findOne({ _id: req.params.id });
       if (!task) {
         return apiResponse.failure(404, null, 'Task not found');
@@ -268,7 +327,11 @@ module.exports = {
             mimetype: file.mimetype,
             path: `/tasks/${folder}`,
             folder,
-            author: res.locals.user._id,
+            author: {
+              _id: res.locals.user._id,
+              fullName: res.locals.user.fullName,
+              picture: res.locals.user.picture,
+            },
             createdAt: new Date(),
             url,
             type: 'task',
@@ -298,7 +361,11 @@ module.exports = {
             $each: [
               {
                 type: updateType,
-                author: res.locals.user._id,
+                author: {
+                  _id: res.locals.user._id,
+                  fullName: res.locals.user.fullName,
+                  picture: res.locals.user.picture,
+                },
                 createdAt: new Date(),
               },
             ],
@@ -316,7 +383,11 @@ module.exports = {
               $each: [
                 {
                   message: updateQuery.message,
-                  author: res.locals.user._id,
+                  author: {
+                    _id: res.locals.user._id,
+                    fullName: res.locals.user.fullName,
+                    picture: res.locals.user.picture,
+                  },
                   updatedAt: new Date(),
                 },
               ],
@@ -325,7 +396,12 @@ module.exports = {
           },
         };
       }
-      console.log(updateQuery);
+      if (req.body.assign) {
+        updateQuery = {
+          ...updateQuery,
+          assign: JSON.parse(req.body.assign),
+        };
+      }
       const updateTask = await Task.update({ _id: req.params.id }, updateQuery);
 
       if (updateTask.n === 0) {
@@ -342,11 +418,6 @@ module.exports = {
         { taskIdFolder: 0 },
       )
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
           path: 'comments.author',
           model: 'user',
           select: 'fullName picture',
@@ -362,9 +433,14 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
-          path: 'assign',
-          model: 'user',
-          select: 'fullName picture',
+          path: 'team',
+          model: 'team',
+          select: 'users name',
+          populate: {
+            path: 'users.user',
+            model: 'user',
+            select: 'fullName picture',
+          },
         });
 
       return apiResponse.success(

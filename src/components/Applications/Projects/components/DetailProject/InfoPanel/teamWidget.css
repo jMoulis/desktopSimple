@@ -72,37 +72,12 @@
       color: #eee9d1; }
 
 .team-widget {
-  display: flex;
-  margin-top: .5rem;
-  align-items: center; }
-  .team-widget-content {
-    display: flex;
-    flex-direction: column;
-    padding-left: 1rem; }
+  padding: 1rem 0; }
   .team-widget h2 {
     font-weight: bold; }
   .team-widget .mini-container {
-    position: relative;
-    height: calc(40px * 2);
-    display: flex;
-    align-items: center;
-    width: calc(40px * 2); }
-    .team-widget .mini-container .user-icon:nth-of-type(even) {
-      padding: 0;
-      position: absolute;
-      top: 0px;
-      left: calc(40px / 2); }
-    .team-widget .mini-container .user-icon:nth-of-type(even):last-child {
-      position: absolute;
-      bottom: 0px;
-      left: calc(40px / 2);
-      top: 40px; }
+    display: flex; }
     .team-widget .mini-container .user-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all 300ms; }
-      .team-widget .mini-container .user-icon:hover {
-        z-index: 1; }
+      padding: 0; }
+      .team-widget .mini-container .user-icon .mini-thumbnail {
+        margin: 0; }

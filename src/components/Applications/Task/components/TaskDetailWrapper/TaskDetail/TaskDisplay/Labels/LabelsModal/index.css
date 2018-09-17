@@ -4,16 +4,16 @@
   padding-top: .5rem;
   padding-right: .5rem;
   padding-left: .5rem; }
-  .task-detail header {
+  .task-detail--header {
     margin-bottom: 1rem; }
-    .task-detail header h1 .form-group {
+    .task-detail--header h1 .form-group {
       padding: 0; }
-      .task-detail header h1 .form-group .form-control {
+      .task-detail--header h1 .form-group .form-control {
         padding: 0;
         font-size: 1.5rem;
         font-weight: bold; }
   .task-detail .modal-container {
-    height: 50%; }
+    height: 80%; }
 
 .labels-modal {
   position: absolute;

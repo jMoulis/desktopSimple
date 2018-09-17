@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Select from '../../../../../../../Form/select';
 import taskModel from '../../TaskCreateForm/task-model';
 import DisplayDocument from '../../../../../../../../Modules/DisplayDocument';
 import InputAutoComplete from '../../../../../../../Form/inputAutoComplete';
-import Input from '../../../../../../../Form/input';
 import SuccessIcon from '../../../../../../../../assets/successIcon/successIcon';
 import './index.css';
 import Textarea from '../../../../../../../Form/textarea';
@@ -80,6 +79,7 @@ class ListInput extends React.Component {
     }
     if (task && task._id !== state.id) {
       const fields = setStateFromProps(task, taskModel);
+      console.log(fields);
       return {
         ...fields,
       };
@@ -293,19 +293,20 @@ class ListInput extends React.Component {
       return editTaskAction({
         assign: {
           changed: true,
-          value: assignee._id,
+          value: JSON.stringify(assignee),
         },
       });
   };
 
   render() {
-    const { activeTaskProcess } = this.props;
+    const { activeTaskProcess, loggedUser } = this.props;
     const { task, error, success } = activeTaskProcess;
     const { form, showUsersAssignModal } = this.state;
-    const { status, priority, tags, dueDate, description, title } = form;
+    const { status, priority, tags, dueDate, description, title, team } = form;
+    console.log(form);
     return (
       <div className="task-detail">
-        <header>
+        <header className="task-detail--header">
           <div
             onKeyPress={() => this.handleLabelClick('title')}
             onClick={() => this.handleLabelClick('title')}
@@ -350,6 +351,40 @@ class ListInput extends React.Component {
         <ul className="task-detail-list">
           <li className="task-detail-list-item">
             <label
+              onKeyPress={() => this.handleLabelClick('team')}
+              onClick={() => this.handleLabelClick('team')}
+              data-name="team"
+              className="d-flex flex-align-items-center"
+            >
+              <span className="left-label-form bold">team:</span>
+              {team && team.selected ? (
+                <Select
+                  config={{
+                    field: taskModel.team,
+                    onChange: this.handleSelectChange,
+                    value: team.value.name,
+                    blur: () => this.handleOnBlur(taskModel.team.name),
+                    options: loggedUser.teams.map(team => ({
+                      value: team._id,
+                      label: team.name,
+                    })),
+                    error: error && error.team && error.team.detail,
+                  }}
+                />
+              ) : (
+                <span className="pointer">{task.team.name}</span>
+              )}
+              {success === 'team' && (
+                <SuccessIcon
+                  style={{
+                    top: 0,
+                  }}
+                />
+              )}
+            </label>
+          </li>
+          <li className="task-detail-list-item">
+            <label
               onKeyPress={() => this.handleLabelClick('status')}
               onClick={() => this.handleLabelClick('status')}
               data-name="status"
@@ -364,12 +399,30 @@ class ListInput extends React.Component {
                     value: status.value,
                     blur: () => this.handleOnBlur(taskModel.status.name),
                     options: [
-                      'To Do',
-                      'In Progress',
-                      'Reopened',
-                      'Need Testing',
-                      'On Hold',
-                      'Closed',
+                      {
+                        value: 'to_do',
+                        label: 'To Do',
+                      },
+                      {
+                        value: 'in_progress',
+                        label: 'In Progress',
+                      },
+                      {
+                        value: 'reopened',
+                        label: 'Reopend',
+                      },
+                      {
+                        value: 'need_testing',
+                        label: 'Need Testing',
+                      },
+                      {
+                        value: 'on_hold',
+                        label: 'On Hold',
+                      },
+                      {
+                        value: 'closed',
+                        label: 'Closed',
+                      },
                     ],
                     small: true,
                     error: error && error.status && error.status.detail,
@@ -407,7 +460,28 @@ class ListInput extends React.Component {
                     small: true,
                     success,
                     error: error && error.priority && error.priority.detail,
-                    options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+                    options: [
+                      {
+                        value: 'highest',
+                        label: 'Highest',
+                      },
+                      {
+                        value: 'high',
+                        label: 'High',
+                      },
+                      {
+                        value: 'medium',
+                        label: 'Medium',
+                      },
+                      {
+                        value: 'low',
+                        label: 'Low',
+                      },
+                      {
+                        value: 'lowest',
+                        label: 'Lowest',
+                      },
+                    ],
                   }}
                 />
               ) : (
@@ -564,7 +638,10 @@ class ListInput extends React.Component {
             zIndex={1}
             closeFromParent={this.handleReassign}
           >
-            <SelectBoxUserContainer callback={this.handleSelectAssign} />
+            <SelectBoxUserContainer
+              users={task.team.users}
+              callback={this.handleSelectAssign}
+            />
           </Modal>
         )}
       </div>

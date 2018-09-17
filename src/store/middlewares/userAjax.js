@@ -23,7 +23,7 @@ export default store => next => action => {
       const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?${filter}`,
+        url: `${ROOT_URL}/api/users${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -31,8 +31,11 @@ export default store => next => action => {
         .then(({ data }) => {
           store.dispatch(fetchUsersSuccessAction(data));
         })
-        .catch(({ response }) => {
-          store.dispatch(fetchUsersFailureAction(response.data.errors.error));
+        .catch(error => {
+          if (!error.response) return console.error(error.message);
+          store.dispatch(
+            fetchUsersFailureAction(error.response.data.errors.error),
+          );
         });
       break;
     }
@@ -66,7 +69,7 @@ export default store => next => action => {
       const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?${filter}`,
+        url: `${ROOT_URL}/api/users${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

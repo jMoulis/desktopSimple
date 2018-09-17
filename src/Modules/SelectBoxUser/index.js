@@ -1,45 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import UserIconContainer from '../UserIcon';
 import './index.css';
 import Button from '../../components/Form/button';
 
-const mapStateToProps = ({ mainTeamReducer, authReducer }) => ({
-  userList: mainTeamReducer.activeTeamProcess.team.users,
-  loggedUser: authReducer.loginProcess.loggedUser,
-});
-
-class SelectBoxUser extends React.Component {
-  constructor(props) {
-    super(props);
-    const { loggedUser, userList } = props;
-    let users = [];
-    if (!props.userList) {
-      users = [
-        ...users,
-        {
-          user: {
-            _id: loggedUser._id,
-            fullName: loggedUser.fullName,
-            picture: loggedUser.picture,
-          },
-        },
-      ];
-    }
-    this.state = {
-      userList: userList || users,
-    };
-  }
-  render() {
-    const { callback, closeFromParent } = this.props;
-    const { userList } = this.state;
-    return (
-      <div>
-        {userList && (
+const SelectBoxUser = ({ callback, closeFromParent, users }) => {
+  return (
+    <div>
+      {users &&
+        users.length > 0 && (
           <div id="selectbox-user">
             <ul className="selectbox-user-list">
-              {userList.map(({ user }) => (
+              {users.map(({ user }) => (
                 <li
                   key={user._id}
                   className="d-flex flex-align-items-center pointer"
@@ -58,23 +30,18 @@ class SelectBoxUser extends React.Component {
             </ul>
           </div>
         )}
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 SelectBoxUser.propTypes = {
-  userList: PropTypes.array,
+  users: PropTypes.array,
   callback: PropTypes.func.isRequired,
-  closeFromParent: PropTypes.func.isRequired,
+  closeFromParent: PropTypes.func,
 };
 SelectBoxUser.defaultProps = {
-  userList: null,
+  users: null,
+  closeFromParent: null,
 };
-const createContainer = connect(
-  mapStateToProps,
-  null,
-);
-const SelectBoxUserContainer = createContainer(SelectBoxUser);
 
-export default SelectBoxUserContainer;
+export default SelectBoxUser;

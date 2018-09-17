@@ -9,6 +9,8 @@ class Utils {
     return formData;
   };
   buildUrlFilter = filter => {
+    if (!filter) return false;
+
     let filters = [];
     Object.keys(filter).forEach(key => {
       if (key === 'repository') {
@@ -18,10 +20,15 @@ class Utils {
         const value = Object.values(repository)[0];
         filters = [...filters, `${keyInRepositoryObject}=${value}`];
       } else {
-        filters = [...filters, `${key}=${filter[key]}`];
+        // if (!filter[key]) {
+        //   return false;
+        // }
+        filters = [...filters, filter[key] && `${key}=${filter[key]}`];
       }
     });
-    return filters.toString().replace(/,/g, '&');
+
+    if (filters.length <= 0) return false;
+    return `?${filters.toString().replace(/,/g, '&')}`;
   };
   simulateClickEvent = file => {
     const element = document.createElement('a');

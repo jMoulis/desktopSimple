@@ -78,7 +78,7 @@ module.exports = app => {
     TasksController.update,
   );
   app.delete('/api/tasks/:id', VerifyToken, TasksController.delete);
-
+  app.get('/api/tasks/users/:id', VerifyToken, TasksController.getUserTask);
   // Comments
   app.put('/api/tasks/comments/:id', VerifyToken, CommentsController.update);
   app.delete('/api/tasks/comments/:id', VerifyToken, CommentsController.delete);

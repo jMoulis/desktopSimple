@@ -86,7 +86,7 @@ class TaskCreateForm extends React.Component {
     const { createTaskAction } = this.props;
     createTaskAction({
       ...this.state,
-      assign: { value: this.state.assign.value._id, changed: true },
+      assign: { value: JSON.stringify(this.state.assign.value), changed: true },
     });
   };
 
@@ -238,7 +238,7 @@ class TaskCreateForm extends React.Component {
               value: team._id,
               label: team.name,
             })),
-            error: error && error.status && error.status.detail,
+            error: error && error.team && error.team.detail,
           }}
         />
         <Select
@@ -249,12 +249,30 @@ class TaskCreateForm extends React.Component {
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
             options: [
-              'To Do',
-              'In Progress',
-              'Reopened',
-              'Need Testing',
-              'On Hold',
-              'Closed',
+              {
+                value: 'to_do',
+                label: 'To Do',
+              },
+              {
+                value: 'in_progress',
+                label: 'In Progress',
+              },
+              {
+                value: 'reopened',
+                label: 'Reopend',
+              },
+              {
+                value: 'need_testing',
+                label: 'Need Testing',
+              },
+              {
+                value: 'on_hold',
+                label: 'On Hold',
+              },
+              {
+                value: 'closed',
+                label: 'Closed',
+              },
             ],
             error: error && error.status && error.status.detail,
           }}
@@ -267,7 +285,28 @@ class TaskCreateForm extends React.Component {
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
             error: error && error.priority && error.priority.detail,
-            options: ['Highest', 'High', 'Medium', 'Low', 'Lowest'],
+            options: [
+              {
+                value: 'highest',
+                label: 'Highest',
+              },
+              {
+                value: 'high',
+                label: 'High',
+              },
+              {
+                value: 'medium',
+                label: 'Medium',
+              },
+              {
+                value: 'low',
+                label: 'Low',
+              },
+              {
+                value: 'lowest',
+                label: 'Lowest',
+              },
+            ],
           }}
         />
         <InputAutoComplete

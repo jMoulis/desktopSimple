@@ -278,19 +278,22 @@ class EditFormProject extends Component {
               error: error && error.dueDate && error.dueDate.detail,
             }}
           />
-          <Checkbox
-            config={{
-              field: Model.isPrice,
-              onChange: this.handleCheckBoxChange,
-              value: this.state.form.isPrice.value,
-              blur: this.handleOnBlur,
-              readOnly: project.author._id !== user._id,
-              focus: this.handleOnFocus,
-              isFocused: this.state.form.isPrice.focus,
-              success,
-              error: error && error.isPrice && error.isPrice.detail,
-            }}
-          />
+          {project.author._id === user._id && (
+            <Checkbox
+              config={{
+                field: Model.isPrice,
+                onChange: this.handleCheckBoxChange,
+                value: this.state.form.isPrice.value,
+                blur: this.handleOnBlur,
+                readOnly: project.author._id !== user._id,
+                focus: this.handleOnFocus,
+                isFocused: this.state.form.isPrice.focus,
+                success,
+                error: error && error.isPrice && error.isPrice.detail,
+              }}
+            />
+          )}
+
           {this.state.form.isPrice.value && (
             <Input
               config={{
@@ -307,19 +310,21 @@ class EditFormProject extends Component {
               }}
             />
           )}
-          <Checkbox
-            config={{
-              field: Model.isContest,
-              onChange: this.handleCheckBoxChange,
-              value: this.state.form.isContest.value,
-              blur: this.handleOnBlur,
-              readOnly: project.author._id !== user._id,
-              focus: this.handleOnFocus,
-              isFocused: this.state.form.isContest.focus,
-              success,
-              error: error && error.isContest && error.isContest.detail,
-            }}
-          />
+          {project.author._id === user._id && (
+            <Checkbox
+              config={{
+                field: Model.isContest,
+                onChange: this.handleCheckBoxChange,
+                value: this.state.form.isContest.value,
+                blur: this.handleOnBlur,
+                readOnly: project.author._id !== user._id,
+                focus: this.handleOnFocus,
+                isFocused: this.state.form.isContest.focus,
+                success,
+                error: error && error.isContest && error.isContest.detail,
+              }}
+            />
+          )}
           {this.state.form.isContest.value && (
             <Input
               config={{
@@ -344,7 +349,6 @@ class EditFormProject extends Component {
               onChange: this.handleInputSelectTagsChange,
               keyPress: this.handleInputSelectTagsChange,
               values: this.state.form.tags.value,
-              blur: this.handleOnBlur,
               readOnly: project.author._id !== user._id,
               success,
               error: error && error.tags && error.tags.detail,

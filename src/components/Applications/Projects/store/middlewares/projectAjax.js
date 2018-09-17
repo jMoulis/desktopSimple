@@ -82,7 +82,7 @@ export default store => next => action => {
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
-      console.log(action.payload);
+
       const formData = new FormData();
       const form = toObject(filteredArray);
       Object.keys(form).forEach(key => formData.append([key], form[key]));

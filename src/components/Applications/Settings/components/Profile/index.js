@@ -188,6 +188,7 @@ class Profile extends React.Component {
       ...prevState,
       [name]: {
         ...prevState[name],
+        changed: false,
         focus: true,
       },
     }));
@@ -420,7 +421,6 @@ class Profile extends React.Component {
                   keyPress: this.handleInputSelectCompetencesChange,
                   values: tags.value,
                   focus: this.handleOnFocus,
-                  blur: this.handleOnBlur,
                   error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
                   success,
