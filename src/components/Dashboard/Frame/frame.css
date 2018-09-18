@@ -40,19 +40,3 @@
     position: relative;
     background-color: #eee9d1;
     border-bottom: 2px solid #0a1c28; }
-    .frame .child-app .app-toolbar {
-      background-color: #97c0b7;
-      border-bottom: 1px solid #0a1c28;
-      padding-top: .5rem;
-      padding-bottom: .5rem;
-      color: #eee9d1;
-      border-bottom: 2px solid #0a1c28; }
-      .frame .child-app .app-toolbar .btn-app-toolbar {
-        margin: 0;
-        border: 2px solid transparent;
-        background-color: transparent;
-        cursor: pointer;
-        transition: border 500ms;
-        outline: none; }
-        .frame .child-app .app-toolbar .btn-app-toolbar:hover {
-          border-bottom: 2px solid #0a1c28; }

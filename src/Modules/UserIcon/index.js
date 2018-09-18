@@ -22,6 +22,7 @@ const UserIcon = ({
   classCss,
   name,
   containerCss,
+  callback,
 }) => {
   if (!user.user) {
     return null;
@@ -30,6 +31,9 @@ const UserIcon = ({
     <div
       className="d-flex flex-align-items-center user-icon"
       style={containerCss}
+      onClick={callback}
+      onKeyPress={callback}
+      data-value={user.user._id}
     >
       <img
         className={`mini-thumbnail mini-thumbnail-${classCss}`}

@@ -14,4 +14,8 @@ module.exports = {
       fs.writeFileSync(`${root}/${fileName}`, document.buffer);
     }
   },
+  isUndefined: value => {
+    if (typeof value !== 'undefined') return false;
+    return true;
+  },
 };

@@ -24,7 +24,7 @@ import {
   deleteTeamSuccessAction,
   deleteTeamFailureAction,
 } from '../reducers/teamReducer';
-import { logoutAction } from '../reducers/authReducer';
+import { logoutAction, editUserSuccessAction } from '../reducers/authReducer';
 /*
  * Code
  */
@@ -53,6 +53,18 @@ export default store => next => action => {
       })
         .then(({ data }) => {
           store.dispatch(createTeamSuccessAction(data));
+          // Add the team to the loggedUser
+          store.dispatch(
+            editUserSuccessAction({
+              user: {
+                ...store.getState().authReducer.loginProcess.loggedUser,
+                teams: [
+                  ...store.getState().authReducer.loginProcess.loggedUser.teams,
+                  data.team,
+                ],
+              },
+            }),
+          );
         })
         .catch(error => {
           if (!error.response) {

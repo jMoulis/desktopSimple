@@ -2,20 +2,25 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import './index.css';
-import TaskFilter from '../containers/TaskFilter';
 import TaskList from '../containers/TaskList';
 import TaskDetailWrapper from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
 import AppToolbar from '../../../../Modules/AppToolbar';
+import SelectBoxAssigneeContainer from '../containers/SelectBoxAssignee';
+import Utils from '../../../../Utils/utils';
+import SelectBoxToolBar from '../../../../Modules/AppToolbar/SelectBoxToolBar';
 
 class Task extends React.Component {
   static propTypes = {
     fetchTasksAction: PropTypes.func.isRequired,
     taskListProcess: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+    activeTeam: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
+    this.utils = new Utils();
     this.state = {
       showCreateModal: false,
       filter: {},
@@ -23,20 +28,46 @@ class Task extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchTasksAction } = this.props;
-    fetchTasksAction();
+    const { fetchTasksAction, activeTeam } = this.props;
+    if (activeTeam._id) return fetchTasksAction({ team: activeTeam._id });
+    return fetchTasksAction();
   }
 
   handleSelectFilter = evt => {
     const { name, value } = evt.target;
-    this.setState(prevState => ({
-      ...prevState,
-      filter: {
-        ...prevState.filter,
-        [name]: value,
+    const { fetchTasksAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filter: {
+          ...prevState.filter,
+          [name]: value,
+        },
+      }),
+      () => {
+        fetchTasksAction(this.state.filter);
       },
-    }));
+    );
   };
+
+  handleSelectAssign = evt => {
+    evt.stopPropagation();
+    const { value } = evt.currentTarget.dataset;
+    const { fetchTasksAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filter: {
+          ...prevState.filter,
+          'assign._id': value,
+        },
+      }),
+      () => {
+        fetchTasksAction(this.state.filter);
+      },
+    );
+  };
+
   handleShowCreateModal = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -44,14 +75,25 @@ class Task extends React.Component {
     }));
   };
 
-  handleAppToolBarSearch = filter => {
+  handleAppToolBarSearch = searchFilter => {
     const { fetchTasksAction } = this.props;
-    fetchTasksAction(filter);
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filter: {
+          ...prevState.filter,
+          filter: searchFilter.filter,
+        },
+      }),
+      () => {
+        fetchTasksAction(this.state.filter);
+      },
+    );
   };
 
   render() {
     const { showCreateModal } = this.state;
-    const { taskListProcess, fetchTasksAction } = this.props;
+    const { taskListProcess, loggedUser } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
         <AppToolbar
@@ -69,25 +111,93 @@ class Task extends React.Component {
             searchFieldLabel: 'tags, Student name, Company name, Description',
           }}
         >
-          <select name="status" onChange={this.handleSelectFilter}>
-            <option value="">Select Status</option>
-            <option value="to_do">To Do</option>
-            <option value="in_progress">In Progress</option>
-          </select>
-          <select name="priority" onChange={this.handleSelectFilter}>
-            <option value="">Select Priority</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-          </select>
-          <button
-            type="submit"
-            onClick={() => fetchTasksAction(this.state.filter)}
-          >
-            Filter
-          </button>
+          <div className="d-flex flex-align-items-center">
+            <SelectBoxToolBar
+              name="team"
+              callback={this.handleSelectFilter}
+              options={[
+                {
+                  value: '',
+                  label: 'Select Team',
+                },
+                ...loggedUser.teams.map(team => ({
+                  value: team._id,
+                  label: team.name,
+                })),
+              ]}
+            />
+            <SelectBoxToolBar
+              name="status"
+              callback={this.handleSelectFilter}
+              options={[
+                {
+                  label: 'Select status',
+                  value: '',
+                },
+                {
+                  value: 'to_do',
+                  label: 'To Do',
+                },
+                {
+                  value: 'in_progress',
+                  label: 'In Progress',
+                },
+                {
+                  value: 'reopened',
+                  label: 'Reopend',
+                },
+                {
+                  value: 'need_testing',
+                  label: 'Need Testing',
+                },
+                {
+                  value: 'on_hold',
+                  label: 'On Hold',
+                },
+                {
+                  value: 'closed',
+                  label: 'Closed',
+                },
+              ]}
+            />
+            <SelectBoxToolBar
+              name="priority"
+              callback={this.handleSelectFilter}
+              options={[
+                {
+                  label: 'Select level',
+                  value: '',
+                },
+                {
+                  value: 'highest',
+                  label: 'Highest',
+                },
+                {
+                  value: 'high',
+                  label: 'High',
+                },
+                {
+                  value: 'medium',
+                  label: 'Medium',
+                },
+                {
+                  value: 'low',
+                  label: 'Low',
+                },
+                {
+                  value: 'lowest',
+                  label: 'Lowest',
+                },
+              ]}
+            />
+
+            <SelectBoxAssigneeContainer
+              teamId={this.state.filter.team}
+              callback={this.handleSelectAssign}
+            />
+          </div>
         </AppToolbar>
         <div className="task-content d-flex full-height relative">
-          <TaskFilter />
           {taskListProcess.tasks.length !== 0 ? (
             <Fragment>
               <TaskList />

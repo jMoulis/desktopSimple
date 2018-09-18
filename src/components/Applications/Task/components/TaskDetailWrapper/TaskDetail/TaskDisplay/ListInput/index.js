@@ -79,7 +79,6 @@ class ListInput extends React.Component {
     }
     if (task && task._id !== state.id) {
       const fields = setStateFromProps(task, taskModel);
-      console.log(fields);
       return {
         ...fields,
       };
@@ -303,7 +302,6 @@ class ListInput extends React.Component {
     const { task, error, success } = activeTaskProcess;
     const { form, showUsersAssignModal } = this.state;
     const { status, priority, tags, dueDate, description, title, team } = form;
-    console.log(form);
     return (
       <div className="task-detail">
         <header className="task-detail--header">
@@ -339,7 +337,15 @@ class ListInput extends React.Component {
             )}
           </div>
           <div className="d-flex flex-align-items-center">
-            <UserIconContainer user={{ user: task.author }} />
+            <UserIconContainer
+              user={{
+                user: {
+                  _id: task.author._id,
+                  picture: task.author.picture,
+                  fullName: task.author.fullName,
+                },
+              }}
+            />
             {task.createdAt && (
               <p className="small">
                 created:

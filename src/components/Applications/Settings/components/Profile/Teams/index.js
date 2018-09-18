@@ -3,22 +3,16 @@ import PropTypes from 'prop-types';
 import './index.css';
 
 import UserIcon from '../../../../../../Modules/UserIcon';
-import Loader from '../../../../../../Modules/Loader';
 
 class TeamProfile extends React.Component {
   static propTypes = {
     globalActions: PropTypes.object.isRequired,
-    fetchTeamsAction: PropTypes.func.isRequired,
-    teamsProcess: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   };
 
   state = {
     showAddTeamModal: false,
   };
-  componentDidMount() {
-    const { fetchTeamsAction } = this.props;
-    fetchTeamsAction();
-  }
 
   handleShowAddTeamModal = () => {
     this.setState(prevState => ({
@@ -27,15 +21,12 @@ class TeamProfile extends React.Component {
     }));
   };
   render() {
-    const { globalActions, teamsProcess } = this.props;
-    const { teams, loading } = teamsProcess;
-    if (loading) {
-      return <Loader size={60} />;
-    }
+    const { globalActions, loggedUser } = this.props;
     return (
       <ul className="ul-nav teams">
-        {teams.length > 0 &&
-          teams.map(team => (
+        {loggedUser &&
+          loggedUser.teams.length > 0 &&
+          loggedUser.teams.map(team => (
             <li
               key={team._id}
               className="team-container"

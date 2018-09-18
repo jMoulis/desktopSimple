@@ -114,17 +114,8 @@ export default store => next => action => {
       break;
     }
     case FETCH_TASKS: {
-      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
-        ._id;
       const loggedUserId = store.getState().authReducer.loginProcess.loggedUser
         ._id;
-      let { payload } = action;
-      if (teamId) {
-        payload = {
-          ...payload,
-          team: teamId,
-        };
-      }
       const filter = utils.buildUrlFilter(action.payload);
       let url = `${ROOT_URL}/api/tasks${!filter ? '' : filter}`;
       if (

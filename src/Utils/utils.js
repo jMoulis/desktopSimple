@@ -10,7 +10,6 @@ class Utils {
   };
   buildUrlFilter = filter => {
     if (!filter) return false;
-
     let filters = [];
     Object.keys(filter).forEach(key => {
       if (key === 'repository') {
@@ -19,14 +18,13 @@ class Utils {
         const keyInRepositoryObject = Object.keys(repository);
         const value = Object.values(repository)[0];
         filters = [...filters, `${keyInRepositoryObject}=${value}`];
-      } else {
-        // if (!filter[key]) {
-        //   return false;
-        // }
+      } else if (
+        typeof filter[key] !== 'undefined' &&
+        !this.isEmptyString(filter[key])
+      ) {
         filters = [...filters, filter[key] && `${key}=${filter[key]}`];
       }
     });
-
     if (filters.length <= 0) return false;
     return `?${filters.toString().replace(/,/g, '&')}`;
   };
@@ -124,6 +122,15 @@ class Utils {
     const image = ['jpeg', 'png', 'gif', 'jpg'];
     if (image.includes(ext)) return true;
     return false;
+  };
+  isObjectEmpty = object => {
+    if (!object) return true;
+    if (Object.keys(object).length === 0) return true;
+    return false;
+  };
+  isEmptyString = string => {
+    if (string.length > 0) return false;
+    return true;
   };
 }
 

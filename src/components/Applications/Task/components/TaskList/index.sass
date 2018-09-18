@@ -1,11 +1,27 @@
 @import '../../../../../styles/charte.sass'
 .task-list
   overflow: auto
-  max-width: 20%
+  width: 20%
   border-right: 2px solid $darkestblue
+  &-title
+    font-weight: bold
+    padding: .3rem
   &-item
     cursor: pointer
     transition: all 150ms
+    & button
+      background-color: transparent
+      border: none
+      cursor: pointer
+      font-family: 'Nunito', sans-serif
+      font-weight: bold
+      outline: none
+      padding: .5rem
+      width: 100%
+      text-align: left
+      transition: all 300ms
+      &:hover
+        color: $orange
     &-selected
       & button
         color: $orange

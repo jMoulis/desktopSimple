@@ -36,7 +36,9 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use('/users', express.static(`${__dirname}/uploads/users`));
+app.use('/public', express.static(`${__dirname}/public`));
 app.use('/task', express.static(`${__dirname}/uploads/task`));
+
 routes(app);
 app.use((err, req, res, next) => {
   const apiResponse = new ApiResponse(res);

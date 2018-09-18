@@ -26,9 +26,7 @@ class AppToolbar extends React.Component {
   };
 
   state = {
-    searchValue: {
-      filter: '',
-    },
+    searchValue: {},
     sorting: 1,
     asc: true,
     subMenu: {},
@@ -92,12 +90,24 @@ class AppToolbar extends React.Component {
         }),
     );
   };
+
+  handleSubmit = evt => {
+    const { searchValue } = this.state;
+    const { search } = this.props;
+    evt.preventDefault();
+    search.action({ ...searchValue });
+    // this.setState(() => ({
+    //   searchValue: {
+    //     filter: '',
+    //   },
+    // }));
+  };
+
   render() {
     const { menus, children, liStyle, search } = this.props;
     const { searchValue, subMenu } = this.state;
     return (
       <div className="app-toolbar d-flex flex-justify-between flex-align-items-center">
-        {children}
         <ul className="app-toolbar-list">
           {menus &&
             menus.map((menu, index) => {
@@ -148,14 +158,13 @@ class AppToolbar extends React.Component {
               return null;
             })}
         </ul>
+
         {search &&
           search.show && (
             <div className="search" style={liStyle}>
+              {children}
               <form
-                onSubmit={evt => {
-                  evt.preventDefault();
-                  search.action({ ...searchValue });
-                }}
+                onSubmit={this.handleSubmit}
                 className="app-toolbar-list-item-form"
               >
                 <Input
@@ -166,7 +175,7 @@ class AppToolbar extends React.Component {
                       placeholder: search.searchFieldLabel,
                     },
                     onChange: this.handleInputChange,
-                    value: searchValue.filter,
+                    value: searchValue.filter || '',
                     className: 'app-toolbar-list-item-form-input-search',
                     parentClassName:
                       'app-toolbar-list-item-form-input-search-container',

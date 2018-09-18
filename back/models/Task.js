@@ -61,11 +61,11 @@ const TaskSchema = new Schema({
   description: String,
   status: {
     type: String,
-    default: 'To Do',
+    default: 'to_do',
   },
   priority: {
     type: String,
-    default: 'Medium',
+    default: 'medium',
   },
   tags: Array,
   files: [FileSchema],

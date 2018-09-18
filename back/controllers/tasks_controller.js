@@ -3,9 +3,10 @@ const mime = require('mime');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
 const shell = require('shelljs');
-const mongoose = require('mongoose');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const Task = require('../models/Task');
+const Team = require('../models/Team');
+const utils = require('../service/utils');
 
 const ROOT_FOLDER = path.join(__dirname, '/../uploads');
 
@@ -25,8 +26,11 @@ module.exports = {
         },
       };
     }
-
     try {
+      let team;
+      if (req.query.team) {
+        team = await Team.findOne({ _id: req.query.team }, { name: 1 });
+      }
       const tasks = await Task.find(query, { taskIdFolder: 0 })
         .populate({
           path: 'comments.author',
@@ -55,7 +59,13 @@ module.exports = {
         })
         .sort({ createdAt: -1 });
       if (!tasks || tasks.length === 0) {
-        return apiResponse.failure(404, null, 'Oups! No tasks found');
+        return apiResponse.failure(
+          404,
+          null,
+          `Oups! No tasks found ${
+            !utils.isUndefined(team) ? `for ${team.name}` : ''
+          }`,
+        );
       }
 
       return apiResponse.success(200, { tasks });
@@ -97,7 +107,11 @@ module.exports = {
         })
         .sort({ createdAt: -1 });
       if (!tasks || tasks.length === 0) {
-        return apiResponse.failure(404, null, 'Oups! No tasks found');
+        return apiResponse.failure(
+          404,
+          null,
+          'Oups! No tasks found for this team',
+        );
       }
 
       return apiResponse.success(200, { tasks });

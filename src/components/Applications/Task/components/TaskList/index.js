@@ -20,6 +20,7 @@ class TaskList extends React.Component {
     const { tasks, activeTask } = this.props;
     return (
       <ul className="task-list">
+        <li className="task-list-title">Tasks</li>
         {tasks &&
           tasks.length !== 0 &&
           tasks.map(task => (

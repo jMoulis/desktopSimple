@@ -62,7 +62,16 @@ class TaskCommentForm extends Component {
     return (
       <div className="task-comment-form">
         <div className="d-flex full-width">
-          <UserIconContainer user={{ user: loggedUser }} classCss="middle" />
+          <UserIconContainer
+            user={{
+              user: {
+                _id: loggedUser._id,
+                picture: loggedUser.picture,
+                fullName: loggedUser.fullName,
+              },
+            }}
+            classCss="middle"
+          />
           <Textarea
             config={{
               field: {

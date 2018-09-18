@@ -9,7 +9,13 @@ const TabContent = ({ data, type, children }) => (
     <header className="d-flex">
       <UserIcon
         classCss="middle"
-        user={{ user: data.author }}
+        user={{
+          user: {
+            _id: data.author._id,
+            picture: data.author.picture,
+            fullName: data.author.fullName,
+          },
+        }}
         containerCss={{
           alignItems: 'flex-start',
         }}
