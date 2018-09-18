@@ -12,7 +12,7 @@ class Utils {
     if (!filter) return false;
     let filters = [];
     Object.keys(filter).forEach(key => {
-      if (key === 'repository') {
+      if (key === 'repository' && !this.isObjectEmpty(filter['repository'])) {
         // repository is a specific key has to replace each other
         const repository = filter[key];
         const keyInRepositoryObject = Object.keys(repository);

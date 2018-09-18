@@ -130,7 +130,7 @@ h1 {
   overflow: auto; }
 
 .height-overflow {
-  height: calc(100% - 40px); }
+  height: calc(100% - 50px); }
 
 .full-height {
   height: 100%; }

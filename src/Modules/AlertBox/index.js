@@ -10,23 +10,18 @@ class AlertBox extends React.Component {
     message: PropTypes.string.isRequired,
     buttons: PropTypes.array.isRequired,
     type: PropTypes.string.isRequired,
-  }
+  };
   state = {
     show: true,
-  }
+  };
   handleClose = func => () => {
     this.setState(() => ({
       parentAction: func,
       show: false,
     }));
-  }
+  };
   render() {
-    const {
-      title,
-      message,
-      buttons,
-      type,
-    } = this.props;
+    const { title, message, buttons, type } = this.props;
     return (
       <CSSTransition
         in={this.state.show}
@@ -40,8 +35,12 @@ class AlertBox extends React.Component {
         unmountOnExit
       >
         <div className={`alert-modal alert-modal-${type}`}>
-          <div className={`alert-modal-container alert-modal-container-${type}`}>
-            <h2 className={`alert-modal-header alert-modal-header-${type}`}>{title}</h2>
+          <div
+            className={`alert-modal-container alert-modal-container-${type}`}
+          >
+            <h2 className={`alert-modal-header alert-modal-header-${type}`}>
+              {title}
+            </h2>
             <div className="alert-modal-content">
               <h1>{message}</h1>
               <div className="alert-modal-btn-container">

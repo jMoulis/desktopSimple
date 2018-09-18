@@ -33,7 +33,7 @@ class Footer extends React.Component {
   render() {
     const { applications, loggedUser } = this.props;
     const objectValues = Object.keys(applications).map(
-      itm => applications[itm],
+      item => applications[item],
     );
     return (
       <footer id="footer">

@@ -13,14 +13,11 @@ class NewTeam extends React.Component {
   static propTypes = {
     fetchUsersCountAction: PropTypes.func.isRequired,
     createTeamAction: PropTypes.func.isRequired,
-    closeFromParent: PropTypes.func,
+    closeOnSuccess: PropTypes.func.isRequired,
     project: PropTypes.object.isRequired,
     teamCreation: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     clearTeamMessageAction: PropTypes.func.isRequired,
-  };
-  static defaultProps = {
-    closeFromParent: null,
   };
   state = {
     name: '',
@@ -47,10 +44,10 @@ class NewTeam extends React.Component {
     };
   }
   componentDidUpdate() {
-    const { teamCreation, closeFromParent } = this.props;
+    const { teamCreation, closeOnSuccess } = this.props;
     const { success } = teamCreation;
     if (success) {
-      closeFromParent('createTeamModal');
+      closeOnSuccess('createTeamModal');
     }
     return true;
   }

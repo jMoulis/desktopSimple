@@ -4,14 +4,14 @@ import ProjectInfo from '../../containers/Team/projectInfo';
 import './index.css';
 import NewTeam from '../../containers/Team/newTeam';
 
-const Team = ({ loggedUser, closeFromParent }) => {
+const Team = ({ loggedUser, closeOnSuccess }) => {
   return (
     <div className="team">
       <div className="content content-project-info">
         <ProjectInfo />
       </div>
       <div className="content content-newteam">
-        <NewTeam loggedUser={loggedUser} closeFromParent={closeFromParent} />
+        <NewTeam loggedUser={loggedUser} closeOnSuccess={closeOnSuccess} />
       </div>
     </div>
   );
@@ -19,7 +19,7 @@ const Team = ({ loggedUser, closeFromParent }) => {
 
 Team.propTypes = {
   loggedUser: PropTypes.object.isRequired,
-  closeFromParent: PropTypes.func.isRequired,
+  closeOnSuccess: PropTypes.func.isRequired,
 };
 
 export default Team;

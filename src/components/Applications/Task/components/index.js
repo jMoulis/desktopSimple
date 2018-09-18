@@ -87,6 +87,12 @@ class Task extends React.Component {
       }),
       () => {
         fetchTasksAction(this.state.filter);
+        this.setState(prevState => ({
+          filter: {
+            ...prevState.filter,
+            filter: '',
+          },
+        }));
       },
     );
   };
@@ -108,7 +114,7 @@ class Task extends React.Component {
             show: true,
             searchField: true,
             action: this.handleAppToolBarSearch,
-            searchFieldLabel: 'tags, Student name, Company name, Description',
+            searchFieldLabel: 'Contains text',
           }}
         >
           <div className="d-flex flex-align-items-center">
@@ -198,11 +204,9 @@ class Task extends React.Component {
           </div>
         </AppToolbar>
         <div className="task-content d-flex full-height relative">
+          <TaskList />
           {taskListProcess.tasks.length !== 0 ? (
-            <Fragment>
-              <TaskList />
-              <TaskDetailWrapper />
-            </Fragment>
+            <TaskDetailWrapper />
           ) : (
             <div className="d-flex flex1 flex-justify-center flex-align-items-center">
               <h1>{taskListProcess.error && taskListProcess.error.detail}</h1>

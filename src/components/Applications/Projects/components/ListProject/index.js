@@ -69,7 +69,7 @@ class ListProject extends React.Component {
       },
     }));
   };
-  handleCloseModal = modalName => {
+  handleCloseModalOnSuccess = modalName => {
     this.setState(prevState => ({
       [modalName]: {
         display: false,
@@ -78,6 +78,14 @@ class ListProject extends React.Component {
       detailProjectModal: {
         ...prevState.detailProjectModal,
         display: false,
+      },
+    }));
+  };
+  handleCloseModal = modalName => {
+    this.setState(() => ({
+      [modalName]: {
+        display: false,
+        zIndex: 0,
       },
     }));
   };
@@ -118,7 +126,7 @@ class ListProject extends React.Component {
             title="New Project"
             zIndex={this.state.showNewProjectForm.zIndex}
           >
-            <NewProject loggedUser={this.props.loggedUser} />
+            <NewProject loggedUser={loggedUser} />
           </Modal>
         )}
         {this.state.createTeamModal.display && (
@@ -128,7 +136,10 @@ class ListProject extends React.Component {
             title="Create Team"
             zIndex={this.state.createTeamModal.zIndex}
           >
-            <Team loggedUser={this.props.loggedUser} />
+            <Team
+              loggedUser={loggedUser}
+              closeOnSuccess={this.handleCloseModalOnSuccess}
+            />
           </Modal>
         )}
         {this.state.detailProjectModal.display &&
@@ -140,7 +151,7 @@ class ListProject extends React.Component {
             zIndex={this.state.detailProjectModal.zIndex}
           >
             <DetailProject
-              loggedUser={this.props.loggedUser}
+              loggedUser={loggedUser}
               openNewTeamModal={this.handleShowCreateTeamModal}
               globalActions={globalActions}
               globalProps={globalProps}

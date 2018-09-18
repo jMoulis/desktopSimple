@@ -96,11 +96,6 @@ class AppToolbar extends React.Component {
     const { search } = this.props;
     evt.preventDefault();
     search.action({ ...searchValue });
-    // this.setState(() => ({
-    //   searchValue: {
-    //     filter: '',
-    //   },
-    // }));
   };
 
   render() {

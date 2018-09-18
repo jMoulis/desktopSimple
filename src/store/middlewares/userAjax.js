@@ -23,7 +23,7 @@ export default store => next => action => {
       const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users${filter}`,
+        url: `${ROOT_URL}/api/users${filter || ''}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

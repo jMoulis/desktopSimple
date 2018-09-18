@@ -66,6 +66,7 @@ class Dashboard extends React.Component {
             <TeamToolbar
               showSettings={this.handleShowSettings}
               showSelectTeamPanel={showSelectTeamPanel}
+              globalActions={globalActions}
             />
           )}
         {objectValues.map(application => {

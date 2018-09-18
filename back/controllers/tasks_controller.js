@@ -477,7 +477,7 @@ module.exports = {
         return apiResponse.failure(404, null, 'Task not found');
       }
       await shell.rm('-R', `${ROOT_FOLDER}/tasks/${task.taskIdFolder}`);
-      const tasks = await Task.find({ team: task.team }, { taskIdFolder: 0 });
+      const tasks = await Task.find({}, { taskIdFolder: 0 });
       return apiResponse.success(201, {
         tasks,
       });

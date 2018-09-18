@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './index.css';
@@ -6,6 +6,13 @@ import { ROOT_URL } from '../../../../../Utils/config';
 import UserIconContainer from '../../../../../Modules/UserIcon';
 
 class SelectBoxAssignee extends Component {
+  static propTypes = {
+    teamId: PropTypes.string,
+  };
+
+  static defaultProps = {
+    teamId: '',
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +20,6 @@ class SelectBoxAssignee extends Component {
       showList: false,
     };
   }
-
   componentDidMount() {
     const { teamId } = this.props;
     if (teamId) return this.fetchTeam(teamId);
@@ -123,19 +129,8 @@ class SelectBoxAssignee extends Component {
           </ul>
         )}
       </div>
-      // <select name="assign._id" onChange={callback}>
-      //   <option value="">Assignee</option>
-      // {users &&
-      //   users.map(({ user }) => (
-      //     <option key={user._id} value={user._id}>
-      //       <UserIconContainer user={{ user }} />
-      //     </option>
-      //   ))}
-      // </select>
     );
   }
 }
-
-SelectBoxAssignee.propTypes = {};
 
 export default SelectBoxAssignee;

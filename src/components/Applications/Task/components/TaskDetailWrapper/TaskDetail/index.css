@@ -1,11 +1,17 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail-wrapper {
+  overflow: auto; }
+
 .task-detail {
   position: relative;
   padding-top: .5rem;
   padding-right: .5rem;
   padding-left: .5rem; }
   .task-detail--header {
-    margin-bottom: 1rem; }
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
     .task-detail--header h1 .form-group {
       padding: 0; }
       .task-detail--header h1 .form-group .form-control {
@@ -14,3 +20,23 @@
         font-weight: bold; }
   .task-detail .modal-container {
     height: 80%; }
+  .task-detail-list {
+    border-bottom: 2px solid #0a1c28;
+    padding-bottom: 1rem; }
+    .task-detail-list-item {
+      position: relative; }
+      .task-detail-list-item .left-label-form {
+        display: flex;
+        align-items: center;
+        width: 120px;
+        height: 28px; }
+      .task-detail-list-item--tags {
+        padding: 0; }
+        .task-detail-list-item--tags .form-group {
+          padding: 0; }
+        .task-detail-list-item--tags .input-auto {
+          padding: 0; }
+      .task-detail-list-item--description {
+        margin-bottom: .5rem; }
+        .task-detail-list-item--description .form-group {
+          padding: 0; }

@@ -25,24 +25,14 @@ class Projects extends React.Component {
     const { fetchProjectsAction } = this.props;
     fetchProjectsAction(this.state.filterParams);
   }
+
   handleSuccessCreation = tabName => {
     this.setState(prevState => ({
       ...prevState,
       tab: tabName,
     }));
   };
-  handleSubmit = evt => {
-    evt.preventDefault();
-    const { fetchProjectsAction } = this.props;
-    fetchProjectsAction({ search: this.state.search });
-  };
-  handleInputChange = evt => {
-    const { name, value } = evt.target;
-    this.setState(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+
   handleTabSelect = evt => {
     const { name } = evt.target;
     this.setState(prevState => ({
@@ -51,15 +41,7 @@ class Projects extends React.Component {
       subMenu: {},
     }));
   };
-  addValueToStateFilters = (filters, filterName) => {
-    if (filters.some(filter => filter.label === filterName.label)) {
-      return filters;
-    }
-    if (filterName.type === 'main') {
-      return [...filters.filter(filter => filter.type !== filterName.type)];
-    }
-    return [...filters, filterName];
-  };
+
   handleAppToolBarSearch = filter => {
     const { fetchProjectsAction } = this.props;
     this.setState(
@@ -76,27 +58,6 @@ class Projects extends React.Component {
     );
   };
 
-  handleSorting = () => {
-    const { fetchProjectsAction } = this.props;
-    let sorting = -1;
-    if (this.state.sorting === 1) {
-      sorting = -1;
-    } else {
-      sorting = 1;
-    }
-    this.setState(
-      prevState => ({
-        ...prevState,
-        sorting,
-        asc: !prevState.asc,
-      }),
-      () =>
-        fetchProjectsAction({
-          search: this.state.search,
-          sorting: this.state.sorting,
-        }),
-    );
-  };
   render() {
     const { globalActions, globalProps, loggedUser } = this.props;
 
@@ -124,41 +85,6 @@ class Projects extends React.Component {
             },
           ]}
         />
-        {/* <div
-          className="app-toolbar d-flex flex-justify-between flex-align-items-center"
-          key="app-toolbar"
-        >
-          <div className="d-flex">
-            <form
-              onSubmit={this.handleSubmit}
-              className="project-container-form"
-            >
-              <Input
-                config={{
-                  field: {
-                    type: 'text',
-                    name: 'search',
-                    placeholder: 'Search',
-                  },
-                  onChange: this.handleInputChange,
-                  value: this.state.search,
-                  className: 'project-input-search',
-                  parentClassName: 'project-input-search-container',
-                }}
-              />
-              <i className="fas fa-search project-input-search-icon" />
-            </form>
-            <button
-              className="btn-asc pointer d-flex"
-              onClick={this.handleSorting}
-              type="button"
-              title="Sorting by date"
-            >
-              <i className="absolute fas fa-sort-up fa-2x" />
-              <i className="fas fa-sort-down fa-2x" />
-            </button>
-          </div> 
-        </div> */}
         {this.state.tab === 'projects' && (
           <ListProject
             selectTab={this.handleTabSelect}

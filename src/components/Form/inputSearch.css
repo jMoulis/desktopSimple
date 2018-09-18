@@ -13,7 +13,7 @@
     width: 100%;
     border: none;
     overflow: auto;
-    height: 100%; }
+    height: calc(100% - 10px); }
     .form-container .form-header {
       display: flex;
       justify-content: flex-start;

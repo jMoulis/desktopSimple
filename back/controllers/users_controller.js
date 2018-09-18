@@ -399,7 +399,6 @@ module.exports = {
       // return apiResponse.failure(422);
       return apiResponse.success(204);
     } catch (error) {
-      console.log(error.message);
       return apiResponse.failure(422, error);
     }
   },

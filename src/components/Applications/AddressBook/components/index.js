@@ -67,6 +67,12 @@ class AddressBook extends Component {
       }),
       () => {
         fetchUsersAction(this.state.filterParams);
+        this.setState(prevState => ({
+          filterParams: {
+            ...prevState.filterParams,
+            filter: '',
+          },
+        }));
       },
     );
   };
@@ -98,7 +104,7 @@ class AddressBook extends Component {
               show: true,
               searchField: true,
               action: this.handleAppToolBarSearch,
-              searchFieldLabel: 'Spec, Student name, Company name, Description',
+              searchFieldLabel: 'Contains text',
             }}
           />
 
