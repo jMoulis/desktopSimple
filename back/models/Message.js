@@ -7,19 +7,22 @@ const MessageSchema = new Schema({
     type: String,
     required: [true, 'Please Provide a message'],
   },
-  author: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
-    },
-  ],
-  team: {
+  sender: {
     type: Schema.Types.ObjectId,
-    ref: 'team',
+    ref: 'user',
+  },
+  receiver: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
   },
   createdAt: Date,
   updatedAt: Date,
   documents: [],
+});
+
+MessageSchema.pre('update', function preUpdate(next) {
+  this.update({}, { $set: { updatedAt: new Date() } });
+  return next();
 });
 
 const Message = mongoose.model('message', MessageSchema);

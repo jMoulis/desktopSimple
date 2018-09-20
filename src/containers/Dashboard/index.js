@@ -14,6 +14,12 @@ import {
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
 import AppLoader from '../../components/Applications/config/applicationsLoader';
 import { editTeamAction } from '../../store/reducers/teamReducer';
+import {
+  createMessageAction,
+  fetchMessagesAction,
+  createMessageSuccessAction,
+  fetchMessagesSuccessAction,
+} from '../../store/reducers/chatReducer';
 
 /*
  * Code

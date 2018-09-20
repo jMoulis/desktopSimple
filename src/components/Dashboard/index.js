@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import io from 'socket.io-client';
 
 import './dashboard.css';
 import Frame from '../../containers/Dashboard/Frame/frame';
@@ -8,6 +9,8 @@ import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
+import { ROOT_URL } from '../../Utils/config';
+import ChatBox from './ChatBox';
 
 class Dashboard extends React.Component {
   static propTypes = {
@@ -24,18 +27,26 @@ class Dashboard extends React.Component {
   static defaultProps = {
     activeApps: null,
   };
+
   constructor(props) {
     super(props);
+    this.socket = io(`${ROOT_URL}`);
+    this.socket.on('connect', () => {
+      console.log('Connected');
+    });
     this.state = {
       helper: true,
       showSettings: false,
+      activeChats: {},
     };
   }
+
   handleShowSettings = () => {
     this.setState(prevState => ({
       showSettings: !prevState.showSettings,
     }));
   };
+
   handleCloseHelper = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -43,6 +54,7 @@ class Dashboard extends React.Component {
     }));
     return true;
   };
+
   render() {
     const {
       applications,
@@ -87,7 +99,10 @@ class Dashboard extends React.Component {
                           ...globalActions,
                           selectTeam,
                         },
-                        globalProps,
+                        globalProps: {
+                          ...globalProps,
+                          socketIo: this.socket,
+                        },
                       });
                     }
                     return null;
@@ -125,6 +140,7 @@ class Dashboard extends React.Component {
             <DetailUser />
           </Modal>
         )}
+        <ChatBox user={user} socket={this.socket} />
       </main>
     );
   }

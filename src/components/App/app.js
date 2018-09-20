@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-
+import io from 'socket.io-client';
 import './app.css';
 import Dashboard from '../../containers/Dashboard';
 import Footer from '../../containers/Dashboard/Footer/footer';

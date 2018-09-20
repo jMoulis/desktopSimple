@@ -1,26 +1,96 @@
-const Team = require('../models/Team');
-const User = require('../models/User');
 const Message = require('../models/Message');
-const ApiResponse = require('../service/api/apiResponse');
+const ApiResponse = require('../service/api/apiResponse_v2');
 
 module.exports = {
-  index(req, res) {
-    // Fetch messages by teams?!
-    res.send('ok');
-  },
-  async create(req, res) {
-    const messageProps = req.body;
-    messageProps.author = { _id: res.locals.user._id };
+  async index(req, res, next) {
+    const apiResponse = new ApiResponse(res);
     try {
-      const project = await Message.create(messageProps);
-      const apiResponse = new ApiResponse(res, {
-        project,
-        success: { status: true, message: 'Message created' },
-      }, 200);
-      return apiResponse.success();
+      const { sender, receiver } = req.query;
+      const messages = await Message.find({
+        $or: [
+          {
+            room: `${sender}.${receiver}`,
+          },
+          { room: `${receiver}.${sender}` },
+        ],
+      })
+        .populate({
+          path: 'sender',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'receiver',
+          model: 'user',
+          select: 'fullName picture',
+        });
+      return apiResponse.success(200, {
+        messages,
+      });
     } catch (error) {
-      const apiResponse = new ApiResponse(res, 400);
-      return apiResponse.failure(error);
+      return apiResponse.failure(422, null, error.message);
+    }
+  },
+  async create(req, res, next) {
+    const apiResponse = new ApiResponse(res);
+    try {
+      const newMessage = await Message.create(req.body);
+      const message = await Message.findOne({ _id: newMessage._id })
+        .populate({
+          path: 'sender',
+          ref: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
+          path: 'receiver',
+          ref: 'user',
+          select: 'fullName picture',
+        });
+      module.exports.socket.on('PRIVATE_MESSAGE', room => {
+        console.log(room);
+        module.exports.io.to(room).emit('NEW_MESSAGE', message);
+      });
+      // try {
+      //
+
+      //
+      // } catch (error) {
+      //   console.log(error.message);
+      // }
+      // await Message.create(messageProps);
+      // const messages = await Message.find({
+      //   $and: [
+      //     {
+      //       $or: [
+      //         {
+      //           sender: res.locals.user._id,
+      //         },
+      //         { receiver: res.locals.user._id },
+      //       ],
+      //     },
+      //     {
+      //       $or: [
+      //         {
+      //           sender: messageProps.receiver,
+      //         },
+      //         { receiver: messageProps.receiver },
+      //       ],
+      //     },
+      //   ],
+      // })
+      //   .populate({
+      //     path: 'sender',
+      //     model: 'user',
+      //     select: 'fullName picture',
+      //   })
+      //   .populate({
+      //     path: 'receiver',
+      //     model: 'user',
+      //     select: 'fullName picture',
+      //   });
+      return apiResponse.success(201);
+    } catch (error) {
+      return apiResponse.failure(422, null, error.message);
     }
   },
   edit(req, res) {

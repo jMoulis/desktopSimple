@@ -83,6 +83,11 @@ module.exports = {
           },
         })
         .populate({
+          path: 'friends',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
           path: 'docs.author',
           model: 'user',
           select: 'fullName picture',

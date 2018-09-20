@@ -63,6 +63,7 @@ module.exports = class ApiResponse {
       return this.res.status(code).send({ errors: errorsApi });
     } catch (error) {
       console.log('error');
+      console.log(error.message);
       // return this.next(error);
     }
   }
