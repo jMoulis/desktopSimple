@@ -10,7 +10,7 @@ import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
 import { ROOT_URL } from '../../Utils/config';
-import ChatBox from './ChatBox';
+import Chat from './Chat';
 
 class Dashboard extends React.Component {
   static propTypes = {
@@ -30,21 +30,34 @@ class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = io(`${ROOT_URL}`);
-    this.socket.on('connect', () => {
-      console.log('Connected');
-    });
+    this.socket = io(`${ROOT_URL}`, { multiplex: false });
+    this.socket.on('connect', () => console.log('connect', this.socket.id));
+    this.socket.on('reconnect', () => this.handleStatusSocket('reconnect'));
     this.state = {
       helper: true,
       showSettings: false,
-      activeChats: {},
+      status: null,
     };
   }
+
+  handleStatusSocket = status => {
+    this.setState(() => ({
+      status,
+    }));
+  };
 
   handleShowSettings = () => {
     this.setState(prevState => ({
       showSettings: !prevState.showSettings,
     }));
+  };
+
+  handleClose = () => {
+    console.log('close');
+  };
+
+  handleReduce = () => {
+    console.log('reduce');
   };
 
   handleCloseHelper = () => {
@@ -140,7 +153,14 @@ class Dashboard extends React.Component {
             <DetailUser />
           </Modal>
         )}
-        <ChatBox user={user} socket={this.socket} />
+        <Chat
+          user={user}
+          socket={this.socket}
+          status={this.state.status}
+          callback={this.handleStatusSocket}
+          close={this.handleClose}
+          reduce={this.handleReduce}
+        />
       </main>
     );
   }

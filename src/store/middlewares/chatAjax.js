@@ -1,11 +1,7 @@
 import axios from 'axios';
-import io from 'socket.io-client';
 import { ROOT_URL } from '../../Utils/config';
 import {
   CREATE_MESSAGE,
-  CREATE_MESSAGE_SUCCESS,
-  createMessageSuccessAction,
-  createMessageFailureAction,
   FETCH_MESSAGES,
   fetchMessagesSuccessAction,
   fetchMessagesFailureAction,
@@ -14,16 +10,6 @@ import {
   fetchMessageFailureAction,
 } from '../reducers/chatReducer';
 import { logoutAction } from '../reducers/authReducer';
-/*
- * Code
- */
-const toObject = arr => {
-  let obj = {};
-  arr.forEach(element => {
-    obj = { ...obj, [element[0]]: element[1].value };
-  });
-  return obj;
-};
 
 export default store => next => action => {
   switch (action.type) {
@@ -32,10 +18,6 @@ export default store => next => action => {
         form: { sender, message, receiver, room },
         socket,
       } = action.payload;
-      const filteredArray = Object.entries(action.payload).filter(
-        field => field[1].changed,
-      );
-      const form = toObject(filteredArray);
       // const formData = new FormData();
       socket.emit('private message', {
         sender: sender.value,
@@ -43,26 +25,7 @@ export default store => next => action => {
         message: message.value,
         receiver: receiver.value,
       });
-      // Object.keys(form).forEach(key => formData.append([key], form[key]));
-      // axios({
-      //   method: 'post',
-      //   data: form,
-      //   url: `${ROOT_URL}/api/messages`,
-      //   headers: {
-      //     Authorization: localStorage.getItem('token'),
-      //   },
-      // })
-      //   .then(({ data }) => {
-      //     store.dispatch(createMessageSuccessAction(data));
-      //   })
-      //   .catch(error => {
-      //     if (!error.response) {
-      //       return console.log(error);
-      //     }
-      //     return store.dispatch(
-      //       createMessageFailureAction(error.response.data.errors),
-      //     );
-      //   });
+
       break;
     }
 

@@ -59,6 +59,11 @@ module.exports = app => {
   app.delete('/api/teams/:id', VerifyToken, TeamsController.delete);
 
   app.get('/api/conversations', VerifyToken, ConversationsController.index);
+  app.get(
+    '/api/conversations/conversation',
+    VerifyToken,
+    ConversationsController.read,
+  );
 
   app.post('/api/messages', VerifyToken, MessageController.create);
   app.get('/api/messages', VerifyToken, MessageController.index);

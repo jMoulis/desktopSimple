@@ -64,6 +64,7 @@ UserIcon.propTypes = {
   containerCss: PropTypes.object,
   active: PropTypes.bool,
   name: PropTypes.bool,
+  callback: PropTypes.func,
 };
 
 UserIcon.defaultProps = {
@@ -71,6 +72,7 @@ UserIcon.defaultProps = {
   classCss: '',
   containerCss: null,
   name: false,
+  callback: null,
 };
 
 const createContainer = connect(

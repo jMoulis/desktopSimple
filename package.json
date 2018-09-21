@@ -42,7 +42,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server": "NODE_ENV=dev nodemon --ignore back/uploads/  back/index.js",
+    "server": "NODE_ENV=dev nodemon --ignore back/uploads/  back/index.js --ignore src/",
     "mongo": "sudo service mongod start"
   },
   "devDependencies": {

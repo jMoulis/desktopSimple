@@ -54,9 +54,6 @@ const initialState = {
   },
 };
 
-const swap = (array, value1, value2) => {
-  let temp = array;
-};
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case CREATE_MESSAGE: {
