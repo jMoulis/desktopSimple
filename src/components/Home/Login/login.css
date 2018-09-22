@@ -4,13 +4,15 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: inherit;
   position: relative;
+  height: calc(100% - 5rem);
   padding-top: 5rem;
   background-color: #eee9d1; }
 
 #signin-form {
-  align-items: stretch; }
+  align-items: stretch;
+  padding-top: 5rem;
+  height: initial; }
   #signin-form .form {
     width: inherit;
     border: 5px solid #d44c00; }

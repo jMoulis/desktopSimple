@@ -1,0 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail-wrapper {
+  overflow: auto; }
+
+#task-form-create {
+  padding: 1rem; }

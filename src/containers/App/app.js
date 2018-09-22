@@ -1,10 +1,8 @@
-
 /*
 * Npm import
 */
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 
 /*
  * Local import
@@ -30,18 +28,20 @@ const mapDispatchToProps = dispatch => ({
   rehydrateAction: () => {
     dispatch(rehydrateAction());
   },
-  fetchSingleTeamAction: (teamId) => {
+  fetchSingleTeamAction: teamId => {
     dispatch(fetchSingleTeamAction(teamId));
   },
-  fetchUserAction: (userId) => {
+  fetchUserAction: userId => {
     dispatch(fetchUserAction(userId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const AppContainer = createContainer(App);
 export default withRouter(AppContainer);

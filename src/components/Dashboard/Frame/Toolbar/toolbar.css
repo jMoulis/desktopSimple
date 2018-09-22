@@ -5,7 +5,8 @@
   align-items: center;
   min-height: 40px;
   background-color: #008e8b;
-  border-bottom: 2px solid #0a1c28; }
+  border-bottom: 2px solid #0a1c28;
+  cursor: grab; }
   .toolbar header {
     flex: 1; }
   .toolbar-title {

@@ -24,14 +24,13 @@ import {
   deleteTeamSuccessAction,
   deleteTeamFailureAction,
 } from '../reducers/teamReducer';
-
-import { logoutAction } from '../../store/reducers/authReducer';
+import { logoutAction, editUserSuccessAction } from '../reducers/authReducer';
 /*
  * Code
  */
-const toObject = (arr) => {
+const toObject = arr => {
   let obj = {};
-  arr.forEach((element) => {
+  arr.forEach(element => {
     obj = { ...obj, [element[0]]: element[1].value };
   });
   return obj;
@@ -39,7 +38,7 @@ const toObject = (arr) => {
 /*
  * Middleware
  */
-export default store => next => (action) => {
+export default store => next => action => {
   switch (action.type) {
     case GLOBAL_CREATE_TEAM: {
       const formData = action.payload;
@@ -54,26 +53,45 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           store.dispatch(createTeamSuccessAction(data));
+          // Add the team to the loggedUser
+          store.dispatch(
+            editUserSuccessAction({
+              user: {
+                ...store.getState().authReducer.loginProcess.loggedUser,
+                teams: [
+                  ...store.getState().authReducer.loginProcess.loggedUser.teams,
+                  data.team,
+                ],
+              },
+            }),
+          );
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.log(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(createTeamFailureAction(error.response.data.errors));
+          return store.dispatch(
+            createTeamFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
     case GLOBAL_EDIT_TEAM: {
-      const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
+      const filteredArray = Object.entries(action.payload).filter(
+        field => field[1].changed,
+      );
       const formData = toObject(filteredArray);
       formData.users = action.payload.users;
+      const teamId = store.getState().mainTeamReducer.activeTeamProcess.team
+        ._id;
+
       axios({
         method: 'put',
         data: formData,
-        url: `${ROOT_URL}/api/teams/${store.getState().mainTeamReducer.activeTeamProcess.team._id}`,
+        url: `${ROOT_URL}/api/teams/${teamId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -81,14 +99,16 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(editTeamSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(editTeamFailureAction(error.response.data.errors));
+          return store.dispatch(
+            editTeamFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -103,14 +123,16 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchTeamsSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchTeamsFailureAction(error.response.data.errors));
+          return store.dispatch(
+            fetchTeamsFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -125,14 +147,16 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchSingleTeamSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchSingleTeamFailureAction(error.response.data.errors));
+          return store.dispatch(
+            fetchSingleTeamFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -147,11 +171,13 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(deleteTeamSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
-          return store.dispatch(deleteTeamFailureAction(error.response.data.errors));
+          return store.dispatch(
+            deleteTeamFailureAction(error.response.data.errors),
+          );
         });
       break;
     }

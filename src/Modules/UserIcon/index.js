@@ -6,15 +6,11 @@ import './index.css';
 
 // Action from global app... I think it might be a little spaghetti code
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
-
-const mapStateToProps = ({ userReducer, appReducer }) => ({
-  userActive: userReducer.userActive,
-  userId: appReducer.userId,
-});
+import { ROOT_URL } from '../../Utils/config';
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  showUserDetailModal: (userId) => {
+  showUserDetailModal: userId => {
     dispatch(showUserDetailModalAction(userId));
   },
 });
@@ -24,24 +20,40 @@ const UserIcon = ({
   user,
   active,
   classCss,
+  name,
+  containerCss,
+  callback,
 }) => {
   if (!user.user) {
     return null;
   }
   return (
-    <img
-      className={`mini-thumbnail mini-thumbnail-${classCss}`}
-      src={user.user.picture || '/img/avatar.png'}
-      alt="Student"
-      title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
-      onClick={() => active && showUserDetailModal(user.user._id)}
-      onKeyPress={() => active && showUserDetailModal(user.user._id)}
-      style={user.spec === 'manager' ? {
-        border: '2px solid #d44c00',
-      } : {
-        border: '2px solid transparent',
-      }}
-    />
+    <div
+      className="d-flex flex-align-items-center user-icon"
+      style={containerCss}
+      onClick={callback}
+      onKeyPress={callback}
+      data-value={user.user._id}
+    >
+      <img
+        className={`mini-thumbnail mini-thumbnail-${classCss}`}
+        src={`${ROOT_URL}${user.user.picture}` || '/img/avatar.png'}
+        alt="Student"
+        title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
+        onClick={() => active && showUserDetailModal(user.user._id)}
+        onKeyPress={() => active && showUserDetailModal(user.user._id)}
+        style={
+          user.spec === 'manager'
+            ? {
+                border: '2px solid #d44c00',
+              }
+            : {
+                border: '2px solid transparent',
+              }
+        }
+      />
+      {name && <span>{user.user.fullName}</span>}
+    </div>
   );
 };
 
@@ -49,15 +61,24 @@ UserIcon.propTypes = {
   showUserDetailModal: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   classCss: PropTypes.string,
+  containerCss: PropTypes.object,
   active: PropTypes.bool,
+  name: PropTypes.bool,
+  callback: PropTypes.func,
 };
 
 UserIcon.defaultProps = {
   active: true,
   classCss: '',
+  containerCss: null,
+  name: false,
+  callback: null,
 };
 
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  null,
+  mapDispatchToProps,
+);
 const UserIconContainer = createContainer(UserIcon);
 
 export default UserIconContainer;

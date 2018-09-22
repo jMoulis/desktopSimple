@@ -16,6 +16,8 @@
   justify-content: space-between;
   align-items: center;
   padding: .5rem; }
+  .team-toolbar button {
+    margin: 0; }
   .team-toolbar-appear {
     opacity: 0.01; }
   .team-toolbar-appear.team-selector-appear-active {
@@ -35,5 +37,7 @@
     .team-toolbar-list-item {
       border: 2px solid transparent;
       margin-right: .3rem; }
+    .team-toolbar-list .user-icon {
+      padding: 0; }
   .team-toolbar .team-list {
     margin-left: .5rem; }

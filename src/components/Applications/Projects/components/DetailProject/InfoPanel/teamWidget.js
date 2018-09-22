@@ -11,19 +11,12 @@ const TeamWidget = ({ team }) => (
         if (!user.user) {
           return null;
         }
-        return (
-          <UserIcon
-            key={index}
-            user={user}
-          />
-        );
+        return <UserIcon key={index} user={user} classCss="middle" />;
       })}
     </div>
     <div className="team-widget-content">
       <h2>{team.name}</h2>
-      <div className="team-widget-score">
-          Score by stars or number?
-      </div>
+      <div className="team-widget-score">Score by stars or number?</div>
     </div>
   </div>
 );

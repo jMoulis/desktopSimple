@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'react-moment';
 
 import './listProject.css';
-import Modal from '../Modal/modal';
+import Modal from '../../../../../Modules/Modal/modal';
 import NewProject from '../../containers/NewProject/newProject';
 import DetailProject from '../../containers/DetailProject/detailProject';
 import Team from '../../containers/Team';
 import Loader from '../../../../../Modules/Loader';
+import ListProjectItem from './listProjectItem';
 
 class ListProject extends React.Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class ListProject extends React.Component {
     globalProps: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
-  }
+  };
   state = {
     showNewProjectForm: {
       display: false,
@@ -31,7 +31,7 @@ class ListProject extends React.Component {
       display: false,
       zIndex: 0,
     },
-  }
+  };
   handleShowNewProjectForm = () => {
     this.setState(prevState => ({
       showNewProjectForm: {
@@ -39,8 +39,8 @@ class ListProject extends React.Component {
         zIndex: 1,
       },
     }));
-  }
-  handleShowDetailModal = (evt) => {
+  };
+  handleShowDetailModal = evt => {
     const { projectid } = evt.currentTarget.dataset;
     const { fetchSingleProjectAction } = this.props;
     fetchSingleProjectAction(projectid);
@@ -55,47 +55,39 @@ class ListProject extends React.Component {
       },
       projectId: projectid,
     }));
-  }
+  };
   handleShowCreateTeamModal = () => {
     this.setState(prevState => ({
       ...prevState,
       createTeamModal: {
         display: !prevState.createTeamModal.display,
-        zIndex: prevState.createTeamModal.zIndex + 1,
+        zIndex: prevState.createTeamModal.zIndex + 20,
       },
       detailProjectModal: {
         ...prevState.detailProjectModal,
         display: true,
       },
     }));
-    // Avoid a nasty effect between transition
-    setTimeout(() => {
-      this.setState(prevState => ({
-        ...prevState,
-        detailProjectModal: {
-          display: false,
-          zIndex: 0,
-        },
-      }));
-    }, 300);
-  }
-  handleCloseDetailModal = () => {
-    this.setState(() => ({
+  };
+  handleCloseModalOnSuccess = modalName => {
+    this.setState(prevState => ({
+      [modalName]: {
+        display: false,
+        zIndex: 0,
+      },
       detailProjectModal: {
+        ...prevState.detailProjectModal,
+        display: false,
+      },
+    }));
+  };
+  handleCloseModal = modalName => {
+    this.setState(() => ({
+      [modalName]: {
         display: false,
         zIndex: 0,
       },
     }));
-  }
-  handleCloseModal = (modalName) => {
-    setTimeout(() => {
-      this.setState(() => ({
-        [modalName]: {
-          display: false,
-          zIndex: 0,
-        },
-      }));
-    }, 300);
   };
   render() {
     const {
@@ -112,93 +104,32 @@ class ListProject extends React.Component {
     if (loggedUser.typeUser && loggedUser.typeUser === 'student' && error) {
       return (
         <div className="notFound">
-          <span>{error}</span>
+          <span>{error.detail}</span>
         </div>
       );
     }
     return (
       <div className="project-list-container">
-        <ul>
-          <li>
-            <form>
-              <label>Criteria 1</label>
-              <input />
-              <label>Criteria 2</label>
-              <input />
-              <label>Criteria 3</label>
-              <input />
-              <label>Criteria 4</label>
-              <input />
-            </form>
-          </li>
-        </ul>
-        <div>
-          {loggedUser.typeUser &&
-          loggedUser.typeUser !== 'student' &&
-          <ul className="project-list">
-            <li className="project-list-item">
-              <h2>Add a Project</h2>
-              <div className="content add-project">
-                <i
-                  onKeyPress={this.handleShowNewProjectForm}
-                  onClick={this.handleShowNewProjectForm}
-                  className="fas fa-plus-circle fa-3x"
-                />
-              </div>
-            </li>
-          </ul>}
+        <ul className="project-list">
           {projectListProcess.projects.map(project => (
-            <ul
-              className="project-list"
+            <ListProjectItem
               key={project._id}
-            >
-              <li
-                className="project-list-item"
-                data-projectid={project._id}
-                data-tab="project-detail"
-                onClick={this.handleShowDetailModal}
-                onKeyPress={this.handleShowDetailModal}
-              >
-                <h2>{project.title}</h2>
-                <div className="content">
-                  <p>Due Date: {project.dueDate && <Moment format="DD/MM/YYYY">{project.dueDate}</Moment>}</p>
-                  <p>Teams: {project.teams.length}</p>
-                  <p>Description: {project.description}</p>
-                  <ul className="tags-list">
-                    {project.tags.map((tag, index) => <li key={index}>{tag}</li>)}
-                  </ul>
-                  <div>
-                    <button
-                      type="button"
-                      data-projectid={project._id}
-                      data-tab="project-detail"
-                      onClick={this.handleShowDetailModal}
-                      className="btn btn-primary"
-                      style={{
-                        width: '100%',
-                        marginTop: '.5rem',
-                      }}
-                    >
-                      Check me out
-                    </button>
-                  </div>
-                </div>
-              </li>
-            </ul>
+              project={project}
+              showDetailModal={this.handleShowDetailModal}
+            />
           ))}
-        </div>
-        {this.state.showNewProjectForm.display &&
+        </ul>
+        {this.state.showNewProjectForm.display && (
           <Modal
             name="showNewProjectForm"
             closeFromParent={this.handleShowNewProjectForm}
             title="New Project"
             zIndex={this.state.showNewProjectForm.zIndex}
           >
-            <NewProject
-              loggedUser={this.props.loggedUser}
-            />
-          </Modal>}
-        {this.state.createTeamModal.display &&
+            <NewProject loggedUser={loggedUser} />
+          </Modal>
+        )}
+        {this.state.createTeamModal.display && (
           <Modal
             name="createTeamModal"
             closeFromParent={this.handleCloseModal}
@@ -206,10 +137,13 @@ class ListProject extends React.Component {
             zIndex={this.state.createTeamModal.zIndex}
           >
             <Team
-              loggedUser={this.props.loggedUser}
+              loggedUser={loggedUser}
+              closeOnSuccess={this.handleCloseModalOnSuccess}
             />
-          </Modal>}
-        {this.state.detailProjectModal.display && activeProjectProcess.loading === false ?
+          </Modal>
+        )}
+        {this.state.detailProjectModal.display &&
+        activeProjectProcess.loading === false ? (
           <Modal
             name="detailProjectModal"
             closeFromParent={this.handleCloseModal}
@@ -217,16 +151,18 @@ class ListProject extends React.Component {
             zIndex={this.state.detailProjectModal.zIndex}
           >
             <DetailProject
-              loggedUser={this.props.loggedUser}
+              loggedUser={loggedUser}
               openNewTeamModal={this.handleShowCreateTeamModal}
               globalActions={globalActions}
               globalProps={globalProps}
             />
-          </Modal> : ''}
+          </Modal>
+        ) : (
+          ''
+        )}
       </div>
     );
   }
 }
-
 
 export default ListProject;

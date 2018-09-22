@@ -1,0 +1,52 @@
+@import '../../styles/charte.sass'
+
+.app-toolbar
+  background-color: $lightblue
+  border-bottom: 1px solid $darkestblue
+  padding-top: .5rem
+  padding-bottom: .5rem
+  color: $beige
+  border-bottom: 2px solid $darkestblue
+  height: 34px
+  & .btn-app-toolbar
+    margin: 0
+    border: 2px solid transparent
+    background-color: transparent
+    cursor: pointer
+    transition: border 500ms
+    outline: none
+    &:hover
+      border-bottom: 2px solid $darkestblue
+  & .search
+    display: flex
+    padding-right: 1rem
+  &-list
+    align-items: center
+    display: flex
+    margin: 0
+    padding-left: 1rem
+    flex: 1
+    &-item
+      position: relative
+      &-form
+        padding-right: 2rem
+        position: relative
+        display: flex
+        align-items: center
+        &-input-search
+          padding: 0 !important
+          background-color: transparent
+          &-icon
+            right: 2rem
+            transition: all 300ms
+            background-color: transparent
+            border: none
+            outline: none
+            cursor: pointer
+            &:hover
+              color: $orange
+          &-container
+            padding: 0
+          .app-toolbar
+      
+      

@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.app-toolbar {
+  background-color: #97c0b7;
+  border-bottom: 1px solid #0a1c28;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  color: #eee9d1;
+  border-bottom: 2px solid #0a1c28;
+  height: 34px; }
+  .app-toolbar .btn-app-toolbar {
+    margin: 0;
+    border: 2px solid transparent;
+    background-color: transparent;
+    cursor: pointer;
+    transition: border 500ms;
+    outline: none; }
+    .app-toolbar .btn-app-toolbar:hover {
+      border-bottom: 2px solid #0a1c28; }
+  .app-toolbar .search {
+    display: flex;
+    padding-right: 1rem; }
+  .app-toolbar-list {
+    align-items: center;
+    display: flex;
+    margin: 0;
+    padding-left: 1rem;
+    flex: 1; }
+    .app-toolbar-list-item {
+      position: relative; }
+      .app-toolbar-list-item-form {
+        padding-right: 2rem;
+        position: relative;
+        display: flex;
+        align-items: center; }
+        .app-toolbar-list-item-form-input-search {
+          padding: 0 !important;
+          background-color: transparent; }
+          .app-toolbar-list-item-form-input-search-icon {
+            right: 2rem;
+            transition: all 300ms;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer; }
+            .app-toolbar-list-item-form-input-search-icon:hover {
+              color: #d44c00; }
+          .app-toolbar-list-item-form-input-search-container {
+            padding: 0; }

@@ -24,12 +24,13 @@ import {
 } from '../reducers/projectReducer';
 
 import { logoutAction } from '../../../../../store/reducers/authReducer';
+import Utils from '../../../../../Utils/utils';
 /*
  * Code
  */
-const toObject = (arr) => {
+const toObject = arr => {
   let obj = {};
-  arr.forEach((element) => {
+  arr.forEach(element => {
     obj = { ...obj, [element[0]]: element[1].value };
   });
   return obj;
@@ -37,11 +38,22 @@ const toObject = (arr) => {
 /*
  * Middleware
  */
-export default store => next => (action) => {
+export default store => next => action => {
+  const utils = new Utils();
   switch (action.type) {
     case CREATE_PROJECT: {
-      const formData = toObject(Object.entries(action.payload).filter(field => field));
-      formData.docs = action.payload.docs;
+      const filteredArray = Object.entries(action.payload).filter(
+        field => field[1].changed,
+      );
+      const formData = new FormData();
+      const form = toObject(filteredArray);
+
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
+      if (action.payload.files) {
+        action.payload.files.value.forEach(file => {
+          formData.append('files', file);
+        });
+      }
       axios({
         method: 'post',
         data: formData,
@@ -53,27 +65,34 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(createProjectSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.log(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(createProjectFailureAction(error.response.data.errors));
+          return store.dispatch(
+            createProjectFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
     case EDIT_PROJECT: {
-      // 1- the action.payload is the state with all fields.
-      // I filter to get only those who changed
-      const filteredArray = Object.entries(action.payload).filter(field => field[1].changed);
-      // 2- I transform my array to an object
-      const formData = toObject(filteredArray);
+      const filteredArray = Object.entries(action.payload).filter(
+        field => field[1].changed,
+      );
+
+      const formData = new FormData();
+      const form = toObject(filteredArray);
+      Object.keys(form).forEach(key => formData.append([key], form[key]));
+
       axios({
         method: 'put',
         data: formData,
-        url: `${ROOT_URL}/api/projects/${store.getState().projectReducer.activeProjectProcess.project._id}`,
+        url: `${ROOT_URL}/api/projects/${
+          store.getState().projectReducer.activeProjectProcess.project._id
+        }`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -81,21 +100,25 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(editProjectSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(editProjectFailureAction(error.response.data.errors));
+          return store.dispatch(
+            editProjectFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
     case FETCH_PROJECTS: {
+      const filter = utils.buildUrlFilter(action.payload);
+
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects`,
+        url: `${ROOT_URL}/api/projects?${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -103,14 +126,16 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchProjectsSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchProjectsFailureAction(error.response.data.errors));
+          return store.dispatch(
+            fetchProjectsFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -125,14 +150,16 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchSingleProjectSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }
           if (error.response.data.auth === false) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchSingleProjectFailureAction(error.response.data.errors));
+          return store.dispatch(
+            fetchSingleProjectFailureAction(error.response.data.errors),
+          );
         });
       break;
     }
@@ -146,9 +173,9 @@ export default store => next => (action) => {
       })
         .then(({ data }) => {
           // store.dispatch(fetchSingleProjectSuccessAction(data));
-          console.log('success', data)
+          console.log('success', data);
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.error(error);
           }

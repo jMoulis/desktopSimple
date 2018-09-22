@@ -21,18 +21,20 @@ const mapStateToProps = ({ userReducer, projectReducer, teamReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchUsersCountAction: (filter) => {
+  fetchUsersCountAction: filter => {
     dispatch(fetchUsersCountAction(filter));
   },
-  createTeamAction: (values) => {
+  createTeamAction: values => {
     dispatch(createTeamAction(values));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const TeamContainer = createContainer(Team);
 export default TeamContainer;

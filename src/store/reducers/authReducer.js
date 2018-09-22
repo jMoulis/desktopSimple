@@ -20,6 +20,18 @@ export const REHYDRATE = 'REHYDRATE';
 export const REHYDRATE_SUCCESS = 'REHYDRATE_SUCCESS';
 export const REHYDRATE_FAILURE = 'REHYDRATE_FAILURE';
 
+export const EDIT_USER = 'EDIT_USER';
+export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
+export const EDIT_USER_FAILURE = 'EDIT_USER_FAILURE';
+
+export const DELETE_USER = 'DELETE_USER';
+export const DELETE_USER_FAILURE = 'DELETE_USER_FAILURE';
+
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS';
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
+
+export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 export const LOGOUT = 'LOGOUT';
 
 /*
@@ -34,7 +46,12 @@ const initialState = {
     loggedUser: null,
     logging: false,
     error: null,
-    loading: true,
+    loading: false,
+  },
+  editUser: {
+    editing: false,
+    error: null,
+    success: false,
   },
   createUserProcess: {
     creating: false,
@@ -114,9 +131,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         loginProcess: {
           loggedUser: null,
-          logging: true,
           error: null,
-          loading: true,
         },
         auth: false,
       };
@@ -155,6 +170,107 @@ const reducer = (state = initialState, action = {}) => {
           error: null,
         },
         auth: false,
+      };
+    }
+    case EDIT_USER: {
+      return {
+        ...state,
+        editUser: {
+          editing: true,
+          error: null,
+          success: false,
+        },
+      };
+    }
+    case EDIT_USER_SUCCESS: {
+      return {
+        ...state,
+        loginProcess: {
+          ...state.loginProcess,
+          loggedUser: action.payload.user,
+        },
+        editUser: {
+          editing: false,
+          success: action.payload.success,
+        },
+      };
+    }
+    case EDIT_USER_FAILURE: {
+      return {
+        ...state,
+        editUser: {
+          editing: false,
+          success: false,
+          error: action.payload,
+        },
+      };
+    }
+    case CHANGE_PASSWORD: {
+      return {
+        ...state,
+        editUser: {
+          editing: true,
+          error: null,
+        },
+      };
+    }
+    case CHANGE_PASSWORD_SUCCESS: {
+      return {
+        ...state,
+        editUser: {
+          editing: false,
+          error: null,
+        },
+      };
+    }
+    case CHANGE_PASSWORD_FAILURE: {
+      return {
+        ...state,
+        editUser: {
+          editing: false,
+          error: action.payload,
+        },
+      };
+    }
+    case DELETE_USER: {
+      return {
+        ...state,
+        editUser: {
+          editing: true,
+          error: null,
+        },
+      };
+    }
+    case DELETE_USER_FAILURE: {
+      return {
+        ...state,
+        editUser: {
+          editing: true,
+          error: action.payload,
+        },
+      };
+    }
+    case CLEAR_MESSAGE: {
+      return {
+        ...state,
+        userActive: {
+          ...state.userActive,
+          loading: false,
+          error: null,
+          success: null,
+        },
+        editUser: {
+          error: null,
+          success: null,
+        },
+        loginProcess: {
+          ...state.loginProcess,
+          error: null,
+        },
+        createUserProcess: {
+          creating: false,
+          error: null,
+        },
       };
     }
     default:
@@ -205,6 +321,44 @@ export const rehydrateFailureAction = error => ({
 });
 export const logoutAction = () => ({
   type: LOGOUT,
+});
+export const editUserAction = (id, updates) => ({
+  type: EDIT_USER,
+  id,
+  payload: updates,
+});
+export const editUserSuccessAction = data => ({
+  type: EDIT_USER_SUCCESS,
+  payload: data,
+});
+export const editUserFailureAction = error => ({
+  type: EDIT_USER_FAILURE,
+  payload: error,
+});
+
+export const changePasswordAction = (id, updates) => ({
+  type: CHANGE_PASSWORD,
+  id,
+  payload: updates,
+});
+export const changePasswordSuccessAction = data => ({
+  type: CHANGE_PASSWORD_SUCCESS,
+  payload: data,
+});
+export const changePasswordFailureAction = error => ({
+  type: CHANGE_PASSWORD_FAILURE,
+  payload: error,
+});
+export const deleteUserAction = userId => ({
+  type: DELETE_USER,
+  userId,
+});
+export const deleteUserFailureAction = error => ({
+  type: DELETE_USER_FAILURE,
+  payload: error,
+});
+export const clearMessageAction = () => ({
+  type: CLEAR_MESSAGE,
 });
 /*
  * Export default

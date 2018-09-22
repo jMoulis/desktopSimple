@@ -1,0 +1,39 @@
+@import '../../styles/charte.sass'
+
+.document
+  flex-wrap: wrap
+  margin-top: .5rem
+  & li
+    margin: .5rem
+  &-item
+    position: relative
+    width: 100px
+    white-space: nowrap
+    overflow: hidden
+    &-link
+      text-align: center
+      color: $darkestblue
+      transition: color 300ms
+      &:hover
+        color: $orange
+    &-infos
+      display: flex
+      flex-direction: column
+      padding-top: .5rem
+    &-delete
+      position: absolute
+      right: 0
+      border: none
+      border-radius: 50%
+      width: 20px
+      height: 20px
+      background-color: $red
+      cursor: pointer
+      color: white
+      font-weight: bold
+      outline: none
+      transition: background-color 200ms
+      &:hover, &:focus
+        background-color: darken($red, 20%)
+      &:active
+        background-color: darken($red, 40%)

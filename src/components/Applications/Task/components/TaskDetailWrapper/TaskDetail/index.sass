@@ -1,0 +1,40 @@
+@import '../../index.sass'
+.task-detail
+  position: relative
+  padding-top: .5rem
+  padding-right: .5rem
+  padding-left: .5rem
+  &--header
+    margin-bottom: 1rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+    & h1
+      & .form-group
+        padding: 0
+        & .form-control
+          padding: 0
+          font-size: 1.5rem
+          font-weight: bold
+  & .modal-container
+    height: 80%
+  &-list
+    border-bottom: 2px solid $darkestblue
+    padding-bottom: 1rem
+    &-item
+      position: relative
+      & .left-label-form
+        display: flex
+        align-items: center
+        width: 120px
+        height: 28px
+      &--tags
+        padding: 0
+        & .form-group
+          padding: 0
+        & .input-auto
+          padding: 0
+      &--description
+        margin-bottom: .5rem
+        & .form-group
+          padding: 0

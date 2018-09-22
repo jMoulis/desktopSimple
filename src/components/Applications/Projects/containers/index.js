@@ -13,22 +13,16 @@ import { fetchTeamsAction } from '../store/reducers/teamReducer';
 /*
  * Code
  */
-const getLoggedUser = () => {
-  if (localStorage.getItem('user')) {
-    const loggedUser = JSON.parse(localStorage.getItem('user'));
-    return loggedUser;
-  }
-  return null;
-};
 // State
-const mapStateToProps =  state => ({
-  loggedUserId: getLoggedUser(),
+const mapStateToProps = ({ authReducer }) => ({
+  loggedUserId: authReducer.loginProcess.loggedUser.id,
+  editUser: authReducer.editUser,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchProjectsAction: (values) => {
-    dispatch(fetchProjectsAction(values));
+  fetchProjectsAction: (filter) => {
+    dispatch(fetchProjectsAction(filter));
   },
   fetchTeamsAction: () => {
     dispatch(fetchTeamsAction());

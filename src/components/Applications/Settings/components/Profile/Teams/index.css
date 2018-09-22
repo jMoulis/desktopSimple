@@ -19,11 +19,23 @@
   width: 150px;
   height: 150px;
   padding-left: .5rem;
-  border-radius: 50%; }
+  border-radius: 50%;
+  cursor: pointer; }
+
+#profile .date-since-container {
+  padding: .5rem 0; }
+
+#profile .date-since-item {
+  font-size: .7rem;
+  font-style: italic; }
 
 .teams {
   align-items: flex-start;
-  padding: 1rem; }
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  height: calc(100% - 70px); }
   .teams-new-team {
     padding-top: 1rem;
     margin: 1rem; }

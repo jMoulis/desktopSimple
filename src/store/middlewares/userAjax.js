@@ -1,11 +1,5 @@
-/*
- * Npm import
- */
 import axios from 'axios';
 
-/*
- * Local import
- */
 import { ROOT_URL } from '../../Utils/config';
 import {
   FETCH_USER,
@@ -16,21 +10,20 @@ import {
   fetchUsersFailureAction,
   FETCH_USERS_COUNT,
   fetchUsersCountSuccessAction,
+  SEND_FRIEND_REQUEST,
+  sendFriendRequestSuccessAction,
 } from '../reducers/userReducer';
 import { logoutAction } from '../reducers/authReducer';
-/*
- * Code
- */
+import Utils from '../../Utils/utils';
 
-/*
- * Middleware
- */
-export default store => next => (action) => {
+export default store => next => action => {
+  const utils = new Utils();
   switch (action.type) {
-    case FETCH_USERS:
+    case FETCH_USERS: {
+      const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?filter=${action.payload}`,
+        url: `${ROOT_URL}/api/users${filter || ''}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -38,35 +31,45 @@ export default store => next => (action) => {
         .then(({ data }) => {
           store.dispatch(fetchUsersSuccessAction(data));
         })
-        .catch(({ response }) => {
-          store.dispatch(fetchUsersFailureAction(response.statusText));
+        .catch(error => {
+          if (!error.response) return console.error(error.message);
+          store.dispatch(
+            fetchUsersFailureAction(error.response.data.errors.error),
+          );
         });
       break;
+    }
+
     case FETCH_USER:
       axios({
         method: 'get',
         url: `${ROOT_URL}/api/users/${action.userId}`,
         headers: {
           Authorization: localStorage.getItem('token'),
+          type: 'user',
         },
       })
         .then(({ data }) => {
           store.dispatch(fetchUserSuccessAction(data));
         })
-        .catch((error) => {
+        .catch(error => {
           if (!error.response) {
             return console.log(error);
           }
           if (error.response.status === 500) {
             return store.dispatch(logoutAction());
           }
-          return store.dispatch(fetchUserFailureAction(error.response.error.errors));
+          return store.dispatch(
+            fetchUserFailureAction(error.response.error.errors),
+          );
         });
       break;
-    case FETCH_USERS_COUNT:
+
+    case FETCH_USERS_COUNT: {
+      const filter = utils.buildUrlFilter(action.payload);
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/users?filter=${action.payload}&count=true`,
+        url: `${ROOT_URL}/api/users${filter}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -78,6 +81,24 @@ export default store => next => (action) => {
           console.error(response.statusText);
         });
       break;
+    }
+    case SEND_FRIEND_REQUEST: {
+      axios({
+        method: 'put',
+        url: `${ROOT_URL}/api/friendrequest`,
+        data: { ...action.payload },
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(sendFriendRequestSuccessAction(data));
+        })
+        .catch(({ response }) => {
+          console.error(response.statusText);
+        });
+      break;
+    }
     default:
   }
 

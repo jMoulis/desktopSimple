@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 import Loader from '../../../Modules/Loader';
+import TagList from '../../../Modules/Tag/tagList';
+import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
+import { ROOT_URL } from '../../../Utils/config';
 
 class DetailUser extends React.Component {
   static propTypes = {
     userId: PropTypes.string.isRequired,
     fetchUserAction: PropTypes.func.isRequired,
     userActive: PropTypes.object.isRequired,
-  }
+  };
   componentDidMount() {
     const { fetchUserAction, userId } = this.props;
-    // fetchUserAction(userId);
+    fetchUserAction(userId);
   }
   render() {
     const { userActive } = this.props;
@@ -21,23 +24,80 @@ class DetailUser extends React.Component {
     }
     return (
       <div className="user">
-        <img className="user-picture" src={user.picture} alt="User" />
+        <img
+          className="user-picture"
+          src={`${ROOT_URL}${user.picture || '/img/avatar.png'}`}
+          alt="User"
+        />
         <h1>{user.fullName}</h1>
         <ul className="user-detail-list">
-          <li>{user.description}</li>
-          <li>{user.email}</li>
-          <li>{user.school}</li>
-          <li>{user.diploma}</li>
-          <li>{user.location}</li>
           <li>
-            <ul className="tag-list">
-              {user.tags.map((tag, index) => (
-                <li key={index} className="tag-item">{tag}</li>
-              ))}
-            </ul>
+            <span>Available: </span>
+            <span>
+              {user.available === 'false' ? 'Non available' : 'Available'}
+            </span>
           </li>
-          <li><a target="_blank" href={`https://${user.linkedIn}`}>{user.linkedIn}</a></li>
-          <li><a target="_blank" href={`https://${user.gitHub}`}>{user.gitHub}</a></li>
+          <li>
+            <span>Description: </span>
+            <p>{user.description || ''}</p>
+          </li>
+          <li>
+            <span>Email: </span>
+            <a href={`mailto:${user.email || ''}`}>{user.email}</a>
+          </li>
+          <li>
+            <span>School: </span>
+            {user.school || ''}
+          </li>
+          <li>
+            <span>Diploma: </span>
+            {user.diploma || ''}
+          </li>
+          <li>
+            <span>Location: </span>
+            {user.location || ''}
+          </li>
+          <li>
+            <span>Tags:</span>
+            <TagList tags={user.tags} />
+          </li>
+          <li>
+            <span>LinkedIn: </span>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${user.linkedIn}` || ''}
+            >
+              {user.linkedIn}
+            </a>
+          </li>
+          <li>
+            <span>GitHub: </span>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://${user.gitHub}` || ''}
+            >
+              {user.gitHub}
+            </a>
+          </li>
+          {user.company && (
+            <Fragment>
+              <li>
+                <span>Company Name: </span>
+                {user.company.companyName}
+              </li>
+              <li>
+                <span>Description: </span>
+                {user.company.companyName}
+              </li>
+              <li>
+                <span>Tags: </span>
+                <TagList tags={user.company.tags} />
+              </li>
+            </Fragment>
+          )}
+          <FriendRequestButtonsContainer user={user} />
         </ul>
       </div>
     );

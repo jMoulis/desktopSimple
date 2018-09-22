@@ -1,19 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import './index.css';
-import Model from '../Model/project-model';
-import Input from '../../../../Form/input';
-import Textarea from '../../../../Form/textarea';
-import InputAutoComplete from '../../../../Form/inputAutoComplete';
-import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
-import Checkbox from '../../../../Form/checkbox';
 import InfoPanel from '../../containers/DetailProject/InfoPanel';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import AlertBox from '../../../../../Modules/AlertBox';
-import UserIcon from '../../../../../Modules/UserIcon';
 import Loader from '../../../../../Modules/Loader';
+import EditFormProjectContainer from '../../containers/DetailProject/editFormProject';
 
 class DetailProject extends React.Component {
   static propTypes = {
@@ -25,223 +17,38 @@ class DetailProject extends React.Component {
     openNewTeamModal: PropTypes.func.isRequired,
     deleteProjectAction: PropTypes.func.isRequired,
     closeFromParent: PropTypes.func.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     const { activeProjectProcess } = props;
     const { project } = activeProjectProcess;
-    let field = {};
-    Object.keys(Model).map((key) => {
-      field = {
-        ...field,
-        [key]: project ?
-          { value: project[key], focus: false, changed: false } :
-          { value: Model[key].isArray ? [] : '', focus: false, changed: false },
-      };
-      return field;
-    });
+
     this.state = {
-      form: {
-        ...field,
-        dueDate: project.dueDate ?
-          { value: moment(project.dueDate).format('DD/MM/YYYY'), changed: false } :
-          { value: '', focus: false, changed: false },
-      },
       delete: false,
       showAlertBox: false,
-      author: project.author,
-
-    };
-  }
-  componentDidUpdate(prevProps, prevState) {
-    const { editProjectAction } = prevProps;
-    // Dealing with documents
-    if (prevState.form.docs.value) {
-      if (prevState.form.docs.value.length !== this.state.form.docs.value.length) {
-        editProjectAction(this.state.form);
-      }
-    }
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
-      evt.preventDefault();
-      return false;
-    }
-    return true;
-  }
-  handleInputChange = (evt) => {
-    const { value, name } = evt.target;
-    return this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [name]: {
-          ...prevState.form[name],
-          value,
-          changed: true,
-        },
-      },
-    }));
-  }
-  handleTextAreaChange = (evt) => {
-    const { value, name } = evt.target;
-    autoTextAreaResizing(evt.target);
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [name]: {
-          ...prevState.form[name],
-          value,
-          changed: true,
-        },
-      },
-    }));
-  }
-  handleCheckBoxChange = (evt) => {
-    const { name, checked } = evt.target;
-
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [name]: {
-          ...prevState.form[name],
-          value: checked,
-          changed: true,
-        },
-      },
-    }));
-  }
-  handleRemove = (evt) => {
-    evt.preventDefault();
-    const { editProjectAction } = this.props;
-    const { state } = this;
-    const values = state.form.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
-    const newTags = {
-      ...state,
-      form: {
-        ...state.form,
-        tags: {
-          ...state.form.tags,
-          value: values,
-          changed: true,
-        },
+      subscribers: {
+        value: project.subscribers,
       },
     };
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        tags: {
-          ...state.form.tags,
-          value: values,
-          changed: true,
-        },
-      },
-    }));
-    editProjectAction(newTags);
   }
-  handleInputSelectTagsChange = (evt) => {
-    const inputValue = evt.target.value;
-    const { editProjectAction } = this.props;
-    if (evt.keyCode === 13) {
-      const { state } = this;
-      const newTags = {
-        ...state,
-        form: {
-          ...state.form,
-          tags: {
-            ...state.form.tags,
-            value: [
-              ...state.form.tags.value,
-              inputValue,
-            ],
-            changed: true,
-          },
-        },
-      };
-      this.setState(prevState => ({
-        ...prevState,
-        form: {
-          ...prevState.form,
-          tags: {
-            ...state.form.tags,
-            value: [
-              ...state.form.tags.value,
-              inputValue,
-            ],
-            changed: true,
-          },
-        },
-      }));
-      editProjectAction(newTags);
-      evt.target.value = '';
-    }
-  }
-  handleOnBlur = (evt) => {
-    // Save the input field
-    const { name } = evt.target;
-    const { editProjectAction } = this.props;
-    if (this.state.form[name].changed) {
-      editProjectAction(this.state.form);
-    }
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        [name]: {
-          ...prevState.form[name],
-          focus: false,
-          changed: false,
-        },
-      },
-    }));
-  }
-  handleOnFocus = (evt) => {
-    // Save the input field
-    if (evt) {
-      const { name } = evt.target;
-      this.setState(prevState => ({
-        ...prevState,
-        form: {
-          ...prevState.form,
-          [name]: {
-            ...prevState.form[name],
-            focus: true,
-          },
-        },
-      }));
-    }
-  }
-  handleInputFileChange = (docs) => {
-    this.setState(prevState => ({
-      ...prevState,
-      form: {
-        ...prevState.form,
-        docs: {
-          value: docs,
-          changed: true,
-        },
-      },
-    }));
-  }
+
   handleDeleteProject = () => {
-    const { deleteProjectAction, activeProjectProcess, closeFromParent } = this.props;
+    const {
+      deleteProjectAction,
+      activeProjectProcess,
+      closeFromParent,
+    } = this.props;
     deleteProjectAction(activeProjectProcess.project._id);
     closeFromParent('detailProjectModal');
-  }
-  handleSubscribe = (evt) => {
+  };
+  handleSubscribe = evt => {
     const { name } = evt.currentTarget;
     const { editProjectAction, loggedUser } = this.props;
-    const stateSubscribers = this.state.form.subscribers.value;
-
+    const stateSubscribers = this.state.subscribers.value;
     let subscribers = [];
-    const userAlreadySubscribed = stateSubscribers.find(subscriber => (
-      subscriber._id === loggedUser._id
-    ));
+    const userAlreadySubscribed = stateSubscribers.find(
+      subscriber => subscriber._id === loggedUser._id,
+    );
 
     switch (name) {
       case 'subscribe':
@@ -251,46 +58,66 @@ class DetailProject extends React.Component {
           subscribers = stateSubscribers;
           return subscribers;
         }
-        return this.setState(prevState => ({
-          ...prevState,
-          form: {
-            ...prevState.form,
-            subscribers: {
-              value: [
-                ...stateSubscribers,
-                { _id: loggedUser._id },
-              ],
-              changed: true,
+        return this.setState(
+          prevState => ({
+            ...prevState,
+            form: {
+              ...prevState.form,
+              subscribers: {
+                value: JSON.stringify([
+                  ...stateSubscribers,
+                  { _id: loggedUser._id },
+                ]),
+                changed: true,
+              },
             },
-          },
-        }), () => editProjectAction(this.state.form));
+          }),
+          () => editProjectAction(this.state.form),
+        );
       case 'unsubscribe':
-        subscribers = stateSubscribers.filter(subscriber => (
-          subscriber._id !== loggedUser._id));
-        return this.setState(prevState => ({
-          ...prevState,
-          form: {
-            ...prevState.form,
-            subscribers: {
-              value: subscribers,
-              changed: true,
+        subscribers = stateSubscribers.filter(
+          subscriber => subscriber._id !== loggedUser._id,
+        );
+        return this.setState(
+          prevState => ({
+            ...prevState,
+            form: {
+              ...prevState.form,
+              subscribers: {
+                value: JSON.stringify(subscribers),
+                changed: true,
+              },
             },
-          },
-        }), () => editProjectAction(this.state.form));
+          }),
+          () => editProjectAction(this.state.form),
+        );
       default:
         break;
     }
-  }
+  };
   handleShowAlertBox = () => {
     this.setState(prevState => ({
       ...prevState,
       showAlertBox: !prevState.showAlertBox,
     }));
-  }
+  };
+  handleOnlineMode = () => {
+    const {
+      editProjectAction,
+      activeProjectProcess: { project },
+    } = this.props;
+    editProjectAction({
+      ...this.state.form,
+      isOnline: {
+        value: !project.isOnline,
+        changed: true,
+      },
+    });
+  };
   handleShare = () => {
     console.log('shared');
     // Open a message to send to...
-  }
+  };
   render() {
     const {
       activeProjectProcess,
@@ -300,7 +127,7 @@ class DetailProject extends React.Component {
       globalProps,
       editProjectAction,
     } = this.props;
-    const { error, loading, project } = activeProjectProcess;
+    const { loading, project } = activeProjectProcess;
     const user = loggedUser;
     if (loading || Object.keys(project).length === 0) {
       if (this.state.delete) {
@@ -309,220 +136,109 @@ class DetailProject extends React.Component {
       return <Loader />;
     }
     return (
-      <div id="edit-project" className="form-container" key="app-content" >
-        <form
-          id="edit-project-form"
-          className="form"
-          onKeyPress={this.handleFormKeyPress}
-          noValidate="true"
-        >
-          <div className="form-content-wrapper">
-            <div className="form-content">
-              <div className="company">
-                <img className="company-logo" src={this.state.author.company.logo} alt="logo company" />
-                <div className="company-info">
-                  <p className="company-info-name">{this.state.author.company.companyName}</p>
-                  <div className="company-author">
-                    <UserIcon
-                      user={{ user: this.state.author }}
-                      classCss="middle"
-                    />
-                    <p>{this.state.author.fullName}</p>
-                  </div>
-                </div>
-              </div>
-              <Input
-                config={{
-                  field: Model.title,
-                  onChange: this.handleInputChange,
-                  value: this.state.form.title.value,
-                  blur: this.handleOnBlur,
-                  keyPress: this.handleInputChange,
-                  readOnly: project.author._id !== user._id,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.title.focus,
-                  error: error && error.title && error.title.detail,
-                }}
-              />
-              <Textarea
-                config={{
-                  field: Model.description,
-                  onChange: this.handleTextAreaChange,
-                  value: this.state.form.description.value,
-                  blur: this.handleOnBlur,
-                  readOnly: project.author._id !== user._id,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.description.focus,
-                  error: error && error.description && error.description.detail,
-                }}
-              />
-              <Input
-                config={{
-                  field: Model.dueDate,
-                  onChange: this.handleInputChange,
-                  value: this.state.form.dueDate.value,
-                  blur: this.handleOnBlur,
-                  keyPress: this.handleInputChange,
-                  readOnly: project.author._id !== user._id,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.dueDate.focus,
-                  error: error && error.dueDate && error.dueDate.detail,
-                }}
-              />
-              <Checkbox
-                config={{
-                  field: Model.isPrice,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.form.isPrice.value,
-                  blur: this.handleOnBlur,
-                  readOnly: project.author._id !== user._id,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.isPrice.focus,
-                  error: error && error.isPrice && error.isPrice.detail,
-                }}
-              />
-              {this.state.form.isPrice.value &&
-                <Input
-                  config={{
-                    field: Model.price,
-                    onChange: this.handleInputChange,
-                    value: this.state.form.price.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    readOnly: project.author._id !== user._id,
-                    isFocused: this.state.form.price.focus,
-                    error: error && error.price && error.price.detail,
-                  }}
-                />
-              }
-              <Checkbox
-                config={{
-                  field: Model.isContest,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.form.isContest.value,
-                  blur: this.handleOnBlur,
-                  readOnly: project.author._id !== user._id,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.isContest.focus,
-                  error: error && error.isContest && error.isContest.detail,
-                }}
-              />
-              {this.state.form.isContest.value &&
-                <Input
-                  config={{
-                    field: Model.maxTeam,
-                    max: 4,
-                    min: project.teams.length !== 0 ? project.teams.length : 1,
-                    onChange: this.handleInputChange,
-                    value: this.state.form.maxTeam.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    readOnly: project.author._id !== user._id,
-                    isFocused: this.state.form.maxTeam.focus,
-                    error: error && error.maxTeam && error.maxTeam.detail,
-                  }}
-                />
-              }
-              <InputAutoComplete
-                config={{
-                  field: Model.tags,
-                  onChange: this.handleInputSelectTagsChange,
-                  keyPress: this.handleInputSelectTagsChange,
-                  values: this.state.form.tags.value,
-                  blur: this.handleOnBlur,
-                  readOnly: project.author._id !== user._id,
-                  error: error && error.tags && error.tags.detail,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.form.tags.focus,
-                  remove: this.handleRemove,
-                }}
-              />
-              <AddFilesInput
-                error={error && error.docs && error.docs.detail}
-                docs={this.state.form.docs.value}
-                onFileChange={this.handleInputFileChange}
-                blur={this.handleOnBlur}
-                readOnly={project.author._id !== user._id}
-              />
-              {project.author._id === user._id &&
+      <div id="edit-project">
+        <ul className="project-toolbar">
+          <li>
+            {project.author._id === user._id && (
+              <Fragment>
                 <button
                   name="detailProjectModal"
                   type="button"
                   className="btn btn-danger"
                   onClick={this.handleShowAlertBox}
-                >Delete
+                >
+                  Delete
                 </button>
-              }
-            </div>
-            <div className="form-content">
-              <InfoPanel
-                openCreateTeamModal={openNewTeamModal}
-                user={user}
-                globalActions={{
-                    ...globalActions,
-                    editProjectAction,
-                }}
-                globalProps={globalProps}
-              />
-            </div>
-            <div className="actions">
-              {project.author._id !== user._id &&
-                project.subscribers &&
-                  <button
-                    title={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                      'Unsubscribe from the project' :
-                      'subscribe to the project'
-                    }
-                    name={project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                      'unsubscribe' :
-                      'subscribe'
-                    }
-                    className={`actions-button actions-button-subscribe
-                      ${project.subscribers.find(subscriber => subscriber._id === user._id) &&
-                        ' subscribed'}`
-                      }
-                    type="button"
-                    onClick={this.handleSubscribe}
-                  >
-                    {project.subscribers.find(subscriber => subscriber._id === user._id) ?
-                      <i className="fas fa-thumbs-up" /> :
-                      <i className="fas fa-thumbs-up" />}
-                  </button>}
+                <button
+                  name="isOnline"
+                  type="button"
+                  className={`btn btn-${
+                    project.isOnline ? 'danger' : 'success'
+                  }`}
+                  onClick={this.handleOnlineMode}
+                >
+                  {project.isOnline ? 'Set Offline' : 'Set Online'}
+                </button>
+              </Fragment>
+            )}
+          </li>
+        </ul>
+        <div className="project-content">
+          <EditFormProjectContainer loggedUser={loggedUser} />
+          <InfoPanel
+            openCreateTeamModal={openNewTeamModal}
+            user={user}
+            globalActions={{
+              ...globalActions,
+              editProjectAction,
+            }}
+            globalProps={globalProps}
+          />
+        </div>
+        <div className="actions">
+          {project.author._id !== user._id &&
+            project.subscribers && (
               <button
-                className="actions-button actions-button-share"
+                title={
+                  project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  )
+                    ? 'Unsubscribe from the project'
+                    : 'subscribe to the project'
+                }
+                name={
+                  project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  )
+                    ? 'unsubscribe'
+                    : 'subscribe'
+                }
+                className={`actions-button actions-button-subscribe
+                  ${project.subscribers.find(
+                    subscriber => subscriber._id === user._id,
+                  ) && ' subscribed'}`}
                 type="button"
-                title="Share the project"
-                onClick={this.handleShare}
+                onClick={this.handleSubscribe}
               >
-                <i className="fas fa-share-alt" />
+                {project.subscribers.find(
+                  subscriber => subscriber._id === user._id,
+                ) ? (
+                  <i className="fas fa-thumbs-up" />
+                ) : (
+                  <i className="fas fa-thumbs-up" />
+                )}
               </button>
-            </div>
-          </div>
-        </form>
-        {this.state.showAlertBox &&
+            )}
+          <button
+            className="actions-button actions-button-share"
+            type="button"
+            title="Share the project"
+            onClick={this.handleShare}
+          >
+            <i className="fas fa-share-alt" />
+          </button>
+        </div>
+        {this.state.showAlertBox && (
           <AlertBox
             title="Confirmation: Delete Project"
             message="Watch out, Are you really willing to delete this project?"
-            buttons={
-              [
-                {
-                  type: 'danger',
-                  action: this.handleDeleteProject,
-                  label: 'Yeap',
-                  category: 'danger',
-                },
-                {
-                  type: 'success',
-                  action: this.handleShowAlertBox,
-                  label: 'Nope',
-                  category: 'success',
-                },
-              ]
-            }
+            buttons={[
+              {
+                type: 'danger',
+                action: this.handleDeleteProject,
+                label: 'Yeap',
+                category: 'danger',
+              },
+              {
+                type: 'success',
+                action: this.handleShowAlertBox,
+                label: 'Nope',
+                category: 'success',
+              },
+            ]}
             type="danger"
-          />}
+          />
+        )}
       </div>
     );
   }

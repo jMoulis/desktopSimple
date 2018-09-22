@@ -43,6 +43,7 @@ export default {
   description: {
     label: 'What about you',
     name: 'description',
+    placeholder: 'Tell us a little more about you',
   },
   tags: {
     label: 'Your Competences',
@@ -50,19 +51,33 @@ export default {
     name: 'tags',
     type: 'text',
   },
-  docs: {
-    label: 'Docs',
-    placeholder: 'Upload docs',
-    name: 'docs',
+  files: {
+    label: 'Files',
+    placeholder: 'Upload files',
+    name: 'files',
   },
   school: {
     label: 'Your school',
     name: 'school',
-    defaultOption: 'Select your School',
+    type: 'text',
+    placeholder: 'Your school',
   },
   diploma: {
     label: 'Your Diploma',
     name: 'diploma',
-    defaultOption: 'Select your Diploma',
+    type: 'text',
+    placeholder: 'Your diploma',
+  },
+  field: {
+    label: "Diploma's field",
+    name: 'field',
+    type: 'text',
+    placeholder: "Diploma's field",
+  },
+  jobDescription: {
+    label: 'Job Description',
+    type: 'text',
+    name: 'jobDescription',
+    placeholder: 'Job description',
   },
 };

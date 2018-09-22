@@ -9,8 +9,10 @@
  * Types
  */
 export const GLOBAL_FETCH_SINGLE_TEAM = 'GLOBAL_FETCH_SINGLE_TEAM';
-export const GLOBAL_FETCH_SINGLE_TEAM_SUCCESS = 'GLOBAL_FETCH_SINGLE_TEAM_SUCCESS';
-export const GLOBAL_FETCH_SINGLE_TEAM_FAILURE = 'GLOBAL_FETCH_SINGLE_TEAM_FAILURE';
+export const GLOBAL_FETCH_SINGLE_TEAM_SUCCESS =
+  'GLOBAL_FETCH_SINGLE_TEAM_SUCCESS';
+export const GLOBAL_FETCH_SINGLE_TEAM_FAILURE =
+  'GLOBAL_FETCH_SINGLE_TEAM_FAILURE';
 
 export const GLOBAL_FETCH_TEAMS = 'GLOBAL_FETCH_TEAMS';
 export const GLOBAL_FETCH_TEAMS_SUCCESS = 'GLOBAL_FETCH_TEAMS_SUCCESS';
@@ -29,7 +31,6 @@ export const GLOBAL_DELETE_TEAM_SUCCESS = 'GLOBAL_DELETE_TEAM_SUCCESS';
 export const GLOBAL_DELETE_TEAM_FAILURE = 'GLOBAL_DELETE_TEAM_FAILURE';
 
 export const GLOBAL_CLEAR_TEAM_MESSAGE = 'GLOBAL_CLEAR_TEAM_MESSAGE';
-
 
 /*
  * State
@@ -80,13 +81,10 @@ const reducer = (state = initialState, action = {}) => {
           error: null,
           success: action.payload.success,
         },
-        teamListProcess: {
-          ...state.teamListProcess,
-          teams: [
-            action.payload.team,
-            ...state.teamListProcess.teams,
-          ],
-        },
+        // teamListProcess: {
+        //   ...state.teamListProcess,
+        //   teams: [action.payload.team, ...state.teamListProcess.teams],
+        // },
       };
     }
     case GLOBAL_CREATE_TEAM_FAILURE: {
@@ -137,7 +135,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         activeTeamProcess: {
-          team: {},
+          ...state.activeTeamProcess,
           success: null,
           loading: true,
           error: null,
@@ -203,6 +201,12 @@ const reducer = (state = initialState, action = {}) => {
         activeTeamProcess: {
           team: {},
           success: null,
+          loading: false,
+          error: null,
+        },
+        teamListProcess: {
+          teams: action.payload.teams,
+          success: action.payload.success,
           loading: false,
           error: null,
         },

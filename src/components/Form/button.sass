@@ -10,6 +10,12 @@
   border: 2px solid $beige
   color: $beige
   transition: all 500ms
+  margin-right: .5rem
+  margin-top: 1rem
+  margin-bottom: 1rem
+  &-small
+    font-size: .7rem
+    padding: .3rem
   &-neutral
     background-color: transparent
     border: 2px solid transparent
@@ -50,6 +56,20 @@
       background-color: $darkblue
       border: 2px solid $darkestblue
       color: $darkestblue
+  &-secondary
+    background-color: $secondaryBorder
+    color: $beige
+    &:hover
+      background-color: $beige
+      border: 2px solid $secondaryBorder
+      color: $secondaryBorder
+    &:active
+      background-color: $secondaryBorder
+      border: 2px solid $secondary
+      color: $darkestblue
+    &:focus
+      background-color: $secondaryBorder
+      color: $beige
   &-disabled
     opacity: 0.6
     cursor: not-allowed

@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#selectbox-user {
+  position: relative; }
+  #selectbox-user .selectbox-user-list {
+    position: absolute;
+    background-color: #eee9d1;
+    z-index: 1;
+    padding: 1rem; }

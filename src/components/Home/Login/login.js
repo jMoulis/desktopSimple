@@ -9,12 +9,13 @@ import Model from '../../../data/models/login-model';
 class Login extends React.Component {
   static propTypes = {
     loginAction: PropTypes.func.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
     loginProcess: PropTypes.object.isRequired,
-  }
+  };
   constructor(props) {
     super(props);
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = {
         ...field,
         [key]: {
@@ -27,19 +28,27 @@ class Login extends React.Component {
     });
     this.state = field;
   }
-  handleSubmit = (evt) => {
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
+  }
+  handleSubmit = evt => {
     evt.preventDefault();
     const { loginAction } = this.props;
     loginAction(this.state);
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -49,10 +58,11 @@ class Login extends React.Component {
         changed: true,
       },
     }));
-  }
+  };
   render() {
     const { loginProcess } = this.props;
-    const { error, logging } = loginProcess;
+    const { logging, error } = loginProcess;
+
     return (
       <div id="signin-form" className="form-container">
         <form
@@ -64,7 +74,7 @@ class Login extends React.Component {
             <h1>Sign In</h1>
           </div>
           <div className="form-content">
-            {error && <div className="error-login">{error.login.detail}</div>}
+            {error && <div className="error-message">{error.detail}</div>}
             <Input
               config={{
                 field: Model.email,
@@ -80,7 +90,14 @@ class Login extends React.Component {
               }}
             />
             <div className="form-group">
-              {<Button type="submit" category="primary" label="Sign In" />}
+              {
+                <Button
+                  type="submit"
+                  category="primary"
+                  loading={logging}
+                  label="Sign In"
+                />
+              }
             </div>
           </div>
         </form>

@@ -12,31 +12,35 @@
   .form-container .form {
     width: 100%;
     border: none;
-    overflow: auto; }
-    .form-container .form .form-header {
+    overflow: auto;
+    height: calc(100% - 10px); }
+    .form-container .form-header {
       display: flex;
       justify-content: flex-start;
       background-color: #008e8b; }
-      .form-container .form .form-header h1 {
+      .form-container .form-header h1 {
         margin: 0;
         padding: 1rem; }
-    .form-container .form .form-content-wrapper {
+    .form-container .form-content-wrapper {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap; }
-    .form-container .form .form-content {
-      background-color: #97c0b7;
+    .form-container .form-content {
+      background-color: #eee9d1;
       padding: .5rem;
       flex: 1; }
-      .form-container .form .form-content .form-group {
-        padding: 0.5rem 0; }
-        .form-container .form .form-content .form-group .form-control-error {
-          border-bottom: 2px solid #f8d7da; }
-      .form-container .form .form-content .error-login {
+      .form-container .form-content .error-login {
         text-align: center; }
-      .form-container .form .form-content label {
+      .form-container .form-content label {
         color: #0a1c28;
         font-weight: bold; }
+
+.form-group {
+  padding: 0.5rem 0; }
+  .form-group-small {
+    padding: 0; }
+  .form-group .form-control-error {
+    border-bottom: 2px solid #f8d7da; }
 
 .error-message {
   padding-top: .3rem;
@@ -49,8 +53,6 @@
   padding-top: .4rem; }
 
 .picture-upload {
-  width: 0.1px;
-  height: 0.1px;
   opacity: 0;
   overflow: hidden;
   position: absolute;
@@ -63,7 +65,19 @@
   transition: border-bottom 200ms; }
   .input-file-label-container:hover {
     border-bottom: 2px solid #d44c00; }
-  .input-file-label-container .input-file-label {
-    cursor: pointer;
-    display: inline-block;
-    width: 100%; }
+
+.input-file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 1.5rem;
+  margin: 0;
+  margin-top: 1rem; }
+  .input-file-label input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 1px;
+    height: 1px; }

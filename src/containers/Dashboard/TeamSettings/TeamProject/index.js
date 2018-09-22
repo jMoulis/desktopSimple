@@ -8,19 +8,23 @@ import { connect } from 'react-redux';
  */
 import TeamProject from '../../../../components/Dashboard/TeamSettings/TeamProject';
 import { editTeamAction } from '../../../../store/reducers/teamReducer';
-
+import { fetchSingleProjectAction } from '../../../../components/Applications/Projects/store/reducers/projectReducer';
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ mainTeamReducer }) => ({
+const mapStateToProps = ({ mainTeamReducer, projectReducer }) => ({
   activeTeam: mainTeamReducer.activeTeamProcess.team,
+  projects: projectReducer.projectListProcess.projects,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
   editTeamAction: (values) => {
     dispatch(editTeamAction(values));
+  },
+  fetchSingleProjectAction: (projectId) => {
+    dispatch(fetchSingleProjectAction(projectId));
   },
 });
 

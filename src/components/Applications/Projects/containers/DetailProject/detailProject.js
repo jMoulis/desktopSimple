@@ -3,12 +3,15 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import DetailProject from '../../components/DetailProject';
-import { editProjectAction, clearProjectMessageAction, deleteProjectAction } from '../../store/reducers/projectReducer';
+import {
+  editProjectAction,
+  clearProjectMessageAction,
+  deleteProjectAction,
+} from '../../store/reducers/projectReducer';
 /*
  * Code
  */
@@ -22,18 +25,20 @@ const mapDispatchToProps = dispatch => ({
   clearProjectMessageAction: () => {
     dispatch(clearProjectMessageAction());
   },
-  editProjectAction: (values) => {
+  editProjectAction: values => {
     dispatch(editProjectAction(values));
   },
-  deleteProjectAction: (projectId) => {
+  deleteProjectAction: projectId => {
     dispatch(deleteProjectAction(projectId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const DetailProjectContainer = createContainer(DetailProject);
 export default DetailProjectContainer;

@@ -3,28 +3,26 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
-import TextEditor from '../components/textEditor';
+import TextEditor from '../components';
 
 /*
  * Code
  */
 // State
-const mapStateToProps = ({ authReducer, profileReducer }) => ({
-  loginProcess: authReducer.loginProcess,
-  userActive: profileReducer.userActive,
-});
+const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({});
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const TextEditorContainer = createContainer(TextEditor);
 export default TextEditorContainer;

@@ -1,16 +1,21 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
-.mini-thumbnail {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  margin: 0 .1rem;
-  transition: all 300ms; }
-  .mini-thumbnail-middle {
-    width: 40px;
-    height: 40px; }
-  .mini-thumbnail:hover {
-    box-shadow: 0 0 10px 0 #0a1c28; }
-  .mini-thumbnail:active {
-    box-shadow: 0 0 2px 0 #0a1c28; }
+.user-icon {
+  padding: .3rem; }
+  .user-icon .mini-thumbnail {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    margin: 0 .1rem;
+    transition: all 300ms; }
+    .user-icon .mini-thumbnail-middle {
+      width: 40px;
+      height: 40px; }
+    .user-icon .mini-thumbnail-big {
+      width: 50px;
+      height: 50px; }
+    .user-icon .mini-thumbnail:hover {
+      box-shadow: 0 0 10px 0 #0a1c28; }
+    .user-icon .mini-thumbnail:active {
+      box-shadow: 0 0 2px 0 #0a1c28; }

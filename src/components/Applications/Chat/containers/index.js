@@ -3,26 +3,17 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
-import Chat from '../components/index';
+import Chat from '../components';
 import { fetchChatAction } from '../store/reducers/chatReducer';
 /*
  * Code
  */
-const getLoggedUser = () => {
-  if (localStorage.getItem('user')) {
-    const loggedUser = JSON.parse(localStorage.getItem('user'));
-    return loggedUser;
-  }
-  return null;
-};
+
 // State
-const mapStateToProps =  state => ({
-  loggedUserId: getLoggedUser(),
-});
+const mapStateToProps = state => ({});
 
 // Actions
 const mapDispatchToProps = dispatch => ({
@@ -31,10 +22,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const ChatContainer = createContainer(Chat);
 export default ChatContainer;

@@ -8,18 +8,23 @@ class Modal extends React.Component {
   static propTypes = {
     closeFromParent: PropTypes.func,
     zIndex: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     children: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.bool,
       PropTypes.array,
     ]),
-  }
+    name: PropTypes.string,
+    noParamsOnClose: PropTypes.bool,
+    small: PropTypes.bool,
+  };
   static defaultProps = {
     children: null,
     closeFromParent: null,
-  }
+    name: '',
+    noParamsOnClose: false,
+    small: false,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -44,14 +49,14 @@ class Modal extends React.Component {
         },
       }));
     }
-  }
+  };
   handleClose = () => {
     this.setState(prevState => ({
       ...prevState,
       display: false,
     }));
     return true;
-  }
+  };
   render() {
     const {
       children,
@@ -60,9 +65,11 @@ class Modal extends React.Component {
       title,
       zIndex,
       small,
+      noParamsOnClose,
     } = this.props;
     const childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { closeFromParent }));
+      React.cloneElement(child, { closeFromParent }),
+    );
 
     return (
       <CSSTransition
@@ -73,10 +80,18 @@ class Modal extends React.Component {
         }}
         classNames="modal-overlay"
         appear
-        onExited={() => closeFromParent()}
+        onExited={() => {
+          if (noParamsOnClose) {
+            return closeFromParent();
+          }
+          return closeFromParent(name);
+        }}
       >
         <div className="modal-overlay" style={{ zIndex }}>
-          <div className="modal-container" style={small ? this.state.style : {}}>
+          <div
+            className="modal-container"
+            style={small ? this.state.style : {}}
+          >
             <header className="modal-header">
               <h1>{title}</h1>
               <button
@@ -88,9 +103,7 @@ class Modal extends React.Component {
                 <i className="fas fa-times-circle fa-2x" />
               </button>
             </header>
-            <div className="modal-content">
-              {childrenWithProps}
-            </div>
+            <div className="modal-content">{childrenWithProps}</div>
           </div>
         </div>
       </CSSTransition>

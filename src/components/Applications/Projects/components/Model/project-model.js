@@ -52,11 +52,11 @@ export default {
     name: 'tags',
     isArray: true,
   },
-  docs: {
+  files: {
     type: 'file',
-    label: 'Choose your docs',
-    name: 'docs',
-    placeholder: 'Add Docs',
+    label: 'Choose your files',
+    name: 'files',
+    placeholder: 'Add files',
     isArray: true,
   },
   subscribers: {
@@ -65,5 +65,10 @@ export default {
     name: 'subscribers',
     placeholder: null,
     isArray: true,
+  },
+  isOnline: {
+    type: 'text',
+    label: null,
+    name: 'isOnline',
   },
 };

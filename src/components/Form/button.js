@@ -7,26 +7,31 @@ import './button.css';
  * Category: normal, success, danger, warning, neutral
  * Size: large, small
  * Type: button, submit
-*/
+ */
+
 const Button = ({
   label,
   loading,
   disabled,
   type,
-  size,
+  small,
   category,
   children,
   onClick,
   style,
   title,
+  ...rest
 }) => (
   <button
     type={type}
     disabled={disabled && true}
     style={style && style}
-    className={`btn ${disabled ? 'btn-disabled' : ''} btn-${category} ${size ? `btn-${size}` : ''}`}
+    className={`btn${disabled ? ' btn-disabled' : ''} btn-${category} ${
+      small ? `btn-small` : ''
+    }`}
     onClick={onClick}
     title={title}
+    {...rest}
   >
     {children}
     {loading ? <i className="fas fa-spinner" /> : label}
@@ -34,10 +39,7 @@ const Button = ({
 );
 
 Button.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onClick: PropTypes.func,
   loading: PropTypes.bool,
   label: PropTypes.string,

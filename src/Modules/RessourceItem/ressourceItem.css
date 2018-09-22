@@ -3,13 +3,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 180px;
+  height: 210px;
   min-width: 105px;
   background-color: #87b6ac;
   position: relative;
   justify-content: space-around;
   border: 2px solid transparent;
-  transition: border 200ms; }
+  transition: border 200ms;
+  margin-right: .5rem; }
+  .ressource-item #btn-search {
+    margin-right: 0; }
   .ressource-item-already-selected {
     border: 2px solid #d44c00; }
   .ressource-item-temp {

@@ -1,9 +1,16 @@
 .cropper {
   display: flex;
   flex-direction: column;
-  align-items: center; }
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+  background-color: black; }
   .cropper-container {
     width: 30%; }
+  .cropper footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem; }
 
 .cropper-bg {
   background-image: url("/img/black.jpg") !important; }

@@ -11,12 +11,13 @@ import Input from '../../Form/input';
 class Signup extends React.Component {
   static propTypes = {
     createUserAction: PropTypes.func.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
     createUserProcess: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
     let field = {};
-    Object.keys(Model).map((key) => {
+    Object.keys(Model).map(key => {
       field = { ...field, [key]: '' };
       return field;
     });
@@ -24,30 +25,38 @@ class Signup extends React.Component {
       ...field,
     };
   }
-  handleSubmit = (evt) => {
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
+  }
+  handleSubmit = evt => {
     evt.preventDefault();
     const { createUserAction } = this.props;
     createUserAction(evt.target);
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(() => ({
       [name]: value,
     }));
-  }
-  handleSelectChange = (evt) => {
+  };
+  handleSelectChange = evt => {
     const { value, name } = evt.target;
     this.setState(() => ({
       [name]: value,
     }));
-  }
+  };
   render() {
     const { createUserProcess } = this.props;
     const { error, creating } = createUserProcess;
@@ -113,12 +122,22 @@ class Signup extends React.Component {
               }}
             />
             <div className="form-group">
-              <Button type="submit" category="primary" label="Sign Up" loading={creating} />
+              <Button
+                type="submit"
+                category="primary"
+                label="Sign Up"
+                loading={creating}
+              />
             </div>
           </div>
         </form>
         <div>
-          <p>Already have an account? <Link href="/signin" to="/signin">Sign In</Link></p>
+          <p>
+            Already have an account?{' '}
+            <Link href="/signin" to="/signin">
+              Sign In
+            </Link>
+          </p>
         </div>
       </div>
     );

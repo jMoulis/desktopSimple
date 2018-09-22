@@ -19,4 +19,12 @@
   width: 150px;
   height: 150px;
   padding-left: .5rem;
-  border-radius: 50%; }
+  border-radius: 50%;
+  cursor: pointer; }
+
+#profile .date-since-container {
+  padding: .5rem 0; }
+
+#profile .date-since-item {
+  font-size: .7rem;
+  font-style: italic; }

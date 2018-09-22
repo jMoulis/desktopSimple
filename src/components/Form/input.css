@@ -12,31 +12,35 @@
   .form-container .form {
     width: 100%;
     border: none;
-    overflow: auto; }
-    .form-container .form .form-header {
+    overflow: auto;
+    height: calc(100% - 10px); }
+    .form-container .form-header {
       display: flex;
       justify-content: flex-start;
       background-color: #008e8b; }
-      .form-container .form .form-header h1 {
+      .form-container .form-header h1 {
         margin: 0;
         padding: 1rem; }
-    .form-container .form .form-content-wrapper {
+    .form-container .form-content-wrapper {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap; }
-    .form-container .form .form-content {
-      background-color: #97c0b7;
+    .form-container .form-content {
+      background-color: #eee9d1;
       padding: .5rem;
       flex: 1; }
-      .form-container .form .form-content .form-group {
-        padding: 0.5rem 0; }
-        .form-container .form .form-content .form-group .form-control-error {
-          border-bottom: 2px solid #f8d7da; }
-      .form-container .form .form-content .error-login {
+      .form-container .form-content .error-login {
         text-align: center; }
-      .form-container .form .form-content label {
+      .form-container .form-content label {
         color: #0a1c28;
         font-weight: bold; }
+
+.form-group {
+  padding: 0.5rem 0; }
+  .form-group-small {
+    padding: 0; }
+  .form-group .form-control-error {
+    border-bottom: 2px solid #f8d7da; }
 
 .error-message {
   padding-top: .3rem;
@@ -54,9 +58,7 @@
   padding: 1rem 0;
   position: relative; }
   .form-group .form-control {
-    background-color: #97c0b7;
     border: none;
-    border-bottom: 2px solid #0a1c28;
     outline: none;
     transition: border-bottom 500ms;
     padding-bottom: .5rem;
@@ -66,10 +68,9 @@
     font-family: 'Nunito', sans-serif; }
   .form-group input, .form-group textarea, .form-group select {
     transition: border-bottom 200ms; }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-      border-bottom: 2px solid #d44c00; }
     .form-group input::placeholder, .form-group textarea::placeholder, .form-group select::placeholder {
-      color: #0a1c28;
+      color: rgba(10, 28, 40, 0.54);
       font-weight: normal;
       font-size: .8rem;
-      font-family: 'Nunito', sans-serif; }
+      font-family: 'Nunito', sans-serif;
+      font-style: italic; }

@@ -1,37 +1,25 @@
-/*
- * Npm import
-*/
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 
-/*
- * Local Import
-*/
-// REDUCERS
 import appReducer from './reducers/appReducer';
 import frameReducer from './reducers/frameReducer';
 import authReducer from './reducers/authReducer';
-import profileReducer from '../components/Applications/Settings/store/reducers/profileReducer';
+import taskReducer from './reducers/taskReducer';
+import userReducer from './reducers/userReducer';
+import mainTeamReducer from './reducers/teamReducer';
+import fileReducer from './reducers/fileReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
 import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
-import chatReducer from '../components/Applications/Chat/store/reducers/chatReducer';
-import mainTeamReducer from './reducers/teamReducer';
-import userReducer from './reducers/userReducer';
+import chatReducer from './reducers/chatReducer';
 
-// MIDDLEWARES
 import authAjax from './middlewares/authAjax';
 import userAjax from './middlewares/userAjax';
-import profileAjax from '../components/Applications/Settings/store/middlewares/profileAjax';
-import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
-import chatAjax from '../components/Applications/Chat/store/middleswares/chatAjax';
-import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
+import taskAjax from './middlewares/taskAjax';
 import mainTeamAjax from './middlewares/teamAjax';
+import fileAjax from './middlewares/fileAjax';
+import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
+import chatAjax from './middlewares/chatAjax';
+import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
 
-/*
- * Code
-*/
-
-
-// Redux DevTools extension
 let devTools = [];
 if (window.devToolsExtension) {
   devTools = [window.devToolsExtension()];
@@ -40,12 +28,13 @@ const mainReducer = combineReducers({
   appReducer,
   frameReducer,
   authReducer,
-  profileReducer,
   projectReducer,
   userReducer,
   teamReducer,
   mainTeamReducer,
   chatReducer,
+  taskReducer,
+  fileReducer,
 });
 
 // Reset reducer on logout
@@ -61,11 +50,12 @@ const store = createStore(
   compose(
     applyMiddleware(authAjax),
     applyMiddleware(userAjax),
-    applyMiddleware(profileAjax),
     applyMiddleware(projectAjax),
     applyMiddleware(teamAjax),
     applyMiddleware(mainTeamAjax),
     applyMiddleware(chatAjax),
+    applyMiddleware(taskAjax),
+    applyMiddleware(fileAjax),
     ...devTools,
   ),
 );

@@ -9,33 +9,52 @@ import Textarea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Checkbox from '../../../../Form/checkbox';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 class NewProject extends React.Component {
   static propTypes = {
     projectCreation: PropTypes.object.isRequired,
     createProjectAction: PropTypes.func.isRequired,
     clearProjectMessageAction: PropTypes.func.isRequired,
-    closeFromParent: PropTypes.func.isRequired,
-  }
+    tabName: PropTypes.string,
+    onSuccess: PropTypes.func,
+  };
+  static defaultProps = {
+    tabName: '',
+    onSuccess: null,
+  };
   constructor(props) {
     super(props);
     let field = {};
-    Object.keys(Model).map((key) => {
-      field = { ...field, [key]: { value: Model[key].isArray ? [] : '', focus: false, changed: false } };
+    Object.keys(Model).map(key => {
+      field = {
+        ...field,
+        [key]: {
+          value: Model[key].isArray ? [] : '',
+          focus: false,
+          changed: false,
+        },
+      };
       return field;
     });
     this.state = {
       ...field,
-      docs: [],
+      files: {
+        changed: false,
+        value: [],
+      },
       isContest: false,
       isPrice: false,
     };
   }
   componentDidUpdate() {
-    const { projectCreation, closeFromParent } = this.props;
-    if (projectCreation.success && projectCreation.success.status) {
-      closeFromParent('createTeamModal');
+    const {
+      projectCreation: { error, loading },
+      onSuccess,
+      tabName,
+    } = this.props;
+    if (!error && !loading && onSuccess) {
+      return onSuccess(tabName);
     }
     return true;
   }
@@ -43,19 +62,34 @@ class NewProject extends React.Component {
     const { clearProjectMessageAction } = this.props;
     clearProjectMessageAction();
   }
-  handleSubmit = (evt) => {
+  handleSubmit = evt => {
     evt.preventDefault();
+    const { type } = evt.target.dataset;
     const { createProjectAction } = this.props;
-    return createProjectAction(this.state);
-  }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+    if (type === 'draft') {
+      createProjectAction({
+        ...this.state,
+        isOnline: { value: false, changed: true },
+      });
+    } else {
+      createProjectAction({
+        ...this.state,
+        isOnline: { value: true, changed: true },
+      });
+    }
+  };
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     return this.setState(prevState => ({
       ...prevState,
@@ -65,8 +99,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -77,8 +111,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleCheckBoxChange = (evt) => {
+  };
+  handleCheckBoxChange = evt => {
     const { name, checked } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -88,8 +122,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleInputSelectCompetencesChange = (evt) => {
+  };
+  handleInputSelectCompetencesChange = evt => {
     const inputValue = evt.target.value;
     if (evt.keyCode === 13) {
       const { state } = this;
@@ -97,28 +131,25 @@ class NewProject extends React.Component {
         ...state,
         tags: {
           ...state.tags,
-          value: [
-            ...state.tags.value,
-            inputValue.toLowerCase(),
-          ],
+          value: [...state.tags.value, inputValue.toLowerCase()],
           changed: true,
         },
       }));
       evt.target.value = '';
     }
-  }
-  handleInputFileChange = (docs) => {
+  };
+  handleInputFileChange = files => {
     this.setState(prevState => ({
       ...prevState,
-      docs,
+      files,
     }));
-  }
-  handleRemove = (evt) => {
+  };
+  handleRemove = evt => {
     evt.preventDefault();
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     this.setState(prevState => ({
       ...prevState,
       tags: {
@@ -127,8 +158,8 @@ class NewProject extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleOnFocus = (evt) => {
+  };
+  handleOnFocus = evt => {
     if (evt) {
       const { name } = evt.target;
       this.setState(prevState => ({
@@ -138,12 +169,11 @@ class NewProject extends React.Component {
           focus: true,
         },
       }));
-    }
-    else {
+    } else {
       return false;
     }
-  }
-  handleOnBlur = (evt) => {
+  };
+  handleOnBlur = evt => {
     if (evt) {
       const { name } = evt.target;
       this.setState(prevState => ({
@@ -153,132 +183,178 @@ class NewProject extends React.Component {
           focus: false,
         },
       }));
-    }
-    else {
+    } else {
       return false;
     }
-  }
+  };
+  handlefilesChange = ({ files }) => {
+    this.setState(prevState => ({
+      ...prevState,
+      files: {
+        changed: true,
+        value: [...prevState.files.value, files.value],
+      },
+    }));
+  };
+  handleRemoveFile = file => {
+    if (file) {
+      this.setState(prevState => ({
+        ...prevState,
+        files: {
+          changed: true,
+          value: prevState.files.value.filter(
+            document => document.name !== file,
+          ),
+        },
+      }));
+    }
+  };
   render() {
-    const { projectCreation } = this.props;
-    const { error, success } = projectCreation;
+    const {
+      projectCreation: { error },
+      onSuccess,
+      tabName,
+    } = this.props;
 
+    const { files } = this.state;
     return (
-      <div id="newProject" className="form-container" key="app-content" >
-        {success && <p className="success">{success.message}</p>}
+      <div id="newProject" className="form-container" key="app-content">
         <form
           id="newProject-form"
           className="form"
           onKeyPress={this.handleFormKeyPress}
-          onSubmit={this.handleSubmit}
           noValidate="true"
         >
-          <div className="form-content-wrapper">
-            <div className="form-content">
-              <Input
-                config={{
-                  field: Model.title,
-                  onChange: this.handleInputChange,
-                  value: this.state.title.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  isFocused: this.state.title.focus,
-                  error: error && error.title && error.title.detail,
-                }}
-              />
-              <Textarea
-                config={{
-                  field: Model.description,
-                  onChange: this.handleTextAreaChange,
-                  value: this.state.description.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.description.focus,
-                  error: error && error.description && error.description.detail,
-                }}
-              />
-              <Input
-                config={{
-                  field: Model.dueDate,
-                  onChange: this.handleInputChange,
-                  value: this.state.dueDate.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  keyPress: this.handleInputChange,
-                  isFocused: this.state.dueDate.focus,
-                  error: error && error.dueDate && error.dueDate.detail,
-                }}
-              />
-              <Checkbox
-                config={{
-                  field: Model.isPrice,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.isPrice.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.isPrice.focus,
-                  error: error && error.isPrice && error.isPrice.detail,
-                }}
-              />
-              {this.state.isPrice.value &&
-                <Input
-                  config={{
-                    field: Model.price,
-                    onChange: this.handleInputChange,
-                    value: this.state.price.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    isFocused: this.state.price.focus,
-                    error: error && error.price && error.price.detail,
-                  }}
-                />
-              }
-              <Checkbox
-                config={{
-                  field: Model.isContest,
-                  onChange: this.handleCheckBoxChange,
-                  value: this.state.isContest.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  isFocused: this.state.isContest.focus,
-                  error: error && error.isContest && error.isContest.detail,
-                }}
-              />
-              {this.state.isContest.value &&
-                <Input
-                  config={{
-                    field: Model.maxTeam,
-                    onChange: this.handleInputChange,
-                    value: this.state.maxTeam.value,
-                    blur: this.handleOnBlur,
-                    focus: this.handleOnFocus,
-                    keyPress: this.handleInputChange,
-                    isFocused: this.state.maxTeam.focus,
-                    error: error && error.maxTeam && error.maxTeam.detail,
-                  }}
-                />
-              }
-              <InputAutoComplete
-                config={{
-                  field: Model.tags,
-                  onChange: this.handleInputSelectCompetencesChange,
-                  keyPress: this.handleInputSelectCompetencesChange,
-                  values: this.state.tags.value,
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  remove: this.handleRemove,
-                  isFocused: this.state.tags.focus,
-                  error: error && error.tags && error.tags.detail,
-                }}
-              />
-              <AddFilesInput
-                error={error && error.docs && error.docs.detail}
-                docs={this.state.docs}
-                onFileChange={this.handleInputFileChange}
-              />
-              <Button type="submit" label="Create" loading={false} />
-            </div>
+          <Input
+            config={{
+              field: Model.title,
+              onChange: this.handleInputChange,
+              value: this.state.title.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              keyPress: this.handleInputChange,
+              isFocused: this.state.title.focus,
+              error: error && error.title && error.title.detail,
+            }}
+          />
+          <Textarea
+            config={{
+              field: Model.description,
+              onChange: this.handleTextAreaChange,
+              value: this.state.description.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.description.focus,
+              error: error && error.description && error.description.detail,
+            }}
+          />
+          <Input
+            config={{
+              field: Model.dueDate,
+              onChange: this.handleInputChange,
+              value: this.state.dueDate.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              keyPress: this.handleInputChange,
+              isFocused: this.state.dueDate.focus,
+              error: error && error.dueDate && error.dueDate.detail,
+            }}
+          />
+          <Checkbox
+            config={{
+              field: Model.isPrice,
+              onChange: this.handleCheckBoxChange,
+              value: this.state.isPrice.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.isPrice.focus,
+              error: error && error.isPrice && error.isPrice.detail,
+            }}
+          />
+          {this.state.isPrice.value && (
+            <Input
+              config={{
+                field: Model.price,
+                onChange: this.handleInputChange,
+                value: this.state.price.value,
+                blur: this.handleOnBlur,
+                focus: this.handleOnFocus,
+                keyPress: this.handleInputChange,
+                isFocused: this.state.price.focus,
+                error: error && error.price && error.price.detail,
+              }}
+            />
+          )}
+          <Checkbox
+            config={{
+              field: Model.isContest,
+              onChange: this.handleCheckBoxChange,
+              value: this.state.isContest.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              isFocused: this.state.isContest.focus,
+              error: error && error.isContest && error.isContest.detail,
+            }}
+          />
+          {this.state.isContest.value && (
+            <Input
+              config={{
+                field: Model.maxTeam,
+                onChange: this.handleInputChange,
+                value: this.state.maxTeam.value,
+                blur: this.handleOnBlur,
+                focus: this.handleOnFocus,
+                keyPress: this.handleInputChange,
+                isFocused: this.state.maxTeam.focus,
+                error: error && error.maxTeam && error.maxTeam.detail,
+              }}
+            />
+          )}
+          <InputAutoComplete
+            config={{
+              field: Model.tags,
+              onChange: this.handleInputSelectCompetencesChange,
+              keyPress: this.handleInputSelectCompetencesChange,
+              values: this.state.tags.value,
+              blur: this.handleOnBlur,
+              focus: this.handleOnFocus,
+              remove: this.handleRemove,
+              isFocused: this.state.tags.focus,
+              error: error && error.tags && error.tags.detail,
+            }}
+          />
+          <DisplayDocument
+            update={this.handlefilesChange}
+            keyToUpdate="files"
+            files={files.value}
+            onDelete={this.handleRemoveFile}
+            editable
+          />
+          <div className="new-project-btn-container">
+            <Button
+              type="button"
+              category="secondary"
+              onClick={() => {
+                onSuccess(tabName);
+              }}
+              label="Cancel"
+              loading={false}
+            />
+            <Button
+              type="submit"
+              category="primary"
+              onClick={this.handleSubmit}
+              data-type="draft"
+              label="Draft"
+              loading={false}
+            />
+            <Button
+              type="submit"
+              category="success"
+              onClick={this.handleSubmit}
+              label="Publish"
+              loading={false}
+            />
           </div>
         </form>
       </div>

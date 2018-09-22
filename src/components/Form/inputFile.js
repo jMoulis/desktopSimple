@@ -1,28 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './inputFile.css';
+import SuccessIcon from '../../assets/successIcon/successIcon';
 
 const InputFile = ({ config }) => {
+  const textInput = React.createRef();
+
   const {
     field,
     onChange,
+    style,
+    styleContainer,
+    styleLabel,
+    blur,
+    focus,
+    success,
+    error,
+    typeFileAccepted,
   } = config;
   return (
-    <div className="form-group">
-      <div className="input-file-label-container">
-        <label className="input-file-label" htmlFor={field.name}>{field.label}</label>
-      </div>
-      <input
-        name={field.name}
-        id={field.name}
-        className="form-control picture-upload"
-        type="file"
-        onChange={onChange}
-        onBlur={config.blur}
-        onFocus={config.focus}
-        accept={config.typeFileAccepted}
-      />
-      {config.error && <small className="error-message">{config.error}</small>}
+    <div className="form-group" style={styleContainer}>
+      <label
+        style={styleLabel}
+        className="btn btn-success input-file-label pointer"
+        htmlFor={field.name}
+      >
+        {field.label}
+        <input
+          ref={textInput}
+          name={field.name}
+          id={field.name}
+          className="form-control pointer"
+          type="file"
+          onChange={onChange}
+          onBlur={blur}
+          onFocus={focus}
+          accept={typeFileAccepted}
+          style={style}
+          onClick={onChange}
+          value={field.value}
+        />
+      </label>
+
+      {success && success === field.name && <SuccessIcon />}
+      {error && <small className="error-message">{error}</small>}
     </div>
   );
 };
@@ -32,4 +53,3 @@ InputFile.propTypes = {
 };
 
 export default InputFile;
-

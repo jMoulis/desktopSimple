@@ -1,0 +1,17 @@
+@import './form.sass'
+.input-search
+  & input
+    text-transform: capitalize
+  &-box
+    position: absolute
+    bottom: -40px
+    left: 0
+    right: 0
+    background-color: $beige
+    z-index: 1
+    & li
+      cursor: pointer
+      padding: 1rem
+      text-transform: capitalize
+      &:hover
+        background-color: lighten($beige, 20)

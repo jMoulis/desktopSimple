@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.user-item {
+  position: relative;
+  background-color: #41848f;
+  padding: .5rem;
+  border: 3px solid #0a1c28;
+  display: flex;
+  min-width: 15rem;
+  transition: all 200ms;
+  margin: .5rem;
+  justify-content: space-between; }
+  .user-item:hover {
+    box-shadow: 0 0 10px 0 #0a1c28; }
+  .user-item-header {
+    display: flex;
+    align-items: center; }
+  .user-item .company-header-reset {
+    padding: 0;
+    margin: 0; }
+  .user-item-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; }
+    .user-item-footer button {
+      width: 100%; }

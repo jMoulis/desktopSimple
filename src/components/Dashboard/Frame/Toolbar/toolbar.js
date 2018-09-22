@@ -13,15 +13,15 @@ class Toolbar extends React.Component {
     title: PropTypes.string,
     handleTransition: PropTypes.func.isRequired,
     exitTimeOut: PropTypes.number.isRequired,
-  }
+  };
   static defaultProps = {
     appName: null,
     title: null,
-  }
+  };
   handleFullSize = () => {
     const { appName, fullSizeAction } = this.props;
     fullSizeAction(appName);
-  }
+  };
   handleClose = () => {
     const {
       appName,
@@ -35,11 +35,11 @@ class Toolbar extends React.Component {
     window.setTimeout(() => {
       closeAppAction(appName);
     }, exitTimeOut);
-  }
+  };
   handleReduce = () => {
     const { appName, reduceAppAction } = this.props;
     reduceAppAction(appName);
-  }
+  };
   render() {
     const { title, appName } = this.props;
     return (

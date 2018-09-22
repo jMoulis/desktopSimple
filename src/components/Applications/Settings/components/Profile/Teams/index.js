@@ -2,44 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 
-import Modal from '../../../../../../Modules/Modal/modal';
 import UserIcon from '../../../../../../Modules/UserIcon';
-import NewTeamContainer from '../../../containers/Profile/Teams/NewTeam';
 
 class TeamProfile extends React.Component {
+  static propTypes = {
+    globalActions: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+  };
+
   state = {
     showAddTeamModal: false,
-  }
+  };
+
   handleShowAddTeamModal = () => {
     this.setState(prevState => ({
       ...prevState,
       showAddTeamModal: !prevState.showAddTeamModal,
     }));
-  }
+  };
   render() {
-    const { user, globalActions } = this.props;
+    const { globalActions, loggedUser } = this.props;
     return (
-      <div>
-        <ul className="ul-nav teams">
-          <li className="teams-new-team">
-            {/* <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => {
-                globalActions.startAppAction('Projects');
-              }}
-            >
-            Create Team
-            </button> */}
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleShowAddTeamModal}
-            >
-            Create Team
-            </button>
-          </li>
-          {user.teams.map(team => (
+      <ul className="ul-nav teams">
+        {loggedUser &&
+          loggedUser.teams.length > 0 &&
+          loggedUser.teams.map(team => (
             <li
               key={team._id}
               className="team-container"
@@ -50,36 +37,20 @@ class TeamProfile extends React.Component {
               <div>
                 <h2>{team.name}</h2>
                 <ul>
-                  {team.users.map((teamMate, index) => (
-                    <li key={index}>
-                      <UserIcon
-                        user={teamMate}
-                      />
-                      <p>{teamMate.user.fullName}</p>
-                    </li>
-                  ))}
+                  {team.users.length > 0 &&
+                    team.users.map((teamMate, index) => (
+                      <li key={index}>
+                        <UserIcon user={teamMate} />
+                        <p>{teamMate.user.fullName}</p>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </li>
           ))}
-        </ul>
-        {this.state.showAddTeamModal &&
-        <Modal
-          closeFromParent={this.handleShowAddTeamModal}
-          zIndex={300}
-          name="Create a team"
-          title="Create a team"
-        >
-          <NewTeamContainer loggedUser={user} />
-        </Modal>}
-      </div>
+      </ul>
     );
   }
 }
-
-TeamProfile.propTypes = {
-  user: PropTypes.object.isRequired,
-  globalActions: PropTypes.object.isRequired,
-};
 
 export default TeamProfile;

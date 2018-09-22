@@ -9,3 +9,7 @@
 
 #new-team {
   display: flex; }
+  #new-team form {
+    overflow-x: hidden; }
+  #new-team .btn-container {
+    margin-top: 2rem; }

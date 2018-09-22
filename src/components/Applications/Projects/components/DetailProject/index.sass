@@ -1,6 +1,13 @@
 @import '../project.sass'
 #edit-project
   color: $darkestblue
+  .project
+    &-content
+      display: flex
+      flex-wrap: wrap
+      padding: 1rem
+    &-toolbar
+      padding: 1rem
 .actions
   position: absolute
   right: 20px
@@ -38,21 +45,4 @@
       background-color: $orange
       border: 2px solid $beige
       color: $beige
-.company
-  display: flex
-  align-items: flex-start
-  margin-bottom: .5rem
-  border-bottom: 2px solid $darkestblue
-  padding-bottom: 1rem
-  &-logo
-    width: 60px
-    height: 60px
-  &-info
-    margin-left: 1rem
-    &-name
-      margin-left: .3rem
-      font-weight: bold
-  &-author
-    display: flex
-    align-items: center
 

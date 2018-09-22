@@ -1,0 +1,17 @@
+.team-project {
+  padding: 1rem;
+  flex: 1; }
+  .team-project-info-list-item {
+    margin: .5rem; }
+    .team-project-info-list-item label {
+      font-weight: bold; }
+  .team-project h1 {
+    margin-bottom: 1rem; }
+
+.no-project {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center; }
+  .no-project p {
+    padding: 2rem; }

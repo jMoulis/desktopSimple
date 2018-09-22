@@ -46,11 +46,15 @@ table
 	border-spacing: 0
 input
 	font-family: $font
+	background-color: $beige
 	&:placeholder
 		font-family: $font
+textarea
+	background-color: $beige
 h1
 	font-size: 1.5rem
 	font-weight: bold
+
 .unselectable
     user-select: none
 .ul-unstyled
@@ -63,8 +67,77 @@ h1
 	padding: 0
 	display: flex
 	align-items: center
-	.li
+	& > li
 		margin-right: .2rem
 .user-thumbnail
 	display: flex
 	align-items: center
+	padding: .2rem
+.online
+	padding: .2rem
+	font-size: .8rem
+	border-radius: 2px
+	position: absolute
+	top: 60px
+	right: 8px
+	color: $beige
+	font-weight: bold
+	letter-spacing: .05rem
+	&--red
+		background-color: $red
+	&--green
+		background-color: $green
+.small
+	font-size: .7rem
+.bold
+	font-weight: bold
+
+.d-flex
+	display: flex
+.flex-column
+	flex-direction: column
+.flex1
+	flex: 1 1 0%
+.flex-justify-between
+	justify-content: space-between
+.flex-justify-center
+	justify-content: center
+.flex-align-items-center
+	align-items: center
+.flex-wrap
+	flex-wrap: wrap
+
+.no-user-select
+	user-select: none
+.overflow
+	overflow: auto
+.height-overflow
+	height: calc(100% - 50px)
+.full-height
+	height: 100%
+.full-width
+	width: 100%
+
+.text-center
+	text-align: center
+.pointer
+	cursor: pointer
+
+.absolute
+	position: absolute
+.relative
+	position: relative
+
+.btn-toolbar
+	border: none
+	background-color: transparent
+	font-family: $font
+	padding: .5rem 0
+	cursor: pointer
+	outline: none
+.not-found
+	display: flex
+	padding-top: 3rem
+	justify-content: center
+	align-items: center
+  margin: .5rem

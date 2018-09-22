@@ -9,12 +9,14 @@
  * Types
  */
 export const SHOW_USER_DETAIL_MODAL = 'SHOW_USER_DETAIL_MODAL';
+export const SHOW_OVERFLOW = 'SHOW_OVERFLOW';
 /*
  * State
 */
 const initialState = {
   showUserDetailModal: false,
   userId: '',
+  showOverflow: true,
 };
 
 /*
@@ -28,6 +30,11 @@ const reducer = (state = initialState, action = {}) => {
         showUserDetailModal: !state.showUserDetailModal,
         userId: action.userId,
       };
+    case SHOW_OVERFLOW:
+      return {
+        ...state,
+        showOverflow: !state.showOverflow,
+      };
     default:
       return {
         ...state,
@@ -35,14 +42,13 @@ const reducer = (state = initialState, action = {}) => {
   }
 };
 
-/*
- *Action creators
- */
 export const showUserDetailModalAction = userId => ({
   type: SHOW_USER_DETAIL_MODAL,
   userId,
 });
-/*
- * Export default
-*/
+
+export const showOverflowAction = () => ({
+  type: SHOW_OVERFLOW,
+});
+
 export default reducer;

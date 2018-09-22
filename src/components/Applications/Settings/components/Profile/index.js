@@ -1,32 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cropper from 'cropperjs';
+import Moment from 'moment';
 
 import './profile.css';
 import '../../../../../../node_modules/cropperjs/dist/cropper.css';
 import Model from './student-model';
 import Input from '../../../../Form/input';
-import InputFile from '../../../../Form/inputFile';
-import Select from '../../../../Form/select';
 import TextArea from '../../../../Form/textarea';
 import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
-import AddFilesInput from '../../../../../Modules/filesHandler/addFilesInput';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
+import { ROOT_URL } from '../../../../../Utils/config';
+import DisplayDocument from '../../../../../Modules/DisplayDocument';
 
 class Profile extends React.Component {
   static propTypes = {
-    userActive: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
     editUserAction: PropTypes.func.isRequired,
-  }
+    editUser: PropTypes.object.isRequired,
+    clearMessageAction: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
-    const { userActive } = this.props;
-    const { user } = userActive;
+    const { loggedUser } = this.props;
     let field = {};
-    Object.keys(Model).map((key) => {
-      field = { ...field, [key]: user ? { value: user[key], focus: false, changed: false } : { value: '', focus: false, changed: false } };
+    Object.keys(Model).map(key => {
+      field = {
+        ...field,
+        [key]: loggedUser
+          ? { value: loggedUser[key], focus: false, changed: false }
+          : { value: '', focus: false, changed: false },
+      };
       return field;
     });
     this.state = {
@@ -34,23 +40,49 @@ class Profile extends React.Component {
       cropModal: false,
     };
   }
+  static getDerivedStateFromProps(props, state) {
+    if (props.loggedUser.picture) {
+      return {
+        ...state,
+        picture: {
+          ...state.picture,
+          value: props.loggedUser.picture,
+        },
+      };
+    }
+    return {
+      ...state,
+    };
+  }
   componentDidUpdate(prevProps, prevState) {
-    const { editUserAction, userActive } = prevProps;
+    const { editUserAction, loggedUser, clearMessageAction } = prevProps;
     // Dealing with documents
-    if (prevState.docs.value) {
-      if (prevState.docs.value.length !== this.state.docs.value.length) {
-        editUserAction(userActive.user._id, this.state);
+    if (prevState.files.value) {
+      if (prevState.files.value.length !== this.state.files.value.length) {
+        editUserAction(loggedUser._id, this.state);
+        clearMessageAction();
       }
     }
   }
-  handleFormKeyPress = (evt) => {
-    if (evt.key === 'Enter' && evt.target.type !== 'textarea' && evt.target.type !== 'submit') {
+
+  componentWillUnmount() {
+    const { clearMessageAction } = this.props;
+    clearMessageAction();
+  }
+
+  handleFormKeyPress = evt => {
+    if (
+      evt.key === 'Enter' &&
+      evt.target.type !== 'textarea' &&
+      evt.target.type !== 'submit'
+    ) {
       evt.preventDefault();
       return false;
     }
     return true;
-  }
-  handleInputChange = (evt) => {
+  };
+
+  handleInputChange = evt => {
     const { value, name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -60,8 +92,9 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleTextAreaChange = (evt) => {
+  };
+
+  handleTextAreaChange = evt => {
     const { value, name } = evt.target;
     autoTextAreaResizing(evt.target);
     this.setState(prevState => ({
@@ -72,38 +105,37 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleInputSelectCompetencesChange = (evt) => {
-    const { value } = evt.target;
-    const { editUserAction, userActive } = this.props;
+  };
 
+  handleInputSelectCompetencesChange = evt => {
+    const { value } = evt.target;
+    const { editUserAction, loggedUser } = this.props;
     if (evt.keyCode === 13) {
-      const { state } = this;
-      const newTags = {
-        ...state,
-        tags: {
-          ...state.tags,
-          value: [
-            ...state.tags.value,
-            value.toLowerCase(),
-          ],
-          changed: true,
-        },
-      };
-      this.setState(() => newTags);
-      editUserAction(userActive.user._id, newTags);
+      this.setState(
+        prevState => ({
+          ...prevState,
+          tags: {
+            ...prevState.tags,
+            value: [...prevState.tags.value, value],
+            changed: true,
+          },
+        }),
+        () => editUserAction(loggedUser._id, this.state),
+      );
       evt.target.value = '';
     }
-  }
-  handleInputFileChange = (evt) => {
+  };
+
+  handleInputFileChange = evt => {
     this.readUrl(evt.target);
-  }
-  readUrl = (input) => {
+  };
+
+  readUrl = input => {
     if (input.files && input.files[0]) {
-      const { editUserAction, userActive } = this.props;
+      const { editUserAction, loggedUser } = this.props;
       const { state } = this;
       const reader = new FileReader();
-      reader.onload = (evt) => {
+      reader.onload = evt => {
         const newPicture = {
           ...state,
           picture: {
@@ -112,13 +144,14 @@ class Profile extends React.Component {
             changed: true,
           },
         };
-        this.setState(() => (newPicture));
-        editUserAction(userActive.user._id, newPicture);
+        this.setState(() => newPicture);
+        editUserAction(loggedUser._id, newPicture);
       };
       reader.readAsDataURL(input.files[0]);
     }
-  }
-  handleSelectChange = (evt) => {
+  };
+
+  handleSelectChange = evt => {
     const { name, value } = evt.target;
     this.setState(prevState => ({
       ...prevState,
@@ -128,15 +161,16 @@ class Profile extends React.Component {
         changed: true,
       },
     }));
-  }
-  handleOnBlur = (evt) => {
+  };
+
+  handleOnBlur = evt => {
     // Save the input field
     const { name } = evt.target;
-    const { editUserAction, userActive } = this.props;
-    // const fromData = document.getElementById('profile-form')
+    const { editUserAction, loggedUser, clearMessageAction } = this.props;
     if (this.state[name].changed) {
-      editUserAction(userActive.user._id, this.state);
+      editUserAction(loggedUser._id, this.state);
     }
+    clearMessageAction();
     this.setState(prevState => ({
       ...prevState,
       [name]: {
@@ -145,25 +179,28 @@ class Profile extends React.Component {
         changed: false,
       },
     }));
-  }
-  handleOnFocus = (evt) => {
+  };
+
+  handleOnFocus = evt => {
     // Save the input field
     const { name } = evt.target;
     this.setState(prevState => ({
       ...prevState,
       [name]: {
         ...prevState[name],
+        changed: false,
         focus: true,
       },
     }));
-  }
-  handleRemove = (evt) => {
+  };
+
+  handleRemove = evt => {
     evt.preventDefault();
-    const { editUserAction, userActive } = this.props;
+    const { editUserAction, loggedUser } = this.props;
     const { state } = this;
-    const values = state.tags.value.filter((value, index) => (
-      index !== Number(evt.target.id)
-    ));
+    const values = state.tags.value.filter(
+      (value, index) => index !== Number(evt.target.id),
+    );
     const newtags = {
       ...state,
       tags: {
@@ -173,27 +210,37 @@ class Profile extends React.Component {
       },
     };
     this.setState(() => newtags);
-    editUserAction(userActive.user._id, newtags);
-  }
-  handleDocsChange = (docs) => {
-    this.setState(prevState => ({
-      ...prevState,
-      docs: {
-        value: docs,
-        changed: true,
-      },
-    }));
-  }
+    editUserAction(loggedUser._id, newtags);
+  };
+
+  handleFilesChange = files => {
+    const { editUserAction, loggedUser } = this.props;
+    editUserAction(loggedUser._id, files);
+  };
+
   handleShowCropImageModal = () => {
     this.setState(prevState => ({
       cropModal: !prevState.cropModal,
     }));
-  }
-  handleCloseCropImageModal = (img) => {
-    // Server crashes on modal close if img undifined... Without response back 
+  };
+
+  handleRemoveFile = file => {
+    const { editUserAction, loggedUser } = this.props;
+    if (file) {
+      editUserAction(loggedUser._id, {
+        files: {
+          value: file,
+          changed: true,
+        },
+      });
+    }
+  };
+
+  handleCloseCropImageModal = img => {
+    // Server crashes on modal close if img undefined... Without response back
     if (img) {
       const { state } = this;
-      const { editUserAction, userActive } = this.props;
+      const { editUserAction, loggedUser } = this.props;
       const newPicture = {
         ...state,
         picture: {
@@ -203,21 +250,37 @@ class Profile extends React.Component {
         },
         cropModal: false,
       };
-      this.setState(() => (newPicture));
-      editUserAction(userActive.user._id, newPicture);
-    }
-    else {
+      this.setState(() => newPicture);
+      editUserAction(loggedUser._id, newPicture);
+    } else {
       this.setState(prevState => ({
         ...prevState,
         cropModal: false,
       }));
     }
-  }
+  };
+
   render() {
-    const { userActive, editUserAction } = this.props;
-    const { error, user } = userActive;
+    const { editUser, loggedUser } = this.props;
+    const { error, success, editing } = editUser;
+    const {
+      picture,
+      fullName,
+      email,
+      jobDescription,
+      location,
+      school,
+      diploma,
+      field,
+      tags,
+      description,
+      website,
+      linkedIn,
+      gitHub,
+      cropModal,
+    } = this.state;
     return (
-      <div id="profile" className="form-container" key="app-content" >
+      <div id="profile" className="form-container" key="app-content">
         <form
           id="profile-form"
           className="form"
@@ -228,148 +291,216 @@ class Profile extends React.Component {
             <div className="form-content">
               <img
                 className="profile-picture"
-                src={`${this.state.picture.value || '/img/avatar.png'}`}
+                src={
+                  picture.value
+                    ? `${ROOT_URL}${picture.value}`
+                    : '/img/avatar.png'
+                }
                 alt="Profile"
                 onClick={this.handleShowCropImageModal}
                 onKeyPress={this.handleShowCropImageModal}
               />
+              <ul className="date-since-container">
+                <li>
+                  <span className="date-since-item">
+                    {`Member since: ${Moment(loggedUser.createdAt).format(
+                      'DD/MM/YYYY',
+                    )}`}
+                  </span>
+                </li>
+                <li>
+                  <span className="date-since-item">
+                    {`Last update: ${Moment(loggedUser.updatedAt).format(
+                      'DD/MM/YYYY',
+                    )}`}
+                  </span>
+                </li>
+              </ul>
               <Input
                 config={{
                   field: Model.fullName,
                   onChange: this.handleInputChange,
-                  value: this.state.fullName.value,
+                  value: fullName.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.fullName && error.fullName.detail,
+                  success,
+                  editing,
                 }}
               />
               <Input
                 config={{
                   field: Model.email,
                   onChange: this.handleInputChange,
-                  value: this.state.email.value,
+                  value: email.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.email && error.email.detail,
+                  success,
+                  editing,
                 }}
               />
+              {loggedUser.typeUser === 'company' && (
+                <Input
+                  config={{
+                    field: Model.jobDescription,
+                    onChange: this.handleInputChange,
+                    value: jobDescription.value,
+                    type: 'text',
+                    blur: this.handleOnBlur,
+                    focus: this.handleOnFocus,
+                    error:
+                      error &&
+                      error.jobDescription &&
+                      error.jobDescription.detail,
+                    success,
+                    editing,
+                  }}
+                />
+              )}
               <Input
                 config={{
                   field: Model.location,
                   onChange: this.handleInputChange,
-                  value: this.state.location.value,
+                  value: location.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.location && error.location.detail,
+                  success,
+                  editing,
                 }}
               />
-              <Select
+              <Input
                 config={{
                   field: Model.school,
-                  onChange: this.handleSelectChange,
-                  value: this.state.school.value,
-                  options: ['Bem', 'O\'Clock'],
+                  onChange: this.handleInputChange,
+                  value: school.value,
+                  type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.school && error.school.detail,
+                  success,
+                  editing,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.diploma,
+                  onChange: this.handleInputChange,
+                  value: diploma.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.diploma && error.diploma.detail,
+                  success,
+                  editing,
+                }}
+              />
+              <Input
+                config={{
+                  field: Model.field,
+                  onChange: this.handleInputChange,
+                  value: field.value,
+                  type: 'text',
+                  blur: this.handleOnBlur,
+                  focus: this.handleOnFocus,
+                  error: error && error.field && error.field.detail,
+                  success,
+                  editing,
                 }}
               />
             </div>
             <div className="form-content">
-              <Select
-                config={{
-                  field: Model.diploma,
-                  onChange: this.handleSelectChange,
-                  value: this.state.diploma.value,
-                  options: ['Master', 'Bachelor'],
-                  blur: this.handleOnBlur,
-                  focus: this.handleOnFocus,
-                  error: error && error.diploma && error.diploma.detail,
-                }}
-              />
               <InputAutoComplete
                 config={{
                   field: Model.tags,
                   onChange: this.handleInputSelectCompetencesChange,
                   keyPress: this.handleInputSelectCompetencesChange,
-                  values: this.state.tags.value,
+                  values: tags.value,
                   focus: this.handleOnFocus,
-                  blur: this.handleOnBlur,
                   error: error && error.tags && error.tags.detail,
                   remove: this.handleRemove,
+                  success,
                 }}
               />
               <TextArea
                 config={{
                   field: Model.description,
                   onChange: this.handleTextAreaChange,
-                  value: this.state.description.value,
+                  value: description.value,
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.description && error.description.detail,
+                  success,
                 }}
               />
               <Input
                 config={{
                   field: Model.website,
                   onChange: this.handleInputChange,
-                  value: this.state.website.value,
+                  value: website.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.website && error.website.detail,
+                  success,
                 }}
               />
               <Input
                 config={{
                   field: Model.linkedIn,
                   onChange: this.handleInputChange,
-                  value: this.state.linkedIn.value,
+                  value: linkedIn.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.linkedIn && error.linkedIn.detail,
+                  success,
                 }}
               />
               <Input
                 config={{
                   field: Model.gitHub,
                   onChange: this.handleInputChange,
-                  value: this.state.gitHub.value,
+                  value: gitHub.value,
                   type: 'text',
                   blur: this.handleOnBlur,
                   focus: this.handleOnFocus,
                   error: error && error.gitHub && error.gitHub.detail,
+                  success,
                 }}
               />
-              <AddFilesInput
-                error={error && error.docs && error.docs.detail}
-                docs={this.state.docs.value}
-                onFileChange={this.handleDocsChange}
+              <DisplayDocument
+                update={this.handleFilesChange}
+                keyToUpdate="files"
+                files={loggedUser.files}
+                onDelete={this.handleRemoveFile}
+                editable
               />
             </div>
           </div>
         </form>
-        {this.state.cropModal &&
+        {cropModal && (
           <Modal
             zIndex={100}
             name="imageCropper"
             title="Image Cropper"
             closeFromParent={this.handleCloseCropImageModal}
+            noParamsOnClose
           >
             <Crop
-              picture={this.state.picture.value}
+              picture={picture.value && `${ROOT_URL}${picture.value}`}
               parentConfig={{
-                user,
-                update: editUserAction,
+                user: loggedUser,
                 error,
                 model: Model,
               }}
             />
-          </Modal>}
+          </Modal>
+        )}
       </div>
     );
   }

@@ -1,0 +1,11 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task-detail-wrapper {
+  overflow: auto; }
+
+.task-comment-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative; }
+  .task-comment-form .form-group {
+    flex: 1; }

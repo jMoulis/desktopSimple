@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.task {
+  position: relative; }
+
+.task-activity {
+  margin-top: 1.5rem;
+  padding-right: .5rem;
+  padding-left: .5rem; }

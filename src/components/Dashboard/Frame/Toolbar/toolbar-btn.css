@@ -1,7 +1,6 @@
 .toolbar-button {
-  width: 10px;
   height: 12px;
-  border-radius: 8px;
+  border-radius: 50%;
   border: none;
   margin-left: 5px;
   margin-right: 5px;

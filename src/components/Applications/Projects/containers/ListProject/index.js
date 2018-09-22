@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -20,15 +19,17 @@ const mapStateToProps = ({ projectReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProjectAction: (projectId) => {
+  fetchSingleProjectAction: projectId => {
     dispatch(fetchSingleProjectAction(projectId));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const ListProjectContainer = createContainer(ListProject);
 export default ListProjectContainer;

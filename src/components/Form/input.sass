@@ -5,9 +5,8 @@
   padding: 1rem 0
   position: relative
   .form-control
-    background-color: $lightblue
     border: none
-    border-bottom: 2px solid $darkestblue
+    // border-bottom: 2px solid transparent
     outline: none
     transition: border-bottom 500ms
     padding-bottom: .5rem
@@ -18,9 +17,12 @@
   input, textarea, select
     transition: border-bottom 200ms
     &:focus
-      border-bottom: 2px solid $orange
+      // border-bottom: 2px solid $orange
     &::placeholder
-      color: $darkestblue
+      color: rgba($darkestblue, .54)
       font-weight: normal
       font-size: .8rem
       font-family: 'Nunito', sans-serif
+      font-style: italic
+    &:hover
+      //border-bottom: 2px solid $orange
