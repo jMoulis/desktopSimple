@@ -27,7 +27,7 @@ module.exports = {
       host: '93.90.204.229',
       ref: 'origin/master',
       repo: 'git@github.com:jMoulis/student.git',
-      path: '/var/www/html/student/back',
+      path: '/var/www/html/student',
       'post-deploy': 'npm install',
     },
     dev: {
