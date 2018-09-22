@@ -14,6 +14,8 @@ import Modal from '../../../../../../../Modules/Modal/modal';
 import Button from '../../../../../../Form/button';
 import UserIconContainer from '../../../../../../../Modules/UserIcon';
 import DisplayDocument from '../../../../../../../Modules/DisplayDocument';
+import axios from 'axios';
+import { ROOT_URL } from '../../../../../../../Utils/config';
 
 class TaskCreateForm extends React.Component {
   static propTypes = {
@@ -159,6 +161,32 @@ class TaskCreateForm extends React.Component {
     }
   };
 
+  handleTeamSelect = async evt => {
+    const { value, name } = evt.target;
+    try {
+      const {
+        data: { team },
+      } = await axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/teams/${value}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      });
+      this.setState(prevState => ({
+        ...prevState,
+        [name]: {
+          ...prevState[name],
+          value,
+          changed: true,
+        },
+        selectedTeamUsers: team.users,
+      }));
+    } catch (error) {
+      console.error('Error loading user from task create form', error.message);
+    }
+  };
+
   handleFormKeyPress = evt => {
     if (
       evt.key === 'Enter' &&
@@ -197,6 +225,7 @@ class TaskCreateForm extends React.Component {
       showUsersAssignModal,
       assign,
       team,
+      selectedTeamUsers,
     } = this.state;
     const { closeFromParent, taskCreation, loggedUser } = this.props;
     const { error } = taskCreation;
@@ -230,7 +259,7 @@ class TaskCreateForm extends React.Component {
         <Select
           config={{
             field: taskModel.team,
-            onChange: this.handleInputChange,
+            onChange: this.handleTeamSelect,
             value: team.value,
             blur: this.handleOnBlur,
             focus: this.handleOnFocus,
@@ -338,7 +367,10 @@ class TaskCreateForm extends React.Component {
             zIndex={1}
             closeFromParent={this.handleReassign}
           >
-            <SelectBoxUser callback={this.handleAssignSelected} />
+            <SelectBoxUser
+              users={selectedTeamUsers}
+              callback={this.handleAssignSelected}
+            />
           </Modal>
         ) : (
           <Button

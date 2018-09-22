@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import io from 'socket.io-client';
 
 import './dashboard.css';
 import Frame from '../../containers/Dashboard/Frame/frame';
@@ -8,6 +9,8 @@ import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
+import { ROOT_URL } from '../../Utils/config';
+import Chat from './Chat';
 
 class Dashboard extends React.Component {
   static propTypes = {
@@ -24,18 +27,39 @@ class Dashboard extends React.Component {
   static defaultProps = {
     activeApps: null,
   };
+
   constructor(props) {
     super(props);
+    this.socket = io(`${ROOT_URL}`, { multiplex: false });
+    this.socket.on('connect', () => console.log('connect', this.socket.id));
+    this.socket.on('reconnect', () => this.handleStatusSocket('reconnect'));
     this.state = {
       helper: true,
       showSettings: false,
+      status: null,
     };
   }
+
+  handleStatusSocket = status => {
+    this.setState(() => ({
+      status,
+    }));
+  };
+
   handleShowSettings = () => {
     this.setState(prevState => ({
       showSettings: !prevState.showSettings,
     }));
   };
+
+  handleClose = () => {
+    console.log('close');
+  };
+
+  handleReduce = () => {
+    console.log('reduce');
+  };
+
   handleCloseHelper = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -43,6 +67,7 @@ class Dashboard extends React.Component {
     }));
     return true;
   };
+
   render() {
     const {
       applications,
@@ -87,7 +112,10 @@ class Dashboard extends React.Component {
                           ...globalActions,
                           selectTeam,
                         },
-                        globalProps,
+                        globalProps: {
+                          ...globalProps,
+                          socketIo: this.socket,
+                        },
                       });
                     }
                     return null;
@@ -125,6 +153,14 @@ class Dashboard extends React.Component {
             <DetailUser />
           </Modal>
         )}
+        <Chat
+          user={user}
+          socket={this.socket}
+          status={this.state.status}
+          callback={this.handleStatusSocket}
+          close={this.handleClose}
+          reduce={this.handleReduce}
+        />
       </main>
     );
   }

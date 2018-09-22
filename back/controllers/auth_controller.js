@@ -9,7 +9,6 @@ module.exports = {
   async login(req, res) {
     try {
       const { email, password } = req.body;
-
       const existingUser = await User.findOne({ email });
       // if (process.env.NODE_ENV !== 'test') {
       //   User.deleteMany({ fake: true }).then(() => loadFakeUser());
@@ -81,6 +80,11 @@ module.exports = {
             model: 'project',
             select: 'title',
           },
+        })
+        .populate({
+          path: 'friends',
+          model: 'user',
+          select: 'fullName picture',
         })
         .populate({
           path: 'docs.author',

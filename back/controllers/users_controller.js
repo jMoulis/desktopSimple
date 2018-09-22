@@ -155,6 +155,11 @@ module.exports = {
           select: 'fullName picture',
         })
         .populate({
+          path: 'friends',
+          model: 'user',
+          select: 'fullName picture',
+        })
+        .populate({
           path: 'company.files.author',
           model: 'user',
           select: 'fullName picture',

@@ -32,6 +32,7 @@
     "serve": "^7.2.0",
     "shelljs": "^0.8.2",
     "socket.io-client": "^2.1.1",
+    "uuid": "^3.3.2",
     "video-react": "^0.10.9"
   },
   "scripts": {
@@ -41,7 +42,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server": "NODE_ENV=dev nodemon --ignore back/uploads/  back/index.js",
+    "server": "NODE_ENV=dev nodemon --ignore back/uploads/  back/index.js --ignore src/",
     "mongo": "sudo service mongod start"
   },
   "devDependencies": {

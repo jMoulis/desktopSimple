@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import './index.css';
 
 class TaskFilter extends React.Component {
+  static propTypes = {
+    fetchTasksAction: PropTypes.func.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+  };
   state = {
     selectedTab: 'All',
   };
@@ -73,9 +77,5 @@ class TaskFilter extends React.Component {
     );
   }
 }
-
-TaskFilter.propTypes = {
-  fetchTasksAction: PropTypes.func.isRequired,
-};
 
 export default TaskFilter;

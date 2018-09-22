@@ -10,7 +10,7 @@ import Textarea from '../../../../../Form/textarea';
 import autoTextAreaResizing from '../../../../../../Utils/autoTextAreaResizing';
 import UserIconContainer from '../../../../../../Modules/UserIcon';
 import Modal from '../../../../../../Modules/Modal/modal';
-import SelectBoxUserContainer from '../../../../../../Modules/SelectBoxUser';
+import SelectBoxUser from '../../../../../../Modules/SelectBoxUser';
 import Button from '../../../../../Form/button';
 import './index.css';
 import AlertBox from '../../../../../../Modules/AlertBox';
@@ -629,7 +629,7 @@ class TaskDetail extends React.Component {
             zIndex={1}
             closeFromParent={this.handleReassign}
           >
-            <SelectBoxUserContainer
+            <SelectBoxUser
               users={task.team.users}
               callback={this.handleSelectAssign}
             />
