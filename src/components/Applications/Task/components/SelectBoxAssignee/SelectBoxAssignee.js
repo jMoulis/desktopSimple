@@ -8,6 +8,8 @@ import UserIconContainer from '../../../../../Modules/UserIcon';
 class SelectBoxAssignee extends Component {
   static propTypes = {
     teamId: PropTypes.string,
+    callback: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -49,7 +51,7 @@ class SelectBoxAssignee extends Component {
         }));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -68,10 +70,15 @@ class SelectBoxAssignee extends Component {
 
   render() {
     const { users, showList, user } = this.state;
-    const { callback } = this.props;
+    const { callback, disabled } = this.props;
     return (
       <div className="selectbox-assign relative">
-        <button className="selectbox-assign-btn" onClick={this.handleShowList}>
+        <button
+          className="selectbox-assign-btn"
+          disabled={!disabled}
+          onClick={this.handleShowList}
+          title={!disabled ? 'Select a team first' : 'Select a assignee'}
+        >
           {this.state.user ? (
             <UserIconContainer
               active={false}

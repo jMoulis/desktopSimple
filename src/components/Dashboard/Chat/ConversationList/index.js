@@ -4,7 +4,8 @@ import Wrapper from '../Wrapper';
 import UserIconContainer from '../../../../Modules/UserIcon';
 import './index.css';
 
-const ConversationList = ({ conversations, loggedUser, callback, ...rest }) => {
+const ConversationList = ({ conversations, loggedUser, callback }) => {
+  console.log(conversations);
   return (
     <Wrapper reduceOnMount>
       <div className={`conversation-list`}>

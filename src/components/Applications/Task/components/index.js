@@ -24,6 +24,7 @@ class Task extends React.Component {
     this.state = {
       showCreateModal: false,
       filter: {},
+      isTeamSelected: false,
     };
   }
 
@@ -43,6 +44,24 @@ class Task extends React.Component {
           ...prevState.filter,
           [name]: value,
         },
+      }),
+      () => {
+        fetchTasksAction(this.state.filter);
+      },
+    );
+  };
+
+  handleSelectTeamFilter = evt => {
+    const { name, value } = evt.target;
+    const { fetchTasksAction } = this.props;
+    this.setState(
+      prevState => ({
+        ...prevState,
+        filter: {
+          ...prevState.filter,
+          [name]: value,
+        },
+        selectedTeam: value ? true : false,
       }),
       () => {
         fetchTasksAction(this.state.filter);
@@ -98,7 +117,7 @@ class Task extends React.Component {
   };
 
   render() {
-    const { showCreateModal } = this.state;
+    const { showCreateModal, isTeamSelected } = this.state;
     const { taskListProcess, loggedUser } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
@@ -120,7 +139,7 @@ class Task extends React.Component {
           <div className="d-flex flex-align-items-center">
             <SelectBoxToolBar
               name="team"
-              callback={this.handleSelectFilter}
+              callback={this.handleSelectTeamFilter}
               options={[
                 {
                   value: '',
@@ -200,6 +219,7 @@ class Task extends React.Component {
             <SelectBoxAssigneeContainer
               teamId={this.state.filter.team}
               callback={this.handleSelectAssign}
+              disabled={isTeamSelected}
             />
           </div>
         </AppToolbar>

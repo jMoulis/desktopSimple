@@ -7,7 +7,7 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
     try {
       const conversations = await Conversation.find({
-        $or: [{ receiver: req.query.sender }, { sender: req.query.receiver }],
+        users: { $in: [res.locals.user._id] },
       })
         .populate('messages')
         .populate({
