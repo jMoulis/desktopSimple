@@ -4,7 +4,6 @@ module.exports = {
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
    */
   apps: [
-
     // First application
     {
       name: 'student',
@@ -27,7 +26,7 @@ module.exports = {
       user: 'root',
       host: '93.90.204.229',
       ref: 'origin/master',
-      repo: 'git@github.com:jMoulis/student_project_back.git',
+      repo: 'git@github.com:jMoulis/student.git',
       path: '/var/www/html/student/back',
       'post-deploy': 'npm install',
     },
@@ -35,7 +34,7 @@ module.exports = {
       user: 'node',
       host: '93.90.204.229',
       ref: 'origin/master',
-      repo: 'git@github.com:jMoulis/student_project_back.git',
+      repo: 'git@github.com:jMoulis/student.git',
       path: '/var/www/development',
       'post-deploy': 'npm install',
       env: {
