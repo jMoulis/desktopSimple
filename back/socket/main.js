@@ -1,7 +1,4 @@
-const mongoose = require('mongoose');
-const Message = require('../models/Message');
-const Conversation = require('../models/Conversation');
-const ConversationController = require('../controllers/conversation_controller');
+const RoomController = require('../controllers/rooms_controller');
 
 module.exports = io => {
   io.on('connection', socket => {
@@ -14,17 +11,22 @@ module.exports = io => {
     // });
 
     socket.on('JOIN_REQUEST', (id, { room, receiver }, callback) => {
-      console.log(receiver);
-      io.to(`${id}`).emit('START_PRIVATE_CHAT', {
-        message: `start private chat with ${receiver.fullName}`,
-      });
-      socket.join(room);
-      callback(receiver._id);
+      try {
+        io.to(`${id}`).emit('START_PRIVATE_CHAT', {
+          message: `start private chat with ${receiver.fullName}`,
+        });
+        socket.join(room);
+        if (callback) {
+          callback(receiver._id);
+        }
+      } catch (error) {
+        console.error('join request', error.message);
+      }
     });
 
     socket.on('NEW_MESSAGE', async ({ message, room, receiver, sender }) => {
       try {
-        const newMessage = await ConversationController.create(
+        const newMessage = await RoomController.create(
           { message, receiver, sender },
           room,
         );
@@ -33,7 +35,7 @@ module.exports = io => {
           room,
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     });
   });

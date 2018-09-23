@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './index.css';
-import { ROOT_URL } from '../../../../../Utils/config';
+// import { ROOT_URL } from '../../../../../Utils/config';
 import UserIconContainer from '../../../../../Modules/UserIcon';
+
+const ROOT_URL = process.env.REACT_APP_API;
 
 class SelectBoxAssignee extends Component {
   static propTypes = {

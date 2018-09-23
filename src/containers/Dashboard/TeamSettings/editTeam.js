@@ -3,7 +3,11 @@
  */
 import { connect } from 'react-redux';
 import { fetchUsersCountAction } from '../../../store/reducers/userReducer';
-import { editTeamAction, clearTeamMessageAction, deleteTeamAction } from '../../../store/reducers/teamReducer';
+import {
+  editTeamAction,
+  clearTeamMessageAction,
+  deleteTeamAction,
+} from '../../../store/reducers/teamReducer';
 
 /*
  * Local import
@@ -20,13 +24,13 @@ const mapStateToProps = ({ userReducer, mainTeamReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchUsersCountAction: (filter) => {
+  fetchUsersCountAction: filter => {
     dispatch(fetchUsersCountAction(filter));
   },
-  editTeamAction: (values) => {
+  editTeamAction: values => {
     dispatch(editTeamAction(values));
   },
-  deleteTeamAction: (teamId) => {
+  deleteTeamAction: teamId => {
     dispatch(deleteTeamAction(teamId));
   },
   clearTeamMessageAction: () => {
@@ -34,10 +38,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const EditTeamContainer = createContainer(EditTeam);
 export default EditTeamContainer;

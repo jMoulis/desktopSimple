@@ -23,11 +23,24 @@ class FriendRequestButtons extends Component {
     loggedUser: PropTypes.object.isRequired,
     sendFriendRequestAction: PropTypes.func.isRequired,
   };
-  isAlreadyRequest = (receivedRequest, key) =>
-    receivedRequest.some(request => request === key);
+
+  isAlreadyRequest = (receivedRequest, key) => {
+    return receivedRequest.some(request => request === key);
+  };
+
+  userFriendsToArrayOfId = friends => friends.map(friend => friend._id);
   isFriendRender = () => {
     const { user, loggedUser, sendFriendRequestAction } = this.props;
-    if (this.isAlreadyRequest(user.friends, loggedUser._id)) {
+    // Check if the logged User is in displayed user friends list
+    // Receives an array of user object from back
+    // This
+
+    if (
+      this.isAlreadyRequest(
+        this.userFriendsToArrayOfId(user.friends),
+        loggedUser._id,
+      )
+    ) {
       return (
         <div>
           <Button
@@ -46,6 +59,7 @@ class FriendRequestButtons extends Component {
         </div>
       );
     }
+    // Check if displayed user sent a request to the logged user
     if (this.isAlreadyRequest(user.sentRequest, loggedUser._id)) {
       return (
         <div className="d-flex">
@@ -75,6 +89,7 @@ class FriendRequestButtons extends Component {
         </div>
       );
     }
+    // Check if displayed user received a request from the logged user
     if (this.isAlreadyRequest(user.receivedRequest, loggedUser._id)) {
       return (
         <Button
@@ -96,6 +111,7 @@ class FriendRequestButtons extends Component {
         />
       );
     }
+    // Check if the logged User declined user diplayed declined request
     if (this.isAlreadyRequest(user.declinedRequest, loggedUser._id)) {
       return (
         <div className="d-flex">

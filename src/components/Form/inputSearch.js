@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 import SuccessIcon from '../../assets/successIcon/successIcon';
 
 import './inputSearch.css';
 
+const ROOT_URL = process.env.REACT_APP_API;
 class InputSearch extends Component {
   static propTypes = {
     config: PropTypes.object.isRequired,

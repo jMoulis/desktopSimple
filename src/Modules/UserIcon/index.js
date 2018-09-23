@@ -6,8 +6,9 @@ import './index.css';
 
 // Action from global app... I think it might be a little spaghetti code
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 
+const ROOT_URL = process.env.REACT_APP_API;
 // Actions
 const mapDispatchToProps = dispatch => ({
   showUserDetailModal: userId => {

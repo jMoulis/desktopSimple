@@ -5,19 +5,24 @@ class ChatBoxForm extends Component {
   state = {
     message: '',
   };
+
   handleSendMessage = evt => {
     evt.preventDefault();
     const { socket, room, loggedUser, receiver, callback } = this.props;
+
     socket.emit('NEW_MESSAGE', {
-      room: room._id,
+      room,
       receiver: receiver._id,
       sender: loggedUser._id,
       message: this.state.message,
     });
+
     this.setState(() => ({
       message: '',
     }));
-    callback();
+    if (callback) {
+      callback();
+    }
   };
 
   handleTextAreaChange = evt => {
@@ -45,10 +50,15 @@ class ChatBoxForm extends Component {
 
 ChatBoxForm.propTypes = {
   socket: PropTypes.object.isRequired,
-  room: PropTypes.object.isRequired,
+  room: PropTypes.string,
   loggedUser: PropTypes.object.isRequired,
   receiver: PropTypes.object.isRequired,
-  callback: PropTypes.func.isRequired,
+  callback: PropTypes.func,
+};
+
+ChatBoxForm.defaultProps = {
+  room: null,
+  callback: null,
 };
 
 export default ChatBoxForm;

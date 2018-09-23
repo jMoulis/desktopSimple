@@ -217,7 +217,7 @@ module.exports = {
       }
       return apiResponse.success(200, { team });
     } catch (error) {
-      return apiResponse.failure(422, null, error.message);
+      return apiResponse.failure(422, error);
     }
   },
 

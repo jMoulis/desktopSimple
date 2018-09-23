@@ -6,7 +6,8 @@ import axios from 'axios';
 /*
  * Local import
  */
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
+
 import {
   GLOBAL_CREATE_TEAM,
   createTeamSuccessAction,
@@ -25,9 +26,9 @@ import {
   deleteTeamFailureAction,
 } from '../reducers/teamReducer';
 import { logoutAction, editUserSuccessAction } from '../reducers/authReducer';
-/*
- * Code
- */
+
+const ROOT_URL = process.env.REACT_APP_API;
+
 const toObject = arr => {
   let obj = {};
   arr.forEach(element => {
@@ -83,6 +84,7 @@ export default store => next => action => {
       const filteredArray = Object.entries(action.payload).filter(
         field => field[1].changed,
       );
+
       const formData = toObject(filteredArray);
       formData.users = action.payload.users;
       const teamId = store.getState().mainTeamReducer.activeTeamProcess.team

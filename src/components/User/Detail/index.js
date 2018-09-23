@@ -4,8 +4,9 @@ import './index.css';
 import Loader from '../../../Modules/Loader';
 import TagList from '../../../Modules/Tag/tagList';
 import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
-import { ROOT_URL } from '../../../Utils/config';
+// import { ROOT_URL } from '../../../Utils/config';
 
+const ROOT_URL = process.env.REACT_APP_API;
 class DetailUser extends React.Component {
   static propTypes = {
     userId: PropTypes.string.isRequired,

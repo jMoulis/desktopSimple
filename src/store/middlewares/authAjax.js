@@ -6,7 +6,7 @@ import axios from 'axios';
 /*
  * Local import
  */
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 import Auth from '../../Utils/auth';
 import {
   CREATE_USER,
@@ -29,6 +29,8 @@ import {
   logoutAction,
 } from '../reducers/authReducer';
 import { fetchUserSuccessAction } from '../reducers/userReducer';
+
+const ROOT_URL = process.env.REACT_APP_API;
 /*
  * Code
  */

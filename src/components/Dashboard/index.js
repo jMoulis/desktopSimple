@@ -9,9 +9,10 @@ import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 import Chat from './Chat';
 
+const ROOT_URL = process.env.REACT_APP_API;
 class Dashboard extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
@@ -31,7 +32,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io(`${ROOT_URL}`, { multiplex: false });
-    this.socket.on('connect', () => console.log('connect', this.socket.id));
+    this.socket.on('connect', () => console.log('connect', 'user connected'));
     this.socket.on('reconnect', () => this.handleStatusSocket('reconnect'));
     this.state = {
       helper: true,
@@ -106,7 +107,7 @@ class Dashboard extends React.Component {
                   activeApps.map(activeApp => {
                     if (activeApp.appName === application.appName) {
                       return React.createElement(activeApp.appComponent, {
-                        key: activeApp,
+                        key: activeApp.appName,
                         loggedUser: user,
                         globalActions: {
                           ...globalActions,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 import {
   CREATE_MESSAGE,
   FETCH_MESSAGES,
@@ -11,6 +11,7 @@ import {
 } from '../reducers/chatReducer';
 import { logoutAction } from '../reducers/authReducer';
 
+const ROOT_URL = process.env.REACT_APP_API;
 export default store => next => action => {
   switch (action.type) {
     case CREATE_MESSAGE: {

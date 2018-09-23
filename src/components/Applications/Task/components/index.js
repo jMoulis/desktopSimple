@@ -61,7 +61,7 @@ class Task extends React.Component {
           ...prevState.filter,
           [name]: value,
         },
-        selectedTeam: value ? true : false,
+        isTeamSelected: value ? true : false,
       }),
       () => {
         fetchTasksAction(this.state.filter);

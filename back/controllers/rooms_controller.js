@@ -1,12 +1,12 @@
 const ApiResponse = require('../service/api/apiResponse_v2');
-const Conversation = require('../models/Conversation');
+const Room = require('../models/Room');
 const Message = require('../models/Message');
 
 module.exports = {
   index: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
-      const conversations = await Conversation.find({
+      const rooms = await Room.find({
         users: { $in: [res.locals.user._id] },
       })
         .populate('messages')
@@ -16,16 +16,16 @@ module.exports = {
           select: 'fullName picture',
         });
 
-      return apiResponse.success(200, { conversations });
+      return apiResponse.success(200, { rooms });
     } catch (error) {
       return apiResponse.failure(422, error, { message: error.message });
     }
   },
+
   create: async (message, room) => {
-    // const apiResponse = new ApiResponse(res);
     try {
       const newMessage = await Message.create(message);
-      await Conversation.findOneAndUpdate(
+      await Room.findOneAndUpdate(
         {
           _id: room,
         },
@@ -44,7 +44,7 @@ module.exports = {
   read: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
-      const conversation = await Conversation.findOne({
+      const room = await Room.findOne({
         users: { $all: [req.query.sender, req.query.receiver] },
       })
         .populate('messages')
@@ -53,16 +53,15 @@ module.exports = {
           ref: 'user',
           select: 'fullName picture',
         });
-
-      if (!conversation) {
-        const newConversation = await Conversation.create({
+      if (!room) {
+        const newRoom = await Room.create({
           users: [req.query.sender, req.query.receiver],
         });
 
-        return apiResponse.success(201, { conversation: newConversation });
+        return apiResponse.success(201, { room: newRoom });
       }
 
-      return apiResponse.success(200, { conversation });
+      return apiResponse.success(200, { room });
     } catch (error) {
       return apiResponse.failure(422, error, { message: error.message });
     }

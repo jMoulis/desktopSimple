@@ -94,7 +94,7 @@ class AddressBook extends Component {
   };
 
   render() {
-    const { usersProcess, loggedUser } = this.props;
+    const { usersProcess, loggedUser, globalProps } = this.props;
     if (usersProcess.users) {
       return (
         <Fragment>
@@ -136,6 +136,7 @@ class AddressBook extends Component {
                     key={user._id}
                     user={user}
                     loggedUser={loggedUser}
+                    socket={globalProps.socketIo}
                   />
                 ))
               )}

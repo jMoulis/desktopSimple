@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ROOT_URL } from '../../Utils/config';
+//import { ROOT_URL } from '../../Utils/config';
 import {
   FETCH_USER,
   fetchUserSuccessAction,
@@ -16,6 +16,7 @@ import {
 import { logoutAction } from '../reducers/authReducer';
 import Utils from '../../Utils/utils';
 
+const ROOT_URL = process.env.REACT_APP_API;
 export default store => next => action => {
   const utils = new Utils();
   switch (action.type) {

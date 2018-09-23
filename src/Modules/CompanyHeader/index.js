@@ -4,8 +4,9 @@ import classNames from 'classnames';
 
 import './index.css';
 import UserIconContainer from '../UserIcon';
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 
+const ROOT_URL = process.env.REACT_APP_API;
 const CompanyHeader = ({ user, classNameContainer }) => {
   return (
     <div className={classNames('company', classNameContainer)}>

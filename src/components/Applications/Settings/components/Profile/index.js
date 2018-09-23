@@ -11,8 +11,10 @@ import InputAutoComplete from '../../../../Form/inputAutoComplete';
 import autoTextAreaResizing from '../../../../../Utils/autoTextAreaResizing';
 import Modal from '../../../../../Modules/Modal/modal';
 import Crop from '../../../../../Modules/Crop';
-import { ROOT_URL } from '../../../../../Utils/config';
+// import { ROOT_URL } from '../../../../../Utils/config';
 import DisplayDocument from '../../../../../Modules/DisplayDocument';
+
+const ROOT_URL = process.env.REACT_APP_API;
 
 class Profile extends React.Component {
   static propTypes = {

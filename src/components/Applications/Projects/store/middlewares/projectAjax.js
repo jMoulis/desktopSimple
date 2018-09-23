@@ -6,7 +6,7 @@ import axios from 'axios';
 /*
  * Local import
  */
-import { ROOT_URL } from '../../../../../Utils/config';
+// import { ROOT_URL } from '../../../../../Utils/config';
 import {
   CREATE_PROJECT,
   createProjectSuccessAction,
@@ -25,9 +25,8 @@ import {
 
 import { logoutAction } from '../../../../../store/reducers/authReducer';
 import Utils from '../../../../../Utils/utils';
-/*
- * Code
- */
+
+const ROOT_URL = process.env.REACT_APP_API;
 const toObject = arr => {
   let obj = {};
   arr.forEach(element => {

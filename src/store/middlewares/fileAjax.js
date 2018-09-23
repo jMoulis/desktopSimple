@@ -6,13 +6,15 @@ import axios from 'axios';
 /*
  * Local import
  */
-import { ROOT_URL } from '../../Utils/config';
+// import { ROOT_URL } from '../../Utils/config';
 
 import {
   FETCH_FILE,
   fetchFileSuccessAction,
   fetchFileFailureAction,
 } from '../reducers/fileReducer';
+
+const ROOT_URL = process.env.REACT_APP_API;
 
 export default store => next => action => {
   switch (action.type) {

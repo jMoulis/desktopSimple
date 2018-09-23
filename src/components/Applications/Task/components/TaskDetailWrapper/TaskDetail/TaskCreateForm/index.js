@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import Input from '../../../../../../Form/input';
 import Select from '../../../../../../Form/select';
@@ -14,9 +15,9 @@ import Modal from '../../../../../../../Modules/Modal/modal';
 import Button from '../../../../../../Form/button';
 import UserIconContainer from '../../../../../../../Modules/UserIcon';
 import DisplayDocument from '../../../../../../../Modules/DisplayDocument';
-import axios from 'axios';
-import { ROOT_URL } from '../../../../../../../Utils/config';
+// import { ROOT_URL } from '../../../../../../../Utils/config';
 
+const ROOT_URL = process.env.REACT_APP_API;
 class TaskCreateForm extends React.Component {
   static propTypes = {
     closeFromParent: PropTypes.func,

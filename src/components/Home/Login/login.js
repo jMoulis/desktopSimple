@@ -62,7 +62,6 @@ class Login extends React.Component {
   render() {
     const { loginProcess } = this.props;
     const { logging, error } = loginProcess;
-
     return (
       <div id="signin-form" className="form-container">
         <form
@@ -74,7 +73,7 @@ class Login extends React.Component {
             <h1>Sign In</h1>
           </div>
           <div className="form-content">
-            {error && <div className="error-message">{error.detail}</div>}
+            {error && <div className="error-message">{error.login.detail}</div>}
             <Input
               config={{
                 field: Model.email,

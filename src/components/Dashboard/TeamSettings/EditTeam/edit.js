@@ -178,6 +178,7 @@ class EditTeam extends React.Component {
       }
     }
   };
+
   handleSearch = filter => {
     this.setState(() => ({
       modal: true,
@@ -186,6 +187,7 @@ class EditTeam extends React.Component {
       },
     }));
   };
+
   handleRemove = ({ target }) => {
     const { tagname } = target.dataset;
     const { editTeamAction } = this.props;
@@ -218,6 +220,7 @@ class EditTeam extends React.Component {
       },
     );
   };
+
   handleSelectUser = user => {
     const { editTeamAction } = this.props;
     this.setState(
@@ -258,25 +261,38 @@ class EditTeam extends React.Component {
       },
     );
   };
+
   hanldeDeleteTeam = () => {
     const { deleteTeamAction, activeTeamProcess, closeFromParent } = this.props;
     deleteTeamAction(activeTeamProcess.team._id);
     closeFromParent();
   };
+
   handleShowAlertBox = () => {
     this.setState(prevState => ({
       ...prevState,
       alertBox: !prevState.alertBox,
     }));
   };
+
   handleOnBlur = evt => {
     evt.preventDefault();
     const { editTeamAction } = this.props;
     const values = {
       name: this.state.name,
     };
-    editTeamAction(values);
+    if (this.state.name.changed) {
+      editTeamAction(values);
+      this.setState(prevState => ({
+        ...prevState,
+        name: {
+          ...prevState.name,
+          changed: false,
+        },
+      }));
+    }
   };
+
   render() {
     const {
       counters,

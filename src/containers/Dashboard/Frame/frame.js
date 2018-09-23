@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -21,15 +20,17 @@ const mapStateToProps = ({ frameReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  setActiveAppAction: (app) => {
+  setActiveAppAction: app => {
     dispatch(setActiveAppAction(app));
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const FrameContainer = createContainer(Frame);
 export default FrameContainer;

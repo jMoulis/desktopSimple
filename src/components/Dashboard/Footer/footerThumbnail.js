@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ROOT_URL } from '../../../Utils/config';
+// import { ROOT_URL } from '../../../Utils/config';
 
 import './footerThumbnail.css';
 
+const ROOT_URL = process.env.REACT_APP_API;
 const FooterThumbnail = ({ user }) => (
   <div id="footer-thumbnail-container">
     <img

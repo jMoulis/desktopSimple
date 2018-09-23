@@ -55,6 +55,13 @@ module.exports = class ApiResponse {
               },
             };
           }
+        } else {
+          errorsApi = {
+            ...errorsApi,
+            error: {
+              detail: err.message,
+            },
+          };
         }
       }
       this.res.set({
@@ -63,8 +70,7 @@ module.exports = class ApiResponse {
       return this.res.status(code).send({ errors: errorsApi });
     } catch (error) {
       console.log('error');
-      console.log(error.message);
-      // return this.next(error);
+      console.error('Api Error', error.message);
     }
   }
 };
