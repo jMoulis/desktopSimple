@@ -102,7 +102,7 @@ class Chat extends Component {
 
   socketJoinRequest = (roomId, receiver, socket) =>
     socket.emit(
-      'JOIN_REQUEST',
+      'JOIN_PRIVATE_REQUEST',
       socket.id,
       {
         room: roomId,

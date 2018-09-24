@@ -60,6 +60,11 @@ module.exports = app => {
 
   app.get('/api/rooms', VerifyToken, RoomsController.index);
   app.get('/api/rooms/room', VerifyToken, RoomsController.read);
+  app.get(
+    '/api/rooms/:id/messages',
+    VerifyToken,
+    RoomsController.fetchRoomMessages,
+  );
 
   app.post('/api/messages', VerifyToken, MessageController.create);
   app.get('/api/messages', VerifyToken, MessageController.index);

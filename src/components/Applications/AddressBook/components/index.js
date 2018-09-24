@@ -11,6 +11,7 @@ class AddressBook extends Component {
   static propTypes = {
     fetchUsersAction: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
     usersProcess: PropTypes.object,
   };
 

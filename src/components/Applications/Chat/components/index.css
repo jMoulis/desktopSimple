@@ -1,10 +1,9 @@
 .chat {
   display: flex;
-  height: 100%;
-  overflow: auto; }
+  height: 100%; }
   .chat-content {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex: 1;
-    padding: 1rem; }
+    flex-direction: column; }
+  .chat-message-list {
+    overflow: auto;
+    height: 100%; }

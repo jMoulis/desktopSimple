@@ -1,93 +1,51 @@
 import axios from 'axios';
-// import { ROOT_URL } from '../../Utils/config';
 import {
-  CREATE_MESSAGE,
-  FETCH_MESSAGES,
-  fetchMessagesSuccessAction,
-  fetchMessagesFailureAction,
-  FETCH_MESSAGE,
-  fetchMessageSuccessAction,
-  fetchMessageFailureAction,
+  FETCH_ROOM,
+  fetchRoomSuccessAction,
+  fetchRoomFailureAction,
+  FETCH_ROOMS,
+  fetchRoomsSuccessAction,
+  fetchRoomsFailureAction,
 } from '../reducers/chatReducer';
-import { logoutAction } from '../reducers/authReducer';
 
 const ROOT_URL = process.env.REACT_APP_API;
+
 export default store => next => action => {
   switch (action.type) {
-    case CREATE_MESSAGE: {
-      const {
-        form: { sender, message, receiver, room },
-        socket,
-      } = action.payload;
-      // const formData = new FormData();
-      socket.emit('private message', {
-        sender: sender.value,
-        room: room.value,
-        message: message.value,
-        receiver: receiver.value,
-      });
-
-      break;
-    }
-
-    case FETCH_MESSAGES: {
-      const { receiver, sender, room, socket } = action.payload;
-      socket.emit('FETCH_MESSAGES', {
-        sender,
-        room,
-        receiver,
-      });
+    case FETCH_ROOM: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/messages?sender=${sender}&receiver=${receiver}`,
+        url: `${ROOT_URL}/api/rooms/${action.payload}/messages`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(fetchMessagesSuccessAction({ ...data, room }));
+          store.dispatch(fetchRoomSuccessAction(data));
         })
         .catch(error => {
-          if (!error.response) {
-            return console.error(error);
-          }
-          if (error.response.data.auth === false) {
-            return store.dispatch(logoutAction());
-          }
-          return store.dispatch(
-            fetchMessagesFailureAction(error.response.data.errors),
-          );
+          store.dispatch(fetchRoomFailureAction(error.response));
         });
       break;
     }
-
-    case FETCH_MESSAGE: {
+    case FETCH_ROOMS: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/messages`,
+        url: `${ROOT_URL}/api/rooms/?type=${action.payload}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
       })
         .then(({ data }) => {
-          store.dispatch(fetchMessageSuccessAction(data));
+          store.dispatch(fetchRoomsSuccessAction(data));
         })
         .catch(error => {
-          if (!error.response) {
-            return console.error(error);
-          }
-          if (error.response.data.auth === false) {
-            return store.dispatch(logoutAction());
-          }
-          return store.dispatch(
-            fetchMessageFailureAction(error.response.data.errors),
-          );
+          store.dispatch(fetchRoomsFailureAction(error.response));
         });
       break;
     }
     default:
   }
 
-  // Je passe à mon voisin
   next(action);
 };

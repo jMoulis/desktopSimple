@@ -47,7 +47,6 @@ module.exports = {
           select: 'fullName picture',
         });
       module.exports.socket.on('PRIVATE_MESSAGE', room => {
-        console.log(room);
         module.exports.io.to(room).emit('NEW_MESSAGE', message);
       });
       // try {

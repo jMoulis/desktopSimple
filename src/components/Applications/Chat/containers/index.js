@@ -1,24 +1,32 @@
-/*
- * Npm import
- */
 import { connect } from 'react-redux';
 
-/*
- * Local import
- */
 import Chat from '../components';
-import { fetchChatAction } from '../store/reducers/chatReducer';
+import {
+  fetchRoomsAction,
+  fetchRoomAction,
+  newRoomMessageSuccessAction,
+} from '../../../../store/reducers/chatReducer';
+
 /*
  * Code
  */
 
 // State
-const mapStateToProps = state => ({});
+const mapStateToProps = ({ chatReducer }) => ({
+  roomsFetchProcess: chatReducer.roomsFetchProcess,
+  room: chatReducer.roomFetchProcess.room,
+});
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchChatAction: () => {
-    dispatch(fetchChatAction());
+  fetchRoomsAction: type => {
+    dispatch(fetchRoomsAction(type));
+  },
+  fetchRoomAction: roomId => {
+    dispatch(fetchRoomAction(roomId));
+  },
+  newRoomMessageSuccessAction: (roomId, message) => {
+    dispatch(newRoomMessageSuccessAction(roomId, message));
   },
 });
 

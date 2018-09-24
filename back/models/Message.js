@@ -15,7 +15,10 @@ const MessageSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
-  createdAt: Date,
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
   updatedAt: Date,
   documents: [],
 });

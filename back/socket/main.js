@@ -1,16 +1,13 @@
 const RoomController = require('../controllers/rooms_controller');
+const Room = require('../models/Room');
 
 module.exports = io => {
-  io.on('connection', socket => {
+  io.on('connection', async socket => {
     console.log('User Connected');
-    // socket.on('USER_CONNECT', user => {
-    //   user.socketId = socket.id;
-    //   connectedUsers = addUser(connectedUsers, user);
-    //   socket.user = user;
-    //   io.emit('USER_CONNECTED', connectedUsers);
-    // });
+    const rooms = await Room.find({ isPrivate: false });
+    rooms.forEach(room => socket.join(`${room._id}`));
 
-    socket.on('JOIN_REQUEST', (id, { room, receiver }, callback) => {
+    socket.on('JOIN_PRIVATE_REQUEST', (id, { room, receiver }, callback) => {
       try {
         io.to(`${id}`).emit('START_PRIVATE_CHAT', {
           message: `start private chat with ${receiver.fullName}`,
@@ -24,9 +21,24 @@ module.exports = io => {
       }
     });
 
+    socket.on('ROOM_MESSAGE', async ({ message, room, sender }) => {
+      try {
+        const newMessage = await RoomController.createMessage(
+          { message, sender },
+          room,
+        );
+        io.to(`${room._id}`).emit('NEW_ROOM_MESSAGE_SUCCESS', {
+          message: newMessage,
+          room: room._id,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+
     socket.on('NEW_MESSAGE', async ({ message, room, receiver, sender }) => {
       try {
-        const newMessage = await RoomController.create(
+        const newMessage = await RoomController.createMessage(
           { message, receiver, sender },
           room,
         );

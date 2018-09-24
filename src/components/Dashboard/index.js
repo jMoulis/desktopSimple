@@ -9,8 +9,6 @@ import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
-// import { ROOT_URL } from '../../Utils/config';
-import Chat from './Chat';
 
 const ROOT_URL = process.env.REACT_APP_API;
 class Dashboard extends React.Component {
@@ -151,17 +149,17 @@ class Dashboard extends React.Component {
             zIndex={200}
             small
           >
-            <DetailUser />
+            <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>
         )}
-        <Chat
+        {/* <Chat
           user={user}
           socket={this.socket}
           status={this.state.status}
           callback={this.handleStatusSocket}
           close={this.handleClose}
           reduce={this.handleReduce}
-        />
+        /> */}
       </main>
     );
   }

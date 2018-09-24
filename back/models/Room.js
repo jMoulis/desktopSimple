@@ -10,6 +10,10 @@ const RoomSchema = new Schema({
     },
   ],
   name: String,
+  isPrivate: {
+    type: Boolean,
+    default: false,
+  },
   messages: [{ type: Schema.Types.ObjectId, ref: 'message' }],
 });
 

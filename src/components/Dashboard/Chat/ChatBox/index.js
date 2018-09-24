@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import UserIconContainer from '../../../../Modules/UserIcon';
 import Wrapper from '../Wrapper';
 import MessagesList from './MessagesList';
-import Form from './Form';
+import ChatBoxForm from './ChatBoxForm';
 
 const ChatBox = ({ room, loggedUser, socket, receiver, callback }) => (
   <Wrapper reduceOnMount={false}>
@@ -11,9 +11,10 @@ const ChatBox = ({ room, loggedUser, socket, receiver, callback }) => (
       if (loggedUser._id !== user._id) {
         return <UserIconContainer key={user._id} user={{ user }} name />;
       }
+      return true;
     })}
     <MessagesList room={room} />
-    <Form
+    <ChatBoxForm
       room={room._id}
       loggedUser={loggedUser}
       socket={socket}

@@ -4,7 +4,8 @@ import './index.css';
 import Loader from '../../../Modules/Loader';
 import TagList from '../../../Modules/Tag/tagList';
 import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
-// import { ROOT_URL } from '../../../Utils/config';
+import Button from '../../Form/button';
+import ChatBoxForm from '../../Dashboard/Chat/ChatBox/ChatBoxForm';
 
 const ROOT_URL = process.env.REACT_APP_API;
 class DetailUser extends React.Component {
@@ -12,14 +13,28 @@ class DetailUser extends React.Component {
     userId: PropTypes.string.isRequired,
     fetchUserAction: PropTypes.func.isRequired,
     userActive: PropTypes.object.isRequired,
+    socket: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   };
+  state = {
+    showMessageForm: false,
+  };
+
   componentDidMount() {
     const { fetchUserAction, userId } = this.props;
     fetchUserAction(userId);
   }
+
+  _handleShowMessageForm = () => {
+    this.setState(prevState => ({
+      showMessageForm: !prevState.showMessageForm,
+    }));
+  };
+
   render() {
-    const { userActive } = this.props;
+    const { userActive, socket, loggedUser } = this.props;
     const { user, loading } = userActive;
+    const { showMessageForm } = this.state;
     if (loading) {
       return <Loader />;
     }
@@ -98,8 +113,30 @@ class DetailUser extends React.Component {
               </li>
             </Fragment>
           )}
-          <FriendRequestButtonsContainer user={user} />
+          {loggedUser.user._id !== user._id && (
+            <div>
+              <FriendRequestButtonsContainer user={user} />
+              <Button
+                category="primary"
+                onClick={this._handleShowMessageForm}
+                data-type="draft"
+                label="Send Message"
+                loading={false}
+                style={{
+                  margin: 0,
+                }}
+              />
+            </div>
+          )}
         </ul>
+        {showMessageForm && (
+          <ChatBoxForm
+            socket={socket}
+            loggedUser={loggedUser.user}
+            receiver={user}
+            callback={this._handleShowMessageForm}
+          />
+        )}
       </div>
     );
   }
