@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MessageList from '../containers/MessagesList';
 import './index.css';
+import RoomsList from './RoomsList';
+import SendRoomMessageForm from './SendRoomMessageForm';
+import ConnectedUserList from '../containers/ConnectedUserList';
 
 class Chat extends React.Component {
   static propTypes = {
@@ -24,6 +27,7 @@ class Chat extends React.Component {
       room: props.room,
     };
   }
+
   static getDerivedStateFromProps(props, state) {
     if (props.room && !state.room) {
       return {
@@ -35,6 +39,7 @@ class Chat extends React.Component {
       ...state,
     };
   }
+
   componentDidMount() {
     const { fetchRoomsAction, newRoomMessageSuccessAction, room } = this.props;
     fetchRoomsAction('global');
@@ -45,26 +50,6 @@ class Chat extends React.Component {
     this.addRoomToState(room);
   }
   addRoomToState = room => this.setState(() => ({ room }));
-  handleSubmit = evt => {
-    evt.preventDefault();
-    const {
-      loggedUser,
-      globalProps: { socketIo },
-    } = this.props;
-    const { room } = this.state;
-    socketIo.emit('ROOM_MESSAGE', {
-      room,
-      sender: loggedUser._id,
-      message: this.state.message,
-    });
-  };
-
-  handleTextAreaChange = evt => {
-    const { value } = evt.target;
-    this.setState(() => ({
-      message: value,
-    }));
-  };
 
   handleSelectRoom = room => {
     const { fetchRoomAction } = this.props;
@@ -80,25 +65,20 @@ class Chat extends React.Component {
       loggedUser,
       globalProps: { socketIo },
     } = this.props;
+    const { room } = this.state;
     return (
       <div className="chat">
-        <ul className="chat-list-room">
-          {rooms &&
-            rooms.map(room => (
-              <li key={room._id}>
-                <button onClick={() => this.handleSelectRoom(room)}>
-                  {room.name}
-                </button>
-              </li>
-            ))}
-        </ul>
+        {rooms && <RoomsList rooms={rooms} callback={this.handleSelectRoom} />}
         <div className="chat-content">
+          <h1>{room && room.name}</h1>
           <MessageList socket={socketIo} loggedUser={loggedUser} />
-          <form onSubmit={this.handleSubmit}>
-            <textarea onChange={this.handleTextAreaChange} />
-            <button type="submit">Send</button>
-          </form>
+          <SendRoomMessageForm
+            loggedUser={loggedUser}
+            room={room}
+            socket={socketIo}
+          />
         </div>
+        <ConnectedUserList />
       </div>
     );
   }

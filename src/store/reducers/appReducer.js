@@ -10,6 +10,8 @@
  */
 export const SHOW_USER_DETAIL_MODAL = 'SHOW_USER_DETAIL_MODAL';
 export const SHOW_OVERFLOW = 'SHOW_OVERFLOW';
+
+export const CONNECTED_USERS = 'CONNECTED_USERS';
 /*
  * State
 */
@@ -17,6 +19,7 @@ const initialState = {
   showUserDetailModal: false,
   userId: '',
   showOverflow: true,
+  connectedUsers: [],
 };
 
 /*
@@ -35,6 +38,12 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         showOverflow: !state.showOverflow,
       };
+    case CONNECTED_USERS: {
+      return {
+        ...state,
+        connectedUsers: action.payload,
+      };
+    }
     default:
       return {
         ...state,
@@ -49,6 +58,11 @@ export const showUserDetailModalAction = userId => ({
 
 export const showOverflowAction = () => ({
   type: SHOW_OVERFLOW,
+});
+
+export const setConnectedUsersAction = users => ({
+  type: CONNECTED_USERS,
+  payload: users,
 });
 
 export default reducer;

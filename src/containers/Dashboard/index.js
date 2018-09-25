@@ -11,7 +11,10 @@ import {
   setActiveAppAction,
   startAppAction,
 } from '../../store/reducers/frameReducer';
-import { showUserDetailModalAction } from '../../store/reducers/appReducer';
+import {
+  showUserDetailModalAction,
+  setConnectedUsersAction,
+} from '../../store/reducers/appReducer';
 import AppLoader from '../../components/Applications/config/applicationsLoader';
 import { editTeamAction } from '../../store/reducers/teamReducer';
 
@@ -57,6 +60,9 @@ const mapDispatchToProps = dispatch => ({
     editTeamAction: values => {
       dispatch(editTeamAction(values));
     },
+  },
+  setConnectedUsersAction: users => {
+    dispatch(setConnectedUsersAction(users));
   },
   showUserDetailModalAction: user => {
     dispatch(showUserDetailModalAction(user));

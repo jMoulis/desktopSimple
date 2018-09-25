@@ -1,0 +1,8 @@
+.chat-message-list-item {
+  padding: 1rem 0; }
+  .chat-message-list-item--header {
+    display: flex; }
+    .chat-message-list-item--header .fullname {
+      margin-right: .5rem; }
+  .chat-message-list-item--content {
+    padding: .5rem 0; }

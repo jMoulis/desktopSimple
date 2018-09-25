@@ -19,6 +19,7 @@ class Dashboard extends React.Component {
     globalActions: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showUserDetailModalAction: PropTypes.func.isRequired,
+    setConnectedUsersAction: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
     selectTeam: PropTypes.func.isRequired,
     activeApps: PropTypes.array,
@@ -29,14 +30,26 @@ class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = io(`${ROOT_URL}`, { multiplex: false });
-    this.socket.on('connect', () => console.log('connect', 'user connected'));
+    this.socket = io(`${ROOT_URL}`, {
+      multiplex: false,
+      query: {
+        userId: props.loggedUser.user._id,
+      },
+    });
+    this.socket.on('connect', () => {});
     this.socket.on('reconnect', () => this.handleStatusSocket('reconnect'));
+    this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
+      props.setConnectedUsersAction(connectedUsers);
+    });
     this.state = {
       helper: true,
       showSettings: false,
       status: null,
     };
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
   }
 
   handleStatusSocket = status => {
@@ -49,14 +62,6 @@ class Dashboard extends React.Component {
     this.setState(prevState => ({
       showSettings: !prevState.showSettings,
     }));
-  };
-
-  handleClose = () => {
-    console.log('close');
-  };
-
-  handleReduce = () => {
-    console.log('reduce');
   };
 
   handleCloseHelper = () => {
@@ -152,14 +157,6 @@ class Dashboard extends React.Component {
             <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>
         )}
-        {/* <Chat
-          user={user}
-          socket={this.socket}
-          status={this.state.status}
-          callback={this.handleStatusSocket}
-          close={this.handleClose}
-          reduce={this.handleReduce}
-        /> */}
       </main>
     );
   }

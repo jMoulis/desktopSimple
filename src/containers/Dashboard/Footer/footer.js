@@ -3,12 +3,16 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import Footer from '../../../components/Dashboard/Footer/footer';
-import { startAppAction, setActiveAppAction, closeAppAction, reduceAppAction } from '../../../store/reducers/frameReducer';
+import {
+  startAppAction,
+  setActiveAppAction,
+  closeAppAction,
+  reduceAppAction,
+} from '../../../store/reducers/frameReducer';
 import { logoutAction } from '../../../store/reducers/authReducer';
 
 /*
@@ -23,16 +27,16 @@ const mapStateToProps = ({ frameReducer, authReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  startAppAction: (appId) => {
+  startAppAction: appId => {
     dispatch(startAppAction(appId));
   },
-  closeAppAction: (appId) => {
+  closeAppAction: appId => {
     dispatch(closeAppAction(appId));
   },
-  reduceAppAction: (appId) => {
+  reduceAppAction: appId => {
     dispatch(reduceAppAction(appId));
   },
-  setActiveAppAction: (app) => {
+  setActiveAppAction: app => {
     dispatch(setActiveAppAction(app));
   },
   logoutAction: () => {
@@ -40,10 +44,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const FooterContainer = createContainer(Footer);
 export default FooterContainer;

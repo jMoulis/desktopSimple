@@ -1,0 +1,4 @@
+.send-room-message-form {
+  display: flex; }
+  .send-room-message-form textarea {
+    width: 100%; }

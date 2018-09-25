@@ -10,3 +10,12 @@
   .chat-message-list {
     overflow: auto;
     height: 100%; }
+
+.room {
+  padding: .5rem; }
+  .room-list button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer; }
+    .room-list button:hover {
+      color: #d44c00; }

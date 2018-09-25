@@ -11,6 +11,7 @@ const path = require('path');
 const { isObjectEmpty } = require('../service/utils');
 
 const ROOT_FOLDER = path.join(__dirname, '/../uploads');
+
 module.exports = {
   async index(req, res, next) {
     const apiResponse = new ApiResponse(res, next);
