@@ -64,11 +64,13 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
     try {
       const roomName = teamProps.name.replace(' ', '_').toUpperCase();
+
       const teamCreated = await Team.create({
         ...teamProps,
         manager,
         room: roomName,
       });
+
       const team = await Team.findOne({ _id: teamCreated.id })
         .populate({
           path: 'manager',
@@ -100,7 +102,7 @@ module.exports = {
         users: ids,
         isPrivate: true,
         isTeamRoom: true,
-        name: roomName,
+        name: team.name,
       });
 
       await User.updateMany(
@@ -252,11 +254,13 @@ module.exports = {
     try {
       const teamToRemove = await Team.findOne({ _id: teamId });
       const ids = teamToRemove.users.map(({ user }) => user);
+
       await Team.findByIdAndRemove({ _id: teamId });
-      // Delete tasks related
+
       await Task.remove({ team: teamId });
 
       const room = await Room.findOneAndRemove({ name: teamToRemove.room });
+
       await User.updateMany(
         { _id: { $in: ids } },
         {
@@ -266,6 +270,7 @@ module.exports = {
           },
         },
       );
+
       await Project.update(
         { teams: { $in: teamToRemove._id } },
         {

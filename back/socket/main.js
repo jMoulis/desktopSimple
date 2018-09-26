@@ -14,7 +14,10 @@ module.exports = io => {
     io.emit('CONNECT_SUCCESS', {
       connectedUsers: usersConnected.getUsersList(),
     });
-    const rooms = await Room.find({ isPrivate: false });
+    const rooms = await Room.find({
+      $or: [{ isPrivate: false }, { isTeamRoom: true }],
+    });
+
     rooms.forEach(room => socket.join(`${room._id}`));
 
     socket.on('disconnect', data => {

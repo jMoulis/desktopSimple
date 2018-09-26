@@ -53,10 +53,11 @@ class Chat extends React.Component {
 
   handleSelectRoom = async (room, receiver) => {
     const { fetchRoomAction, globalProps } = this.props;
+    console.log();
     try {
       fetchRoomAction(room._id);
       if (receiver) {
-        this._handleJoinRequest(
+        this._handleJoinPrivateMessageRequest(
           {
             room: room._id,
             receiver,
@@ -75,7 +76,7 @@ class Chat extends React.Component {
 
   _setError = message => this.setState(() => ({ error: message }));
 
-  _handleJoinRequest = async (data, socket, error) => {
+  _handleJoinPrivateMessageRequest = async (data, socket, error) => {
     try {
       if (!data) throw Error('No Room found');
       socket.emit('JOIN_PRIVATE_REQUEST', socket.id, data);
@@ -88,7 +89,13 @@ class Chat extends React.Component {
       });
     }
   };
-
+  roomTitle = room => {
+    if (!room) return false;
+    if (room.isPrivateMessage) {
+      return room.users.map(user => user.fullName).join(' # ');
+    }
+    return room.name;
+  };
   render() {
     const {
       roomsFetchProcess: { rooms },
@@ -106,7 +113,7 @@ class Chat extends React.Component {
           />
         )}
         <div className="chat-content">
-          <h1>{room && room.name}</h1>
+          <h1>{this.roomTitle(room)}</h1>
           <MessageList socket={socketIo} loggedUser={loggedUser} />
           <SendRoomMessageForm
             loggedUser={loggedUser}
@@ -114,7 +121,10 @@ class Chat extends React.Component {
             socket={socketIo}
           />
         </div>
-        <ConnectedUserList />
+        <div className="connected-user">
+          <h1>Connected User</h1>
+          <ConnectedUserList />
+        </div>
       </div>
     );
   }

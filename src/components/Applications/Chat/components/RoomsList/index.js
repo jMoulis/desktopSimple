@@ -4,9 +4,6 @@ import './index.css';
 import UserIconContainer from '../../../../../Modules/UserIcon';
 
 class RoomsList extends React.Component {
-  handleCallbackUserIcon = user => {
-    console.log(user);
-  };
   groupBy = arrayObjects => {
     const teamRooms = {
       name: 'teamRoom',
@@ -40,8 +37,8 @@ class RoomsList extends React.Component {
           <li>
             {this.groupBy(rooms).map(room => {
               return (
-                <div key={room.name}>
-                  <h2>{room.name}</h2>
+                <div className="room-list-item" key={room.name}>
+                  <h2>{`#${room.name}`}</h2>
                   <ul>
                     {room.rooms.map((item, index) => {
                       if (item.users && !item.name) {

@@ -29,6 +29,15 @@ class MessageList extends React.Component {
       roomFetchProcess: { room },
     } = this.props;
     if (room) {
+      if (room.messages.length === 0) {
+        return (
+          <ul ref={this.messagesList} className="chat-message-list">
+            <li>
+              <span>No Message yet</span>
+            </li>
+          </ul>
+        );
+      }
       return (
         <ul ref={this.messagesList} className="chat-message-list">
           {room.messages.map(message => (
@@ -39,7 +48,13 @@ class MessageList extends React.Component {
         </ul>
       );
     }
-    return <ul ref={this.messagesList} />;
+    return (
+      <ul ref={this.messagesList} className="chat-message-list">
+        <li>
+          <span>No Message yet</span>
+        </li>
+      </ul>
+    );
   }
 }
 

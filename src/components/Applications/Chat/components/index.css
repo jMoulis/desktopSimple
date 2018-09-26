@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .chat {
   display: flex;
-  height: 100%; }
+  height: 100%;
+  background-color: #97c0b7; }
   .chat-content {
     display: flex;
     flex-direction: column;
