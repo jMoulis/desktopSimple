@@ -29,19 +29,24 @@ class SendRoomMessageForm extends React.Component {
       message: '',
     }));
   };
+
   handleTextAreaChange = evt => {
     const { value } = evt.target;
     this.setState(() => ({
       message: value,
     }));
   };
+
   render() {
     return (
       <form
         className="send-room-message-form"
         onSubmit={evt => this.handleSubmit(evt)}
       >
-        <textarea onChange={this.handleTextAreaChange} />
+        <textarea
+          onChange={this.handleTextAreaChange}
+          value={this.state.message}
+        />
         <button type="submit">Send</button>
       </form>
     );

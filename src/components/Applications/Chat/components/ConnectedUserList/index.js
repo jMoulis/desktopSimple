@@ -5,12 +5,11 @@ import UserIconContainer from '../../../../../Modules/UserIcon';
 class ConnectedUserList extends Component {
   render() {
     const { connectedUsers } = this.props;
-    console.log(connectedUsers);
     return (
       <ul>
         {connectedUsers &&
           connectedUsers.map(user => (
-            <li>
+            <li key={user._id}>
               <UserIconContainer user={{ user }} name />
             </li>
           ))}

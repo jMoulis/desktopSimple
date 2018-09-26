@@ -7,30 +7,26 @@ import './index.css';
 
 class TeamSelector extends React.Component {
   static propTypes = {
-    userActive: PropTypes.object,
+    loggedUser: PropTypes.object.isRequired,
     selectTeam: PropTypes.func.isRequired,
-  }
-  static defaultProps = {
-    userActive: null,
-  }
+  };
+
   state = {
     display: true,
     teamId: '',
-  }
-  handleCloseMe = (evt) => {
+  };
+
+  handleCloseMe = evt => {
     const { teamid } = evt.currentTarget.dataset;
     this.setState({
       display: false,
       teamId: teamid,
     });
-  }
-  render() {
-    const { userActive, selectTeam } = this.props;
-    const { teamId } = this.state;
+  };
 
-    if (userActive.loading) {
-      return <span />;
-    }
+  render() {
+    const { loggedUser, selectTeam } = this.props;
+    const { teamId } = this.state;
     return (
       <CSSTransition
         in={this.state.display}
@@ -44,23 +40,23 @@ class TeamSelector extends React.Component {
         <div className="team-selector">
           <h1>Please select the team you want to load</h1>
           <ul className="ul-nav">
-            {userActive.user.teams.map((team, index) => (
-              <li
-                className="team-selector-item"
-                key={index}
-                onClick={this.handleCloseMe}
-                onKeyPress={this.handleCloseMe}
-                data-teamid={team._id}
-              >
-                <TeamWidget key={index} team={team} />
-              </li>
-            ))}
+            {loggedUser &&
+              loggedUser.teams.map((team, index) => (
+                <li
+                  className="team-selector-item"
+                  key={index}
+                  onClick={this.handleCloseMe}
+                  onKeyPress={this.handleCloseMe}
+                  data-teamid={team._id}
+                >
+                  <TeamWidget key={index} team={team} />
+                </li>
+              ))}
           </ul>
         </div>
       </CSSTransition>
     );
   }
 }
-
 
 export default TeamSelector;

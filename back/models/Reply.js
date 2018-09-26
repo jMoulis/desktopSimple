@@ -2,16 +2,12 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const MessageSchema = new Schema({
-  message: {
+const ReplySchema = new Schema({
+  text: {
     type: String,
     required: [true, 'Please Provide a message'],
   },
   sender: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  },
-  receiver: {
     type: Schema.Types.ObjectId,
     ref: 'user',
   },
@@ -20,19 +16,17 @@ const MessageSchema = new Schema({
     default: new Date(),
   },
   updatedAt: Date,
-  documents: [],
-  replies: {
+  message: {
     type: Schema.Types.ObjectId,
-    ref: 'reply',
+    ref: 'message',
   },
-  subscribed: Boolean,
 });
 
-MessageSchema.pre('update', function preUpdate(next) {
+ReplySchema.pre('update', function preUpdate(next) {
   this.update({}, { $set: { updatedAt: new Date() } });
   return next();
 });
 
-const Message = mongoose.model('message', MessageSchema);
+const Reply = mongoose.model('reply', ReplySchema);
 
-module.exports = Message;
+module.exports = Reply;

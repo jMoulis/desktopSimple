@@ -27,6 +27,7 @@ const TeamSchema = new Schema({
   documents: [],
   isDone: Boolean,
   score: Number,
+  room: String,
 });
 
 const Team = mongoose.model('team', TeamSchema);

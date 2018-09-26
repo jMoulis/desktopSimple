@@ -1,5 +1,6 @@
 const ApiResponse = require('../service/api/apiResponse_v2');
 const Room = require('../models/Room');
+const User = require('../models/User');
 const Message = require('../models/Message');
 
 module.exports = {
@@ -7,14 +8,10 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
     let { query } = req;
     try {
-      if ('global') {
-        query = {
-          isPrivate: false,
-        };
-      }
-      /*{
-        users: { $in: [res.locals.user._id] },
-      }*/
+      query = {
+        $or: [{ isPrivate: false }, { users: { $in: [res.locals.user._id] } }],
+      };
+
       const rooms = await Room.find(query)
         .populate({
           path: 'messages',
@@ -90,7 +87,10 @@ module.exports = {
     const apiResponse = new ApiResponse(res);
     try {
       const room = await Room.findOne({
-        users: { $all: [req.query.sender, req.query.receiver] },
+        users: {
+          $all: [req.query.sender, req.query.receiver],
+        },
+        isPrivateMessage: true,
       })
         .populate('messages')
         .populate({
@@ -101,9 +101,16 @@ module.exports = {
       if (!room) {
         const newRoom = await Room.create({
           users: [req.query.sender, req.query.receiver],
-          isPrivate: true,
+          isPrivateMessage: true,
         });
-
+        await User.updateMany(
+          { _id: { $in: [req.query.sender, req.query.receiver] } },
+          {
+            $addToSet: {
+              rooms: newRoom._id,
+            },
+          },
+        );
         return apiResponse.success(201, { room: newRoom });
       }
 

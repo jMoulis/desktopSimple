@@ -31,8 +31,8 @@ const UserIcon = ({
     <div
       className="d-flex flex-align-items-center user-icon"
       style={containerCss}
-      onClick={callback}
-      onKeyPress={callback}
+      onClick={() => callback && callback(user.user)}
+      onKeyPress={() => callback && callback(user.user)}
       data-value={user.user._id}
     >
       <img

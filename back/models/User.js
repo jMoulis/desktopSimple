@@ -125,6 +125,10 @@ const UserSchema = new Schema({
       ref: 'user',
     },
   ],
+  rooms: {
+    type: Schema.Types.ObjectId,
+    ref: 'room',
+  },
 });
 
 UserSchema.pre('save', function preSave(next) {

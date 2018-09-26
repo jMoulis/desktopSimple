@@ -51,12 +51,42 @@ class Chat extends React.Component {
   }
   addRoomToState = room => this.setState(() => ({ room }));
 
-  handleSelectRoom = room => {
-    const { fetchRoomAction } = this.props;
-    fetchRoomAction(room._id);
+  handleSelectRoom = async (room, receiver) => {
+    const { fetchRoomAction, globalProps } = this.props;
+    try {
+      fetchRoomAction(room._id);
+      if (receiver) {
+        this._handleJoinRequest(
+          {
+            room: room._id,
+            receiver,
+          },
+          globalProps.socketIo,
+          this._setError,
+        );
+      }
+    } catch (error) {
+      this._setError(error.message);
+    }
     this.setState(() => ({
       room,
     }));
+  };
+
+  _setError = message => this.setState(() => ({ error: message }));
+
+  _handleJoinRequest = async (data, socket, error) => {
+    try {
+      if (!data) throw Error('No Room found');
+      socket.emit('JOIN_PRIVATE_REQUEST', socket.id, data);
+    } catch (err) {
+      error({
+        error: {
+          message: err.message,
+          title: 'Join',
+        },
+      });
+    }
   };
 
   render() {
@@ -68,7 +98,13 @@ class Chat extends React.Component {
     const { room } = this.state;
     return (
       <div className="chat">
-        {rooms && <RoomsList rooms={rooms} callback={this.handleSelectRoom} />}
+        {rooms && (
+          <RoomsList
+            rooms={rooms}
+            callback={this.handleSelectRoom}
+            loggedUser={loggedUser}
+          />
+        )}
         <div className="chat-content">
           <h1>{room && room.name}</h1>
           <MessageList socket={socketIo} loggedUser={loggedUser} />

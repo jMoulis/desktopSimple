@@ -3,6 +3,7 @@ const User = require('../models/User');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const ApiResponse = require('../service/api/apiResponse_v2');
+const Room = require('../models/Room');
 
 const decodeBase64Image = dataString => {
   const matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
@@ -62,7 +63,12 @@ module.exports = {
     const manager = res.locals.user && res.locals.user._id;
     const apiResponse = new ApiResponse(res);
     try {
-      const teamCreated = await Team.create({ ...teamProps, manager });
+      const roomName = teamProps.name.replace(' ', '_').toUpperCase();
+      const teamCreated = await Team.create({
+        ...teamProps,
+        manager,
+        room: roomName,
+      });
       const team = await Team.findOne({ _id: teamCreated.id })
         .populate({
           path: 'manager',
@@ -90,15 +96,23 @@ module.exports = {
         });
       const ids = team.users.map(({ user }) => user);
 
+      const room = await Room.create({
+        users: ids,
+        isPrivate: true,
+        isTeamRoom: true,
+        name: roomName,
+      });
+
       await User.updateMany(
         { _id: { $in: ids } },
         {
           $addToSet: {
             teams: team,
-            rooms: team._id,
+            rooms: room._id,
           },
         },
       );
+
       await Project.update(
         { _id: team.project },
         {
@@ -192,6 +206,17 @@ module.exports = {
           select: 'fullName picture',
         });
 
+      if (teamProps.users) {
+        const ids = teamProps.users.map(({ user }) => user._id);
+        await Room.update(
+          { name: team.room },
+          {
+            $addToSet: {
+              users: ids,
+            },
+          },
+        );
+      }
       if (team.project) {
         const updateProject = await Project.update(
           { _id: team.project },
@@ -230,16 +255,17 @@ module.exports = {
       await Team.findByIdAndRemove({ _id: teamId });
       // Delete tasks related
       await Task.remove({ team: teamId });
+
+      const room = await Room.findOneAndRemove({ name: teamToRemove.room });
       await User.updateMany(
         { _id: { $in: ids } },
         {
           $pull: {
             teams: teamToRemove._id,
-            rooms: teamToRemove._id,
+            rooms: room._id,
           },
         },
       );
-
       await Project.update(
         { teams: { $in: teamToRemove._id } },
         {
@@ -269,6 +295,7 @@ module.exports = {
           model: 'user',
           select: 'fullName picture',
         });
+
       return apiResponse.success(201, { teams });
     } catch (error) {
       next(error);

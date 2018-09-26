@@ -10,47 +10,6 @@ module.exports = io => {
     console.log('User Connected');
     const newUser = await UserModel.findById(socket.handshake.query.userId);
 
-    // if (connectedUsers.length === 0) {
-    //   console.log('users empty');
-    //   connectedUsers.push({
-    //     fullName: newUser.fullName,
-    //     picture: newUser.picture,
-    //     _id: newUser._id,
-    //     socket: socket.id,
-    //   });
-    // }
-    // console.log(connectedUsers);
-    // const exists = connectedUsers.find(user => user.socket === socket.id);
-    // if (typeof exists !== 'undefined') {
-    //   console.log('Exist', exists);
-    // } else {
-    //   console.log('Doesnot', exists);
-    //   connectedUsers.push({
-    //     fullName: newUser.fullName,
-    //     picture: newUser.picture,
-    //     _id: newUser._id,
-    //     socket: socket.id,
-    //   });
-    // }
-    io.of('/').clients((error, clients) => {
-      console.log(clients);
-    });
-    // if (
-    //   !connectedUsers.find(user => {
-    //     console.log(newUser);
-    //     user._id === newUser._id;
-    //   })
-    // ) {
-    //   console.log('exists', newUser.fullName);
-    // } else {
-    //   console.log('Doesnot exists', newUser.fullName);
-    //   connectedUsers.push({
-    //     fullName: newUser.fullName,
-    //     picture: newUser.picture,
-    //     _id: newUser._id,
-    //     socket: socket.id,
-    //   });
-    // }
     usersConnected.addUser(socket.id, newUser);
     io.emit('CONNECT_SUCCESS', {
       connectedUsers: usersConnected.getUsersList(),
@@ -64,14 +23,15 @@ module.exports = io => {
         connectedUsers: usersConnected.getUsersList(),
       });
     });
-    socket.on('JOIN_PRIVATE_REQUEST', (id, { room, receiver }, callback) => {
+
+    socket.on('JOIN_PRIVATE_REQUEST', (id, props, callback) => {
       try {
         io.to(`${id}`).emit('START_PRIVATE_CHAT', {
-          message: `start private chat with ${receiver.fullName}`,
+          message: `start private chat with ${props.receiver.fullName}`,
         });
-        socket.join(room);
+        socket.join(props.room);
         if (callback) {
-          callback(receiver._id);
+          callback(props.receiver._id);
         }
       } catch (error) {
         console.error('join request', error.message);

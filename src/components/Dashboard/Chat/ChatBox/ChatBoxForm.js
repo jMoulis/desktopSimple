@@ -43,6 +43,7 @@ class ChatBoxForm extends Component {
     this.setState(() => ({
       message: '',
     }));
+
     if (callback) {
       callback();
     }
@@ -72,6 +73,7 @@ class ChatBoxForm extends Component {
       error(error.message);
     }
   };
+
   _setError = message => this.setState(() => ({ error: message }));
 
   handleTextAreaChange = evt => {

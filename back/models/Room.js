@@ -12,9 +12,21 @@ const RoomSchema = new Schema({
   name: String,
   isPrivate: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   messages: [{ type: Schema.Types.ObjectId, ref: 'message' }],
+  isArchived: {
+    type: Boolean,
+    default: false,
+  },
+  isPrivateMessage: {
+    type: Boolean,
+    default: false,
+  },
+  isTeamRoom: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Room = mongoose.model('room', RoomSchema);
