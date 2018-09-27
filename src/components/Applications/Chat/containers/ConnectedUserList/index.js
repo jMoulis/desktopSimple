@@ -5,9 +5,11 @@ const mapStateToProps = ({ appReducer }) => ({
   connectedUsers: appReducer.connectedUsers,
 });
 
+const mapDispatchToProps = dispatch => ({});
+
 const createContainer = connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 );
 
 const ConnectedUserListContainer = createContainer(ConnectedUserList);

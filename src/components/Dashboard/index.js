@@ -11,6 +11,7 @@ import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
 
 const ROOT_URL = process.env.REACT_APP_API;
+
 class Dashboard extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
@@ -41,6 +42,10 @@ class Dashboard extends React.Component {
     this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
       props.setConnectedUsersAction(connectedUsers);
     });
+    this.socket.on('START_PRIVATE_CHAT', () => {
+      // Create a reducer action to add this newx room to rooms list
+    });
+    this.socket.on('NEW_MESSAGE_SUCCESS', props.newRoomMessageSuccessAction);
     this.state = {
       helper: true,
       showSettings: false,
@@ -152,7 +157,7 @@ class Dashboard extends React.Component {
             closeFromParent={showUserDetailModalAction}
             name=""
             zIndex={200}
-            small
+            // small
           >
             <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>

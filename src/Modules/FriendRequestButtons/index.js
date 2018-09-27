@@ -24,17 +24,20 @@ class FriendRequestButtons extends Component {
     sendFriendRequestAction: PropTypes.func.isRequired,
   };
 
-  isAlreadyRequest = (receivedRequest, key) => {
-    return receivedRequest.some(request => request === key);
+  isAlreadyRequest = (users, key) => {
+    return users.some(user => user === key);
   };
 
-  userFriendsToArrayOfId = friends => friends.map(friend => friend._id);
+  userFriendsToArrayOfId = friends => {
+    const responseArray = [];
+    friends.forEach(friend => {
+      if (friend) return responseArray.push(friend);
+    });
+    return responseArray;
+  };
+
   isFriendRender = () => {
     const { user, loggedUser, sendFriendRequestAction } = this.props;
-    // Check if the logged User is in displayed user friends list
-    // Receives an array of user object from back
-    // This
-
     if (
       this.isAlreadyRequest(
         this.userFriendsToArrayOfId(user.friends),

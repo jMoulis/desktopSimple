@@ -31,6 +31,11 @@ module.exports = app => {
     upload.fields([{ name: 'company.files' }, { name: 'files' }]),
     UsersController.edit,
   );
+  app.put(
+    '/api/users/:id/room/:room',
+    VerifyToken,
+    UsersController.editRoomStatus,
+  );
   app.delete('/api/users/:id', VerifyToken, UsersController.delete);
 
   app.put('/api/friendrequest', VerifyToken, UsersController.friendsRequest);

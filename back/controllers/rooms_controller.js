@@ -59,6 +59,7 @@ module.exports = {
       return console.log(error.message);
     }
   },
+
   fetchRoomMessages: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
@@ -83,6 +84,7 @@ module.exports = {
       return apiResponse.failure(422, error, { message: error.message });
     }
   },
+
   read: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
@@ -98,23 +100,49 @@ module.exports = {
           ref: 'user',
           select: 'fullName picture',
         });
+
+      if (room) {
+        const userUpdate = await User.findOneAndUpdate(
+          { _id: res.locals.user._id, 'rooms._id': room._id },
+          {
+            $set: {
+              'rooms.$.isDisplay': true,
+            },
+          },
+        );
+
+        const user = await User.findOne({ _id: userUpdate._id }, { rooms: 1 });
+        return apiResponse.success(200, { room, rooms: user.rooms });
+      }
+
       if (!room) {
         const newRoom = await Room.create({
           users: [req.query.sender, req.query.receiver],
           isPrivateMessage: true,
         });
+
+        const response = await Room.findById(newRoom._id)
+          .populate('messages')
+          .populate({
+            path: 'users',
+            ref: 'user',
+            select: 'fullName picture',
+          });
+
         await User.updateMany(
           { _id: { $in: [req.query.sender, req.query.receiver] } },
           {
             $addToSet: {
-              rooms: newRoom._id,
+              rooms: { _id: newRoom._id, isDisplay: true },
             },
           },
         );
-        return apiResponse.success(201, { room: newRoom });
+        const user = await User.findOne(
+          { _id: res.locals.user._id },
+          { rooms: 1 },
+        );
+        return apiResponse.success(201, { room: response, rooms: user.rooms });
       }
-
-      return apiResponse.success(200, { room });
     } catch (error) {
       return apiResponse.failure(422, error, { message: error.message });
     }

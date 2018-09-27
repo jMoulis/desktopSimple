@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MessageList from '../containers/MessagesList';
 import './index.css';
-import RoomsList from './RoomsList';
 import SendRoomMessageForm from './SendRoomMessageForm';
 import ConnectedUserList from '../containers/ConnectedUserList';
+import RoomsListContainer from '../containers/RoomsList';
 
 class Chat extends React.Component {
   static propTypes = {
@@ -49,11 +49,11 @@ class Chat extends React.Component {
     );
     this.addRoomToState(room);
   }
+
   addRoomToState = room => this.setState(() => ({ room }));
 
   handleSelectRoom = async (room, receiver) => {
     const { fetchRoomAction, globalProps } = this.props;
-    console.log();
     try {
       fetchRoomAction(room._id);
       if (receiver) {
@@ -89,6 +89,7 @@ class Chat extends React.Component {
       });
     }
   };
+
   roomTitle = room => {
     if (!room) return false;
     if (room.isPrivateMessage) {
@@ -96,6 +97,7 @@ class Chat extends React.Component {
     }
     return room.name;
   };
+
   render() {
     const {
       roomsFetchProcess: { rooms },
@@ -106,7 +108,7 @@ class Chat extends React.Component {
     return (
       <div className="chat">
         {rooms && (
-          <RoomsList
+          <RoomsListContainer
             rooms={rooms}
             callback={this.handleSelectRoom}
             loggedUser={loggedUser}

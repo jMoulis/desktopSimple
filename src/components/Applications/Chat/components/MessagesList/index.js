@@ -28,7 +28,8 @@ class MessageList extends React.Component {
     const {
       roomFetchProcess: { room },
     } = this.props;
-    if (room) {
+
+    if (room && room.messages) {
       if (room.messages.length === 0) {
         return (
           <ul ref={this.messagesList} className="chat-message-list">

@@ -6,12 +6,14 @@ export const FETCH_ROOM = 'FETCH_ROOM';
 export const FETCH_ROOM_SUCCESS = 'FETCH_ROOM_SUCCESS';
 export const FETCH_ROOM_FAILURE = 'FETCH_ROOM_FAILURE';
 
+export const ADD_ROOM_TO_STATE = 'ADD_ROOM_TO_STATE';
+
 export const NEW_MESSAGE_ROOM_SUCCESS = 'NEW_MESSAGE_ROOM_SUCCESS';
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 
 const initialState = {
   roomFetchProcess: {
-    room: null,
+    room: {},
     success: null,
     loading: true,
     error: null,
@@ -46,7 +48,7 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         roomFetchProcess: {
-          room: null,
+          room: {},
           success: false,
           loading: false,
           error: action.payload,
@@ -88,11 +90,15 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case NEW_MESSAGE_ROOM_SUCCESS: {
+      console.log(action.payload);
       let messages;
-      if (state.roomFetchProcess.room) {
-        messages = state.roomFetchProcess.room.messages;
+      if (state.roomFetchProcess.room && state.roomFetchProcess.room.messages) {
+        messages = [...state.roomFetchProcess.room.messages];
       }
-      if (state.roomFetchProcess.room._id === action.payload.roomId) {
+      if (
+        state.roomFetchProcess.room &&
+        state.roomFetchProcess.room._id === action.payload.roomId
+      ) {
         messages = [...messages, action.payload.message];
       }
       return {
@@ -102,6 +108,19 @@ const reducer = (state = initialState, action = {}) => {
             ...state.roomFetchProcess.room,
             messages,
           },
+        },
+      };
+    }
+    case ADD_ROOM_TO_STATE: {
+      const rooms = [...state.roomsFetchProcess.rooms];
+
+      if (rooms.some(room => room._id === action.payload._id) === false) {
+        rooms.unshift(action.payload);
+      }
+      return {
+        ...state,
+        roomsFetchProcess: {
+          rooms,
         },
       };
     }
@@ -143,6 +162,10 @@ export const newRoomMessageSuccessAction = room => ({
     message: room.message,
     roomId: room.room,
   },
+});
+export const addRoomToStateAction = room => ({
+  type: ADD_ROOM_TO_STATE,
+  payload: room,
 });
 
 export default reducer;

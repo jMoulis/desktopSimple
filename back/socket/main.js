@@ -62,6 +62,7 @@ module.exports = io => {
           { message, receiver, sender },
           room,
         );
+        console.log(room);
         io.to(`${room}`).emit('NEW_MESSAGE_SUCCESS', {
           message: newMessage,
           room,

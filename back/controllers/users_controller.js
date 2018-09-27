@@ -331,6 +331,30 @@ module.exports = {
     }
   },
 
+  async editRoomStatus(req, res) {
+    const apiResponse = new ApiResponse(res);
+    try {
+      const { status } = req.query;
+      const userId = req.params.id;
+      const roomId = req.params.room;
+      await User.update(
+        { _id: userId, 'rooms._id': roomId },
+        {
+          $set: {
+            'rooms.$.isDisplay': status,
+          },
+        },
+      );
+      const user = await User.findOne({ _id: userId }, { rooms: 1 });
+      if (!user) {
+        return apiResponse.failure(404, null, 'User not found');
+      }
+      return apiResponse.success(201, { rooms: user.rooms }, true);
+    } catch (error) {
+      return apiResponse.failure(422, error, error.message);
+    }
+  },
+
   async deleteFile(body, keyDocs, subDocument) {
     let key = `${keyDocs}`;
 

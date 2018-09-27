@@ -34,6 +34,8 @@ export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE';
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 export const LOGOUT = 'LOGOUT';
 
+export const HIDE_PRIVATE_ROOM = 'HIDE_PRIVATE_ROOM';
+export const HIDE_PRIVATE_ROOM_SUCCESS = 'HIDE_PRIVATE_ROOM_SUCCESS';
 /*
  * State
 */
@@ -273,6 +275,23 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+    case HIDE_PRIVATE_ROOM: {
+      return {
+        ...state,
+      };
+    }
+    case HIDE_PRIVATE_ROOM_SUCCESS: {
+      return {
+        ...state,
+        loginProcess: {
+          ...state.loginProcess,
+          loggedUser: {
+            ...state.loginProcess.loggedUser,
+            rooms: action.payload.rooms,
+          },
+        },
+      };
+    }
     default:
       return {
         ...state,
@@ -359,6 +378,18 @@ export const deleteUserFailureAction = error => ({
 });
 export const clearMessageAction = () => ({
   type: CLEAR_MESSAGE,
+});
+export const hidePrivateRoomAction = (roomId, loggedUserId, status) => ({
+  type: HIDE_PRIVATE_ROOM,
+  payload: {
+    roomId,
+    loggedUserId,
+    status,
+  },
+});
+export const hidePrivateRoomSuccessAction = room => ({
+  type: HIDE_PRIVATE_ROOM_SUCCESS,
+  payload: room,
 });
 /*
  * Export default
