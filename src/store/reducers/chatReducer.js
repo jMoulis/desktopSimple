@@ -90,7 +90,6 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case NEW_MESSAGE_ROOM_SUCCESS: {
-      console.log(action.payload);
       let messages;
       if (state.roomFetchProcess.room && state.roomFetchProcess.room.messages) {
         messages = [...state.roomFetchProcess.room.messages];
