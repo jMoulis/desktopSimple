@@ -96,6 +96,10 @@ const TaskSchema = new Schema({
   assign: {
     type: Object,
   },
+  isRead: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 TaskSchema.pre('update', function preUpdate(next) {

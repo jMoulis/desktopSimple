@@ -7,7 +7,10 @@ const MessageListItem = ({ message }) => {
   return (
     <div className="chat-message-list-item">
       <div className="chat-message-list-item--header">
-        <UserIconContainer user={{ user: message.sender }} />
+        <UserIconContainer
+          user={{ user: message.sender }}
+          hideNotificationBadge
+        />
         <div>
           <div className="d-flex flex-align-items-baseline">
             <span className="fullname">{message.sender.fullName}</span>

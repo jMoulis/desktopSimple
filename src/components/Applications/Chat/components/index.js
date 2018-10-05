@@ -44,12 +44,20 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchRoomsAction, newRoomMessageSuccessAction, room } = this.props;
-    fetchRoomsAction();
-    this.props.globalProps.socketIo.on(
-      'NEW_ROOM_MESSAGE_SUCCESS',
+    const {
+      fetchRoomsAction,
       newRoomMessageSuccessAction,
-    );
+      room,
+      fetchNotificationsSuccessAction,
+    } = this.props;
+    fetchRoomsAction();
+    // this.props.globalProps.socketIo.on(
+    //   'NEW_ROOM_MESSAGE_SUCCESS',
+    //   ({ room, message }) => {
+    //     newRoomMessageSuccessAction({ room, message });
+    //     // fetchNotificationsSuccessAction({ notifications });
+    //   },
+    // );
     this.addRoomToState(room);
   }
 
@@ -74,6 +82,7 @@ class Chat extends React.Component {
     }
     this.setState(() => ({
       room,
+      receiver,
     }));
   };
 
@@ -107,7 +116,7 @@ class Chat extends React.Component {
       loggedUser,
       globalProps: { socketIo },
     } = this.props;
-    const { room } = this.state;
+    const { room, receiver } = this.state;
     return (
       <div className="chat">
         {rooms && (
@@ -122,6 +131,7 @@ class Chat extends React.Component {
           <MessageList socket={socketIo} loggedUser={loggedUser} />
           <SendRoomMessageForm
             loggedUser={loggedUser}
+            receiver={receiver}
             room={room}
             socket={socketIo}
           />

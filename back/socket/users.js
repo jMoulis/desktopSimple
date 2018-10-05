@@ -7,7 +7,7 @@ class Users {
     this.users.push({
       fullName: user.fullName,
       picture: user.picture,
-      _id: user._id,
+      _id: user._id.toString(),
       socketId,
     });
     return user;
@@ -19,6 +19,10 @@ class Users {
 
   getUser(socketId) {
     return this.users.find(user => user.socketId === socketId);
+  }
+
+  getUserByUserId(userId) {
+    return this.users.find(user => user._id === userId);
   }
 
   removeUser(socketId) {

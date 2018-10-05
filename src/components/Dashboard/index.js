@@ -20,6 +20,9 @@ class Dashboard extends React.Component {
     globalActions: PropTypes.object.isRequired,
     showSelectTeamPanel: PropTypes.func.isRequired,
     showUserDetailModalAction: PropTypes.func.isRequired,
+    fetchNotificationsSuccessAction: PropTypes.func.isRequired,
+    newRoomMessageSuccessAction: PropTypes.func.isRequired,
+    fetchNotificationsAction: PropTypes.func.isRequired,
     setConnectedUsersAction: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
     selectTeam: PropTypes.func.isRequired,
@@ -42,15 +45,23 @@ class Dashboard extends React.Component {
     this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
       props.setConnectedUsersAction(connectedUsers);
     });
-    this.socket.on('START_PRIVATE_CHAT', () => {
-      // Create a reducer action to add this newx room to rooms list
+    this.socket.on('START_PRIVATE_CHAT', () => {});
+    this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
+      props.fetchNotificationsSuccessAction({ notifications });
     });
-    this.socket.on('NEW_MESSAGE_SUCCESS', props.newRoomMessageSuccessAction);
+    this.socket.on('NEW_ROOM_MESSAGE_SUCCESS', ({ room, message }) => {
+      props.newRoomMessageSuccessAction({ room, message });
+    });
     this.state = {
       helper: true,
       showSettings: false,
       status: null,
     };
+  }
+
+  componentDidMount() {
+    const { fetchNotificationsAction } = this.props;
+    fetchNotificationsAction();
   }
 
   componentWillUnmount() {
@@ -157,7 +168,6 @@ class Dashboard extends React.Component {
             closeFromParent={showUserDetailModalAction}
             name=""
             zIndex={200}
-            // small
           >
             <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>

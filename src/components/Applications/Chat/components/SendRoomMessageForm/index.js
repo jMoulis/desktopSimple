@@ -20,11 +20,18 @@ class SendRoomMessageForm extends React.Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const { loggedUser, socket, room } = this.props;
+    const { loggedUser, socket, room, receiver } = this.props;
     socket.emit('ROOM_MESSAGE', {
       room,
       sender: loggedUser._id,
       message: this.state.message,
+      receiver: receiver && receiver._id,
+    });
+    socket.emit('NEW_NOTIFICATION', {
+      room,
+      sender: loggedUser._id,
+      message: this.state.message,
+      receiver: receiver && receiver._id,
     });
     this.setState(() => ({
       message: '',

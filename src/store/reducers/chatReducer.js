@@ -91,7 +91,7 @@ const reducer = (state = initialState, action = {}) => {
         },
         roomFetchProcess: {
           ...state.roomFetchProcess,
-          room: defaultRoom,
+          room: defaultRoom || {},
         },
       };
     }

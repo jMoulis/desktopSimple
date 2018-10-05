@@ -18,6 +18,10 @@ import {
 import AppLoader from '../../components/Applications/config/applicationsLoader';
 import { editTeamAction } from '../../store/reducers/teamReducer';
 import { newRoomMessageSuccessAction } from '../../store/reducers/chatReducer';
+import {
+  fetchNotificationsAction,
+  fetchNotificationsSuccessAction,
+} from '../../store/reducers/notificationsReducer';
 
 /*
  * Code
@@ -70,6 +74,12 @@ const mapDispatchToProps = dispatch => ({
   },
   newRoomMessageSuccessAction: (roomId, message) => {
     dispatch(newRoomMessageSuccessAction(roomId, message));
+  },
+  fetchNotificationsAction: () => {
+    dispatch(fetchNotificationsAction());
+  },
+  fetchNotificationsSuccessAction: notiifcations => {
+    dispatch(fetchNotificationsSuccessAction(notiifcations));
   },
 });
 

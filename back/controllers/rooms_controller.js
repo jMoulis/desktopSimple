@@ -2,6 +2,7 @@ const ApiResponse = require('../service/api/apiResponse_v2');
 const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
+const Notifications = require('../models/Notifications');
 
 module.exports = {
   index: async (req, res) => {
@@ -11,7 +12,6 @@ module.exports = {
       query = {
         $or: [{ isPrivate: false }, { users: { $in: [res.locals.user._id] } }],
       };
-
       const rooms = await Room.find(query)
         .populate({
           path: 'messages',
@@ -31,6 +31,7 @@ module.exports = {
       const privateRooms = rooms.filter(room => room.isPrivateMessage);
       const teamRooms = rooms.filter(room => room.isTeamRoom);
       const globalRooms = rooms.filter(room => !room.isPrivate);
+
       if (req.query.updatestatus) {
         const userId = req.params.id;
         const roomId = req.params.room;

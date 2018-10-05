@@ -27,6 +27,7 @@ class RoomsList extends React.Component {
       showSelectSearch: false,
     };
   }
+
   componentDidUpdate() {
     document.addEventListener('mouseup', evt => {
       const container = document.querySelector('.select-user-list');
@@ -36,6 +37,7 @@ class RoomsList extends React.Component {
         }));
     });
   }
+
   handleSearch = evt => {
     const { value } = evt.target;
     if (!value)
@@ -124,7 +126,6 @@ class RoomsList extends React.Component {
       loggedUser,
       fetchRoomsAndUpdateStatus,
     } = this.props;
-
     return (
       <div className="room">
         <h1>Rooms</h1>
@@ -188,6 +189,7 @@ class RoomsList extends React.Component {
                       }}
                       callback={user => callback(privateRoom, user)}
                       name
+                      shouldUpdateNotification
                     />
                     <button
                       style={{

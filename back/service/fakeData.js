@@ -8,7 +8,7 @@ const images = require('./fakeImageB64');
 
 const User = mongoose.model('user');
 
-const numberUser = 100;
+const numberUser = 5;
 
 let index = 1;
 

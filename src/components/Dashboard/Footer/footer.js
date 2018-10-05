@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AppLoader from '../../Applications/config/applicationsLoader';
 import './footer.css';
 import Thumbnail from '../../../containers/Dashboard/Footer/footerThumbnail';
+import BadgeNotifications from './BadgeNotifications';
 
 class Footer extends React.Component {
   static propTypes = {
@@ -11,6 +12,7 @@ class Footer extends React.Component {
     logoutAction: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    notifications: PropTypes.array.isRequired,
   };
   handleStartApp = event => {
     const { startAppAction, setActiveAppAction } = this.props;
@@ -30,8 +32,19 @@ class Footer extends React.Component {
     const { logoutAction } = this.props;
     logoutAction();
   };
+
+  hasNotifications = (notifications, appNotificationKey) => {
+    const totalNotifications = notifications.filter(
+      notification =>
+        notification.type === appNotificationKey && !notification.isRead,
+    ).length;
+    if (totalNotifications > 0)
+      return <BadgeNotifications count={totalNotifications} />;
+    return null;
+  };
+
   render() {
-    const { applications, loggedUser } = this.props;
+    const { applications, loggedUser, notifications } = this.props;
     const objectValues = Object.keys(applications).map(
       item => applications[item],
     );
@@ -57,19 +70,25 @@ class Footer extends React.Component {
                 className="app-btn"
               >
                 <div className="btn-container">
-                  {[
-                    <i
-                      key={`${application.appName}-1`}
-                      className={application.icon}
-                      title={application.title}
-                    />,
-                    <span
-                      key={`${application.appName}-2`}
-                      className="btn-title"
-                    >
-                      {application.title}
-                    </span>,
-                  ]}
+                  {
+                    <Fragment>
+                      {this.hasNotifications(
+                        notifications,
+                        application.notificationsKey,
+                      )}
+                      <i
+                        key={`${application.appName}-1`}
+                        className={application.icon}
+                        title={application.title}
+                      />
+                      <span
+                        key={`${application.appName}-2`}
+                        className="btn-title"
+                      >
+                        {application.title}
+                      </span>
+                    </Fragment>
+                  }
                 </div>
                 {applications[application.appName].reduce && (
                   <p className="active-app-circle" />

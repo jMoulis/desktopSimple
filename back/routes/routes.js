@@ -13,6 +13,7 @@ const multerUtil = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 const ApiResponse = require('../service/api/apiResponse_v2');
 const roomsRoutes = require('./rooms_routes');
+const notificationsRoutes = require('./notifications_routes');
 
 const { storage } = multerUtil;
 
@@ -20,6 +21,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = app => {
   roomsRoutes(app);
+  notificationsRoutes(app);
   app.post('/api/login', AuthController.login);
   app.post('/api/register', upload.single('picture'), AuthController.register);
   app.post('/api/security', VerifyToken, AuthController.changePassword);

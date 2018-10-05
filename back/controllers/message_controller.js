@@ -1,4 +1,6 @@
 const Message = require('../models/Message');
+const Notifications = require('../models/Notifications');
+
 const ApiResponse = require('../service/api/apiResponse_v2');
 
 module.exports = {
@@ -46,47 +48,9 @@ module.exports = {
           ref: 'user',
           select: 'fullName picture',
         });
-      module.exports.socket.on('PRIVATE_MESSAGE', room => {
-        module.exports.io.to(room).emit('NEW_MESSAGE', message);
-      });
-      // try {
-      //
-
-      //
-      // } catch (error) {
-      //   console.log(error.message);
-      // }
-      // await Message.create(messageProps);
-      // const messages = await Message.find({
-      //   $and: [
-      //     {
-      //       $or: [
-      //         {
-      //           sender: res.locals.user._id,
-      //         },
-      //         { receiver: res.locals.user._id },
-      //       ],
-      //     },
-      //     {
-      //       $or: [
-      //         {
-      //           sender: messageProps.receiver,
-      //         },
-      //         { receiver: messageProps.receiver },
-      //       ],
-      //     },
-      //   ],
-      // })
-      //   .populate({
-      //     path: 'sender',
-      //     model: 'user',
-      //     select: 'fullName picture',
-      //   })
-      //   .populate({
-      //     path: 'receiver',
-      //     model: 'user',
-      //     select: 'fullName picture',
-      //   });
+      // module.exports.socket.on('PRIVATE_MESSAGE', room => {
+      //   module.exports.io.to(room).emit('NEW_MESSAGE', message);
+      // });
       return apiResponse.success(201);
     } catch (error) {
       return apiResponse.failure(422, null, error.message);

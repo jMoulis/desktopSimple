@@ -98,11 +98,18 @@ class ChatBoxForm extends Component {
     const { room } = this.state;
 
     fetchRoomsAndUpdateStatusAction(room._id, loggedUser._id, true);
-    socket.emit('NEW_MESSAGE', {
-      room: room._id,
-      receiver: receiver._id,
+    socket.emit('ROOM_MESSAGE', {
+      room,
+      receiver,
+      sender: loggedUser,
+      message: this.state.message,
+    });
+
+    socket.emit('NEW_NOTIFICATION', {
+      room,
       sender: loggedUser._id,
       message: this.state.message,
+      receiver: receiver && receiver._id,
     });
 
     this.setState(() => ({

@@ -10,6 +10,7 @@ import fileReducer from './reducers/fileReducer';
 import projectReducer from '../components/Applications/Projects/store/reducers/projectReducer';
 import teamReducer from '../components/Applications/Projects/store/reducers/teamReducer';
 import chatReducer from './reducers/chatReducer';
+import notificationsReducer from './reducers/notificationsReducer';
 
 import authAjax from './middlewares/authAjax';
 import userAjax from './middlewares/userAjax';
@@ -18,6 +19,7 @@ import mainTeamAjax from './middlewares/teamAjax';
 import fileAjax from './middlewares/fileAjax';
 import projectAjax from '../components/Applications/Projects/store/middlewares/projectAjax';
 import chatAjax from './middlewares/chatAjax';
+import notificationsAjax from './middlewares/notificationsAjax';
 import teamAjax from '../components/Applications/Projects/store/middlewares/teamAjax';
 
 let devTools = [];
@@ -35,6 +37,7 @@ const mainReducer = combineReducers({
   chatReducer,
   taskReducer,
   fileReducer,
+  notificationsReducer,
 });
 
 // Reset reducer on logout
@@ -56,6 +59,7 @@ const store = createStore(
     applyMiddleware(chatAjax),
     applyMiddleware(taskAjax),
     applyMiddleware(fileAjax),
+    applyMiddleware(notificationsAjax),
     ...devTools,
   ),
 );

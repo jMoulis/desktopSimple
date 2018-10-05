@@ -15,15 +15,14 @@ import Modal from '../../../../../../../Modules/Modal/modal';
 import Button from '../../../../../../Form/button';
 import UserIconContainer from '../../../../../../../Modules/UserIcon';
 import DisplayDocument from '../../../../../../../Modules/DisplayDocument';
-// import { ROOT_URL } from '../../../../../../../Utils/config';
 
 const ROOT_URL = process.env.REACT_APP_API;
+
 class TaskCreateForm extends React.Component {
   static propTypes = {
     closeFromParent: PropTypes.func,
     createTaskAction: PropTypes.func.isRequired,
     taskCreation: PropTypes.object.isRequired,
-    teamId: PropTypes.string,
     clearTaskMessageAction: PropTypes.func.isRequired,
     fetchTasksAction: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
@@ -31,7 +30,6 @@ class TaskCreateForm extends React.Component {
 
   static defaultProps = {
     closeFromParent: null,
-    teamId: null,
   };
 
   constructor(props) {
@@ -86,11 +84,13 @@ class TaskCreateForm extends React.Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const { createTaskAction } = this.props;
+    const { createTaskAction, socket } = this.props;
     createTaskAction({
       ...this.state,
       assign: { value: JSON.stringify(this.state.assign.value), changed: true },
     });
+
+    socket.emit('NEW_TASK', { assign: this.state.assign.value });
   };
 
   handleInputChange = evt => {

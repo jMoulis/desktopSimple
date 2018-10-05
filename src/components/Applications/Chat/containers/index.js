@@ -6,6 +6,7 @@ import {
   fetchRoomAction,
   newRoomMessageSuccessAction,
 } from '../../../../store/reducers/chatReducer';
+import { fetchNotificationsSuccessAction } from '../../../../store/reducers/notificationsReducer';
 
 /*
  * Code
@@ -27,6 +28,9 @@ const mapDispatchToProps = dispatch => ({
   },
   newRoomMessageSuccessAction: (roomId, message) => {
     dispatch(newRoomMessageSuccessAction(roomId, message));
+  },
+  fetchNotificationsSuccessAction: notifications => {
+    dispatch(fetchNotificationsSuccessAction(notifications));
   },
 });
 

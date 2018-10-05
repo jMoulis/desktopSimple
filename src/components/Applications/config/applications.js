@@ -21,6 +21,7 @@ export default {
     reduce: false,
     zIndex: 0,
     icon: 'far fa-comments fa-2x',
+    notificationsKey: 'message',
     typeUser: ['all'],
   },
   Settings: {

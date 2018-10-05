@@ -29,6 +29,10 @@ class Task extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props);
+    this.props.globalProps.socketIo.on('NEW_TASK_SUCCESS', message => {
+      console.log(message);
+    });
     const { fetchTasksAction, activeTeam } = this.props;
     if (activeTeam._id) return fetchTasksAction({ team: activeTeam._id });
     return fetchTasksAction();
@@ -238,7 +242,7 @@ class Task extends React.Component {
             title="Create a task"
             zIndex={1}
           >
-            <TaskCreateForm />
+            <TaskCreateForm socket={this.props.globalProps.socketIo} />
           </Modal>
         )}
       </div>
