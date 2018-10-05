@@ -2,7 +2,6 @@ const ApiResponse = require('../service/api/apiResponse_v2');
 const Room = require('../models/Room');
 const User = require('../models/User');
 const Message = require('../models/Message');
-const Notifications = require('../models/Notifications');
 
 module.exports = {
   index: async (req, res) => {
@@ -51,6 +50,7 @@ module.exports = {
       );
 
       const privateRoomsFiltered = privateRooms.filter(room => {
+        console.log(room);
         if (room) {
           return loggedUserRooms.rooms.find(
             userRoom =>
@@ -62,7 +62,7 @@ module.exports = {
 
       return apiResponse.success(200, {
         rooms: {
-          privateRooms: privateRoomsFiltered || [],
+          privateRooms: privateRoomsFiltered,
           teamRooms,
           globalRooms,
         },
