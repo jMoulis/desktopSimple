@@ -62,11 +62,6 @@ module.exports = {
         { taskIdFolder: 0 },
       )
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
           path: 'comments.author',
           model: 'user',
           select: 'fullName picture',
@@ -78,11 +73,6 @@ module.exports = {
         })
         .populate({
           path: 'activities.author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
-          path: 'assign',
           model: 'user',
           select: 'fullName picture',
         });
@@ -124,11 +114,6 @@ module.exports = {
         { taskIdFolder: 0 },
       )
         .populate({
-          path: 'author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
           path: 'comments.author',
           model: 'user',
           select: 'fullName picture',
@@ -140,11 +125,6 @@ module.exports = {
         })
         .populate({
           path: 'activities.author',
-          model: 'user',
-          select: 'fullName picture',
-        })
-        .populate({
-          path: 'assign',
           model: 'user',
           select: 'fullName picture',
         });

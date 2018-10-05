@@ -372,6 +372,7 @@ class TaskDetail extends React.Component {
                       value: team._id,
                       label: team.name,
                     })),
+                    small: true,
                     error: error && error.team && error.team.detail,
                   }}
                 />

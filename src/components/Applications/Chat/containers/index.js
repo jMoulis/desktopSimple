@@ -19,8 +19,8 @@ const mapStateToProps = ({ chatReducer }) => ({
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchRoomsAction: type => {
-    dispatch(fetchRoomsAction(type));
+  fetchRoomsAction: () => {
+    dispatch(fetchRoomsAction());
   },
   fetchRoomAction: roomId => {
     dispatch(fetchRoomAction(roomId));

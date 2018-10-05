@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
+import Button from '../../../../Form/button';
 
 class SendRoomMessageForm extends React.Component {
   static propTypes = {
@@ -43,11 +44,11 @@ class SendRoomMessageForm extends React.Component {
         className="send-room-message-form"
         onSubmit={evt => this.handleSubmit(evt)}
       >
-        <textarea
+        <input
           onChange={this.handleTextAreaChange}
           value={this.state.message}
         />
-        <button type="submit">Send</button>
+        <Button type="submit" label="Send" />
       </form>
     );
   }

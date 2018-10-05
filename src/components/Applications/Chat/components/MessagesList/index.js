@@ -28,7 +28,6 @@ class MessageList extends React.Component {
     const {
       roomFetchProcess: { room },
     } = this.props;
-
     if (room && room.messages) {
       if (room.messages.length === 0) {
         return (

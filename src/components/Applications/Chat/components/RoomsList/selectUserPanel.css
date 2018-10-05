@@ -1,0 +1,7 @@
+.select-user-list {
+  position: absolute;
+  top: 2.5rem;
+  background-color: white;
+  width: 190px;
+  overflow: auto;
+  height: 250px; }

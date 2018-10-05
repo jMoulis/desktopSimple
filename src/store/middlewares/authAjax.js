@@ -27,8 +27,6 @@ import {
   changePasswordSuccessAction,
   changePasswordFailureAction,
   logoutAction,
-  HIDE_PRIVATE_ROOM,
-  hidePrivateRoomSuccessAction,
 } from '../reducers/authReducer';
 import { fetchUserSuccessAction } from '../reducers/userReducer';
 
@@ -266,33 +264,12 @@ export default store => next => action => {
           store.dispatch(logoutAction());
         })
         .catch(error => {
-          console.error(error);
           if (!error.response) {
             return console.error(error.message);
           }
           return store.dispatch(
             deleteUserFailureAction(error.response.data.errors),
           );
-        });
-      break;
-    }
-    case HIDE_PRIVATE_ROOM: {
-      console.log(action);
-      axios({
-        method: 'put',
-        url: `${ROOT_URL}/api/users/${action.payload.loggedUserId}/room/${
-          action.payload.roomId
-        }?status=${action.payload.status}`,
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-        data: { 'rooms.room': { isDisplay: false } },
-      })
-        .then(({ data }) => {
-          store.dispatch(hidePrivateRoomSuccessAction(data));
-        })
-        .catch(error => {
-          console.error(error.message);
         });
       break;
     }

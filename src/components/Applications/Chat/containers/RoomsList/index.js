@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import RoomsList from '../../components/RoomsList';
-import { hidePrivateRoomAction } from '../../../../../store/reducers/authReducer';
+import { fetchRoomsAndUpdateStatus } from '../../../../../store/reducers/chatReducer';
 
 const mapDispatchToProps = dispatch => ({
-  hidePrivateRoomAction: (roomId, loggedUserId, status) => {
-    dispatch(hidePrivateRoomAction(roomId, loggedUserId, status));
+  fetchRoomsAndUpdateStatus: (roomId, loggedUserId, status) => {
+    dispatch(fetchRoomsAndUpdateStatus(roomId, loggedUserId, status));
   },
 });
 

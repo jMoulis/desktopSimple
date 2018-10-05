@@ -34,7 +34,7 @@ const Button = ({
     {...rest}
   >
     {children}
-    {loading ? <i className="fas fa-spinner" /> : label}
+    {loading ? <i className="fas fa-spinner" /> : <span>{label}</span>}
   </button>
 );
 

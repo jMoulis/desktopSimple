@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { addRoomToStateAction } from '../../../../store/reducers/chatReducer';
-import { hidePrivateRoomSuccessAction } from '../../../../store/reducers/authReducer';
+import {
+  addRoomToStateAction,
+  fetchRoomsAndUpdateStatus,
+} from '../../../../store/reducers/chatReducer';
 
 const ROOT_URL = process.env.REACT_APP_API;
 const mapStateToProps = ({ chatReducer }) => ({
@@ -14,8 +16,8 @@ const dispatchStateToProps = dispatch => ({
   addRoomAction: room => {
     dispatch(addRoomToStateAction(room));
   },
-  hidePrivateRoomSuccessAction: room => {
-    dispatch(hidePrivateRoomSuccessAction(room));
+  fetchRoomsAndUpdateStatusAction: (roomId, loggedUserId, status) => {
+    dispatch(fetchRoomsAndUpdateStatus(roomId, loggedUserId, status));
   },
 });
 
@@ -25,6 +27,7 @@ class ChatBoxForm extends Component {
     loggedUser: PropTypes.object.isRequired,
     receiver: PropTypes.object.isRequired,
     callback: PropTypes.func,
+    fetchRoomsAndUpdateStatusAction: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -37,24 +40,14 @@ class ChatBoxForm extends Component {
   };
 
   async componentDidMount() {
-    const {
-      loggedUser,
-      receiver,
-      socket,
-      addRoomAction,
-      hidePrivateRoomSuccessAction,
-    } = this.props;
+    const { loggedUser, receiver, socket } = this.props;
     try {
-      const { room, rooms } = await this._fetchRoomAction(
+      const { room } = await this._fetchRoomAction(
         receiver,
         loggedUser,
         this._setError,
       );
-      console.log('ChatBox', room);
       this._addRoomToState(room);
-      hidePrivateRoomSuccessAction({ rooms });
-      addRoomAction(room);
-
       await this._handleJoinRequest(
         {
           room: room._id,
@@ -71,11 +64,40 @@ class ChatBoxForm extends Component {
     }
   }
   _addRoomToState = room => this.setState(() => ({ room }));
+  _setError = message => this.setState(() => ({ error: message }));
+  _fetchRoomAction = async (receiver, user, error) => {
+    try {
+      const {
+        data: { room },
+      } = await axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/rooms/room?receiver=${receiver._id}&sender=${
+          user._id
+        }`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      });
+      return {
+        room,
+      };
+    } catch (err) {
+      error(error.message);
+    }
+  };
 
   handleSendMessage = evt => {
     evt.preventDefault();
-    const { socket, loggedUser, receiver, callback } = this.props;
+    const {
+      socket,
+      loggedUser,
+      receiver,
+      callback,
+      fetchRoomsAndUpdateStatusAction,
+    } = this.props;
     const { room } = this.state;
+
+    fetchRoomsAndUpdateStatusAction(room._id, loggedUser._id, true);
     socket.emit('NEW_MESSAGE', {
       room: room._id,
       receiver: receiver._id,
@@ -91,30 +113,6 @@ class ChatBoxForm extends Component {
       callback();
     }
   };
-
-  _fetchRoomAction = async (receiver, user, error) => {
-    try {
-      const {
-        data: { room, rooms },
-      } = await axios({
-        method: 'get',
-        url: `${ROOT_URL}/api/rooms/room?receiver=${receiver._id}&sender=${
-          user._id
-        }`,
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
-      return {
-        room,
-        rooms,
-      };
-    } catch (err) {
-      error(error.message);
-    }
-  };
-
-  _setError = message => this.setState(() => ({ error: message }));
 
   handleTextAreaChange = evt => {
     const { value } = evt.target;

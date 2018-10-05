@@ -1,6 +1,10 @@
+import Utils from '../../Utils/utils';
+
 export const FETCH_ROOMS = 'FETCH_ROOMS';
 export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
 export const FETCH_ROOMS_FAILURE = 'FETCH_ROOMS_FAILURE';
+
+export const FETCH_ROOMS_UPDATE_STATUS = 'FETCH_ROOMS_UPDATE_STATUS';
 
 export const FETCH_ROOM = 'FETCH_ROOM';
 export const FETCH_ROOM_SUCCESS = 'FETCH_ROOM_SUCCESS';
@@ -19,13 +23,14 @@ const initialState = {
     error: null,
   },
   roomsFetchProcess: {
-    rooms: [],
+    rooms: {},
     success: null,
     loading: true,
     error: null,
   },
 };
 
+const utils = new Utils();
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case FETCH_ROOM: {
@@ -60,10 +65,22 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
       };
     }
+
     case FETCH_ROOMS_SUCCESS: {
-      const defaultRoom = action.payload.rooms.find(
+      const defaultRoom = action.payload.rooms.globalRooms.find(
         room => room.name === 'GENERAL',
       );
+      if (!utils.isObjectEmpty(state.roomFetchProcess.room)) {
+        return {
+          ...state,
+          roomsFetchProcess: {
+            rooms: action.payload.rooms,
+            success: true,
+            loading: false,
+            error: null,
+          },
+        };
+      }
       return {
         ...state,
         roomsFetchProcess: {
@@ -82,13 +99,20 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         roomsFetchProcess: {
-          rooms: [],
+          rooms: {},
           success: null,
           loading: false,
           error: null,
         },
       };
     }
+
+    case FETCH_ROOMS_UPDATE_STATUS: {
+      return {
+        ...state,
+      };
+    }
+
     case NEW_MESSAGE_ROOM_SUCCESS: {
       let messages;
       if (state.roomFetchProcess.room && state.roomFetchProcess.room.messages) {
@@ -112,7 +136,6 @@ const reducer = (state = initialState, action = {}) => {
     }
     case ADD_ROOM_TO_STATE: {
       const rooms = [...state.roomsFetchProcess.rooms];
-
       if (rooms.some(room => room._id === action.payload._id) === false) {
         rooms.unshift(action.payload);
       }
@@ -165,6 +188,14 @@ export const newRoomMessageSuccessAction = room => ({
 export const addRoomToStateAction = room => ({
   type: ADD_ROOM_TO_STATE,
   payload: room,
+});
+export const fetchRoomsAndUpdateStatus = (roomId, loggedUserId, status) => ({
+  type: FETCH_ROOMS_UPDATE_STATUS,
+  payload: {
+    roomId,
+    loggedUserId,
+    status,
+  },
 });
 
 export default reducer;

@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// import { ROOT_URL } from '../../../../../Utils/config';
 import { FETCH_CHAT, fetchChatSuccessAction } from '../reducers/chatReducer';
 
 const ROOT_URL = process.env.REACT_APP_API;

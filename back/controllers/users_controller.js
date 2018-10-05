@@ -345,6 +345,7 @@ module.exports = {
           },
         },
       );
+
       const user = await User.findOne({ _id: userId }, { rooms: 1 });
       if (!user) {
         return apiResponse.failure(404, null, 'User not found');

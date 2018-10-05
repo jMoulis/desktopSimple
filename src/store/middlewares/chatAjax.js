@@ -6,6 +6,7 @@ import {
   FETCH_ROOMS,
   fetchRoomsSuccessAction,
   fetchRoomsFailureAction,
+  FETCH_ROOMS_UPDATE_STATUS,
 } from '../reducers/chatReducer';
 
 const ROOT_URL = process.env.REACT_APP_API;
@@ -31,7 +32,7 @@ export default store => next => action => {
     case FETCH_ROOMS: {
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/rooms/?type=${action.payload}`,
+        url: `${ROOT_URL}/api/rooms`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -41,6 +42,24 @@ export default store => next => action => {
         })
         .catch(error => {
           store.dispatch(fetchRoomsFailureAction(error.response));
+        });
+      break;
+    }
+    case FETCH_ROOMS_UPDATE_STATUS: {
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/rooms/user/${action.payload.loggedUserId}/room/${
+          action.payload.roomId
+        }?updatestatus=${action.payload.status}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(fetchRoomsSuccessAction(data));
+        })
+        .catch(error => {
+          console.error(error.message);
         });
       break;
     }

@@ -69,16 +69,14 @@ class Task extends React.Component {
     );
   };
 
-  handleSelectAssign = evt => {
-    evt.stopPropagation();
-    const { value } = evt.currentTarget.dataset;
+  handleSelectAssign = user => {
     const { fetchTasksAction } = this.props;
     this.setState(
       prevState => ({
         ...prevState,
         filter: {
           ...prevState.filter,
-          'assign._id': value,
+          'assign._id': user._id,
         },
       }),
       () => {

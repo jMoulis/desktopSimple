@@ -4,16 +4,29 @@
   &-list
     overflow: auto
     height: calc(100% - 40px)
+    &-search-form
+      position: relative
+      width: 100%
+      & input
+        border: none
+        background-color: $beige
+        width: 100%
+        padding: .5rem
+        box-sizing: border-box
     & button
       border: none
       background-color: transparent
       cursor: pointer
       transition: all 300ms
       margin-left: .3rem
+      outline: none
       &:hover
         color: $orange
     &-item
       padding: .5rem
+      &-btn
+        padding: .5rem 0
+        outline: none
       & ul
         & li
           display: flex
@@ -25,3 +38,4 @@
       & h2
         padding: .5rem
         font-weight: bold
+        cursor: pointer

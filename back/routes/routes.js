@@ -8,17 +8,18 @@ const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
 const CommentsController = require('../controllers/comments_controller');
 const FilesController = require('../controllers/files_controller');
-const RoomsController = require('../controllers/rooms_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const multerUtil = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
 const ApiResponse = require('../service/api/apiResponse_v2');
+const roomsRoutes = require('./rooms_routes');
 
 const { storage } = multerUtil;
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = app => {
+  roomsRoutes(app);
   app.post('/api/login', AuthController.login);
   app.post('/api/register', upload.single('picture'), AuthController.register);
   app.post('/api/security', VerifyToken, AuthController.changePassword);
@@ -62,14 +63,6 @@ module.exports = app => {
   app.get('/api/teams/:id', VerifyToken, TeamsController.show);
   app.put('/api/teams/:id', VerifyToken, TeamsController.edit);
   app.delete('/api/teams/:id', VerifyToken, TeamsController.delete);
-
-  app.get('/api/rooms', VerifyToken, RoomsController.index);
-  app.get('/api/rooms/room', VerifyToken, RoomsController.read);
-  app.get(
-    '/api/rooms/:id/messages',
-    VerifyToken,
-    RoomsController.fetchRoomMessages,
-  );
 
   app.post('/api/messages', VerifyToken, MessageController.create);
   app.get('/api/messages', VerifyToken, MessageController.index);

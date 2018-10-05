@@ -3,20 +3,17 @@ class Users {
     this.users = [];
   }
 
-  addUser(socketId, user, room) {
+  addUser(socketId, user) {
     this.users.push({
       fullName: user.fullName,
       picture: user.picture,
       _id: user._id,
       socketId,
-      room,
     });
     return user;
   }
 
-  getUsersList(room) {
-    const users = this.users.filter(user => user.room === room);
-    const usersName = users.map(user => user);
+  getUsersList() {
     return this.users;
   }
 

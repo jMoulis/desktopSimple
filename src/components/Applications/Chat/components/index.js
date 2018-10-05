@@ -5,6 +5,9 @@ import './index.css';
 import SendRoomMessageForm from './SendRoomMessageForm';
 import ConnectedUserList from '../containers/ConnectedUserList';
 import RoomsListContainer from '../containers/RoomsList';
+import Utils from '../../../../Utils/utils';
+
+const utils = new Utils();
 
 class Chat extends React.Component {
   static propTypes = {
@@ -29,7 +32,7 @@ class Chat extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.room && !state.room) {
+    if (props.room && utils.isObjectEmpty(state.room)) {
       return {
         ...state,
         room: props.room,
@@ -42,7 +45,7 @@ class Chat extends React.Component {
 
   componentDidMount() {
     const { fetchRoomsAction, newRoomMessageSuccessAction, room } = this.props;
-    fetchRoomsAction('global');
+    fetchRoomsAction();
     this.props.globalProps.socketIo.on(
       'NEW_ROOM_MESSAGE_SUCCESS',
       newRoomMessageSuccessAction,
@@ -91,7 +94,7 @@ class Chat extends React.Component {
   };
 
   roomTitle = room => {
-    if (!room) return false;
+    if (!room || Object.keys(room).length === 0) return 'GENERAL';
     if (room.isPrivateMessage) {
       return room.users.map(user => user.fullName).join(' # ');
     }

@@ -13,7 +13,8 @@
     height: 100%; }
 
 .chat-message-list {
-  background-color: #eee9d1; }
+  background-color: #eee9d1;
+  margin-top: 1rem; }
   .chat-message-list-item {
     padding: .5rem 0; }
     .chat-message-list-item--header {
