@@ -51,15 +51,21 @@ module.exports = {
       );
 
       const privateRoomsFiltered = privateRooms.filter(room => {
-        return loggedUserRooms.rooms.find(
-          userRoom =>
-            userRoom._id.toString() === room._id.toString() &&
-            userRoom.isDisplay,
-        );
+        if (room) {
+          return loggedUserRooms.rooms.find(
+            userRoom =>
+              userRoom._id.toString() === room._id.toString() &&
+              userRoom.isDisplay,
+          );
+        }
       });
 
       return apiResponse.success(200, {
-        rooms: { privateRooms: privateRoomsFiltered, teamRooms, globalRooms },
+        rooms: {
+          privateRooms: privateRoomsFiltered || [],
+          teamRooms,
+          globalRooms,
+        },
       });
     } catch (error) {
       return apiResponse.failure(422, error, { message: error.message });
