@@ -116,25 +116,28 @@ class SelectBoxAssignee extends Component {
               />
             </li>
             {users &&
-              users.map(({ user }) => (
-                <li className="selectbox-assign-list-item" key={user._id}>
-                  <UserIconContainer
-                    callback={evt => {
-                      callback(evt);
-                      this.handleSelect(user);
-                    }}
-                    active={false}
-                    user={{
-                      user: {
-                        _id: user._id,
-                        picture: user.picture,
-                        fullName: user.fullName,
-                      },
-                    }}
-                    name
-                  />
-                </li>
-              ))}
+              users.map(({ user }) => {
+                if (user)
+                  return (
+                    <li className="selectbox-assign-list-item" key={user._id}>
+                      <UserIconContainer
+                        callback={evt => {
+                          callback(evt);
+                          this.handleSelect(user);
+                        }}
+                        active={false}
+                        user={{
+                          user: {
+                            _id: user._id,
+                            picture: user.picture,
+                            fullName: user.fullName,
+                          },
+                        }}
+                        name
+                      />
+                    </li>
+                  );
+              })}
           </ul>
         )}
       </div>

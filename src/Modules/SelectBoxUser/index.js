@@ -11,22 +11,26 @@ const SelectBoxUser = ({ callback, closeFromParent, users }) => {
         users.length > 0 && (
           <div id="selectbox-user">
             <ul className="selectbox-user-list">
-              {users.map(({ user }) => (
-                <li
-                  key={user._id}
-                  className="d-flex flex-align-items-center pointer"
-                >
-                  <Button
-                    label="Select"
-                    onClick={() => {
-                      callback(user);
-                      closeFromParent();
-                    }}
-                  />
-                  <UserIconContainer user={{ user }} />
-                  <span>{user.fullName}</span>
-                </li>
-              ))}
+              {users.map(({ user }) => {
+                if (user) {
+                  return (
+                    <li
+                      key={user._id}
+                      className="d-flex flex-align-items-center pointer"
+                    >
+                      <Button
+                        label="Select"
+                        onClick={() => {
+                          callback(user);
+                          closeFromParent();
+                        }}
+                      />
+                      <UserIconContainer user={{ user }} />
+                      <span>{user.fullName}</span>
+                    </li>
+                  );
+                }
+              })}
             </ul>
           </div>
         )}

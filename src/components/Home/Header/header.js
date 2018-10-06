@@ -4,7 +4,10 @@ import './header.css';
 
 const Header = () => (
   <header className="home-header">
-    <h1>Home Page</h1>
+    <div>
+      <h1>E²</h1>
+      <p>Etudiants et Entreprises - l'équation parfaite</p>
+    </div>
     <NavBar />
   </header>
 );

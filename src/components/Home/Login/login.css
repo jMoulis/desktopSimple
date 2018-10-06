@@ -5,9 +5,24 @@
   justify-content: space-between;
   align-items: center;
   position: relative;
-  height: calc(100% - 5rem);
+  min-height: calc(100% - 5rem);
   padding-top: 5rem;
   background-color: #eee9d1; }
+  #homepage .subtitle {
+    font-size: 2rem;
+    padding: 1rem; }
+  #homepage .huge-title {
+    font-size: 2rem;
+    padding: 1rem 0; }
+  #homepage .explication {
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+    width: 80%; }
+  #homepage em {
+    font-weight: bold; }
+  #homepage q {
+    font-style: italic;
+    font-weight: bold; }
 
 #signin-form {
   align-items: stretch;
