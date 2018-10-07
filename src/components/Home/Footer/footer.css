@@ -6,23 +6,31 @@
   align-items: center;
   position: relative;
   min-height: calc(100% - 5rem);
-  padding-top: 5rem;
-  background-color: #eee9d1; }
+  padding-top: 4rem; }
   #homepage .subtitle {
     font-size: 2rem;
-    padding: 1rem; }
+    padding: 1rem;
+    font-weight: bold;
+    text-transform: uppercase; }
   #homepage .huge-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     padding: 1rem 0; }
   #homepage .explication {
     font-size: 1.2rem;
     line-height: 1.7rem;
     width: 80%; }
+    @media (max-width: 500px) {
+      #homepage .explication {
+        width: 100%;
+        text-align: center; } }
   #homepage em {
     font-weight: bold; }
   #homepage q {
     font-style: italic;
     font-weight: bold; }
+  #homepage ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem; }
 
 #footer {
   background-color: #0a1c28;

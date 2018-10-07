@@ -129,6 +129,9 @@ h1 {
 .flex-align-items-baseline {
   align-items: baseline; }
 
+.a-reset {
+  text-decoration: none; }
+
 .no-user-select {
   user-select: none; }
 

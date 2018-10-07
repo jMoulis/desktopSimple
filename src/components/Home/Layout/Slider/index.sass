@@ -1,0 +1,16 @@
+@import '../../home.sass'
+.slider
+  display: flex
+  overflow: hidden
+  justify-content: center
+  width: 100%
+  &-list
+    @media (max-width: $xs)
+      display: none
+      justify-content: center
+    &-item
+      padding: 0 1rem
+      min-width: 220px
+      max-width: 220px
+      @media (max-width: $xs)
+        max-width: 100%

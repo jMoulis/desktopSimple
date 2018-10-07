@@ -1,7 +1,64 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+#homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  min-height: calc(100% - 5rem);
+  padding-top: 4rem; }
+  #homepage .subtitle {
+    font-size: 2rem;
+    padding: 1rem;
+    font-weight: bold;
+    text-transform: uppercase; }
+  #homepage .huge-title {
+    font-size: 2.5rem;
+    padding: 1rem 0; }
+  #homepage .explication {
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+    width: 80%; }
+    @media (max-width: 500px) {
+      #homepage .explication {
+        width: 100%;
+        text-align: center; } }
+  #homepage em {
+    font-weight: bold; }
+  #homepage q {
+    font-style: italic;
+    font-weight: bold; }
+  #homepage ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem; }
+
 #content {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 2rem;
-  height: inherit;
-  width: 100%; }
+  height: inherit; }
+  @media (max-width: 500px) {
+    #content .plateforme-unique {
+      padding: 1rem; } }
+  #content .plateforme-unique-content {
+    max-width: 30%;
+    display: flex;
+    flex-direction: column; }
+    @media (max-width: 500px) {
+      #content .plateforme-unique-content {
+        max-width: 100%; } }
+  @media (max-width: 500px) {
+    #content video {
+      display: none; } }
+  @media (max-width: 500px) {
+    #content .first-row img {
+      display: none;
+      align-items: center; } }
+  #content .first-row .header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; }
+    @media (max-width: 500px) {
+      #content .first-row .header {
+        padding: 1rem;
+        align-items: center; } }

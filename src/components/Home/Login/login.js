@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 import './login.css';
 import Button from '../../Form/button';
 import Input from '../../Form/input';
@@ -100,6 +100,19 @@ class Login extends React.Component {
             </div>
           </div>
         </form>
+        <div>
+          <p>
+            Need an account?
+            <Link href="/signup" to="/signup">
+              Sign up
+            </Link>
+          </p>
+          <p>
+            <Link href="/password_reset" to="/password_reset">
+              I forgot my password?
+            </Link>
+          </p>
+        </div>
       </div>
     );
   }

@@ -32,15 +32,19 @@
     list-style-type: decimal;
     padding-left: 1.5rem; }
 
-#signin-form {
-  align-items: stretch;
-  padding-top: 5rem;
-  height: initial;
-  overflow: hidden; }
-  #signin-form .form {
-    width: inherit;
-    border: 5px solid #d44c00; }
-  #signin-form label {
-    color: #0a1c28; }
-  #signin-form .form-content {
-    width: inherit; }
+.slider {
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  width: 100%; }
+  @media (max-width: 500px) {
+    .slider-list {
+      display: none;
+      justify-content: center; } }
+  .slider-list-item {
+    padding: 0 1rem;
+    min-width: 220px;
+    max-width: 220px; }
+    @media (max-width: 500px) {
+      .slider-list-item {
+        max-width: 100%; } }
