@@ -38,8 +38,13 @@ const TeamToolbar = ({
             </Button>
           </li>
           <li className="team-toolbar-list-item">
-            <Button category="neutral" type="button" title="Message">
-              <i className="far fa-envelope fa-2x" />
+            <Button
+              category="neutral"
+              type="button"
+              title="Chats"
+              onClick={() => globalActions.startAppAction('Chat')}
+            >
+              <i className="fas fa-comments fa-2x" />
             </Button>
           </li>
           <li className="team-toolbar-list-item">

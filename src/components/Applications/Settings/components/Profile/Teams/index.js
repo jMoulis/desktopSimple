@@ -38,12 +38,15 @@ class TeamProfile extends React.Component {
                 <h2>{team.name}</h2>
                 <ul>
                   {team.users.length > 0 &&
-                    team.users.map((teamMate, index) => (
-                      <li key={index}>
-                        <UserIcon user={teamMate} />
-                        <p>{teamMate.user.fullName}</p>
-                      </li>
-                    ))}
+                    team.users.map((teamMate, index) => {
+                      if (teamMate && teamMate.user)
+                        return (
+                          <li key={index}>
+                            <UserIcon user={teamMate} />
+                            <p>{teamMate.user.fullName}</p>
+                          </li>
+                        );
+                    })}
                 </ul>
               </div>
             </li>

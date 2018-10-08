@@ -17,6 +17,7 @@ class Task extends React.Component {
     taskListProcess: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     activeTeam: PropTypes.object.isRequired,
+    globalProps: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
@@ -29,7 +30,6 @@ class Task extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
     this.props.globalProps.socketIo.on('NEW_TASK_SUCCESS', message => {
       console.log(message);
     });
