@@ -50,10 +50,10 @@ module.exports = {
       );
 
       const privateRoomsFiltered = privateRooms.filter(room => {
-        console.log(room);
         if (room) {
           return loggedUserRooms.rooms.find(
             userRoom =>
+              userRoom._id &&
               userRoom._id.toString() === room._id.toString() &&
               userRoom.isDisplay,
           );
