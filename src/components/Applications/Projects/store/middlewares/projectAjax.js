@@ -117,7 +117,7 @@ export default store => next => action => {
 
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/projects?${filter}`,
+        url: `${ROOT_URL}/api/projects${filter || ''}`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },
