@@ -132,10 +132,13 @@ class RoomsList extends React.Component {
       callback,
       loggedUser,
       fetchRoomsAndUpdateStatus,
+      smallSize,
+      hide,
     } = this.props;
-    const { hideButtonShow } = this.state;
+
     return (
-      <div className={`room ${hideButtonShow ? 'room-hide' : ''}`}>
+      <div className={`room`}>
+        {smallSize && <button onClick={hide}>X</button>}
         <h1>Rooms</h1>
         <ul className="room-list">
           <li className="room-list-item">

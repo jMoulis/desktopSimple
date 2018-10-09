@@ -28,8 +28,8 @@ class AddressBook extends Component {
   };
 
   componentDidMount() {
-    const { fetchUsersActionTest } = this.props;
-    fetchUsersActionTest(this.state.filterParams);
+    const { fetchUsersAction } = this.props;
+    fetchUsersAction(this.state.filterParams);
   }
 
   handleFetchUsers = (filter, { filterName }) => {

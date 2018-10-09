@@ -27,6 +27,8 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       room: props.room,
+      showRoomList: true,
+      smallSize: false,
     };
   }
 
@@ -46,7 +48,26 @@ class Chat extends React.Component {
     const { fetchRoomsAction, room } = this.props;
     fetchRoomsAction();
     this.addRoomToState(room);
+    this.setInitialRoomListView();
+    window.addEventListener('resize', this.setInitialRoomListView, false);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => null, true);
+  }
+  setInitialRoomListView = () => {
+    if (window.matchMedia('(max-width:500px)').matches) {
+      this.setState(() => ({
+        showRoomList: false,
+        smallSize: true,
+      }));
+    } else {
+      this.setState(() => ({
+        showRoomList: true,
+        smallSize: false,
+      }));
+    }
+  };
 
   addRoomToState = room => this.setState(() => ({ room }));
 
@@ -67,9 +88,10 @@ class Chat extends React.Component {
     } catch (error) {
       this._setError(error.message);
     }
-    this.setState(() => ({
+    this.setState(prevState => ({
       room,
       receiver,
+      showRoomList: prevState.smallSize ? false : true,
     }));
   };
 
@@ -89,6 +111,17 @@ class Chat extends React.Component {
     }
   };
 
+  handleShowRoomList = () => {
+    this.setState(prevState => ({
+      showRoomList: !prevState.showRoomList,
+    }));
+  };
+  handleHideRoomList = () => {
+    this.setState(prevState => ({
+      showRoomList: false,
+    }));
+  };
+
   roomTitle = room => {
     if (!room || Object.keys(room).length === 0) return 'GENERAL';
     if (room.isPrivateMessage) {
@@ -103,18 +136,22 @@ class Chat extends React.Component {
       loggedUser,
       globalProps: { socketIo },
     } = this.props;
-    const { room, receiver } = this.state;
+    const { room, receiver, showRoomList, smallSize } = this.state;
     return (
       <div className="chat">
-        {rooms && (
-          <RoomsListContainer
-            rooms={rooms}
-            callback={this.handleSelectRoom}
-            loggedUser={loggedUser}
-          />
-        )}
+        {rooms &&
+          showRoomList && (
+            <RoomsListContainer
+              rooms={rooms}
+              callback={this.handleSelectRoom}
+              loggedUser={loggedUser}
+              smallSize={smallSize}
+              hide={this.handleShowRoomList}
+            />
+          )}
         <div className="chat-content">
           <div className="d-flex">
+            {smallSize && <button onClick={this.handleShowRoomList}>X</button>}
             <h1>{this.roomTitle(room)}</h1>
           </div>
           <MessageList socket={socketIo} loggedUser={loggedUser} />
@@ -125,10 +162,12 @@ class Chat extends React.Component {
             socket={socketIo}
           />
         </div>
-        <div className="connected-user">
-          <h1>Connected User</h1>
-          <ConnectedUserList />
-        </div>
+        {!smallSize && (
+          <div className="connected-user">
+            <h1>Connected User</h1>
+            <ConnectedUserList />
+          </div>
+        )}
       </div>
     );
   }

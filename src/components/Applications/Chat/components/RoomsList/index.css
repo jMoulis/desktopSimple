@@ -14,6 +14,13 @@
 
 .room {
   padding: .5rem; }
+  @media (max-width: 500px) {
+    .room {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background-color: #008e8b;
+      z-index: 1; } }
   .room-list {
     overflow: auto;
     height: calc(100% - 40px); }
