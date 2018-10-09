@@ -11,6 +11,7 @@ import NoMatch from '../NoMatch/noMatch';
 import Signup from '../../containers/Home/SignUp';
 import TeamSelector from '../../containers/Dashboard/TeamSelector';
 import Loader from '../../Modules/Loader';
+import ErrorBoundary from '../Hoc/ErrorBoundary';
 
 class App extends Component {
   static propTypes = {
@@ -108,16 +109,19 @@ class App extends Component {
               if (auth) {
                 return (
                   <div className="app-container">
-                    <Dashboard
-                      key="dashboard"
-                      showSelectTeamPanel={this.showSelectTeamPanel}
-                      selectTeam={this.handleSelectTeam}
-                    />
-                    {this.state.showSelectTeam &&
-                      loginProcess.loggedUser.typeUser !== 'company' &&
-                      loginProcess.loggedUser.teams.length !== 0 && (
-                        <TeamSelector selectTeam={this.handleSelectTeam} />
-                      )}
+                    <ErrorBoundary>
+                      <Dashboard
+                        key="dashboard"
+                        showSelectTeamPanel={this.showSelectTeamPanel}
+                        selectTeam={this.handleSelectTeam}
+                      />
+
+                      {this.state.showSelectTeam &&
+                        loginProcess.loggedUser.typeUser !== 'company' &&
+                        loginProcess.loggedUser.teams.length !== 0 && (
+                          <TeamSelector selectTeam={this.handleSelectTeam} />
+                        )}
+                    </ErrorBoundary>
                     <Footer key="footer" />
                   </div>
                 );

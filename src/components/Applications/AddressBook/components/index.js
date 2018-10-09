@@ -28,8 +28,8 @@ class AddressBook extends Component {
   };
 
   componentDidMount() {
-    const { fetchUsersAction } = this.props;
-    fetchUsersAction(this.state.filterParams);
+    const { fetchUsersActionTest } = this.props;
+    fetchUsersActionTest(this.state.filterParams);
   }
 
   handleFetchUsers = (filter, { filterName }) => {
@@ -113,7 +113,7 @@ class AddressBook extends Component {
             <LeftNavBar fetchUsersAction={this.handleFetchUsers} />
             <ul className="overflow height-overflow flex1">
               <li
-                className="d-flex flex-align-items-center flex-justify-between"
+                className="d-flex flex-align-items-center flex-justify-between address-book-pagination"
                 style={{
                   margin: '.5rem',
                 }}

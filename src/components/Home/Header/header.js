@@ -14,7 +14,9 @@ const Header = () => (
         >
           E²
         </h1>
-        <p>Etudiants et Entreprises - l'équation parfaite</p>
+        <p className="home-header-subtitle">
+          Etudiants et Entreprises - l'équation parfaite
+        </p>
       </Link>
     </div>
     <NavBar />

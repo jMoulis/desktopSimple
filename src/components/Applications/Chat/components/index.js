@@ -13,7 +13,6 @@ class Chat extends React.Component {
   static propTypes = {
     room: PropTypes.object,
     fetchRoomAction: PropTypes.func.isRequired,
-    newRoomMessageSuccessAction: PropTypes.func.isRequired,
     globalProps: PropTypes.object.isRequired,
     fetchRoomsAction: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
@@ -44,20 +43,8 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      fetchRoomsAction,
-      newRoomMessageSuccessAction,
-      room,
-      fetchNotificationsSuccessAction,
-    } = this.props;
+    const { fetchRoomsAction, room } = this.props;
     fetchRoomsAction();
-    // this.props.globalProps.socketIo.on(
-    //   'NEW_ROOM_MESSAGE_SUCCESS',
-    //   ({ room, message }) => {
-    //     newRoomMessageSuccessAction({ room, message });
-    //     // fetchNotificationsSuccessAction({ notifications });
-    //   },
-    // );
     this.addRoomToState(room);
   }
 
@@ -127,7 +114,9 @@ class Chat extends React.Component {
           />
         )}
         <div className="chat-content">
-          <h1>{this.roomTitle(room)}</h1>
+          <div className="d-flex">
+            <h1>{this.roomTitle(room)}</h1>
+          </div>
           <MessageList socket={socketIo} loggedUser={loggedUser} />
           <SendRoomMessageForm
             loggedUser={loggedUser}

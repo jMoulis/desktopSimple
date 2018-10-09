@@ -9,6 +9,7 @@ import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
+import ErrorBoundary from '../Hoc/ErrorBoundary';
 
 const ROOT_URL = process.env.REACT_APP_API;
 

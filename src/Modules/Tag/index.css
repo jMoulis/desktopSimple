@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
 .tags {
   display: flex;
-  margin-top: .5rem; }
+  margin-top: .5rem;
+  flex-wrap: wrap; }
   .tags-item {
     border: 2px solid #eee9d1;
     padding: .2rem .5rem;

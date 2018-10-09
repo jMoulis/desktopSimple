@@ -3,9 +3,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   position: relative;
-  min-height: calc(100% - 5rem);
+  min-height: calc(100% - 4rem);
   padding-top: 4rem; }
   #homepage .subtitle {
     font-size: 2rem;
@@ -33,8 +32,7 @@
     padding-left: 1.5rem; }
 
 #signin-form {
-  align-items: stretch;
-  padding-top: 5rem;
+  padding: 3rem 2rem;
   height: initial;
   overflow: hidden; }
   #signin-form .form {

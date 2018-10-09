@@ -8,6 +8,7 @@ const MessageController = require('../controllers/message_controller');
 const TasksController = require('../controllers/tasks_controller');
 const CommentsController = require('../controllers/comments_controller');
 const FilesController = require('../controllers/files_controller');
+const ErrorsFrontController = require('../controllers/errors_front_controller');
 const VerifyToken = require('../auth/VerifyToken');
 const multerUtil = require('../service/multerStorage');
 const CompanyIsAllowedToPost = require('../service/companyIsAllowedToPost');
@@ -95,6 +96,7 @@ module.exports = app => {
   app.post('/api/files', VerifyToken, FilesController.index);
   app.delete('/api/files', VerifyToken, FilesController.delete);
 
+  app.post('/api/errors', VerifyToken, ErrorsFrontController.create);
   app.get('*', (req, res) => {
     const apiResponse = new ApiResponse(res);
     return apiResponse.failure(404, null, 'Route not found');

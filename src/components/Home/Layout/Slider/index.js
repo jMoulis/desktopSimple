@@ -13,9 +13,9 @@ class Slider extends Component {
     this.state = {
       data: props.data,
     };
-    this.setState(prevState => ({
-      data: this.passFirstToLast(prevState.data),
-    }));
+    // this.setState(prevState => ({
+    //   data: this.passFirstToLast(prevState.data),
+    // }));
     // this.timer = setInterval(() => {
     //   this.setState(prevState => ({
     //     data: this.passFirstToLast(prevState.data),

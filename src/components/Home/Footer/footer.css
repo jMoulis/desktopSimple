@@ -3,9 +3,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   position: relative;
-  min-height: calc(100% - 5rem);
+  min-height: calc(100% - 4rem);
   padding-top: 4rem; }
   #homepage .subtitle {
     font-size: 2rem;
@@ -36,7 +35,8 @@
   background-color: #0a1c28;
   color: #eee9d1;
   position: relative;
-  height: 80px; }
+  height: 80px;
+  overflow-x: auto; }
   #footer:before {
     content: '';
     height: 5px;

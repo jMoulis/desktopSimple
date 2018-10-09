@@ -1,1 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+@media (max-width: 500px) {
+  .address-book-pagination {
+    flex-direction: column; } }

@@ -25,6 +25,7 @@ class RoomsList extends React.Component {
       search: '',
       users: [],
       showSelectSearch: false,
+      hideButtonShow: true,
     };
   }
 
@@ -119,6 +120,12 @@ class RoomsList extends React.Component {
 
   _setError = message => this.setState(() => ({ error: message }));
 
+  handleShowRoomList = () => {
+    this.setState(prevState => ({
+      hideButtonShow: !prevState.hideButtonShow,
+    }));
+  };
+
   render() {
     const {
       rooms,
@@ -126,8 +133,9 @@ class RoomsList extends React.Component {
       loggedUser,
       fetchRoomsAndUpdateStatus,
     } = this.props;
+    const { hideButtonShow } = this.state;
     return (
-      <div className="room">
+      <div className={`room ${hideButtonShow ? 'room-hide' : ''}`}>
         <h1>Rooms</h1>
         <ul className="room-list">
           <li className="room-list-item">

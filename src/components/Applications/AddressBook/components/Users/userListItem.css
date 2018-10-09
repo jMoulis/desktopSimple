@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+@media (max-width: 500px) {
+  .address-book-pagination {
+    flex-direction: column; } }
+
 .user-item {
   position: relative;
   background-color: #41848f;
@@ -16,6 +20,9 @@
     align-items: center; }
   .user-item-header {
     margin-bottom: 1rem; }
+    @media (max-width: 500px) {
+      .user-item-header {
+        flex-direction: column; } }
   .user-item .company-header-reset {
     padding: 0;
     margin: 0; }
@@ -23,5 +30,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around; }
+    @media (max-width: 500px) {
+      .user-item-buttons {
+        padding-top: 1rem; } }
     .user-item-buttons button {
       width: 100%; }

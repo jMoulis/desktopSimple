@@ -1,24 +1,10 @@
-/*
- * Npm import
- */
 import React from 'react';
-
-/*
- * Local import
- */
-
-
-/*
- * Code
- */
+import './index.css';
 
 const NoMatch = () => (
-  <div id="404">
-    <h1 id="app-hello">Oups no page found</h1>
+  <div id="not-found">
+    <h1>404 - Hum... The page was not found</h1>
   </div>
 );
 
-/*
- * Export Default
- */
 export default NoMatch;

@@ -8,6 +8,7 @@
   justify-content: center; }
 
 .team-toolbar {
+  overflow-x: auto;
   position: absolute;
   top: 0;
   right: 0;
