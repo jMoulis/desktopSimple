@@ -1,14 +1,21 @@
 import { connect } from 'react-redux';
 
 import Teams from '../../../components/Profile/Teams';
+import { fetchTeamsAction } from '../../../../../../store/reducers/teamReducer';
 
-const mapStateToProps = ({ authReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
+const mapStateToProps = ({ mainTeamReducer }) => ({
+  teamListProcess: mainTeamReducer.teamListProcess,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchTeamsAction: id => {
+    dispatch(fetchTeamsAction(id));
+  },
 });
 
 const createContainer = connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 );
 
 const TeamsContainer = createContainer(Teams);

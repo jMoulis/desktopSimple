@@ -112,15 +112,15 @@ class App extends Component {
                     <ErrorBoundary>
                       <Dashboard
                         key="dashboard"
-                        showSelectTeamPanel={this.showSelectTeamPanel}
+                        // showSelectTeamPanel={this.showSelectTeamPanel}
                         selectTeam={this.handleSelectTeam}
                       />
 
-                      {this.state.showSelectTeam &&
+                      {/* {this.state.showSelectTeam &&
                         loginProcess.loggedUser.typeUser !== 'company' &&
                         loginProcess.loggedUser.teams.length !== 0 && (
                           <TeamSelector selectTeam={this.handleSelectTeam} />
-                        )}
+                        )} */}
                     </ErrorBoundary>
                     <Footer key="footer" />
                   </div>

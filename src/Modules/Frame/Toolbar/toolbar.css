@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 40px;
+  border-bottom: 2px solid #0a1c28;
+  cursor: grab; }
+  .toolbar header {
+    flex: 1; }
+  .toolbar-title {
+    display: inline-block;
+    margin-left: 5px; }
+  .toolbar-button-container {
+    display: flex;
+    align-items: center; }
+    @media (max-width: 500px) {
+      .toolbar-button-container {
+        display: none; } }

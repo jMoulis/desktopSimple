@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
 import './dashboard.css';
-import Frame from '../../containers/Dashboard/Frame/frame';
+import Frame from '../../Modules/Frame/containers/frame';
 import Helper from '../../containers/Dashboard/Helper/helper';
 import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
-import ErrorBoundary from '../Hoc/ErrorBoundary';
 
 const ROOT_URL = process.env.REACT_APP_API;
 
@@ -19,10 +18,9 @@ class Dashboard extends React.Component {
     loggedUser: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
-    showSelectTeamPanel: PropTypes.func.isRequired,
+    showSelectTeamPanel: PropTypes.func,
     showUserDetailModalAction: PropTypes.func.isRequired,
     fetchNotificationsSuccessAction: PropTypes.func.isRequired,
-    newRoomMessageSuccessAction: PropTypes.func.isRequired,
     fetchNotificationsAction: PropTypes.func.isRequired,
     setConnectedUsersAction: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
@@ -31,6 +29,7 @@ class Dashboard extends React.Component {
   };
   static defaultProps = {
     activeApps: null,
+    showSelectTeamPanel: null,
   };
 
   constructor(props) {
@@ -46,12 +45,8 @@ class Dashboard extends React.Component {
     this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
       props.setConnectedUsersAction(connectedUsers);
     });
-    this.socket.on('START_PRIVATE_CHAT', () => {});
     this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
       props.fetchNotificationsSuccessAction({ notifications });
-    });
-    this.socket.on('NEW_ROOM_MESSAGE_SUCCESS', ({ room, message }) => {
-      props.newRoomMessageSuccessAction({ room, message });
     });
     this.state = {
       helper: true,
@@ -107,14 +102,14 @@ class Dashboard extends React.Component {
     const { user } = loggedUser;
     return (
       <main id="dashboard" className="dashboard">
-        {globalProps.activeTeamProcess.team &&
+        {/* globalProps.activeTeamProcess.team &&
           user.typeUser !== 'company' && (
             <TeamToolbar
               showSettings={this.handleShowSettings}
               showSelectTeamPanel={showSelectTeamPanel}
               globalActions={globalActions}
             />
-          )}
+          ) */}
         {objectValues.map(application => {
           if (application.display) {
             return (
@@ -136,6 +131,7 @@ class Dashboard extends React.Component {
                         globalProps: {
                           ...globalProps,
                           socketIo: this.socket,
+                          loggedUser: user,
                         },
                       });
                     }
@@ -169,6 +165,7 @@ class Dashboard extends React.Component {
             closeFromParent={showUserDetailModalAction}
             name=""
             zIndex={200}
+            small
           >
             <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>

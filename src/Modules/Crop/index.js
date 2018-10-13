@@ -102,7 +102,7 @@ class Crop extends React.Component {
             src={this.state.picture || '/img/avatar.png'}
             alt="Cropping"
           />
-          <div className="crop-toolbar">
+          <div className="cropper-toolbar">
             <button
               type="button"
               className="btn btn-primary"
@@ -119,8 +119,7 @@ class Crop extends React.Component {
             >
               <i className="fas fa-redo-alt" />
             </button>
-          </div>
-          <footer>
+
             <InputFile
               config={{
                 styleContainer: {
@@ -128,7 +127,7 @@ class Crop extends React.Component {
                 },
                 field: {
                   ...parentConfig.model.picture,
-                  label: 'Change picture',
+                  label: 'Change',
                 },
                 onChange: this.handleInputFileChange,
                 focus: this.handleOnFocus,
@@ -144,9 +143,9 @@ class Crop extends React.Component {
               className="btn btn-primary"
               onClick={this.handleCrop}
             >
-              Edit
+              Save
             </button>
-          </footer>
+          </div>
         </div>
       </div>
     );

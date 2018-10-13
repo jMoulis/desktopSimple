@@ -1,13 +1,66 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import UserIconContainer from '../../../../../Modules/UserIcon';
+import RepliesList from './RepliesList';
+import RepliesListSmall from './RepliesList/RepliesListSmall';
+import FormMessageItem from './FormMessageItem/FormMessageItem';
+import Message from './Message';
 import ActionPanel from './ActionPanel';
 
 class MessageListItem extends React.Component {
-  state = {
-    showActionPanelBtn: false,
-    showActionPanel: false,
+  static propTypes = {
+    message: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+    socket: PropTypes.object.isRequired,
+    room: PropTypes.object.isRequired,
+  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showReplyForm: false,
+      showActionPanel: false,
+      showActionPanelBtn: false,
+    };
+  }
+
+  handleShowReplyForm = messageId => {
+    this.setState(() => ({
+      showReplyForm: true,
+      messageId,
+    }));
+  };
+
+  handleShowReplies = () => {
+    this.setState(prevState => ({
+      showReplies: !prevState.showReplies,
+    }));
+  };
+
+  handleHideForm = stateParentKey => {
+    this.setState(() => ({
+      [stateParentKey]: false,
+    }));
+  };
+
+  handleDeleteMessage = messageId => {
+    const { socket, room } = this.props;
+    socket.emit('MESSAGE_DELETE', {
+      room,
+      messageId,
+    });
+  };
+
+  handleUpdateMessage = messageId => {
+    this.setState(() => ({
+      showInputChange: true,
+      messageId,
+    }));
+  };
+
+  handleShowActionPanel = () => {
+    this.setState(prevState => ({
+      showActionPanel: !prevState.showActionPanel,
+    }));
   };
 
   handleDisplayActionMenuBtn = () => {
@@ -16,71 +69,109 @@ class MessageListItem extends React.Component {
       showActionPanel: prevState.showActionPanelBtn && false,
     }));
   };
-  handleShowActionPanel = () => {
-    this.setState(prevState => ({
-      showActionPanel: !prevState.showActionPanel,
+
+  handleHideForm = stateParentKey => {
+    this.setState(() => ({
+      [stateParentKey]: false,
     }));
   };
 
-  handleDeleteMessage = messageId => {
-    console.log(messageId);
-  };
-
-  handleUpdateMessage = messageId => {
-    console.log(messageId);
-  };
-
   render() {
-    const { message } = this.props;
-    const { showActionPanelBtn, showActionPanel } = this.state;
+    const {
+      showReplyForm,
+      showReplies,
+      showActionPanelBtn,
+      showActionPanel,
+      showInputChange,
+    } = this.state;
+    const { message, loggedUser, socket, room } = this.props;
     return (
-      <div
-        className="chat-message-list-item"
-        onMouseEnter={this.handleDisplayActionMenuBtn}
-        onMouseLeave={this.handleDisplayActionMenuBtn}
-      >
-        <div className="chat-message-list-item--header">
-          <UserIconContainer
-            user={{ user: message.sender }}
-            hideNotificationBadge
+      <Fragment>
+        <div
+          className="d-flex flex-justify-between flex-align-items-center"
+          onMouseEnter={this.handleDisplayActionMenuBtn}
+          onMouseLeave={this.handleDisplayActionMenuBtn}
+        >
+          <Message
+            message={message}
+            socket={socket}
+            room={room}
+            loggedUser={loggedUser}
+            showInputChange={showInputChange}
+            callback={this.handleHideForm}
+            typeSocketAction="MESSAGE_UPDATE"
           />
-          <div>
-            <div className="d-flex flex-align-items-baseline">
-              <span className="fullname">{message.sender.fullName}</span>
-              <span className="small">
-                {message.createdAt &&
-                  moment(message.createdAt).format('DD/MM/YYYY hh:mm')}
-              </span>
+          {showActionPanelBtn && (
+            <div className="chat-message-list-item-panel">
+              <button
+                type="button"
+                className="chat-message-list-item-panel-action"
+                onClick={this.handleShowActionPanel}
+              >
+                <i className="fas fa-ellipsis-v" />
+              </button>
+              {showActionPanel && (
+                <ActionPanel
+                  onDelete={this.handleDeleteMessage}
+                  onUpdate={this.handleUpdateMessage}
+                  onAnswer={this.handleShowReplyForm}
+                  canAnswer
+                  messageId={message._id}
+                  isAllowed={loggedUser._id === message.sender._id}
+                />
+              )}
             </div>
-            <div className="chat-message-list-item--content">
-              {message.message}
-            </div>
-          </div>
+          )}
         </div>
-        {showActionPanelBtn && (
-          <div className="chat-message-list-item-panel">
-            <button
-              className="chat-message-list-item-panel-action"
-              onClick={this.handleShowActionPanel}
-            >
-              <i className="fas fa-ellipsis-v" />
-            </button>
-            {showActionPanel && (
-              <ActionPanel
-                onDelete={this.handleDeleteMessage}
-                onUpdate={this.handleUpdateMessage}
-                messageId={message._id}
-              />
-            )}
+
+        {showReplyForm && (
+          <div className="chat-message-list-item--content">
+            <FormMessageItem
+              socket={socket}
+              room={room}
+              typeSocketAction="NEW_REPLY"
+              loggedUser={loggedUser}
+              message={message}
+              stateParentKey="showReplyForm"
+              callback={this.handleHideForm}
+            />
           </div>
         )}
-      </div>
+        {showReplies ? (
+          <Fragment>
+            <RepliesListSmall
+              replies={message.replies}
+              callback={this.handleShowReplies}
+            />
+            <RepliesList
+              replies={message.replies}
+              message={message}
+              socket={socket}
+              room={room}
+              loggedUser={loggedUser}
+              callback={this.handleShowReplyForm}
+            />
+          </Fragment>
+        ) : (
+          <div className="d-flex flex-align-items-center">
+            {message.replies.map(reply => (
+              <UserIconContainer
+                containerCss={{ padding: 0 }}
+                user={{ user: reply.sender }}
+                classCss="small"
+                isSmall
+                hideNotificationBadge
+              />
+            ))}
+            <RepliesListSmall
+              replies={message.replies}
+              callback={this.handleShowReplies}
+            />
+          </div>
+        )}
+      </Fragment>
     );
   }
 }
-
-MessageListItem.propTypes = {
-  message: PropTypes.object.isRequired,
-};
 
 export default MessageListItem;

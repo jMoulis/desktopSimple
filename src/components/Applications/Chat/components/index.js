@@ -15,7 +15,10 @@ class Chat extends React.Component {
     fetchRoomAction: PropTypes.func.isRequired,
     globalProps: PropTypes.object.isRequired,
     fetchRoomsAction: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
+    updateMessageSuccessAction: PropTypes.func.isRequired,
+    newMessageSuccessAction: PropTypes.func.isRequired,
+    newReplySuccessAction: PropTypes.func.isRequired,
+    deleteMessageSuccessAction: PropTypes.func.isRequired,
     roomsFetchProcess: PropTypes.object.isRequired,
   };
 
@@ -45,11 +48,38 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    const { fetchRoomsAction, room } = this.props;
+    const {
+      fetchRoomsAction,
+      room,
+      globalProps: { socketIo },
+      updateMessageSuccessAction,
+      newMessageSuccessAction,
+      deleteMessageSuccessAction,
+      newReplySuccessAction,
+    } = this.props;
     fetchRoomsAction();
     this.addRoomToState(room);
     this.setInitialRoomListView();
     window.addEventListener('resize', this.setInitialRoomListView, false);
+    socketIo.on('START_PRIVATE_CHAT', () => {});
+    socketIo.on('NEW_MESSAGE_SUCCESS', ({ message }) => {
+      newMessageSuccessAction(message);
+    });
+    socketIo.on('UPDATE_MESSAGE_SUCCESS', ({ message }) => {
+      updateMessageSuccessAction(message);
+    });
+    socketIo.on('MESSAGE_DELETE_SUCCESS', ({ message }) => {
+      deleteMessageSuccessAction(message);
+    });
+    socketIo.on('NEW_REPLY_SUCCESS', ({ reply }) => {
+      newReplySuccessAction(reply);
+    });
+    socketIo.on('UPDATE_REPLY_SUCCESS', ({ reply }) => {
+      updateMessageSuccessAction(reply);
+    });
+    socketIo.on('REPLY_DELETE_SUCCESS', ({ reply }) => {
+      updateMessageSuccessAction(reply);
+    });
   }
 
   componentWillUnmount() {
@@ -117,7 +147,7 @@ class Chat extends React.Component {
     }));
   };
   handleHideRoomList = () => {
-    this.setState(prevState => ({
+    this.setState(() => ({
       showRoomList: false,
     }));
   };
@@ -133,8 +163,7 @@ class Chat extends React.Component {
   render() {
     const {
       roomsFetchProcess: { rooms },
-      loggedUser,
-      globalProps: { socketIo },
+      globalProps: { socketIo, loggedUser },
     } = this.props;
     const { room, receiver, showRoomList, smallSize } = this.state;
     return (

@@ -4,21 +4,20 @@ import Chat from '../components';
 import {
   fetchRoomsAction,
   fetchRoomAction,
-  newRoomMessageSuccessAction,
 } from '../../../../store/reducers/chatReducer';
 import { fetchNotificationsSuccessAction } from '../../../../store/reducers/notificationsReducer';
+import {
+  updateMessageSuccessAction,
+  newMessageSuccessAction,
+  deleteMessageSuccessAction,
+  newReplySuccessAction,
+} from '../../../../store/reducers/messageReducer';
 
-/*
- * Code
- */
-
-// State
 const mapStateToProps = ({ chatReducer }) => ({
   roomsFetchProcess: chatReducer.roomsFetchProcess,
   room: chatReducer.roomFetchProcess.room,
 });
 
-// Actions
 const mapDispatchToProps = dispatch => ({
   fetchRoomsAction: () => {
     dispatch(fetchRoomsAction());
@@ -26,17 +25,23 @@ const mapDispatchToProps = dispatch => ({
   fetchRoomAction: roomId => {
     dispatch(fetchRoomAction(roomId));
   },
-  newRoomMessageSuccessAction: (roomId, message) => {
-    dispatch(newRoomMessageSuccessAction(roomId, message));
-  },
   fetchNotificationsSuccessAction: notifications => {
     dispatch(fetchNotificationsSuccessAction(notifications));
   },
+  updateMessageSuccessAction: message => {
+    dispatch(updateMessageSuccessAction(message));
+  },
+  newMessageSuccessAction: message => {
+    dispatch(newMessageSuccessAction(message));
+  },
+  deleteMessageSuccessAction: message => {
+    dispatch(deleteMessageSuccessAction(message));
+  },
+  newReplySuccessAction: reply => {
+    dispatch(newReplySuccessAction(reply));
+  },
 });
 
-/*
- * Export default
- */
 const createContainer = connect(
   mapStateToProps,
   mapDispatchToProps,

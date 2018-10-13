@@ -17,11 +17,9 @@ module.exports = {
   async index(req, res) {
     const apiResponse = new ApiResponse(res);
     try {
-      const LIMIT = 5;
+      const LIMIT = 10;
       let SKIP = 0;
-      let query = {
-        // teams: mongoose.Types.ObjectId(req.query.teams),
-      };
+      let query = {};
       if (req.query.teams) {
         query = {
           ...query,

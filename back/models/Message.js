@@ -2,6 +2,22 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
+const ReplySchema = new Schema({
+  message: {
+    type: String,
+    required: [true, 'Please Provide a message'],
+  },
+  sender: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
+  updatedAt: Date,
+});
+
 const MessageSchema = new Schema({
   message: {
     type: String,
@@ -21,9 +37,10 @@ const MessageSchema = new Schema({
   },
   updatedAt: Date,
   documents: [],
-  replies: {
+  replies: [ReplySchema],
+  room: {
     type: Schema.Types.ObjectId,
-    ref: 'reply',
+    ref: 'room',
   },
   subscribed: Boolean,
 });

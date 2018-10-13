@@ -5,7 +5,7 @@
   top: 2rem;
   min-width: 100px;
   z-index: 1;
-  background-color: #008e8b; }
+  background-color: #D2D3D9; }
   .sub-menu-list {
     padding: 0;
     display: flex;
@@ -21,6 +21,6 @@
         text-align: start;
         outline: none; }
         .sub-menu-list-item-btn:hover {
-          background-color: #00a8a4; }
+          background-color: #e0e1e5; }
         .sub-menu-list-item-btn:active {
-          background-color: #00c1bd; }
+          background-color: #eeeef0; }

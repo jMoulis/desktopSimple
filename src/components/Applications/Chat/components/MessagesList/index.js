@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MessageListItem from './MessageListItem';
+import MessageListItem from '../../containers/MessagesList/MessageListItem';
 import './index.css';
 
 class MessageList extends React.Component {
   static propTypes = {
     roomFetchProcess: PropTypes.object.isRequired,
+    fetchMessagesAction: PropTypes.func.isRequired,
+    messages: PropTypes.array.isRequired,
+    loggedUser: PropTypes.object.isRequired,
+    socket: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -16,8 +20,21 @@ class MessageList extends React.Component {
     this.scrollToBottom(this.messagesList.current);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.scrollToBottom(this.messagesList.current);
+
+    const prevRoomId = prevProps.roomFetchProcess.room._id;
+    const {
+      fetchMessagesAction,
+      roomFetchProcess: { room },
+    } = this.props;
+    if (room._id && typeof prevRoomId === 'undefined') {
+      return fetchMessagesAction(room._id);
+    }
+    if (room._id.toString() !== prevRoomId.toString()) {
+      return fetchMessagesAction(room._id);
+    }
+    return true;
   }
 
   scrollToBottom = element => {
@@ -27,9 +44,12 @@ class MessageList extends React.Component {
   render() {
     const {
       roomFetchProcess: { room },
+      messages,
+      loggedUser,
+      socket,
     } = this.props;
-    if (room && room.messages) {
-      if (room.messages.length === 0) {
+    if (room && messages) {
+      if (messages.length === 0) {
         return (
           <ul ref={this.messagesList} className="chat-message-list">
             <li>
@@ -40,9 +60,14 @@ class MessageList extends React.Component {
       }
       return (
         <ul ref={this.messagesList} className="chat-message-list">
-          {room.messages.map(message => (
+          {messages.map(message => (
             <li key={message._id}>
-              <MessageListItem message={message} />
+              <MessageListItem
+                message={message}
+                loggedUser={loggedUser}
+                socket={socket}
+                room={room}
+              />
             </li>
           ))}
         </ul>

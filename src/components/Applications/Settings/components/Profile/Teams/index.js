@@ -7,13 +7,18 @@ import UserIcon from '../../../../../../Modules/UserIcon';
 class TeamProfile extends React.Component {
   static propTypes = {
     globalActions: PropTypes.object.isRequired,
-    loggedUser: PropTypes.object.isRequired,
+    teamListProcess: PropTypes.object.isRequired,
+    fetchTeamsAction: PropTypes.func.isRequired,
   };
 
   state = {
     showAddTeamModal: false,
   };
 
+  componentDidMount() {
+    const { fetchTeamsAction } = this.props;
+    fetchTeamsAction();
+  }
   handleShowAddTeamModal = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -21,12 +26,14 @@ class TeamProfile extends React.Component {
     }));
   };
   render() {
-    const { globalActions, loggedUser } = this.props;
+    const { globalActions, teamListProcess } = this.props;
+    if (teamListProcess.loading) {
+      return <span />;
+    }
     return (
       <ul className="ul-nav teams">
-        {loggedUser &&
-          loggedUser.teams.length > 0 &&
-          loggedUser.teams.map(team => (
+        {teamListProcess.teams &&
+          teamListProcess.teams.map(team => (
             <li
               key={team._id}
               className="team-container"

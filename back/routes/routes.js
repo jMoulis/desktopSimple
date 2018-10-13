@@ -4,7 +4,7 @@ const UsersController = require('../controllers/users_controller');
 const ProjectsController = require('../controllers/projects_controller');
 const AuthController = require('../controllers/auth_controller');
 const TeamsController = require('../controllers/teams_controller');
-const MessageController = require('../controllers/message_controller');
+const MessageController = require('../controllers/messages_controller');
 const TasksController = require('../controllers/tasks_controller');
 const CommentsController = require('../controllers/comments_controller');
 const FilesController = require('../controllers/files_controller');
@@ -68,8 +68,12 @@ module.exports = app => {
   app.delete('/api/teams/:id', VerifyToken, TeamsController.delete);
 
   app.post('/api/messages', VerifyToken, MessageController.create);
-  app.get('/api/messages', VerifyToken, MessageController.index);
-  app.put('/api/messages/:id', VerifyToken, MessageController.edit);
+  app.get(
+    '/api/messages/room/:roomId',
+    VerifyToken,
+    MessageController.fetchRoomMessages,
+  );
+  app.put('/api/messages/:id', VerifyToken, MessageController.update);
   app.delete('/api/messages/:id', VerifyToken, MessageController.delete);
 
   // Tasks

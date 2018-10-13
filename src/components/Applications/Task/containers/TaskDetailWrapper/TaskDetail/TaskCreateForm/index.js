@@ -7,10 +7,9 @@ import {
   fetchTasksAction,
 } from '../../../../../../../store/reducers/taskReducer';
 
-const mapStateToProps = ({ taskReducer, mainTeamReducer, authReducer }) => ({
+const mapStateToProps = ({ taskReducer, mainTeamReducer }) => ({
   taskCreation: taskReducer.taskCreation,
   teamId: mainTeamReducer.activeTeamProcess.team._id,
-  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 const mapDispatchToProps = dispatch => ({

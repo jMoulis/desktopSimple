@@ -1,4 +1,4 @@
-const RoomController = require('../controllers/rooms_controller');
+const MessageController = require('../controllers/messages_controller');
 const Room = require('../models/Room');
 const UserModel = require('../models/User');
 const Notifications = require('../models/Notifications');
@@ -42,15 +42,79 @@ module.exports = io => {
       }
     });
 
-    socket.on('ROOM_MESSAGE', async ({ message, room, sender }) => {
+    socket.on('NEW_MESSAGE', async ({ message, room, sender }) => {
       try {
-        const newMessage = await RoomController.createMessage(
-          { message, sender },
+        const newMessage = await MessageController.create({
+          message,
+          sender,
           room,
-        );
-        io.to(`${room._id}`).emit('NEW_ROOM_MESSAGE_SUCCESS', {
+        });
+        io.to(`${room._id}`).emit('NEW_MESSAGE_SUCCESS', {
           message: newMessage,
           room: room._id,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+
+    socket.on('NEW_REPLY', async ({ message, room, sender, messageId }) => {
+      try {
+        const newMessage = await MessageController.createReply({
+          message,
+          sender,
+          messageId,
+        });
+        io.to(`${room._id}`).emit('NEW_REPLY_SUCCESS', {
+          reply: newMessage,
+          room: room._id,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+
+    socket.on('REPLY_UPDATE', async ({ message, room, messageId }) => {
+      try {
+        const updateMessage = await MessageController.updateReply(messageId, {
+          message,
+        });
+        io.to(`${room._id}`).emit('UPDATE_REPLY_SUCCESS', {
+          reply: updateMessage,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+
+    socket.on('MESSAGE_UPDATE', async ({ message, room, messageId }) => {
+      try {
+        const updateMessage = await MessageController.update(messageId, {
+          message,
+        });
+        io.to(`${room._id}`).emit('UPDATE_MESSAGE_SUCCESS', {
+          message: updateMessage,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+
+    socket.on('REPLY_DELETE', async ({ room, messageId }) => {
+      try {
+        const deleteMessage = await MessageController.deleteReply(messageId);
+        io.to(`${room._id}`).emit('REPLY_DELETE_SUCCESS', {
+          reply: deleteMessage,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+    socket.on('MESSAGE_DELETE', async ({ room, messageId }) => {
+      try {
+        const deleteMessage = await MessageController.delete(messageId);
+        io.to(`${room._id}`).emit('MESSAGE_DELETE_SUCCESS', {
+          message: deleteMessage,
         });
       } catch (error) {
         console.error(error.message);
@@ -71,24 +135,11 @@ module.exports = io => {
           isRead: false,
         });
         const userToSendTo = usersConnected.getUserByUserId(receiver);
-        io.to(`${userToSendTo.socketId}`).emit('NEW_NOTIFICATION_SUCCESS', {
-          notifications,
-        });
-      }
-    });
-
-    socket.on('NEW_MESSAGE', async ({ message, room, receiver, sender }) => {
-      try {
-        const newMessage = await RoomController.createMessage(
-          { message, receiver, sender },
-          room,
-        );
-        io.to(`${room}`).emit('NEW_MESSAGE_SUCCESS', {
-          message: newMessage,
-          room,
-        });
-      } catch (error) {
-        console.log(error.message);
+        if (userToSendTo) {
+          io.to(`${userToSendTo.socketId}`).emit('NEW_NOTIFICATION_SUCCESS', {
+            notifications,
+          });
+        }
       }
     });
 

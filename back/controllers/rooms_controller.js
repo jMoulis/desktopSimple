@@ -11,21 +11,11 @@ module.exports = {
       query = {
         $or: [{ isPrivate: false }, { users: { $in: [res.locals.user._id] } }],
       };
-      const rooms = await Room.find(query)
-        .populate({
-          path: 'messages',
-          ref: 'message',
-          populate: {
-            path: 'sender',
-            ref: 'user',
-            select: 'fullName picture',
-          },
-        })
-        .populate({
-          path: 'users',
-          ref: 'user',
-          select: 'fullName picture',
-        });
+      const rooms = await Room.find(query, { messages: 0 }).populate({
+        path: 'users',
+        ref: 'user',
+        select: 'fullName picture',
+      });
 
       const privateRooms = rooms.filter(room => room.isPrivateMessage);
       const teamRooms = rooms.filter(room => room.isTeamRoom);
@@ -139,6 +129,7 @@ module.exports = {
       return apiResponse.failure(422, error);
     }
   },
+
   fetchRoomMessages: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
@@ -167,12 +158,15 @@ module.exports = {
   read: async (req, res) => {
     const apiResponse = new ApiResponse(res);
     try {
-      const room = await Room.findOne({
-        users: {
-          $all: [req.query.sender, req.query.receiver],
+      const room = await Room.findOne(
+        {
+          users: {
+            $all: [req.query.sender, req.query.receiver],
+          },
+          isPrivateMessage: true,
         },
-        isPrivateMessage: true,
-      })
+        { messages: 0 },
+      )
         .populate('messages')
         .populate({
           path: 'users',

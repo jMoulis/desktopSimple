@@ -26,7 +26,6 @@
       justify-content: space-around;
       flex-wrap: wrap; }
     .form-container .form-content {
-      background-color: #eee9d1;
       padding: .5rem;
       flex: 1; }
       .form-container .form-content .error-login {

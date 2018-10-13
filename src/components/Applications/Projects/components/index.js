@@ -8,7 +8,6 @@ import AppToolBar from '../../../../Modules/AppToolbar';
 class Projects extends React.Component {
   static propTypes = {
     fetchProjectsAction: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
   };
@@ -59,7 +58,7 @@ class Projects extends React.Component {
   };
 
   render() {
-    const { globalActions, globalProps, loggedUser } = this.props;
+    const { globalActions, globalProps } = this.props;
 
     return (
       <div className="project-container">
@@ -81,21 +80,19 @@ class Projects extends React.Component {
               label: 'New Project',
               action: this.handleTabSelect,
               name: 'create-project',
-              show: loggedUser.typeUser === 'company',
+              show: globalProps.loggedUser.typeUser === 'company',
             },
           ]}
         />
         {this.state.tab === 'projects' && (
           <ListProject
             selectTab={this.handleTabSelect}
-            loggedUser={loggedUser}
             globalActions={globalActions}
             globalProps={globalProps}
           />
         )}
         {this.state.tab === 'create-project' && (
           <NewProject
-            loggedUser={loggedUser}
             onSuccess={this.handleSuccessCreation}
             tabName="projects"
           />

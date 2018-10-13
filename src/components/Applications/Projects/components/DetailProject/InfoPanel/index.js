@@ -13,12 +13,7 @@ class InfoPanel extends React.Component {
   }
 
   render() {
-    const {
-      openCreateTeamModal,
-      user,
-      globalActions,
-      globalProps,
-    } = this.props;
+    const { openCreateTeamModal, globalActions, globalProps } = this.props;
     const { activeProjectProcess } = this.props;
     const { project } = activeProjectProcess;
     return (
@@ -33,17 +28,16 @@ class InfoPanel extends React.Component {
         )}
         {/* if the max Team is ok and if the user is a student */}
         {project.teams.length < project.maxTeam &&
-          user._id !== project.author._id && (
+          globalProps.loggedUser._id !== project.author._id && (
             <ButtonAction
               globalActions={globalActions}
               openCreateTeamModal={openCreateTeamModal}
               project={project}
-              user={user}
               globalProps={globalProps}
             />
           )}
         {project.teams.length === project.maxTeam &&
-          user.typeUser !== 'company' && <NoRoomLeft />}
+          globalProps.loggedUser.typeUser !== 'company' && <NoRoomLeft />}
       </div>
     );
   }
@@ -53,7 +47,6 @@ InfoPanel.propTypes = {
   activeProjectProcess: PropTypes.object.isRequired,
   globalActions: PropTypes.object.isRequired,
   globalProps: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
   openCreateTeamModal: PropTypes.func,
 };
 

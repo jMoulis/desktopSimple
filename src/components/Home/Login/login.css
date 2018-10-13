@@ -34,10 +34,18 @@
 #signin-form {
   padding: 3rem 2rem;
   height: initial;
-  overflow: hidden; }
+  overflow: hidden;
+  align-items: center; }
+  @media (max-width: 500px) {
+    #signin-form {
+      align-items: initial; } }
   #signin-form .form {
     width: inherit;
-    border: 5px solid #d44c00; }
+    border: 5px solid #d44c00;
+    min-width: 500px; }
+    @media (max-width: 500px) {
+      #signin-form .form {
+        min-width: unset; } }
   #signin-form label {
     color: #0a1c28; }
   #signin-form .form-content {

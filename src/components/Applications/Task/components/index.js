@@ -7,7 +7,7 @@ import TaskDetailWrapper from '../containers/TaskDetailWrapper';
 import Modal from '../../../../Modules/Modal/modal';
 import TaskCreateForm from '../containers/TaskDetailWrapper/TaskDetail/TaskCreateForm';
 import AppToolbar from '../../../../Modules/AppToolbar';
-import SelectBoxAssigneeContainer from '../containers/SelectBoxAssignee';
+import SelectBoxAssignee from './SelectBoxAssignee';
 import Utils from '../../../../Utils/utils';
 import SelectBoxToolBar from '../../../../Modules/AppToolbar/SelectBoxToolBar';
 
@@ -15,7 +15,6 @@ class Task extends React.Component {
   static propTypes = {
     fetchTasksAction: PropTypes.func.isRequired,
     taskListProcess: PropTypes.object.isRequired,
-    loggedUser: PropTypes.object.isRequired,
     activeTeam: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
   };
@@ -120,7 +119,7 @@ class Task extends React.Component {
 
   render() {
     const { showCreateModal, isTeamSelected } = this.state;
-    const { taskListProcess, loggedUser } = this.props;
+    const { taskListProcess, globalProps } = this.props;
     return (
       <div className="task d-flex flex-column full-height">
         <AppToolbar
@@ -147,7 +146,7 @@ class Task extends React.Component {
                   value: '',
                   label: 'Select Team',
                 },
-                ...loggedUser.teams.map(team => ({
+                ...globalProps.loggedUser.teams.map(team => ({
                   value: team._id,
                   label: team.name,
                 })),
@@ -218,7 +217,7 @@ class Task extends React.Component {
               ]}
             />
 
-            <SelectBoxAssigneeContainer
+            <SelectBoxAssignee
               teamId={this.state.filter.team}
               callback={this.handleSelectAssign}
               disabled={isTeamSelected}
@@ -228,7 +227,7 @@ class Task extends React.Component {
         <div className="task-content d-flex full-height relative">
           <TaskList />
           {taskListProcess.tasks.length !== 0 ? (
-            <TaskDetailWrapper />
+            <TaskDetailWrapper globalProps={globalProps} />
           ) : (
             <div className="d-flex flex1 flex-justify-center flex-align-items-center">
               <h1>{taskListProcess.error && taskListProcess.error.detail}</h1>
@@ -242,7 +241,10 @@ class Task extends React.Component {
             title="Create a task"
             zIndex={1}
           >
-            <TaskCreateForm socket={this.props.globalProps.socketIo} />
+            <TaskCreateForm
+              socket={this.props.globalProps.socketIo}
+              loggedUser={this.props.globalProps.loggedUser}
+            />
           </Modal>
         )}
       </div>

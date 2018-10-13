@@ -233,7 +233,7 @@ class EditFormProject extends Component {
         id="edit-project-form"
         className="form"
         onKeyPress={this.handleFormKeyPress}
-        noValidate="true"
+        noValidate
       >
         <div className="form-content">
           <CompanyHeader user={author} />

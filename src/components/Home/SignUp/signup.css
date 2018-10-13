@@ -2,12 +2,20 @@
 #signup {
   padding: 3rem 2rem;
   height: initial;
-  overflow: hidden; }
+  overflow: hidden;
+  align-items: center; }
+  @media (max-width: 500px) {
+    #signup {
+      align-items: initial; } }
   #signup label {
     color: #0a1c28; }
   #signup .form {
     width: inherit;
-    border: 5px solid #d44c00; }
+    border: 5px solid #d44c00;
+    min-width: 500px; }
+    @media (max-width: 500px) {
+      #signup .form {
+        min-width: unset; } }
   #signup .form-content {
     width: inherit; }
   #signup #typeUser {

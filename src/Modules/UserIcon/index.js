@@ -8,17 +8,18 @@ import './index.css';
 import { showUserDetailModalAction } from '../../store/reducers/appReducer';
 import { updateNotificationsAction } from '../../store/reducers/notificationsReducer';
 import BadgeNotifications from '../../components/Dashboard/Footer/BadgeNotifications';
-import Utils from '../../Utils/utils';
+import UserDotConnection from './UserDotConnection';
 
 const ROOT_URL = process.env.REACT_APP_API;
 
 const mapStateToProps = ({
   notificationsReducer,
   chatReducer,
-  authReducer,
+  appReducer,
 }) => ({
   notifications: notificationsReducer.notifications,
   room: chatReducer.roomFetchProcess.room,
+  connectedUsers: appReducer.connectedUsers,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -33,6 +34,9 @@ const mapDispatchToProps = dispatch => ({
 class UserIcon extends React.Component {
   static propTypes = {
     showUserDetailModal: PropTypes.func.isRequired,
+    updateNotificationsAction: PropTypes.func.isRequired,
+    notifications: PropTypes.array.isRequired,
+    connectedUsers: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
     classCss: PropTypes.string,
     containerCss: PropTypes.object,
@@ -76,6 +80,12 @@ class UserIcon extends React.Component {
       );
     }
   };
+  isConnected = (user, connectedUsers) => {
+    const userConnected = connectedUsers.some(
+      connectedUser => connectedUser._id === user._id,
+    );
+    return userConnected;
+  };
   render() {
     const {
       showUserDetailModal,
@@ -89,6 +99,8 @@ class UserIcon extends React.Component {
       updateNotificationsAction,
       hideNotificationBadge,
       shouldUpdateNotification,
+      connectedUsers,
+      isSmall,
     } = this.props;
     if (!user.user) {
       return null;
@@ -121,23 +133,30 @@ class UserIcon extends React.Component {
         }}
         data-value={user.user._id}
       >
-        <img
-          className={`mini-thumbnail mini-thumbnail-${classCss}`}
-          src={`${ROOT_URL}${user.user.picture}` || '/img/avatar.png'}
-          alt="Student"
-          title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
-          onClick={() => active && showUserDetailModal(user.user._id)}
-          onKeyPress={() => active && showUserDetailModal(user.user._id)}
-          style={
-            user.spec === 'manager'
-              ? {
-                  border: '2px solid #d44c00',
-                }
-              : {
-                  border: '2px solid transparent',
-                }
-          }
-        />
+        <div className="relative">
+          <UserDotConnection
+            isConnected={this.isConnected(user.user, connectedUsers)}
+            isSmall={isSmall}
+          />
+          <img
+            className={`mini-thumbnail mini-thumbnail-${classCss}`}
+            src={`${ROOT_URL}${user.user.picture}` || '/img/avatar.png'}
+            alt="Student"
+            title={`${user.user.fullName} ${user.spec ? `- ${user.spec}` : ''}`}
+            onClick={() => active && showUserDetailModal(user.user._id)}
+            onKeyPress={() => active && showUserDetailModal(user.user._id)}
+            style={
+              user.spec === 'manager'
+                ? {
+                    border: '2px solid #d44c00',
+                  }
+                : {
+                    border: '2px solid transparent',
+                  }
+            }
+          />
+        </div>
+
         {!hideNotificationBadge && this.hasNotifications(notifications, user)}
         {name && <span>{user.user.fullName}</span>}
       </div>

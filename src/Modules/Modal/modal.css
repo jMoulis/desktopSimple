@@ -23,7 +23,7 @@
 .modal-container {
   margin: 1rem;
   border: 5px solid #0a1c28;
-  background-color: #eee9d1 !important;
+  background-color: white !important;
   min-width: 90%;
   height: 95%;
   overflow: hidden;
@@ -34,7 +34,7 @@
   justify-content: space-between;
   padding: .5rem;
   border-bottom: 5px solid #0a1c28;
-  background-color: #97c0b7; }
+  background-color: #A1A1A6; }
 
 .modal-content {
   height: calc(100% - 50px);

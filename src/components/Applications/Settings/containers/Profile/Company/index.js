@@ -3,18 +3,19 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
 import CompanyProfile from '../../../components/Profile/Company';
-import { editUserAction, clearMessageAction } from '../../../../../../store/reducers/authReducer';
+import {
+  editUserAction,
+  clearMessageAction,
+} from '../../../../../../store/reducers/authReducer';
 /*
  * Code
  */
 // State
 const mapStateToProps = ({ authReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
   editUser: authReducer.editUser,
 });
 
@@ -28,10 +29,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const CompanyProfileContainer = createContainer(CompanyProfile);
 export default CompanyProfileContainer;

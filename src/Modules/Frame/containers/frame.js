@@ -1,0 +1,36 @@
+/*
+ * Npm import
+ */
+import { connect } from 'react-redux';
+
+/*
+ * Local import
+ */
+import Frame from '../Frame';
+import { setActiveAppAction } from '../../../store/reducers/frameReducer';
+
+/*
+ * Code
+ */
+// State
+const mapStateToProps = ({ frameReducer }) => ({
+  activeApp: frameReducer.activeApp,
+  applications: frameReducer.applications,
+});
+
+// Actions
+const mapDispatchToProps = dispatch => ({
+  setActiveAppAction: app => {
+    dispatch(setActiveAppAction(app));
+  },
+});
+
+/*
+ * Export default
+ */
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+const FrameContainer = createContainer(Frame);
+export default FrameContainer;

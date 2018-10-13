@@ -1,0 +1,19 @@
+@import '../../../styles/charte.sass'
+
+.toolbar
+  display: flex
+  justify-content: space-between
+  align-items: center
+  min-height: 40px
+  border-bottom: 2px solid $darkestblue
+  cursor: grab
+  header
+    flex: 1
+  &-title
+    display: inline-block
+    margin-left: 5px
+  &-button-container
+    display: flex
+    align-items: center
+    @media (max-width: $xs)
+      display: none

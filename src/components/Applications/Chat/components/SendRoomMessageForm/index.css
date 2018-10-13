@@ -1,9 +1,24 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.chat {
+  display: flex;
+  height: 100%; }
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: .5rem; }
+  .chat-message-list {
+    overflow: auto;
+    height: 100%; }
+
 .send-room-message-form {
   display: flex;
   margin-top: .5rem;
-  height: 3rem; }
+  height: 3rem;
+  border: 2px solid #0a1c28; }
   .send-room-message-form input {
     width: 100%;
-    border: none; }
+    border: none;
+    outline: none; }
   .send-room-message-form button {
     margin: 0; }

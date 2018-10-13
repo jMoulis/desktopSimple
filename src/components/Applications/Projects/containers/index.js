@@ -3,7 +3,6 @@
  */
 import { connect } from 'react-redux';
 
-
 /*
  * Local import
  */
@@ -15,13 +14,12 @@ import { fetchTeamsAction } from '../store/reducers/teamReducer';
  */
 // State
 const mapStateToProps = ({ authReducer }) => ({
-  loggedUserId: authReducer.loginProcess.loggedUser.id,
   editUser: authReducer.editUser,
 });
 
 // Actions
 const mapDispatchToProps = dispatch => ({
-  fetchProjectsAction: (filter) => {
+  fetchProjectsAction: filter => {
     dispatch(fetchProjectsAction(filter));
   },
   fetchTeamsAction: () => {
@@ -29,10 +27,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-
 /*
  * Export default
  */
-const createContainer = connect(mapStateToProps, mapDispatchToProps);
+const createContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 const ProjectContainer = createContainer(Project);
 export default ProjectContainer;

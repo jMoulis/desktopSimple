@@ -3,7 +3,6 @@ import moment from 'moment';
 import UserIconContainer from '../../../../../../Modules/UserIcon';
 
 const TaskInfo = ({ task }) => {
-  console.log(task);
   return (
     <div id="task-info">
       <div>

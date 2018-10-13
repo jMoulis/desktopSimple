@@ -137,7 +137,7 @@ class RoomsList extends React.Component {
     } = this.props;
 
     return (
-      <div className={`room`}>
+      <div className="room">
         {smallSize && <button onClick={hide}>X</button>}
         <h1>Rooms</h1>
         <ul className="room-list">

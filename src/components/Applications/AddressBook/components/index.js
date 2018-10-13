@@ -28,6 +28,7 @@ class AddressBook extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     const { fetchUsersAction } = this.props;
     fetchUsersAction(this.state.filterParams);
   }
@@ -136,7 +137,7 @@ class AddressBook extends Component {
                   <UserListItem
                     key={user._id}
                     user={user}
-                    loggedUser={loggedUser}
+                    loggedUser={globalProps.loggedUser}
                     socket={globalProps.socketIo}
                   />
                 ))

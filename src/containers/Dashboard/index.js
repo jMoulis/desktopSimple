@@ -17,7 +17,6 @@ import {
 } from '../../store/reducers/appReducer';
 import AppLoader from '../../components/Applications/config/applicationsLoader';
 import { editTeamAction } from '../../store/reducers/teamReducer';
-import { newRoomMessageSuccessAction } from '../../store/reducers/chatReducer';
 import {
   fetchNotificationsAction,
   fetchNotificationsSuccessAction,
@@ -71,9 +70,6 @@ const mapDispatchToProps = dispatch => ({
   },
   showUserDetailModalAction: user => {
     dispatch(showUserDetailModalAction(user));
-  },
-  newRoomMessageSuccessAction: (roomId, message) => {
-    dispatch(newRoomMessageSuccessAction(roomId, message));
   },
   fetchNotificationsAction: () => {
     dispatch(fetchNotificationsAction());

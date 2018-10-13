@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import './index.css';
 import TabContent from './TabContent';
 import TabNav from './TabNav';
-import TaskCommentFormContainer from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentForm';
+import TaskCommentForm from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentForm';
 import TaskCommentEditForm from '../../../containers/TaskDetailWrapper/TaskDetail/TaskComment/TaskCommentEditForm';
 
 class TaskActivity extends React.Component {
   static propTypes = {
     task: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object.isRequired,
   };
   state = {
     type: 'comments',
@@ -22,7 +23,7 @@ class TaskActivity extends React.Component {
   };
 
   render() {
-    const { task } = this.props;
+    const { task, loggedUser } = this.props;
     const { type } = this.state;
     return (
       <div className="task-activity">
@@ -37,7 +38,7 @@ class TaskActivity extends React.Component {
           </ul>
         ) : (
           <ul>
-            <li>{<TaskCommentFormContainer />}</li>
+            <li>{<TaskCommentForm loggedUser={loggedUser} />}</li>
             {task &&
               task.comments &&
               task.comments.map((comment, index) => (

@@ -7,10 +7,13 @@
   background-color: black; }
   .cropper-container {
     width: 30%; }
-  .cropper footer {
+  .cropper-toolbar {
     display: flex;
-    justify-content: space-between;
-    margin-top: 1rem; }
+    justify-content: space-around; }
+    .cropper-toolbar button {
+      margin: 0; }
+    .cropper-toolbar .input-file-label {
+      margin: 0; }
 
 .cropper-bg {
   background-image: url("/img/black.jpg") !important; }

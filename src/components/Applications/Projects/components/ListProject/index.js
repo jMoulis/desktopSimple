@@ -15,7 +15,6 @@ class ListProject extends React.Component {
     activeProjectProcess: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
-    loggedUser: PropTypes.object.isRequired,
     fetchSingleProjectAction: PropTypes.func.isRequired,
   };
   state = {
@@ -92,7 +91,6 @@ class ListProject extends React.Component {
   render() {
     const {
       projectListProcess,
-      loggedUser,
       activeProjectProcess,
       globalActions,
       globalProps,
@@ -101,7 +99,11 @@ class ListProject extends React.Component {
     if (loading) {
       return <Loader />;
     }
-    if (loggedUser.typeUser && loggedUser.typeUser === 'student' && error) {
+    if (
+      globalProps.loggedUser.typeUser &&
+      globalProps.loggedUser.typeUser === 'student' &&
+      error
+    ) {
       return (
         <div className="notFound">
           <span>{error.detail}</span>
@@ -126,7 +128,7 @@ class ListProject extends React.Component {
             title="New Project"
             zIndex={this.state.showNewProjectForm.zIndex}
           >
-            <NewProject loggedUser={loggedUser} />
+            <NewProject />
           </Modal>
         )}
         {this.state.createTeamModal.display && (
@@ -137,7 +139,7 @@ class ListProject extends React.Component {
             zIndex={this.state.createTeamModal.zIndex}
           >
             <Team
-              loggedUser={loggedUser}
+              loggedUser={globalProps.loggedUser}
               closeOnSuccess={this.handleCloseModalOnSuccess}
             />
           </Modal>
@@ -151,7 +153,6 @@ class ListProject extends React.Component {
             zIndex={this.state.detailProjectModal.zIndex}
           >
             <DetailProject
-              loggedUser={loggedUser}
               openNewTeamModal={this.handleShowCreateTeamModal}
               globalActions={globalActions}
               globalProps={globalProps}

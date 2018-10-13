@@ -4,9 +4,15 @@
   padding: 3rem 2rem
   height: initial
   overflow: hidden
+  align-items: center
+  @media (max-width: $xs)
+    align-items: initial
   .form
     width: inherit
     border: 5px solid $orange
+    min-width: 500px
+    @media (max-width: $xs)
+      min-width: unset
   label
     color: $darkestblue
   .form-content

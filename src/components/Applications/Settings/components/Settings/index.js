@@ -10,8 +10,8 @@ import AppToolbar from '../../../../../Modules/AppToolbar';
 
 class Settings extends React.Component {
   static propTypes = {
-    loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object,
+    globalProps: PropTypes.object.isRequired,
   };
   static defaultProps = {
     globalActions: null,
@@ -64,7 +64,10 @@ class Settings extends React.Component {
     }
   };
   render() {
-    const { loggedUser, globalActions } = this.props;
+    const {
+      globalProps: { loggedUser },
+      globalActions,
+    } = this.props;
     const { subMenu } = this.state;
     return (
       <div className="settings-container">
@@ -119,14 +122,12 @@ class Settings extends React.Component {
             width: '50%',
           }}
         />
-        {this.state.tab === 'profile' && <Profile key="profile" />}
+        {this.state.tab === 'profile' && (
+          <Profile loggedUser={loggedUser} key="profile" />
+        )}
         {this.state.tab === 'teams' &&
           loggedUser.typeUser !== 'company' && (
-            <TeamProfile
-              key="teams"
-              loggedUser={loggedUser}
-              globalActions={globalActions}
-            />
+            <TeamProfile key="teams" globalActions={globalActions} />
           )}
         {this.state.tab === 'newTeam' && (
           <NewTeamContainer
@@ -135,8 +136,12 @@ class Settings extends React.Component {
             tabName="teams"
           />
         )}
-        {this.state.tab === 'company' && <CompanyProfile key="profile" />}
-        {this.state.tab === 'account' && <AccountProfile key="account" />}
+        {this.state.tab === 'company' && (
+          <CompanyProfile loggedUser={loggedUser} key="profile" />
+        )}
+        {this.state.tab === 'account' && (
+          <AccountProfile loggedUser={loggedUser} key="account" />
+        )}
       </div>
     );
   }

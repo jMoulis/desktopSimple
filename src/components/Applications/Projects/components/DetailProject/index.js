@@ -10,7 +10,6 @@ import EditFormProjectContainer from '../../containers/DetailProject/editFormPro
 class DetailProject extends React.Component {
   static propTypes = {
     activeProjectProcess: PropTypes.object.isRequired,
-    loggedUser: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
     editProjectAction: PropTypes.func.isRequired,
@@ -43,11 +42,11 @@ class DetailProject extends React.Component {
   };
   handleSubscribe = evt => {
     const { name } = evt.currentTarget;
-    const { editProjectAction, loggedUser } = this.props;
+    const { editProjectAction, globalProps } = this.props;
     const stateSubscribers = this.state.subscribers.value;
     let subscribers = [];
     const userAlreadySubscribed = stateSubscribers.find(
-      subscriber => subscriber._id === loggedUser._id,
+      subscriber => subscriber._id === globalProps.loggedUser._id,
     );
 
     switch (name) {
@@ -66,7 +65,7 @@ class DetailProject extends React.Component {
               subscribers: {
                 value: JSON.stringify([
                   ...stateSubscribers,
-                  { _id: loggedUser._id },
+                  { _id: globalProps.loggedUser._id },
                 ]),
                 changed: true,
               },
@@ -76,7 +75,7 @@ class DetailProject extends React.Component {
         );
       case 'unsubscribe':
         subscribers = stateSubscribers.filter(
-          subscriber => subscriber._id !== loggedUser._id,
+          subscriber => subscriber._id !== globalProps.loggedUser._id,
         );
         return this.setState(
           prevState => ({
@@ -122,13 +121,12 @@ class DetailProject extends React.Component {
     const {
       activeProjectProcess,
       openNewTeamModal,
-      loggedUser,
       globalActions,
       globalProps,
       editProjectAction,
     } = this.props;
     const { loading, project } = activeProjectProcess;
-    const user = loggedUser;
+    const user = globalProps.loggedUser;
     if (loading || Object.keys(project).length === 0) {
       if (this.state.delete) {
         return <span>Message confirmation deleted</span>;
@@ -164,10 +162,9 @@ class DetailProject extends React.Component {
           </li>
         </ul>
         <div className="project-content">
-          <EditFormProjectContainer loggedUser={loggedUser} />
+          <EditFormProjectContainer loggedUser={globalProps.loggedUser} />
           <InfoPanel
             openCreateTeamModal={openNewTeamModal}
-            user={user}
             globalActions={{
               ...globalActions,
               editProjectAction,

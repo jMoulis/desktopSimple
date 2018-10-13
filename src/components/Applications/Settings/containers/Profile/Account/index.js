@@ -17,7 +17,6 @@ import {
  */
 // State
 const mapStateToProps = ({ authReducer }) => ({
-  loggedUser: authReducer.loginProcess.loggedUser,
   editUser: authReducer.editUser,
 });
 // Actions

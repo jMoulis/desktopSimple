@@ -6,9 +6,8 @@ import {
   deleteTaskAction,
 } from '../../../../../../store/reducers/taskReducer';
 
-const mapStateToProps = ({ taskReducer, authReducer }) => ({
+const mapStateToProps = ({ taskReducer }) => ({
   activeTaskProcess: taskReducer.activeTaskProcess,
-  loggedUser: authReducer.loginProcess.loggedUser,
 });
 
 const mapDispatchProps = dispatch => ({

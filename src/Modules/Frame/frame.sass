@@ -1,0 +1,52 @@
+@import '../../styles/charte.sass'
+
+.frame
+  background-color: $frameBg
+  border: 8px solid $darkestblue
+  border-radius: 2px
+  box-shadow: 0px 0px 20px 0px $darkestblue
+  flex-direction: column
+  min-height: 250px
+  min-width: 250px
+  position: absolute
+  overflow: auto // Must be kept for the resize attribute
+  resize: both
+  max-height: 98%
+  display: flex
+  padding-bottom: 1rem
+  @media (max-width: $xs)
+    bottom: 0 !important
+    height: inherit !important
+    left: 0 !important
+    resize: none
+    right: 0 !important
+    top: 0 !important
+    width: inherit !important
+    max-height: 100% !important
+  &-appear
+    opacity: 0.01
+  &-appear.frame-appear-active
+    opacity: 1
+    transition: opacity 300ms ease-in
+  &-exit
+    opacity: 1
+  &-exit.frame-exit-active
+    opacity: 0.01
+    transition: opacity 300ms ease-in
+  &-reset
+    bottom: 0 !important
+    height: inherit !important
+    left: 0 !important
+    resize: none
+    right: 0 !important
+    top: 0 !important
+    width: inherit !important
+    max-height: 100% !important
+  &-reduce
+    display: none
+  .child-app
+    height: 100%
+    overflow: hidden
+    position: relative
+    background-color: $windowBgColor
+    border-bottom: 2px solid $darkestblue

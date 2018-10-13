@@ -8,10 +8,12 @@ class SendRoomMessageForm extends React.Component {
     loggedUser: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired,
     room: PropTypes.object,
+    receiver: PropTypes.object,
   };
 
   static defaultProps = {
     room: null,
+    receiver: null,
   };
 
   state = {
@@ -21,18 +23,20 @@ class SendRoomMessageForm extends React.Component {
   handleSubmit = evt => {
     evt.preventDefault();
     const { loggedUser, socket, room, receiver } = this.props;
-    socket.emit('ROOM_MESSAGE', {
+
+    socket.emit('NEW_MESSAGE', {
       room,
       sender: loggedUser._id,
       message: this.state.message,
-      receiver: receiver && receiver._id,
     });
+
     socket.emit('NEW_NOTIFICATION', {
       room,
       sender: loggedUser._id,
       message: this.state.message,
       receiver: receiver && receiver._id,
     });
+
     this.setState(() => ({
       message: '',
     }));

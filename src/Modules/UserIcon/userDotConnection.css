@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.user-dot {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background-color: gray; }
+  .user-dot-small {
+    width: 5px;
+    height: 5px;
+    border: 1px solid white; }
+  .user-dot-connected {
+    background-color: green; }
