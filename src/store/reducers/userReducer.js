@@ -171,10 +171,6 @@ const reducer = (state = initialState, action = {}) => {
   }
 };
 
-/*
- *Action creators
- */
-
 export const fetchUsersCountAction = filter => ({
   type: FETCH_USERS_COUNT,
   payload: filter,

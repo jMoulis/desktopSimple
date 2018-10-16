@@ -23,6 +23,7 @@ class Dashboard extends React.Component {
     fetchNotificationsSuccessAction: PropTypes.func.isRequired,
     fetchNotificationsAction: PropTypes.func.isRequired,
     setConnectedUsersAction: PropTypes.func.isRequired,
+    emptyConnectedUserListAction: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
     selectTeam: PropTypes.func.isRequired,
     activeApps: PropTypes.array,
@@ -39,34 +40,88 @@ class Dashboard extends React.Component {
       query: {
         userId: props.loggedUser.user._id,
       },
+      // reconnectionAttempts: 5,
     });
-    this.socket.on('connect', () => {});
-    this.socket.on('reconnect', () => this.handleStatusSocket('reconnect'));
+    this.state = {
+      helper: true,
+      showSettings: false,
+      socketStatus: {
+        type: null,
+        message: null,
+        error: {
+          reconnecting: {
+            status: false,
+            message: '',
+          },
+        },
+      },
+    };
+    this.socket.on('connect', () => {
+      console.log('connect');
+      this.handleStatusSocket({
+        type: 'connect',
+        message: 'You are connected',
+        error: null,
+      });
+    });
+    this.socket.on('connect_error', () => {
+      const { emptyConnectedUserListAction } = this.props;
+      emptyConnectedUserListAction();
+      this.handleStatusSocket({
+        error: {
+          type: 'connect_error',
+          message: 'Chat connexion failed',
+          ...this.state.socketStatus.error,
+        },
+      });
+    });
+    this.socket.on('reconnecting', () => {
+      this.handleStatusSocket({
+        error: {
+          reconnecting: {
+            status: true,
+            message: 'We are trying to reconnect you',
+          },
+        },
+      });
+    });
+    this.socket.on('reconnect', () => {
+      this.handleStatusSocket({
+        type: 'reconnect',
+        message: 'Chat reconnexion successfull',
+      });
+    });
+    this.socket.on('reconnect_failed', () => {
+      this.handleStatusSocket({
+        error: {
+          type: 'reconnect_failed',
+          message: 'Reconnection failed. Check your internet connexion',
+          reconnecting: {
+            status: false,
+            message: 'Reconnection failed. Check your internet connexion',
+          },
+        },
+      });
+    });
     this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
       props.setConnectedUsersAction(connectedUsers);
     });
     this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
       props.fetchNotificationsSuccessAction({ notifications });
     });
-    this.state = {
-      helper: true,
-      showSettings: false,
-      status: null,
-    };
   }
 
   componentDidMount() {
     const { fetchNotificationsAction } = this.props;
     fetchNotificationsAction();
   }
-
   componentWillUnmount() {
     this.socket.close();
   }
 
-  handleStatusSocket = status => {
+  handleStatusSocket = socketStatus => {
     this.setState(() => ({
-      status,
+      socketStatus,
     }));
   };
 
@@ -100,6 +155,7 @@ class Dashboard extends React.Component {
       item => applications[item],
     );
     const { user } = loggedUser;
+    const { socketStatus } = this.state;
     return (
       <main id="dashboard" className="dashboard">
         {/* globalProps.activeTeamProcess.team &&
@@ -110,6 +166,7 @@ class Dashboard extends React.Component {
               globalActions={globalActions}
             />
           ) */}
+        {/* {status.type === 'error' && <Notifications message={status.message} />} */}
         {objectValues.map(application => {
           if (application.display) {
             return (
@@ -132,6 +189,7 @@ class Dashboard extends React.Component {
                           ...globalProps,
                           socketIo: this.socket,
                           loggedUser: user,
+                          socketStatus,
                         },
                       });
                     }

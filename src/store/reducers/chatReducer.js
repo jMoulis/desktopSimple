@@ -4,6 +4,8 @@ export const FETCH_ROOMS = 'FETCH_ROOMS';
 export const FETCH_ROOMS_SUCCESS = 'FETCH_ROOMS_SUCCESS';
 export const FETCH_ROOMS_FAILURE = 'FETCH_ROOMS_FAILURE';
 
+export const SET_DEFAULT_ROOM = 'SET_DEFAULT_ROOM';
+
 export const FETCH_ROOMS_UPDATE_STATUS = 'FETCH_ROOMS_UPDATE_STATUS';
 
 export const FETCH_ROOM = 'FETCH_ROOM';
@@ -92,6 +94,7 @@ const reducer = (state = initialState, action = {}) => {
           ...state.roomFetchProcess,
           room: defaultRoom || {},
         },
+        defaultRoom,
       };
     }
     case FETCH_ROOMS_FAILURE: {
@@ -111,6 +114,17 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
       };
     }
+
+    case SET_DEFAULT_ROOM: {
+      return {
+        ...state,
+        roomFetchProcess: {
+          ...state.roomFetchProcess,
+          room: state.defaultRoom || {},
+        },
+      };
+    }
+
     case ADD_ROOM_TO_STATE: {
       const rooms = [...state.roomsFetchProcess.rooms];
       if (rooms.some(room => room._id === action.payload._id) === false) {
@@ -160,6 +174,11 @@ export const addRoomToStateAction = room => ({
   type: ADD_ROOM_TO_STATE,
   payload: room,
 });
+
+export const setDefaultRoomAction = () => ({
+  type: SET_DEFAULT_ROOM,
+});
+
 export const fetchRoomsAndUpdateStatus = (roomId, loggedUserId, status) => ({
   type: FETCH_ROOMS_UPDATE_STATUS,
   payload: {

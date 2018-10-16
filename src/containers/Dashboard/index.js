@@ -14,6 +14,7 @@ import {
 import {
   showUserDetailModalAction,
   setConnectedUsersAction,
+  emptyConnectedUserListAction,
 } from '../../store/reducers/appReducer';
 import AppLoader from '../../components/Applications/config/applicationsLoader';
 import { editTeamAction } from '../../store/reducers/teamReducer';
@@ -74,8 +75,11 @@ const mapDispatchToProps = dispatch => ({
   fetchNotificationsAction: () => {
     dispatch(fetchNotificationsAction());
   },
-  fetchNotificationsSuccessAction: notiifcations => {
-    dispatch(fetchNotificationsSuccessAction(notiifcations));
+  fetchNotificationsSuccessAction: notifcations => {
+    dispatch(fetchNotificationsSuccessAction(notifcations));
+  },
+  emptyConnectedUserListAction: () => {
+    dispatch(emptyConnectedUserListAction());
   },
 });
 

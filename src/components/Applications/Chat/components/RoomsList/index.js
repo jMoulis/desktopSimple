@@ -4,6 +4,8 @@ import axios from 'axios';
 import './index.css';
 import UserIconContainer from '../../../../../Modules/UserIcon';
 import SelectUserPanel from './SelectUserPanel';
+import Modal from '../../../../../Modules/Modal/modal';
+import UsersLoaderContainer from '../../../../../Modules/UserLoader';
 
 const ROOT_URL = process.env.REACT_APP_API;
 class RoomsList extends React.Component {
@@ -12,10 +14,18 @@ class RoomsList extends React.Component {
     callback: PropTypes.func.isRequired,
     fetchRoomsAndUpdateStatus: PropTypes.func.isRequired,
     loggedUser: PropTypes.object.isRequired,
+    smallSize: PropTypes.bool,
+    closeRoomAction: PropTypes.func.isRequired,
+    setDefaultRoomAction: PropTypes.func.isRequired,
+    selectedRoom: PropTypes.object,
+    defaultRoom: PropTypes.object,
   };
 
   static defaultProps = {
     rooms: {},
+    smallSize: false,
+    selectedRoom: {},
+    defaultRoom: {},
   };
 
   constructor(props) {
@@ -26,6 +36,7 @@ class RoomsList extends React.Component {
       users: [],
       showSelectSearch: false,
       hideButtonShow: true,
+      showNewPrivateMessageModal: false,
     };
   }
 
@@ -83,6 +94,20 @@ class RoomsList extends React.Component {
     }
   };
 
+  hanldeSelectUser = async user => {
+    const { callback, loggedUser, fetchRoomsAndUpdateStatus } = this.props;
+    const { room } = await this._fetchRoomAction(
+      user,
+      loggedUser,
+      this._setError,
+    );
+    fetchRoomsAndUpdateStatus(room._id, loggedUser._id, true);
+    callback(room, user);
+    this.setState(() => ({
+      showSelectSearch: false,
+    }));
+  };
+
   _fetchRoomAction = async (receiver, user, error) => {
     try {
       const {
@@ -104,25 +129,28 @@ class RoomsList extends React.Component {
     }
   };
 
-  hanldeSelectUser = async user => {
-    const { callback, loggedUser, fetchRoomsAndUpdateStatus } = this.props;
-    const { room } = await this._fetchRoomAction(
-      user,
-      loggedUser,
-      this._setError,
-    );
-    fetchRoomsAndUpdateStatus(room._id, loggedUser._id, true);
-    callback(room, user);
-    this.setState(() => ({
-      showSelectSearch: false,
-    }));
-  };
-
   _setError = message => this.setState(() => ({ error: message }));
 
   handleShowRoomList = () => {
     this.setState(prevState => ({
       hideButtonShow: !prevState.hideButtonShow,
+    }));
+  };
+
+  handleNewPrivateMessage = ({ user }) => {
+    this.hanldeSelectUser(user);
+    this.setState(prevState => ({
+      showNewPrivateMessageModal: !prevState.showNewPrivateMessageModal,
+    }));
+  };
+  handleCloseModal = () => {
+    this.setState(() => ({
+      showNewPrivateMessageModal: false,
+    }));
+  };
+  handleOpenModal = () => {
+    this.setState(() => ({
+      showNewPrivateMessageModal: true,
     }));
   };
 
@@ -133,22 +161,36 @@ class RoomsList extends React.Component {
       loggedUser,
       fetchRoomsAndUpdateStatus,
       smallSize,
-      hide,
+      closeRoomAction,
+      setDefaultRoomAction,
+      selectedRoom,
+      defaultRoom,
     } = this.props;
-
+    const { showNewPrivateMessageModal } = this.state;
     return (
       <div className="room">
-        {smallSize && <button onClick={hide}>X</button>}
+        {smallSize && <button onClick={closeRoomAction}>X</button>}
         <h1>Rooms</h1>
         <ul className="room-list">
-          <li className="room-list-item">
+          <li
+            style={{
+              padding: '.5rem',
+            }}
+          >
             <ul>
               <li>
                 <h2>#Global</h2>
               </li>
               {rooms.globalRooms &&
                 rooms.globalRooms.map((globalRoom, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className={`room-list-item ${
+                      globalRoom._id === selectedRoom._id
+                        ? 'room-list-item-selected'
+                        : ''
+                    }`}
+                  >
                     <button
                       className="room-list-item-btn"
                       onClick={() => callback(globalRoom)}
@@ -162,7 +204,14 @@ class RoomsList extends React.Component {
               </li>
               {rooms.teamRooms &&
                 rooms.teamRooms.map((teamRoom, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className={`room-list-item ${
+                      teamRoom._id === selectedRoom._id
+                        ? 'room-list-item-selected'
+                        : ''
+                    }`}
+                  >
                     <button
                       className="room-list-item-btn"
                       onClick={() => callback(teamRoom)}
@@ -181,6 +230,9 @@ class RoomsList extends React.Component {
                     onChange={this.handleSearch}
                     placeholder="Search private message"
                   />
+                  <button onClick={this.handleOpenModal}>
+                    <i className="fas fa-edit" />
+                  </button>
                   {this.state.showSelectSearch && (
                     <SelectUserPanel
                       users={this.state.users}
@@ -191,7 +243,14 @@ class RoomsList extends React.Component {
               </li>
               {rooms.privateRooms &&
                 rooms.privateRooms.map(privateRoom => (
-                  <li key={privateRoom._id}>
+                  <li
+                    key={privateRoom._id}
+                    className={`room-list-item ${
+                      privateRoom._id === selectedRoom._id
+                        ? 'room-list-item-selected'
+                        : ''
+                    }`}
+                  >
                     <UserIconContainer
                       user={{
                         user: privateRoom.users.find(
@@ -207,13 +266,15 @@ class RoomsList extends React.Component {
                         top: 0,
                         right: 0,
                       }}
-                      onClick={() =>
+                      onClick={() => {
+                        callback(defaultRoom);
+                        setDefaultRoomAction();
                         fetchRoomsAndUpdateStatus(
                           privateRoom._id,
                           loggedUser._id,
                           false,
-                        )
-                      }
+                        );
+                      }}
                     >
                       X
                     </button>
@@ -222,6 +283,18 @@ class RoomsList extends React.Component {
             </ul>
           </li>
         </ul>
+        {showNewPrivateMessageModal && (
+          <Modal
+            closeFromParent={this.handleCloseModal}
+            zIndex={2}
+            title="New Private message"
+          >
+            <UsersLoaderContainer
+              filter={{ type: 'student' }}
+              select={this.handleNewPrivateMessage}
+            />
+          </Modal>
+        )}
       </div>
     );
   }

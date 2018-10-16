@@ -44,6 +44,7 @@ class UserIcon extends React.Component {
     name: PropTypes.bool,
     hideNotificationBadge: PropTypes.bool,
     shouldUpdateNotification: PropTypes.bool,
+    isSmall: PropTypes.bool,
     callback: PropTypes.func,
   };
   static defaultProps = {
@@ -54,6 +55,7 @@ class UserIcon extends React.Component {
     callback: null,
     hideNotificationBadge: false,
     shouldUpdateNotification: false,
+    isSmall: false,
   };
   hasNotifications = (notifications, { user }) => {
     const filteredNotif = notifications.filter(

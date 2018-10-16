@@ -1,7 +1,69 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.chat {
+  display: flex;
+  height: 100%; }
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: .5rem; }
+  .chat-message-list {
+    overflow: auto;
+    height: 100%; }
+
+.room {
+  padding: .5rem;
+  border-right: 2px solid #0a1c28; }
+  @media (max-width: 500px) {
+    .room {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1; } }
+  .room-list {
+    overflow: auto;
+    height: calc(100% - 40px); }
+    .room-list-search-form {
+      position: relative;
+      width: 100%;
+      display: flex; }
+      .room-list-search-form input {
+        border: none;
+        width: 100%;
+        padding: .5rem;
+        box-sizing: border-box;
+        outline: none; }
+    .room-list button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 300ms;
+      margin-left: .3rem;
+      outline: none; }
+      .room-list button:hover {
+        color: #d44c00; }
+      .room-list button-btn {
+        padding: .5rem 0;
+        outline: none; }
+    .room-list-item {
+      display: flex;
+      justify-content: space-between;
+      transition: all 300ms;
+      cursor: pointer; }
+      .room-list-item:hover {
+        background-color: rgba(0, 0, 0, 0.2); }
+      .room-list-item-selected {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: #d44c00; }
+    .room-list h2 {
+      padding: .5rem;
+      font-weight: bold;
+      cursor: pointer; }
+
 .select-user-list {
   position: absolute;
   top: 2.5rem;
-  background-color: white;
+  background-color: #A1A1A6;
   width: 190px;
   overflow: auto;
   height: 250px;

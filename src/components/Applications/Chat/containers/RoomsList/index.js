@@ -1,15 +1,25 @@
 import { connect } from 'react-redux';
 import RoomsList from '../../components/RoomsList';
-import { fetchRoomsAndUpdateStatus } from '../../../../../store/reducers/chatReducer';
+import {
+  fetchRoomsAndUpdateStatus,
+  setDefaultRoomAction,
+} from '../../../../../store/reducers/chatReducer';
+
+const mapStateToProps = ({ chatReducer }) => ({
+  defaultRoom: chatReducer.defaultRoom,
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchRoomsAndUpdateStatus: (roomId, loggedUserId, status) => {
     dispatch(fetchRoomsAndUpdateStatus(roomId, loggedUserId, status));
   },
+  setDefaultRoomAction: () => {
+    dispatch(setDefaultRoomAction());
+  },
 });
 
 const createContainer = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 

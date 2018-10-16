@@ -14,7 +14,6 @@ const hasSelectedTag = (selectedTags, tag) => {
   return false;
 };
 const hisSelected = (users, me) => {
-  console.log(users);
   const amISelected = Object.values(users).find(user => user._id === me._id);
   if (amISelected) {
     return amISelected;

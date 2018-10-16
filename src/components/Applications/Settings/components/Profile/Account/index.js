@@ -6,7 +6,7 @@ import Model from './account-model';
 import Input from '../../../../../Form/input';
 import Button from '../../../../../Form/button';
 import AlertBox from '../../../../../../Modules/AlertBox';
-import Info from '../../../../../../Modules/Info';
+import Notifications from '../../../../../../Modules/Notifications';
 
 class AccountProfile extends React.Component {
   static propTypes = {
@@ -122,30 +122,36 @@ class AccountProfile extends React.Component {
       }
     }
   };
+
   handleDeleteAccount = () => {
     const { deleteUserAction, loggedUser } = this.props;
     deleteUserAction(loggedUser._id);
   };
+
   handleShowAlertBoxDanger = () => {
     this.setState(prevState => ({
       ...prevState,
       showAlertBox: !prevState.showAlertBox,
     }));
   };
+
   render() {
     const { editUser, clearMessageAction } = this.props;
-    const { editing, success } = editUser;
+    const { success } = editUser;
     const { error } = this.state;
     return (
       <div id="profile" className="form-container account" key="app-content">
         {success && (
-          <Info message={success} parentAction={clearMessageAction} />
+          <Notifications
+            message="Password changed"
+            parentAction={clearMessageAction}
+          />
         )}
         <form
           id="profile-form"
           className="form"
           onSubmit={this.handleSubmit}
-          noValidate="true"
+          noValidate
           onKeyPress={this.handleFormKeyPress}
         >
           <div className="profile-content-form-wrapper">
@@ -189,7 +195,6 @@ class AccountProfile extends React.Component {
               <Button
                 type="submit"
                 label="Change"
-                editing={editing}
                 disabled={this.state.disabled}
                 category="primary"
               />

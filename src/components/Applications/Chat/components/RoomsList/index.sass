@@ -13,6 +13,7 @@
     &-search-form
       position: relative
       width: 100%
+      display: flex
       & input
         border: none
         width: 100%
@@ -28,20 +29,20 @@
       outline: none
       &:hover
         color: $orange
-    &-item
-      padding: .5rem
       &-btn
         padding: .5rem 0
         outline: none
-      & ul
-        & li
-          display: flex
-          justify-content: space-between
-          transition: all 300ms
-          cursor: pointer
-          &:hover
-            background-color: rgba(0,0,0, .2)
-      & h2
-        padding: .5rem
-        font-weight: bold
-        cursor: pointer
+    &-item
+      display: flex
+      justify-content: space-between
+      transition: all 300ms
+      cursor: pointer
+      &:hover
+        background-color: rgba(0,0,0, .2)
+      &-selected
+        background-color: rgba(0,0,0, .2)
+        color: $orange
+    & h2
+      padding: .5rem
+      font-weight: bold
+      cursor: pointer

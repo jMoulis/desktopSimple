@@ -104,7 +104,16 @@ module.exports = {
         });
       }
 
-      const users = await User.find(query, { password: 0 })
+      const projection = {
+        available: 0,
+        files: 0,
+        projects: 0,
+        rooms: 0,
+        subscribes: 0,
+        teams: 0,
+        password: 0,
+      };
+      const users = await User.find(query, projection)
         .sort(
           req.query.sorting ? { fullName: req.query.sorting } : { fullName: 1 },
         )

@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.chat {
+  display: flex;
+  height: 100%; }
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: .5rem; }
+  .chat-message-list {
+    overflow: auto;
+    height: 100%; }
+
+.socket-status {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #ff6666;
+  font-size: 1rem;
+  color: white;
+  height: 40px; }
+  .socket-status-success {
+    background-color: #7fbf7f; }

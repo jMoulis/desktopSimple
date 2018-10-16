@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AppLoader from '../../Applications/config/applicationsLoader';
 import './footer.css';
-import Thumbnail from '../../../containers/Dashboard/Footer/footerThumbnail';
 import BadgeNotifications from './BadgeNotifications';
+import UserIconContainer from '../../../Modules/UserIcon';
 
 class Footer extends React.Component {
   static propTypes = {
@@ -31,6 +31,13 @@ class Footer extends React.Component {
   handleLogout = () => {
     const { logoutAction } = this.props;
     logoutAction();
+  };
+
+  isConnected = (user, connectedUsers) => {
+    const userConnected = connectedUsers.some(
+      connectedUser => connectedUser._id === user._id,
+    );
+    return userConnected;
   };
 
   hasNotifications = (notifications, appNotificationKey) => {
@@ -104,9 +111,16 @@ class Footer extends React.Component {
               data-appname="Settings"
               onClick={this.handleStartApp}
               className="app-btn"
+              style={{
+                padding: 0,
+              }}
               title="Profile"
             >
-              <Thumbnail />
+              <UserIconContainer
+                user={{ user: loggedUser }}
+                active={false}
+                classCss="middle"
+              />
             </button>
           </div>
           <div className="btn-container">

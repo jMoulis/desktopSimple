@@ -136,9 +136,7 @@ module.exports = {
         {
           $pull: {
             replies: {
-              $elemMatch: {
-                _id: messageId,
-              },
+              _id: messageId,
             },
           },
         },

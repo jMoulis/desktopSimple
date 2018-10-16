@@ -14,10 +14,8 @@
 .chat-message-list {
   margin-top: 1rem; }
   .chat-message-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .5rem 0; }
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(10, 28, 40, 0.2); }
     .chat-message-list-item-panel {
       position: relative; }
       .chat-message-list-item-panel-action {
@@ -29,7 +27,8 @@
         .chat-message-list-item-panel-action:hover {
           color: #d44c00; }
     .chat-message-list-item--header {
-      display: flex; }
+      display: flex;
+      justify-content: space-between; }
       .chat-message-list-item--header .fullname {
         margin-right: .5rem;
         font-weight: bold; }

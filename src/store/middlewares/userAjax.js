@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-//import { ROOT_URL } from '../../Utils/config';
 import {
   FETCH_USER,
   fetchUserSuccessAction,

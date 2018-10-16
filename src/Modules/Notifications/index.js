@@ -3,23 +3,35 @@ import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import './index.css';
 
-class Info extends React.Component {
+class Notification extends React.Component {
   static propTypes = {
     message: PropTypes.string.isRequired,
-    parentAction: PropTypes.func.isRequired,
-  }
+    parentAction: PropTypes.func,
+    timeout: PropTypes.number,
+  };
+
+  static defaultProps = {
+    parentAction: null,
+  };
+
+  static defaultProps = {
+    timeout: 1000,
+  };
+
   state = {
     show: true,
-  }
-  handleClose = () => {
+  };
+
+  handleClose = timeout => {
     setTimeout(() => {
       this.setState(() => ({
         show: false,
       }));
-    }, 1000);
-  }
+    }, timeout);
+  };
+
   render() {
-    const { message, parentAction } = this.props;
+    const { message, parentAction, timeout } = this.props;
     return (
       <CSSTransition
         in={this.state.show}
@@ -30,8 +42,12 @@ class Info extends React.Component {
         classNames="info"
         appear
         unmountOnExit
-        onEntered={() => this.handleClose()}
-        onExited={() => parentAction()}
+        onEntered={() => this.handleClose(timeout)}
+        onExited={() => {
+          if (parentAction) {
+            parentAction();
+          }
+        }}
       >
         <div className="info">
           <p>{message}</p>
@@ -41,4 +57,4 @@ class Info extends React.Component {
   }
 }
 
-export default Info;
+export default Notification;

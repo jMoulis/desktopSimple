@@ -9,6 +9,11 @@ module.exports = io => {
 
   io.on('connection', async socket => {
     console.log('User Connected');
+    const handleError = error => {
+      io.to(`${socket.id}`).emit('FAILURE', {
+        message: error,
+      });
+    };
     const newUser = await UserModel.findById(socket.handshake.query.userId);
     usersConnected.addUser(socket.id, newUser);
 
@@ -51,10 +56,10 @@ module.exports = io => {
         });
         io.to(`${room._id}`).emit('NEW_MESSAGE_SUCCESS', {
           message: newMessage,
-          room: room._id,
+          room: rooms._id,
         });
       } catch (error) {
-        console.error(error.message);
+        handleError('Error while sending message');
       }
     });
 
@@ -74,7 +79,7 @@ module.exports = io => {
       }
     });
 
-    socket.on('REPLY_UPDATE', async ({ message, room, messageId }) => {
+    socket.on('UPDATE_REPLY', async ({ message, room, messageId }) => {
       try {
         const updateMessage = await MessageController.updateReply(messageId, {
           message,
@@ -87,7 +92,7 @@ module.exports = io => {
       }
     });
 
-    socket.on('MESSAGE_UPDATE', async ({ message, room, messageId }) => {
+    socket.on('UPDATE_MESSAGE', async ({ message, room, messageId }) => {
       try {
         const updateMessage = await MessageController.update(messageId, {
           message,
@@ -100,7 +105,7 @@ module.exports = io => {
       }
     });
 
-    socket.on('REPLY_DELETE', async ({ room, messageId }) => {
+    socket.on('DELETE_REPLY', async ({ room, messageId }) => {
       try {
         const deleteMessage = await MessageController.deleteReply(messageId);
         io.to(`${room._id}`).emit('REPLY_DELETE_SUCCESS', {

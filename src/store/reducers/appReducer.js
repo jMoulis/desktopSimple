@@ -12,6 +12,7 @@ export const SHOW_USER_DETAIL_MODAL = 'SHOW_USER_DETAIL_MODAL';
 export const SHOW_OVERFLOW = 'SHOW_OVERFLOW';
 
 export const CONNECTED_USERS = 'CONNECTED_USERS';
+export const EMPTY_CONNECTED_USERS_LIST = 'EMPTY_CONNECTED_USERS_LIST';
 /*
  * State
 */
@@ -44,6 +45,12 @@ const reducer = (state = initialState, action = {}) => {
         connectedUsers: action.payload,
       };
     }
+    case EMPTY_CONNECTED_USERS_LIST: {
+      return {
+        ...state,
+        connectedUsers: [],
+      };
+    }
     default:
       return {
         ...state,
@@ -63,6 +70,10 @@ export const showOverflowAction = () => ({
 export const setConnectedUsersAction = users => ({
   type: CONNECTED_USERS,
   payload: users,
+});
+
+export const emptyConnectedUserListAction = () => ({
+  type: EMPTY_CONNECTED_USERS_LIST,
 });
 
 export default reducer;

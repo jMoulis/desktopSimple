@@ -11,7 +11,7 @@ const SelectBoxUser = ({ callback, closeFromParent, users }) => {
         users.length > 0 && (
           <div id="selectbox-user">
             <ul className="selectbox-user-list">
-              {users.map(({ user }) => {
+              {users.map(user => {
                 if (user) {
                   return (
                     <li

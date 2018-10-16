@@ -3,13 +3,8 @@ import PropTypes from 'prop-types';
 
 class FormMessageItem extends React.Component {
   static propTypes = {
-    socket: PropTypes.object.isRequired,
-    room: PropTypes.object.isRequired,
-    typeSocketAction: PropTypes.string.isRequired,
-    loggedUser: PropTypes.object.isRequired,
-    message: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired,
     callback: PropTypes.func.isRequired,
-    stateParentKey: PropTypes.string.isRequired,
     value: PropTypes.string,
   };
 
@@ -33,44 +28,19 @@ class FormMessageItem extends React.Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const {
-      socket,
-      room,
-      typeSocketAction,
-      loggedUser,
-      message,
-      callback,
-      stateParentKey,
-    } = this.props;
+    const { onSubmit } = this.props;
     const { text } = this.state;
-    socket.emit(typeSocketAction, {
-      room,
-      message: text,
-      messageId: message._id,
-      sender: {
-        _id: loggedUser._id,
-        fullName: loggedUser.fullName,
-        picture: loggedUser.picture,
-      },
-    });
-    callback(stateParentKey);
-  };
-
-  handleCancel = () => {
-    const { callback, stateParentKey } = this.props;
-    callback(stateParentKey);
-    this.setState(() => ({
-      text: this.props.value,
-    }));
+    onSubmit(text);
   };
 
   render() {
     const { text } = this.state;
+    const { callback } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <input value={text} onChange={this.handleInputChange} />
         <button type="submit">Save</button>
-        <button type="button" onClick={this.handleCancel}>
+        <button type="button" onClick={callback}>
           Cancel
         </button>
       </form>

@@ -52,7 +52,7 @@ class MessageList extends React.Component {
       if (messages.length === 0) {
         return (
           <ul ref={this.messagesList} className="chat-message-list">
-            <li>
+            <li className="chat-message-list-item">
               <span>No Message yet</span>
             </li>
           </ul>
@@ -61,7 +61,7 @@ class MessageList extends React.Component {
       return (
         <ul ref={this.messagesList} className="chat-message-list">
           {messages.map(message => (
-            <li key={message._id}>
+            <li key={message._id} className="chat-message-list-item">
               <MessageListItem
                 message={message}
                 loggedUser={loggedUser}

@@ -6,6 +6,7 @@ import SendRoomMessageForm from './SendRoomMessageForm';
 import ConnectedUserList from '../containers/ConnectedUserList';
 import RoomsListContainer from '../containers/RoomsList';
 import Utils from '../../../../Utils/utils';
+import SocketStatus from './SoketStatus';
 
 const utils = new Utils();
 
@@ -163,40 +164,46 @@ class Chat extends React.Component {
   render() {
     const {
       roomsFetchProcess: { rooms },
-      globalProps: { socketIo, loggedUser },
+      globalProps: { socketIo, loggedUser, socketStatus },
     } = this.props;
     const { room, receiver, showRoomList, smallSize } = this.state;
     return (
-      <div className="chat">
-        {rooms &&
-          showRoomList && (
-            <RoomsListContainer
-              rooms={rooms}
-              callback={this.handleSelectRoom}
+      <div className="full-height">
+        <SocketStatus status={socketStatus} />
+        <div className="chat">
+          {rooms &&
+            showRoomList && (
+              <RoomsListContainer
+                rooms={rooms}
+                callback={this.handleSelectRoom}
+                loggedUser={loggedUser}
+                smallSize={smallSize}
+                closeRoomAction={this.handleShowRoomList}
+                selectedRoom={room}
+              />
+            )}
+          <div className="chat-content">
+            <div className="d-flex">
+              {smallSize && (
+                <button onClick={this.handleShowRoomList}>X</button>
+              )}
+              <h1>{this.roomTitle(room)}</h1>
+            </div>
+            <MessageList socket={socketIo} loggedUser={loggedUser} />
+            <SendRoomMessageForm
               loggedUser={loggedUser}
-              smallSize={smallSize}
-              hide={this.handleShowRoomList}
+              receiver={receiver}
+              room={room}
+              socket={socketIo}
             />
+          </div>
+          {!smallSize && (
+            <div className="connected-user">
+              <h1>Connected User</h1>
+              <ConnectedUserList />
+            </div>
           )}
-        <div className="chat-content">
-          <div className="d-flex">
-            {smallSize && <button onClick={this.handleShowRoomList}>X</button>}
-            <h1>{this.roomTitle(room)}</h1>
-          </div>
-          <MessageList socket={socketIo} loggedUser={loggedUser} />
-          <SendRoomMessageForm
-            loggedUser={loggedUser}
-            receiver={receiver}
-            room={room}
-            socket={socketIo}
-          />
         </div>
-        {!smallSize && (
-          <div className="connected-user">
-            <h1>Connected User</h1>
-            <ConnectedUserList />
-          </div>
-        )}
       </div>
     );
   }
