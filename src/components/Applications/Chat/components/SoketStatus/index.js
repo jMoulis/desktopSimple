@@ -48,6 +48,7 @@ class SocketStatus extends React.Component {
 
   render() {
     const { status } = this.props;
+
     const { showOk } = this.state;
     return (
       <Fragment>

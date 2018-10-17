@@ -7,6 +7,17 @@ module.exports = {
   async fetchRoomMessages(req, res) {
     const apiResponse = new ApiResponse(res);
     try {
+      const totalMessage = await Message.find({
+        room: req.params.roomId,
+      }).count();
+      let limit = 10;
+      if (req.query.limit) {
+        limit += Number(req.query.limit);
+      }
+      let skip = 0;
+      if (totalMessage > limit) {
+        skip = totalMessage - limit;
+      }
       const messages = await Message.find({ room: req.params.roomId })
         .populate({
           path: 'sender',
@@ -22,9 +33,11 @@ module.exports = {
           path: 'replies.sender',
           ref: 'user',
           select: 'fullName picture',
-        });
+        })
+        .skip(skip)
+        .limit(limit);
 
-      return apiResponse.success(200, { messages });
+      return apiResponse.success(200, { messages, totalMessage, limit });
     } catch (error) {
       return apiResponse.failure(422, null, error.message);
     }

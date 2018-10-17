@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import './dashboard.css';
 import Frame from '../../Modules/Frame/containers/frame';
 import Helper from '../../containers/Dashboard/Helper/helper';
-import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
+// import TeamToolbar from '../../containers/Dashboard/TeamToolbar';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
     loggedUser: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
-    showSelectTeamPanel: PropTypes.func,
+    // showSelectTeamPanel: PropTypes.func,
     showUserDetailModalAction: PropTypes.func.isRequired,
     fetchNotificationsSuccessAction: PropTypes.func.isRequired,
     fetchNotificationsAction: PropTypes.func.isRequired,
@@ -30,7 +30,7 @@ class Dashboard extends React.Component {
   };
   static defaultProps = {
     activeApps: null,
-    showSelectTeamPanel: null,
+    // showSelectTeamPanel: null,
   };
 
   constructor(props) {
@@ -59,9 +59,11 @@ class Dashboard extends React.Component {
     this.socket.on('connect', () => {
       console.log('connect');
       this.handleStatusSocket({
-        type: 'connect',
-        message: 'You are connected',
-        error: null,
+        socketStatus: {
+          type: 'connect',
+          message: 'You are connected',
+          error: null,
+        },
       });
     });
     this.socket.on('connect_error', () => {
@@ -87,8 +89,10 @@ class Dashboard extends React.Component {
     });
     this.socket.on('reconnect', () => {
       this.handleStatusSocket({
-        type: 'reconnect',
-        message: 'Chat reconnexion successfull',
+        socketStatus: {
+          type: 'reconnect',
+          message: 'Chat reconnexion successfull',
+        },
       });
     });
     this.socket.on('reconnect_failed', () => {
@@ -145,7 +149,6 @@ class Dashboard extends React.Component {
       activeApps,
       loggedUser,
       globalProps,
-      showSelectTeamPanel,
       showUserDetailModalAction,
       showUserDetailModal,
       globalActions,

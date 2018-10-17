@@ -7,12 +7,12 @@
     flex-direction: column;
     flex: 1;
     padding: .5rem; }
-  .chat-message-list {
-    overflow: auto;
-    height: 100%; }
 
 .chat-message-list {
-  margin-top: 1rem; }
+  margin-top: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%; }
   .chat-message-list-item {
     padding: 1rem 0;
     border-bottom: 1px solid rgba(10, 28, 40, 0.2); }

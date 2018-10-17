@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+@media (max-width: 500px) {
+  .address-book-pagination {
+    flex-direction: column; } }
+
+.send-message-form {
+  display: flex;
+  margin-top: .5rem;
+  height: 3rem;
+  border: 2px solid #0a1c28; }
+  .send-message-form textarea {
+    width: 100%;
+    border: none;
+    outline: none; }
+  .send-message-form button {
+    margin: 0; }

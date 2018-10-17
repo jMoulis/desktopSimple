@@ -9,7 +9,7 @@ import LoginForm from '../../containers/Home/Login/login';
 import Content from '../../containers/Home/Content/content';
 import NoMatch from '../NoMatch/noMatch';
 import Signup from '../../containers/Home/SignUp';
-import TeamSelector from '../../containers/Dashboard/TeamSelector';
+// import TeamSelector from '../../containers/Dashboard/TeamSelector';
 import Loader from '../../Modules/Loader';
 import ErrorBoundary from '../Hoc/ErrorBoundary';
 

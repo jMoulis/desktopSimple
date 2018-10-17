@@ -6,7 +6,7 @@ import TagList from '../../../../../Modules/Tag/tagList';
 import Button from '../../../../../components/Form/button';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
 import FriendRequestButtonsContainer from '../../../../../Modules/FriendRequestButtons';
-import ChatBoxForm from '../../../../Dashboard/Chat/ChatBox/ChatBoxForm';
+import SendMessageForm from './SendMessageForm';
 
 class UserListItem extends React.Component {
   static propTypes = {
@@ -69,7 +69,7 @@ class UserListItem extends React.Component {
           )}
         </div>
         {showMessageForm && (
-          <ChatBoxForm
+          <SendMessageForm
             socket={socket}
             loggedUser={loggedUser}
             receiver={user}

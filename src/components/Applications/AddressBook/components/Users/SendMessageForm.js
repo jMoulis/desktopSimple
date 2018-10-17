@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import {
   addRoomToStateAction,
   fetchRoomsAndUpdateStatus,
-} from '../../../../store/reducers/chatReducer';
+} from '../../../../../store/reducers/chatReducer';
+import './sendMessageForm.css';
+import Button from '../../../../Form/button';
 
 const ROOT_URL = process.env.REACT_APP_API;
 const mapStateToProps = ({ chatReducer }) => ({
@@ -21,7 +23,7 @@ const dispatchStateToProps = dispatch => ({
   },
 });
 
-class ChatBoxForm extends Component {
+class SendMessageForm extends Component {
   static propTypes = {
     socket: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
@@ -98,9 +100,8 @@ class ChatBoxForm extends Component {
     const { room } = this.state;
 
     fetchRoomsAndUpdateStatusAction(room._id, loggedUser._id, true);
-    socket.emit('ROOM_MESSAGE', {
+    socket.emit('NEW_MESSAGE', {
       room,
-      receiver,
       sender: loggedUser,
       message: this.state.message,
     });
@@ -148,7 +149,7 @@ class ChatBoxForm extends Component {
     return (
       <form
         style={style}
-        className={`d-flex ${column ? 'flex-column' : ''}`}
+        className={`send-message-form ${column ? 'flex-column' : ''}`}
         onSubmit={this.handleSendMessage}
       >
         <textarea
@@ -156,9 +157,7 @@ class ChatBoxForm extends Component {
           value={this.state.message}
           onChange={this.handleTextAreaChange}
         />
-        <button type="submit" disabled={message.length === 0}>
-          Send
-        </button>
+        <Button type="submit" label="Send" disabled={message.length === 0} />
       </form>
     );
   }
@@ -168,6 +167,6 @@ const createContainer = connect(
   mapStateToProps,
   dispatchStateToProps,
 );
-const ChatBoxFormContainer = createContainer(ChatBoxForm);
+const SendMessageFormContainer = createContainer(SendMessageForm);
 
-export default ChatBoxFormContainer;
+export default SendMessageFormContainer;

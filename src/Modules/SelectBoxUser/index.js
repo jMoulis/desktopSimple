@@ -30,6 +30,7 @@ const SelectBoxUser = ({ callback, closeFromParent, users }) => {
                     </li>
                   );
                 }
+                return null;
               })}
             </ul>
           </div>

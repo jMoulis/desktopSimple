@@ -223,7 +223,7 @@ class NewProject extends React.Component {
           id="newProject-form"
           className="form"
           onKeyPress={this.handleFormKeyPress}
-          noValidate="true"
+          noValidate
         >
           <Input
             config={{

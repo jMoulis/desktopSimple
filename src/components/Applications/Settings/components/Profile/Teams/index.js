@@ -53,6 +53,7 @@ class TeamProfile extends React.Component {
                             <p>{teamMate.user.fullName}</p>
                           </li>
                         );
+                      return null;
                     })}
                 </ul>
               </div>

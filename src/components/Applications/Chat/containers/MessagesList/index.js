@@ -6,11 +6,13 @@ import { fetchMessagesAction } from '../../../../../store/reducers/messageReduce
 const mapStateToProps = ({ chatReducer, messageReducer }) => ({
   roomFetchProcess: chatReducer.roomFetchProcess,
   messages: messageReducer.messages,
+  totalMessage: messageReducer.totalMessage,
+  limit: messageReducer.limit,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchMessagesAction: roomId => {
-    dispatch(fetchMessagesAction(roomId));
+  fetchMessagesAction: (roomId, limit) => {
+    dispatch(fetchMessagesAction(roomId, limit));
   },
 });
 

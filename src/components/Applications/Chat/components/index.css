@@ -7,6 +7,3 @@
     flex-direction: column;
     flex: 1;
     padding: .5rem; }
-  .chat-message-list {
-    overflow: auto;
-    height: 100%; }

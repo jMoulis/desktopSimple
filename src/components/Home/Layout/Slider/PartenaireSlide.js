@@ -16,6 +16,11 @@ const PartenaireSlide = ({ item }) => {
   );
 };
 
-PartenaireSlide.propTypes = {};
+PartenaireSlide.propTypes = {
+  item: PropTypes.object,
+};
 
+PartenaireSlide.defaultProps = {
+  item: null,
+};
 export default PartenaireSlide;

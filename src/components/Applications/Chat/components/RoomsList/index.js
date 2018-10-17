@@ -290,7 +290,7 @@ class RoomsList extends React.Component {
             title="New Private message"
           >
             <UsersLoaderContainer
-              filter={{ type: 'student' }}
+              filter={{}}
               select={this.handleNewPrivateMessage}
             />
           </Modal>

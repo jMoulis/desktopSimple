@@ -6,6 +6,7 @@ import './userLoader.css';
 import { fetchUsersAction } from '../../store/reducers/userReducer';
 import Pagination from '../../components/Applications/AddressBook/components/Pagination';
 import UserIconContainer from '../UserIcon';
+import Button from '../../components/Form/button';
 
 const mapStateToProps = ({ projectReducer, userReducer }) => ({
   project: projectReducer.activeProjectProcess.project,
@@ -35,6 +36,7 @@ class UsersLoader extends React.Component {
       ...this.props.filter,
       available: true,
       tags: true,
+      filter: '',
     },
   };
   componentDidMount() {
@@ -51,20 +53,52 @@ class UsersLoader extends React.Component {
     const { page } = evt.target.dataset;
     fetchUsers({ page, ...filter });
   };
+  handleInputChange = evt => {
+    const { value } = evt.target;
+    this.setState(prevState => ({
+      filter: {
+        ...prevState.filter,
+        filter: value,
+      },
+    }));
+  };
+  handleSearchUser = evt => {
+    const { fetchUsers } = this.props;
+    const { filter } = this.state;
+    evt.preventDefault();
+    fetchUsers({ ...filter });
+  };
   render() {
-    // filter and select from parent
-    const { userList, select, filter } = this.props;
+    const { userList, select } = this.props;
     const { error, users } = userList;
+    const { filter } = this.state;
     return (
       <div className="users">
         {error && <span>Error</span>}
-        <Pagination
-          prevPage={userList.pagination.prevPage}
-          nextPage={userList.pagination.nextPage}
-          loading={userList.loading}
-          action={this.handleFetchPage}
-          count={userList.pagination.count}
-        />
+        <div className="d-flex flex-justify-between flex-align-items-center">
+          <form onSubmit={this.handleSearchUser}>
+            <input
+              value={filter.filter}
+              onChange={this.handleInputChange}
+              placeholder="Search..."
+            />
+            <Button
+              type="submit"
+              label="search"
+              small
+              style={{
+                margin: 0,
+              }}
+            />
+          </form>
+          <Pagination
+            prevPage={userList.pagination.prevPage}
+            nextPage={userList.pagination.nextPage}
+            loading={userList.loading}
+            action={this.handleFetchPage}
+            count={userList.pagination.count}
+          />
+        </div>
 
         <ul className="ul-unstyled users-list">
           {users.map(user => (

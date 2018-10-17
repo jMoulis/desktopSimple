@@ -292,7 +292,7 @@ class CompanyProfile extends React.Component {
         <form
           id="profile-form"
           className="form"
-          noValidate="true"
+          noValidate
           onKeyPress={this.handleFormKeyPress}
         >
           <div className="profile-content-form-wrapper">

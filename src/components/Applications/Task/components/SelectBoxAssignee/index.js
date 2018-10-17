@@ -141,6 +141,7 @@ class SelectBoxAssignee extends Component {
                       />
                     </li>
                   );
+                return null;
               })}
           </ul>
         )}

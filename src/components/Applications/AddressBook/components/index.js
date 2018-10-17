@@ -28,7 +28,6 @@ class AddressBook extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     const { fetchUsersAction } = this.props;
     fetchUsersAction(this.state.filterParams);
   }
@@ -96,7 +95,7 @@ class AddressBook extends Component {
   };
 
   render() {
-    const { usersProcess, loggedUser, globalProps } = this.props;
+    const { usersProcess, globalProps } = this.props;
     if (usersProcess.users) {
       return (
         <Fragment>

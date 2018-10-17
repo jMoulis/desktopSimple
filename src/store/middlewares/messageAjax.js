@@ -13,10 +13,12 @@ const ROOT_URL = process.env.REACT_APP_API;
 export default store => next => action => {
   switch (action.type) {
     case FETCH_MESSAGES: {
-      const roomId = action.payload;
+      const { roomId, limit } = action.payload;
       axios({
         method: 'get',
-        url: `${ROOT_URL}/api/messages/room/${roomId}`,
+        url: `${ROOT_URL}/api/messages/room/${roomId}${
+          limit ? `?limit=${limit.limit}` : ''
+        }`,
         headers: {
           Authorization: localStorage.getItem('token'),
         },

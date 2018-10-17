@@ -306,7 +306,7 @@ class EditTeam extends React.Component {
       <div id="new-team">
         <form
           onSubmit={this.handleSubmit}
-          noValidate="true"
+          noValidate
           onKeyPress={this.handleFormKeyPress}
           className="form"
           name="detailProjectModal"

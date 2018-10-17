@@ -10,6 +10,13 @@ const BadgeNotifications = ({ count, style }) => {
   );
 };
 
-BadgeNotifications.propTypes = {};
+BadgeNotifications.propTypes = {
+  count: PropTypes.number.isRequired,
+  style: PropTypes.object,
+};
+
+BadgeNotifications.defaultProps = {
+  style: null,
+};
 
 export default BadgeNotifications;

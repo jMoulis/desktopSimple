@@ -1,5 +1,7 @@
 const initialState = {
   messages: [],
+  totalMessage: 0,
+  limit: 10,
 };
 
 export const NEW_MESSAGE_SUCCESS = 'NEW_MESSAGE_SUCCESS';
@@ -27,10 +29,12 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
     case FETCH_MESSAGES_SUCCESS: {
-      const { messages } = action.payload;
+      const { messages, totalMessage, limit } = action.payload;
       return {
         ...state,
         messages,
+        totalMessage,
+        limit,
       };
     }
     case FETCH_MESSAGES_FAILURE: {
@@ -110,9 +114,12 @@ export const newReplySuccessAction = reply => ({
   },
 });
 
-export const fetchMessagesAction = roomId => ({
+export const fetchMessagesAction = (roomId, limit) => ({
   type: FETCH_MESSAGES,
-  payload: roomId,
+  payload: {
+    roomId,
+    limit,
+  },
 });
 
 export const fetchMessagesSuccessAction = payload => ({

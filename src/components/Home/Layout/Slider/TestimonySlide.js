@@ -26,6 +26,12 @@ const TestimonySlide = ({ item }) => {
   );
 };
 
-TestimonySlide.propTypes = {};
+TestimonySlide.propTypes = {
+  item: PropTypes.object,
+};
+
+TestimonySlide.defaultProps = {
+  item: null,
+};
 
 export default TestimonySlide;

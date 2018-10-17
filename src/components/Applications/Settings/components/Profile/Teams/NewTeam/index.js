@@ -169,7 +169,7 @@ class NewTeam extends React.Component {
           ) : (
             <form
               onSubmit={this.handleSubmit}
-              noValidate="true"
+              noValidate
               onKeyPress={this.handleFormKeyPress}
               className="form"
               name="newTeam"

@@ -10,19 +10,22 @@ class MessageList extends React.Component {
     messages: PropTypes.array.isRequired,
     loggedUser: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired,
+    totalMessage: PropTypes.number.isRequired,
+    limit: PropTypes.number.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.messagesList = React.createRef();
-  }
-  componentDidMount() {
-    this.scrollToBottom(this.messagesList.current);
+    this.state = {
+      init: false,
+    };
   }
 
   componentDidUpdate(prevProps) {
-    this.scrollToBottom(this.messagesList.current);
-
+    if (!this.state.init) {
+      this.scrollToBottom(this.messagesList.current);
+    }
     const prevRoomId = prevProps.roomFetchProcess.room._id;
     const {
       fetchMessagesAction,
@@ -32,15 +35,38 @@ class MessageList extends React.Component {
       return fetchMessagesAction(room._id);
     }
     if (room._id.toString() !== prevRoomId.toString()) {
+      this.setInit(false);
       return fetchMessagesAction(room._id);
     }
     return true;
   }
 
+  setInit = bool => this.setState(() => ({ init: bool }));
   scrollToBottom = element => {
     element.scrollTop = element.scrollHeight;
   };
 
+  handleScroll = evt => {
+    const {
+      messages,
+      totalMessage,
+      fetchMessagesAction,
+      limit,
+      roomFetchProcess: { room },
+    } = this.props;
+    const element = evt.target;
+    if (this.reachedTop(evt.target)) {
+      if (messages.length < totalMessage) {
+        fetchMessagesAction(room._id, { limit: limit + 10 });
+      }
+    }
+    this.setState(() => ({
+      scrollPosition: element.scrollTop,
+      init: true,
+    }));
+  };
+
+  reachedTop = element => element.scrollTop === 0;
   render() {
     const {
       roomFetchProcess: { room },
@@ -59,7 +85,11 @@ class MessageList extends React.Component {
         );
       }
       return (
-        <ul ref={this.messagesList} className="chat-message-list">
+        <ul
+          ref={this.messagesList}
+          className="chat-message-list"
+          onScroll={this.handleScroll}
+        >
           {messages.map(message => (
             <li key={message._id} className="chat-message-list-item">
               <MessageListItem
