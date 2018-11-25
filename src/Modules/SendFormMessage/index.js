@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import {
   addRoomToStateAction,
   fetchRoomsAndUpdateStatus,
-} from '../../../../../store/reducers/chatReducer';
+} from '../../store/reducers/chatReducer';
 import './sendMessageForm.css';
-import Button from '../../../../Form/button';
+import Button from '../../components/Form/button';
 
 const ROOT_URL = process.env.REACT_APP_API;
 const mapStateToProps = ({ chatReducer }) => ({
@@ -44,12 +44,15 @@ class SendMessageForm extends Component {
   async componentDidMount() {
     const { loggedUser, receiver, socket } = this.props;
     try {
+      // Fetch room from sender and receiver id
       const { room } = await this._fetchRoomAction(
         receiver,
         loggedUser,
         this._setError,
       );
+
       this._addRoomToState(room);
+
       await this._handleJoinRequest(
         {
           room: room._id,
@@ -87,7 +90,19 @@ class SendMessageForm extends Component {
       error(error.message);
     }
   };
-
+  _handleJoinRequest = async (data, socket, error) => {
+    try {
+      if (!data) throw Error('No Room found');
+      socket.emit('JOIN_PRIVATE_REQUEST', socket.id, data);
+    } catch (err) {
+      error({
+        error: {
+          message: err.message,
+          title: 'Join',
+        },
+      });
+    }
+  };
   handleSendMessage = evt => {
     evt.preventDefault();
     const {
@@ -110,7 +125,8 @@ class SendMessageForm extends Component {
       room,
       sender: loggedUser._id,
       message: this.state.message,
-      receiver: receiver && receiver._id,
+      receiver: receiver && receiver,
+      type: 'message',
     });
 
     this.setState(() => ({
@@ -127,20 +143,6 @@ class SendMessageForm extends Component {
     this.setState(() => ({
       message: value,
     }));
-  };
-
-  _handleJoinRequest = async (data, socket, error) => {
-    try {
-      if (!data) throw Error('No Room found');
-      socket.emit('JOIN_PRIVATE_REQUEST', socket.id, data);
-    } catch (err) {
-      error({
-        error: {
-          message: err.message,
-          title: 'Join',
-        },
-      });
-    }
   };
 
   render() {

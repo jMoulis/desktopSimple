@@ -28,6 +28,7 @@ module.exports = app => {
   app.post('/api/security', VerifyToken, AuthController.changePassword);
 
   app.get('/api/users', VerifyToken, UsersController.index);
+  app.get('/api/users/friends', VerifyToken, UsersController.findFriends);
   app.get('/api/users/:id', VerifyToken, UsersController.show);
   app.put(
     '/api/users/:id',

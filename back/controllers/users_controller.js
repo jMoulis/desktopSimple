@@ -132,6 +132,23 @@ module.exports = {
     }
   },
 
+  async findFriends(req, res) {
+    const apiResponse = new ApiResponse(res);
+    const regex = new RegExp(req.query.search, 'i');
+    try {
+      const users = await User.find(
+        { fullName: regex },
+        { fullName: 1, picture: 1 },
+      );
+      if (!users)
+        return apiResponse.failure(404, null, { message: 'User not found' });
+      return apiResponse.success(200, {
+        users,
+      });
+    } catch (error) {
+      return apiResponse.failure(422, error);
+    }
+  },
   async show(req, res) {
     const { id } = req.params;
     const apiResponse = new ApiResponse(res);
@@ -596,6 +613,35 @@ module.exports = {
       return apiResponse.success(201, { user: userChanged }, true);
     } catch (error) {
       return apiResponse.failure(422, null, error.message);
+    }
+  },
+
+  setRoomDisplayStatus: async (status, room) => {
+    try {
+      const userToUpdate = await User.findOne({ 'rooms._id': room._id });
+      if (!userToUpdate) return { error: 'No user found' };
+      const roomToUpdate = userToUpdate.rooms.find(
+        userRoom => userRoom._id.toString() === room._id.toString(),
+      );
+      if (typeof roomToUpdate === 'undefined')
+        return { error: 'No user found' };
+
+      const user = await User.findOneAndUpdate(
+        { 'rooms._id': room._id },
+        {
+          $set: {
+            'rooms.$.isDisplay': status,
+          },
+        },
+      );
+      const userUpdated = await User.findOne({ _id: user._id }, { rooms: 1 });
+      return {
+        user: userUpdated,
+      };
+    } catch (error) {
+      return {
+        error: 'Error while updating user room status',
+      };
     }
   },
 

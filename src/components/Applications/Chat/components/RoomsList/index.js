@@ -6,6 +6,8 @@ import UserIconContainer from '../../../../../Modules/UserIcon';
 import SelectUserPanel from './SelectUserPanel';
 import Modal from '../../../../../Modules/Modal/modal';
 import UsersLoaderContainer from '../../../../../Modules/UserLoader';
+import NewRoomForm from './NewRoomForm';
+import Button from '../../../../Form/button';
 
 const ROOT_URL = process.env.REACT_APP_API;
 class RoomsList extends React.Component {
@@ -17,8 +19,10 @@ class RoomsList extends React.Component {
     smallSize: PropTypes.bool,
     closeRoomAction: PropTypes.func.isRequired,
     setDefaultRoomAction: PropTypes.func.isRequired,
+    socket: PropTypes.object.isRequired,
     selectedRoom: PropTypes.object,
     defaultRoom: PropTypes.object,
+    notifications: PropTypes.array,
   };
 
   static defaultProps = {
@@ -26,6 +30,7 @@ class RoomsList extends React.Component {
     smallSize: false,
     selectedRoom: {},
     defaultRoom: {},
+    notifications: [],
   };
 
   constructor(props) {
@@ -37,6 +42,8 @@ class RoomsList extends React.Component {
       showSelectSearch: false,
       hideButtonShow: true,
       showNewPrivateMessageModal: false,
+      showNewRoomFormModal: false,
+      error: null,
     };
   }
 
@@ -96,16 +103,20 @@ class RoomsList extends React.Component {
 
   hanldeSelectUser = async user => {
     const { callback, loggedUser, fetchRoomsAndUpdateStatus } = this.props;
-    const { room } = await this._fetchRoomAction(
-      user,
-      loggedUser,
-      this._setError,
-    );
-    fetchRoomsAndUpdateStatus(room._id, loggedUser._id, true);
-    callback(room, user);
-    this.setState(() => ({
-      showSelectSearch: false,
-    }));
+    try {
+      const { room, error } = await this._fetchRoomAction(
+        user,
+        loggedUser,
+        this._setError,
+      );
+      fetchRoomsAndUpdateStatus(room._id, loggedUser._id, true);
+      callback(room, user);
+      this.setState(() => ({
+        showSelectSearch: false,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   _fetchRoomAction = async (receiver, user, error) => {
@@ -125,7 +136,7 @@ class RoomsList extends React.Component {
         room,
       };
     } catch (err) {
-      error(error.message);
+      error(err.message);
     }
   };
 
@@ -143,15 +154,68 @@ class RoomsList extends React.Component {
       showNewPrivateMessageModal: !prevState.showNewPrivateMessageModal,
     }));
   };
+
   handleCloseModal = () => {
     this.setState(() => ({
       showNewPrivateMessageModal: false,
+      showNewRoomFormModal: false,
     }));
   };
+
   handleOpenModal = () => {
     this.setState(() => ({
       showNewPrivateMessageModal: true,
     }));
+  };
+
+  handleCreateRoom = () => {
+    this.setState(() => ({
+      showNewRoomFormModal: true,
+    }));
+  };
+
+  handleNewRoomSubmit = ({ form, roomReceivedRequest }, callback) => {
+    const { socket, loggedUser } = this.props;
+    socket.emit(
+      'NEW_ROOM',
+      {
+        values: form,
+        sender: loggedUser._id,
+        roomReceivedRequest,
+        message: form.name,
+        type: 'room_request',
+      },
+      ({ error }) => {
+        if (error) return this._setError(error);
+        callback();
+      },
+    );
+    // roomReceivedRequest.forEach(receiver => {
+    //   socket.emit('NEW_NOTIFICATION', {
+    //     sender: loggedUser._id,
+    //     message: 'New Room request',
+    //     type: 'room_request',
+    //     receiver,
+    //   });
+    // });
+  };
+
+  handleAcceptRequest = ({ room, notificationId }) => {
+    const { socket, loggedUser } = this.props;
+    socket.emit('REQUEST_ROOM_ACCEPT', {
+      senderId: loggedUser._id,
+      roomId: room,
+      notificationId,
+    });
+  };
+
+  handleDeclineRequest = ({ room, notificationId }) => {
+    const { socket, loggedUser } = this.props;
+    socket.emit('REQUEST_ROOM_DECLINE', {
+      senderId: loggedUser._id,
+      roomId: room,
+      notificationId,
+    });
   };
 
   render() {
@@ -165,12 +229,69 @@ class RoomsList extends React.Component {
       setDefaultRoomAction,
       selectedRoom,
       defaultRoom,
+      notifications,
     } = this.props;
-    const { showNewPrivateMessageModal } = this.state;
+    const { showNewPrivateMessageModal, showNewRoomFormModal } = this.state;
     return (
       <div className="room">
         {smallSize && <button onClick={closeRoomAction}>X</button>}
-        <h1>Rooms</h1>
+        <div className="d-flex flex-justify-between">
+          <h1>Rooms</h1>
+          <Button
+            style={{
+              margin: 0,
+              padding: '0 .3rem',
+            }}
+            onClick={this.handleCreateRoom}
+          >
+            +
+          </Button>
+        </div>
+        {notifications.length > 0 && (
+          <ul>
+            {notifications.map((notification, index) => {
+              if (notification.type === 'room_request')
+                return (
+                  <li key={index}>
+                    <div
+                      style={{
+                        padding: '0.5rem 1rem',
+                      }}
+                    >
+                      {notification.body}
+                      <Button
+                        small
+                        category="success"
+                        style={{ margin: 0 }}
+                        onClick={() =>
+                          this.handleAcceptRequest({
+                            room: notification.room,
+                            notificationId: notification._id,
+                          })
+                        }
+                      >
+                        <i className="fas fa-check-circle" />
+                      </Button>
+                      <Button
+                        small
+                        category="danger"
+                        style={{ margin: 0 }}
+                        onClick={() =>
+                          this.handleDeclineRequest({
+                            room: notification.room,
+                            notificationId: notification._id,
+                          })
+                        }
+                      >
+                        <i className="fas fa-ban" />
+                      </Button>
+                    </div>
+                  </li>
+                );
+              return null;
+            })}
+          </ul>
+        )}
         <ul className="room-list">
           <li
             style={{
@@ -221,7 +342,28 @@ class RoomsList extends React.Component {
                   </li>
                 ))}
               <li>
-                <h2>#Private</h2>
+                <h2>#PrivateRooms</h2>
+              </li>
+              {rooms.privateRooms &&
+                rooms.privateRooms.map((privateRoom, index) => (
+                  <li
+                    key={index}
+                    className={`room-list-item ${
+                      privateRoom._id === selectedRoom._id
+                        ? 'room-list-item-selected'
+                        : ''
+                    }`}
+                  >
+                    <button
+                      className="room-list-item-btn"
+                      onClick={() => callback(privateRoom)}
+                    >
+                      {privateRoom.name}
+                    </button>
+                  </li>
+                ))}
+              <li>
+                <h2>#Private Messages</h2>
               </li>
               <li>
                 <div className="room-list-search-form">
@@ -241,45 +383,48 @@ class RoomsList extends React.Component {
                   )}
                 </div>
               </li>
-              {rooms.privateRooms &&
-                rooms.privateRooms.map(privateRoom => (
-                  <li
-                    key={privateRoom._id}
-                    className={`room-list-item ${
-                      privateRoom._id === selectedRoom._id
-                        ? 'room-list-item-selected'
-                        : ''
-                    }`}
-                  >
-                    <UserIconContainer
-                      user={{
-                        user: privateRoom.users.find(
-                          user => user && user._id !== loggedUser._id,
-                        ),
-                      }}
-                      callback={user => callback(privateRoom, user)}
-                      name
-                      shouldUpdateNotification
-                    />
-                    <button
-                      style={{
-                        top: 0,
-                        right: 0,
-                      }}
-                      onClick={() => {
-                        callback(defaultRoom);
-                        setDefaultRoomAction();
-                        fetchRoomsAndUpdateStatus(
-                          privateRoom._id,
-                          loggedUser._id,
-                          false,
-                        );
-                      }}
+              {rooms.privateMessages &&
+                rooms.privateMessages.map(privateMessage => {
+                  return (
+                    <li
+                      key={privateMessage._id}
+                      className={`room-list-item ${
+                        privateMessage._id === selectedRoom._id
+                          ? 'room-list-item-selected'
+                          : ''
+                      }`}
                     >
-                      X
-                    </button>
-                  </li>
-                ))}
+                      <UserIconContainer
+                        user={{
+                          user: privateMessage.users.find(
+                            user => user && user._id !== loggedUser._id,
+                          ),
+                        }}
+                        callback={user => callback(privateMessage, user)}
+                        name
+                        shouldUpdateNotification
+                      />
+                      <button
+                        style={{
+                          top: 0,
+                          right: 0,
+                        }}
+                        onClick={() => {
+                          // callback(defaultRoom);
+                          // Go back to global Room;
+                          setDefaultRoomAction();
+                          fetchRoomsAndUpdateStatus(
+                            privateMessage._id,
+                            loggedUser._id,
+                            false,
+                          );
+                        }}
+                      >
+                        X
+                      </button>
+                    </li>
+                  );
+                })}
             </ul>
           </li>
         </ul>
@@ -292,6 +437,18 @@ class RoomsList extends React.Component {
             <UsersLoaderContainer
               filter={{}}
               select={this.handleNewPrivateMessage}
+            />
+          </Modal>
+        )}
+        {showNewRoomFormModal && (
+          <Modal
+            closeFromParent={this.handleCloseModal}
+            zIndex={2}
+            title="New Private Room"
+          >
+            <NewRoomForm
+              loggedUser={loggedUser}
+              onSubmit={this.handleNewRoomSubmit}
             />
           </Modal>
         )}

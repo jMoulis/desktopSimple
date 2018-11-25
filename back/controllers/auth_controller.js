@@ -131,12 +131,21 @@ module.exports = {
       if (password) {
         hashedPassword = bcrypt.hashSync(password, 10);
       }
-      const newUser = await User.create({
+      let props = {
         email,
         fullName,
         typeUser,
         password: hashedPassword,
-      });
+      };
+
+      if (typeUser === 'company') {
+        props = {
+          ...props,
+          company: {},
+        };
+      }
+
+      const newUser = await User.create(props);
       const token = jwt.sign(
         { user: { _id: newUser._id }, auth: true },
         config.secret,

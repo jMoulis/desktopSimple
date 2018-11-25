@@ -23,7 +23,11 @@ class Textarea extends React.Component {
     const { config } = this.props;
     return (
       <div className={`form-group ${config.field.required ? 'required' : ''}`}>
-        <label htmlFor={config.field.name} style={{ display: 'inline-block' }}>
+        <label
+          className="form-label"
+          htmlFor={config.field.name}
+          style={{ display: 'inline-block' }}
+        >
           {config.field.label}
         </label>
         <textarea

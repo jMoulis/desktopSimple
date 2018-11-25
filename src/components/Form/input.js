@@ -12,7 +12,9 @@ const Input = ({ config }) => (
     )}
   >
     {config.field.label && (
-      <label htmlFor={config.field.name}>{config.field.label}</label>
+      <label className="form-label" htmlFor={config.field.name}>
+        {config.field.label}
+      </label>
     )}
     <input
       type={config.field.type}

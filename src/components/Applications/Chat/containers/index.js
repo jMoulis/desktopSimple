@@ -4,6 +4,7 @@ import Chat from '../components';
 import {
   fetchRoomsAction,
   fetchRoomAction,
+  fetchRoomsSuccessAction,
 } from '../../../../store/reducers/chatReducer';
 import { fetchNotificationsSuccessAction } from '../../../../store/reducers/notificationsReducer';
 import {
@@ -11,6 +12,7 @@ import {
   newMessageSuccessAction,
   deleteMessageSuccessAction,
   newReplySuccessAction,
+  fetchMessagesSuccessAction,
 } from '../../../../store/reducers/messageReducer';
 
 const mapStateToProps = ({ chatReducer }) => ({
@@ -28,6 +30,9 @@ const mapDispatchToProps = dispatch => ({
   fetchNotificationsSuccessAction: notifications => {
     dispatch(fetchNotificationsSuccessAction(notifications));
   },
+  fetchMessagesSuccessAction: messages => {
+    dispatch(fetchMessagesSuccessAction(messages));
+  },
   updateMessageSuccessAction: message => {
     dispatch(updateMessageSuccessAction(message));
   },
@@ -39,6 +44,9 @@ const mapDispatchToProps = dispatch => ({
   },
   newReplySuccessAction: reply => {
     dispatch(newReplySuccessAction(reply));
+  },
+  fetchRoomsSuccessAction: rooms => {
+    dispatch(fetchRoomsSuccessAction(rooms));
   },
 });
 

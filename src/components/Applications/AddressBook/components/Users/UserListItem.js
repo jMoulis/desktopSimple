@@ -6,7 +6,7 @@ import TagList from '../../../../../Modules/Tag/tagList';
 import Button from '../../../../../components/Form/button';
 import CompanyHeader from '../../../../../Modules/CompanyHeader';
 import FriendRequestButtonsContainer from '../../../../../Modules/FriendRequestButtons';
-import SendMessageForm from './SendMessageForm';
+import SendMessageForm from '../../../../../Modules/SendFormMessage';
 
 class UserListItem extends React.Component {
   static propTypes = {

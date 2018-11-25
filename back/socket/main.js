@@ -1,19 +1,16 @@
-const MessageController = require('../controllers/messages_controller');
 const Room = require('../models/Room');
 const UserModel = require('../models/User');
-const Notifications = require('../models/Notifications');
 const UserClass = require('./users');
+const messageSocketController = require('./messageSocketController');
+const replySocketController = require('./replySocketController');
+const notificationSocketController = require('./notificationSocketController');
+const roomSocketController = require('./roomSocketController');
 
 module.exports = io => {
   const usersConnected = new UserClass();
 
   io.on('connection', async socket => {
     console.log('User Connected');
-    const handleError = error => {
-      io.to(`${socket.id}`).emit('FAILURE', {
-        message: error,
-      });
-    };
     const newUser = await UserModel.findById(socket.handshake.query.userId);
     usersConnected.addUser(socket.id, newUser);
 
@@ -28,125 +25,24 @@ module.exports = io => {
 
     socket.on('disconnect', () => {
       usersConnected.removeUser(socket.id);
+      usersConnected.removeTypingUser(socket.id);
       io.emit('CONNECT_SUCCESS', {
         connectedUsers: usersConnected.getUsersList(),
       });
     });
 
-    socket.on('JOIN_PRIVATE_REQUEST', (id, props, callback) => {
+    socket.on('JOIN_PRIVATE_REQUEST', props => {
       try {
-        io.to(`${id}`).emit('START_PRIVATE_CHAT', {
-          message: `start private chat with ${props.receiver.fullName}`,
-        });
         socket.join(props.room);
-        if (callback) {
-          callback(props.receiver._id);
-        }
       } catch (error) {
         console.error('join request', error.message);
       }
     });
 
-    socket.on('NEW_MESSAGE', async ({ message, room, sender }) => {
-      try {
-        const newMessage = await MessageController.create({
-          message,
-          sender,
-          room,
-        });
-        io.to(`${room._id}`).emit('NEW_MESSAGE_SUCCESS', {
-          message: newMessage,
-          room: rooms._id,
-        });
-      } catch (error) {
-        handleError('Error while sending message');
-      }
-    });
-
-    socket.on('NEW_REPLY', async ({ message, room, sender, messageId }) => {
-      try {
-        const newMessage = await MessageController.createReply({
-          message,
-          sender,
-          messageId,
-        });
-        io.to(`${room._id}`).emit('NEW_REPLY_SUCCESS', {
-          reply: newMessage,
-          room: room._id,
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-
-    socket.on('UPDATE_REPLY', async ({ message, room, messageId }) => {
-      try {
-        const updateMessage = await MessageController.updateReply(messageId, {
-          message,
-        });
-        io.to(`${room._id}`).emit('UPDATE_REPLY_SUCCESS', {
-          reply: updateMessage,
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-
-    socket.on('UPDATE_MESSAGE', async ({ message, room, messageId }) => {
-      try {
-        const updateMessage = await MessageController.update(messageId, {
-          message,
-        });
-        io.to(`${room._id}`).emit('UPDATE_MESSAGE_SUCCESS', {
-          message: updateMessage,
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-
-    socket.on('DELETE_REPLY', async ({ room, messageId }) => {
-      try {
-        const deleteMessage = await MessageController.deleteReply(messageId);
-        io.to(`${room._id}`).emit('REPLY_DELETE_SUCCESS', {
-          reply: deleteMessage,
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-    socket.on('MESSAGE_DELETE', async ({ room, messageId }) => {
-      try {
-        const deleteMessage = await MessageController.delete(messageId);
-        io.to(`${room._id}`).emit('MESSAGE_DELETE_SUCCESS', {
-          message: deleteMessage,
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-
-    socket.on('NEW_NOTIFICATION', async ({ message, sender, receiver }) => {
-      if (receiver) {
-        await Notifications.create({
-          type: 'message',
-          body: message,
-          sender,
-          receiver,
-        });
-        const notifications = await Notifications.find({
-          receiver,
-          type: 'message',
-          isRead: false,
-        });
-        const userToSendTo = usersConnected.getUserByUserId(receiver);
-        if (userToSendTo) {
-          io.to(`${userToSendTo.socketId}`).emit('NEW_NOTIFICATION_SUCCESS', {
-            notifications,
-          });
-        }
-      }
-    });
+    messageSocketController(io, socket, usersConnected);
+    replySocketController(io, socket);
+    notificationSocketController(io, socket, usersConnected);
+    roomSocketController(io, socket, usersConnected);
 
     // socket.on('NEW_TASK', async ({ assign, sender, task }) => {
     //   try {

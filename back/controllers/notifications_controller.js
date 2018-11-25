@@ -8,6 +8,7 @@ module.exports = {
     try {
       const notifications = await Notifications.find({
         receiver: res.locals.user._id,
+        isRead: false,
       });
       return apiResponse.success(200, {
         notifications,
@@ -33,6 +34,7 @@ module.exports = {
       );
       const notifications = await Notifications.find({
         receiver: res.locals.user._id,
+        isRead: false,
       });
       return apiResponse.success(200, {
         notifications,

@@ -2,6 +2,8 @@
 .document {
   flex-wrap: wrap;
   margin-top: .5rem; }
+  .document input {
+    color: #eee9d1; }
   .document li {
     margin: .5rem; }
   .document-item {

@@ -31,10 +31,11 @@ class SendRoomMessageForm extends React.Component {
     });
 
     socket.emit('NEW_NOTIFICATION', {
-      room,
       sender: loggedUser._id,
       message: this.state.message,
-      receiver: receiver && receiver._id,
+      receiver: receiver && receiver,
+      type: 'message',
+      room,
     });
 
     this.setState(() => ({
@@ -49,6 +50,25 @@ class SendRoomMessageForm extends React.Component {
     }));
   };
 
+  handleFocus = () => {
+    const { loggedUser, socket, room } = this.props;
+    socket.emit('IS_TYPING_MESSAGE', {
+      room,
+      sender: {
+        _id: loggedUser._id,
+        fullName: loggedUser.fullName,
+        picture: loggedUser.picture,
+      },
+    });
+  };
+
+  handleBlur = () => {
+    const { socket, room } = this.props;
+    socket.emit('STOP_TYPING_MESSAGE', {
+      room,
+    });
+  };
+
   render() {
     return (
       <form
@@ -58,7 +78,10 @@ class SendRoomMessageForm extends React.Component {
         <input
           onChange={this.handleTextAreaChange}
           value={this.state.message}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
         />
+
         <Button type="submit" label="Send" />
       </form>
     );

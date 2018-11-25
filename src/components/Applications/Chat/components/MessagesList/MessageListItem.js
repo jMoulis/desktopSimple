@@ -33,7 +33,7 @@ class MessageListItem extends React.Component {
 
   handleDeleteMessage = messageId => {
     const { socket, room } = this.props;
-    socket.emit('MESSAGE_DELETE', {
+    socket.emit('DELETE_MESSAGE', {
       room,
       messageId,
     });

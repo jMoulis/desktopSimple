@@ -57,7 +57,6 @@ class Dashboard extends React.Component {
       },
     };
     this.socket.on('connect', () => {
-      console.log('connect');
       this.handleStatusSocket({
         socketStatus: {
           type: 'connect',
@@ -226,7 +225,6 @@ class Dashboard extends React.Component {
             closeFromParent={showUserDetailModalAction}
             name=""
             zIndex={200}
-            small
           >
             <DetailUser socket={this.socket} loggedUser={loggedUser} />
           </Modal>

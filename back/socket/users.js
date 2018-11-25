@@ -1,6 +1,7 @@
 class Users {
   constructor() {
     this.users = [];
+    this.typingUsers = [];
   }
 
   addUser(socketId, user) {
@@ -13,6 +14,15 @@ class Users {
     return user;
   }
 
+  addTypingUser(socketId, user) {
+    this.typingUsers.push({
+      fullName: user.fullName,
+      picture: user.picture,
+      _id: user._id.toString(),
+      socketId,
+    });
+    return user;
+  }
   getUsersList() {
     return this.users;
   }
@@ -31,6 +41,20 @@ class Users {
       this.users = this.users.filter(user => user.socketId !== socketId);
     }
     return user;
+  }
+
+  getTypingUsers() {
+    return this.typingUsers;
+  }
+
+  removeTypingUser(socketId) {
+    const user = this.getUser(socketId);
+    if (user) {
+      this.typingUsers = this.typingUsers.filter(
+        user => user.socketId !== socketId,
+      );
+    }
+    return this.typingUsers;
   }
 }
 

@@ -12,6 +12,7 @@ export default {
     icon: 'fas fa-sitemap fa-2x',
     reduce: false,
     typeUser: ['all'],
+    notificationsKey: 'project',
   },
   Chat: {
     appName: 'Chat',
@@ -33,6 +34,7 @@ export default {
     icon: 'fas fa-cog fa-2x',
     reduce: false,
     typeUser: ['all'],
+    notificationsKey: 'setting',
   },
   TextEditor: {
     appName: 'TextEditor',
@@ -43,6 +45,7 @@ export default {
     icon: 'fas fa-edit fa-2x',
     reduce: false,
     typeUser: ['all'],
+    notificationsKey: 'textEditor',
   },
   Task: {
     appName: 'Task',
@@ -53,6 +56,7 @@ export default {
     icon: 'fas fa-tasks fa-2x',
     reduce: false,
     typeUser: ['student'],
+    notificationsKey: 'task',
   },
   AddressBook: {
     appName: 'AddressBook',
@@ -63,5 +67,6 @@ export default {
     icon: 'far fa-address-book fa-2x',
     reduce: false,
     typeUser: ['all'],
+    notificationsKey: 'addressBook',
   },
 };

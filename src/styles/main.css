@@ -116,6 +116,9 @@ h1 {
 .flex-justify-center {
   justify-content: center; }
 
+.flex-justify-flex-end {
+  justify-content: flex-end; }
+
 .flex-align-items-center {
   align-items: center; }
 

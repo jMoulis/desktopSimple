@@ -5,8 +5,9 @@ import {
   setDefaultRoomAction,
 } from '../../../../../store/reducers/chatReducer';
 
-const mapStateToProps = ({ chatReducer }) => ({
+const mapStateToProps = ({ chatReducer, notificationsReducer }) => ({
   defaultRoom: chatReducer.defaultRoom,
+  notifications: notificationsReducer.notifications,
 });
 
 const mapDispatchToProps = dispatch => ({

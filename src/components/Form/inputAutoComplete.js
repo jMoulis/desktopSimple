@@ -6,7 +6,9 @@ import SuccessIcon from '../../assets/successIcon/successIcon';
 const InputAutoComplete = ({ config }) => {
   return (
     <div className={`form-group ${config.field.required ? 'required' : ''}`}>
-      <label htmlFor={config.field.name}>{config.field.label}</label>
+      <label className="form-label" htmlFor={config.field.name}>
+        {config.field.label}
+      </label>
       <div
         className={
           config.isFocused ? 'input-auto input-auto--focus' : 'input-auto'

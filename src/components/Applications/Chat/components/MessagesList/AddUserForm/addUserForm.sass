@@ -1,0 +1,45 @@
+@import '../index.sass'
+.add-user
+  padding: 1rem
+  & .users-wrapper
+    cursor: pointer
+    border: 2px solid transparent
+    min-height: 47px
+    transition: all 300ms
+    &:hover
+      box-shadow: 0 0 5px 0 $darkestblue
+  &-header
+    display: flex
+    align-items: flex-start
+    margin-bottom: 1rem
+    & button
+      margin: 0
+  & .container-input
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    border: 2px solid $darkestblue
+    padding: .5rem
+    & input
+      border: none
+      outline: none
+    & .users-tag
+        display: flex
+        flex-wrap: wrap
+        margin-right: .5rem
+        border: 2px solid $beige
+        & span
+          padding: .2rem .5rem
+          background-color: $blue
+          color: $beige
+          font-weight: bold
+          cursor: pointer
+          outline: none
+          border-right: 2px solid $beige
+        & button
+          background-color: $fullRed
+          color: $beige
+          font-weight: bold
+          border: none
+          outline: none
+          cursor: pointer

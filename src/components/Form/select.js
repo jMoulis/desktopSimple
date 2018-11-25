@@ -28,7 +28,9 @@ const Select = ({ config }) => {
         ''} ${small ? 'form-group-small' : ''}`}
       style={containerStyle}
     >
-      {field.label && <label className="label-top">{field.label}</label>}
+      {field.label && (
+        <label className="label-top form-label">{field.label}</label>
+      )}
       <select
         id={field.name}
         name={field.name}

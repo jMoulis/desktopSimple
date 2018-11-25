@@ -11,6 +11,10 @@ class MessageTemp extends Component {
     loggedUser: PropTypes.object.isRequired,
     socketActionType: PropTypes.string.isRequired,
     callbacks: PropTypes.object.isRequired,
+    canAnswer: PropTypes.bool,
+  };
+  static defaultProps = {
+    canAnswer: false,
   };
   state = {
     showInputChange: false,

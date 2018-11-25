@@ -9,7 +9,10 @@ const RoomSchema = new Schema({
       ref: 'user',
     },
   ],
-  name: String,
+  name: {
+    type: String,
+    required: [true, 'The Room name is mandatory'],
+  },
   isPrivate: {
     type: Boolean,
     default: true,
@@ -26,6 +29,10 @@ const RoomSchema = new Schema({
   isTeamRoom: {
     type: Boolean,
     default: false,
+  },
+  createdAt: {
+    type: Date,
+    default: new Date(),
   },
 });
 

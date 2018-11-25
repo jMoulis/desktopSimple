@@ -48,7 +48,7 @@ class RepliesList extends React.Component {
     }));
   };
 
-  displayThumbnailRepliesList = replies => {
+  displayThumbnailRepliesList = (replies, userKey) => {
     const maxReplies = replies.slice(0, 5);
     const maxRepliesLength = maxReplies.length;
     const lengthReplies = replies.length;
@@ -59,7 +59,7 @@ class RepliesList extends React.Component {
             <UserIconContainer
               key={reply._id}
               containerCss={{ padding: 0 }}
-              user={{ user: reply.sender }}
+              user={{ user: reply[userKey] }}
               classCss="small"
               isSmall
               hideNotificationBadge
@@ -109,7 +109,7 @@ class RepliesList extends React.Component {
     return (
       <div className="replies-list">
         <div className="d-flex flex-align-items-center replies-list-small">
-          {this.displayThumbnailRepliesList(replies)}
+          {this.displayThumbnailRepliesList(replies, 'sender')}
           {replies.length && replies.length > 0 ? (
             <button
               className="replies-list-small-button"

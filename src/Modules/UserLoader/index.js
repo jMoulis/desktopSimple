@@ -29,14 +29,17 @@ class UsersLoader extends React.Component {
     }).isRequired,
     filter: PropTypes.object.isRequired,
     select: PropTypes.func.isRequired,
-    closeFromParent: PropTypes.func.isRequired,
+    closeFromParent: PropTypes.func,
   };
+  static defaultProps = {
+    closeFromParent: null,
+  };
+
   state = {
     filter: {
       ...this.props.filter,
       available: true,
       tags: true,
-      filter: '',
     },
   };
   componentDidMount() {

@@ -30,7 +30,7 @@
       flex: 1; }
       .form-container .form-content .error-login {
         text-align: center; }
-      .form-container .form-content label {
+      .form-container .form-content .form-label {
         color: #0a1c28;
         font-weight: bold; }
 

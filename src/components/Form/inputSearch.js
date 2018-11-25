@@ -97,7 +97,9 @@ class InputSearch extends Component {
           config.field.required ? 'required' : ''
         }`}
       >
-        <label htmlFor={config.field.name}>{config.field.label}</label>
+        <label className="form-label" htmlFor={config.field.name}>
+          {config.field.label}
+        </label>
         <input
           value={this.state[config.field.name].value}
           onChange={this.handleInputChange}

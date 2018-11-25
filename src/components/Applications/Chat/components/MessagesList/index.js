@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MessageListItem from '../../containers/MessagesList/MessageListItem';
 import './index.css';
+import TempMessage from './TempMessage';
+import Utils from '../../../../../Utils/utils';
 
 class MessageList extends React.Component {
   static propTypes = {
     roomFetchProcess: PropTypes.object.isRequired,
     fetchMessagesAction: PropTypes.func.isRequired,
+    typingStatus: PropTypes.object.isRequired,
     messages: PropTypes.array.isRequired,
     loggedUser: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired,
@@ -18,12 +21,13 @@ class MessageList extends React.Component {
     super(props);
     this.messagesList = React.createRef();
     this.state = {
-      init: false,
+      shouldScrollBottom: true,
     };
+    this.utils = new Utils();
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.state.init) {
+    if (this.state.shouldScrollBottom) {
       this.scrollToBottom(this.messagesList.current);
     }
     const prevRoomId = prevProps.roomFetchProcess.room._id;
@@ -34,14 +38,16 @@ class MessageList extends React.Component {
     if (room._id && typeof prevRoomId === 'undefined') {
       return fetchMessagesAction(room._id);
     }
-    if (room._id.toString() !== prevRoomId.toString()) {
-      this.setInit(false);
+    if (room._id && room._id.toString() !== prevRoomId.toString()) {
+      this.shouldScrollBottomAction(true);
       return fetchMessagesAction(room._id);
     }
     return true;
   }
 
-  setInit = bool => this.setState(() => ({ init: bool }));
+  shouldScrollBottomAction = bool =>
+    this.setState(() => ({ shouldScrollBottom: bool }));
+
   scrollToBottom = element => {
     element.scrollTop = element.scrollHeight;
   };
@@ -63,6 +69,7 @@ class MessageList extends React.Component {
     this.setState(() => ({
       scrollPosition: element.scrollTop,
       init: true,
+      shouldScrollBottom: false,
     }));
   };
 
@@ -73,9 +80,21 @@ class MessageList extends React.Component {
       messages,
       loggedUser,
       socket,
+      typingStatus,
     } = this.props;
-    if (room && messages) {
-      if (messages.length === 0) {
+    const typingUsersExceptLoogedUser = typingStatus.typingUsers.filter(
+      typingUser => typingUser._id !== loggedUser._id,
+    );
+    if (this.utils.isObjectEmpty(room))
+      return (
+        <ul ref={this.messagesList} className="chat-message-list">
+          <li className="chat-message-list-item">
+            <span>No room selected</span>
+          </li>
+        </ul>
+      );
+    if (messages) {
+      if (messages && messages.length === 0) {
         return (
           <ul ref={this.messagesList} className="chat-message-list">
             <li className="chat-message-list-item">
@@ -90,16 +109,27 @@ class MessageList extends React.Component {
           className="chat-message-list"
           onScroll={this.handleScroll}
         >
-          {messages.map(message => (
-            <li key={message._id} className="chat-message-list-item">
-              <MessageListItem
-                message={message}
-                loggedUser={loggedUser}
-                socket={socket}
-                room={room}
-              />
-            </li>
-          ))}
+          {messages
+            .filter(message => message.room === room._id)
+            .map(message => (
+              <li key={message._id} className="chat-message-list-item">
+                <MessageListItem
+                  message={message}
+                  loggedUser={loggedUser}
+                  socket={socket}
+                  room={room}
+                />
+              </li>
+            ))}
+          {typingUsersExceptLoogedUser.length > 0 &&
+            typingStatus.room &&
+            typingStatus.room._id === room._id && (
+              <li className="chat-message-list-item">
+                {typingUsersExceptLoogedUser.map((typingUser, index) => (
+                  <TempMessage key={index} user={typingUser} />
+                ))}
+              </li>
+            )}
         </ul>
       );
     }

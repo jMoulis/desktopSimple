@@ -25,7 +25,9 @@ class NewTeam extends React.Component {
     counters: {},
     selectedUsers: {},
     modal: false,
+    filter: {},
   };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const { usersCount } = nextProps;
     if (usersCount.count) {
@@ -45,11 +47,13 @@ class NewTeam extends React.Component {
   componentWillUnmount() {
     this.props.clearTeamMessageAction();
   }
+
   handleClose = () => {
     this.setState(() => ({
       modal: false,
     }));
   };
+
   handleFormKeyPress = evt => {
     if (
       evt.key === 'Enter' &&
@@ -61,12 +65,14 @@ class NewTeam extends React.Component {
     }
     return true;
   };
+
   handleInputChange = evt => {
     const { name, value } = evt.target;
     this.setState(() => ({
       [name]: value,
     }));
   };
+
   handleSelectedTags = evt => {
     const { fetchUsersCountAction } = this.props;
     const { value } = evt.target;
@@ -91,10 +97,11 @@ class NewTeam extends React.Component {
         counters: {
           ...prevState.counters,
         },
-        filter: value,
+        filter,
       }));
     }
   };
+
   handleSubmit = evt => {
     evt.preventDefault();
     const { createTeamAction, loggedUser, onSuccess, tabName } = this.props;
@@ -115,6 +122,7 @@ class NewTeam extends React.Component {
     createTeamAction(values);
     onSuccess(tabName);
   };
+
   handleSearch = filter => {
     this.setState(() => ({
       modal: true,
@@ -123,6 +131,7 @@ class NewTeam extends React.Component {
       },
     }));
   };
+
   handleRemove = ({ target }) => {
     const { tagname } = target.dataset;
     this.setState(prevState => {
@@ -136,6 +145,7 @@ class NewTeam extends React.Component {
       };
     });
   };
+
   handleSelectUser = user => {
     this.setState(prevState => {
       const filteredselectedTags = prevState.selectedTags.map(ressource => {
@@ -157,8 +167,9 @@ class NewTeam extends React.Component {
       };
     });
   };
+
   render() {
-    const { counters, selectedUsers, selectedTags } = this.state;
+    const { counters, selectedUsers, selectedTags, filter } = this.state;
     const { teamCreation } = this.props;
     const { error, success } = teamCreation;
     return (
@@ -251,7 +262,7 @@ class NewTeam extends React.Component {
               closeFromParent={this.handleClose}
             >
               <UsersLoader
-                filter={{ ...this.state.filter, type: 'student' }}
+                filter={{ ...filter, type: 'student' }}
                 select={this.handleSelectUser}
               />
             </Modal>

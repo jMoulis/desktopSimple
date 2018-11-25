@@ -23,7 +23,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSelectTeam: true,
+      // showSelectTeam: true,
     };
   }
   static getDerivedStateFromProps(nextProps, nextState) {
