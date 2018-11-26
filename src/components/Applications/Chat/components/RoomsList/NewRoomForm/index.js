@@ -21,6 +21,7 @@ class NewRoomForm extends Component {
       form: {
         name: '',
         isPrivate: true,
+        isTeamRoom: false,
         users: [
           {
             fullName: props.loggedUser.fullName,
@@ -64,7 +65,7 @@ class NewRoomForm extends Component {
             padding: '1rem',
           }}
         >
-          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
+          <form className="d-flex flex-column">
             <label>Room Name</label>
             <input
               type="text"
@@ -90,7 +91,7 @@ class NewRoomForm extends Component {
                 margin: 0,
                 padding: '0 .3rem',
               }}
-              type="submit"
+              onClick={this.handleSubmit}
               label="Submit"
               disabled={
                 !roomReceivedRequest || roomReceivedRequest.length === 0

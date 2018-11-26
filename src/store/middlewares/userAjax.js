@@ -59,7 +59,6 @@ export default store => next => action => {
           if (error.response.status === 500) {
             return store.dispatch(logoutAction());
           }
-          console.log(error.response.data.errors.error);
           return store.dispatch(
             fetchUserFailureAction(error.response.data.errors.error),
           );

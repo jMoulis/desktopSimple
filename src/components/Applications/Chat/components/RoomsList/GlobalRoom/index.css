@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.chat {
+  display: flex;
+  height: 100%; }
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: .5rem; }
+
+.room {
+  padding: .5rem;
+  border-right: 2px solid #0a1c28;
+  min-width: 250px; }
+  @media (max-width: 500px) {
+    .room {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1; } }
+  .room h2 {
+    padding: .5rem 0;
+    font-weight: bold;
+    cursor: pointer; }
+  .room-list {
+    overflow: auto;
+    height: calc(100% - 60px);
+    overflow-y: scroll; }
+
+.global-room {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+  .global-room-header {
+    display: flex;
+    align-items: center; }
+    .global-room-header h2 {
+      margin-left: .3rem; }
+    .global-room-header i {
+      width: 10px; }
+  .global-room span {
+    background-color: #7fbf7f;
+    padding: .3rem;
+    font-size: .5rem;
+    border-radius: 1.5px; }
+  .global-room-content {
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.2); }
+  .global-room-item {
+    display: flex;
+    justify-content: space-between;
+    transition: all 300ms;
+    cursor: pointer; }
+    .global-room-item:hover {
+      background-color: rgba(0, 0, 0, 0.2); }
+    .global-room-item-selected {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #d44c00; }
+    .global-room-item-btn {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 300ms;
+      margin-left: .3rem;
+      outline: none;
+      padding: .5rem 0; }
+      .global-room-item-btn:hover {
+        color: #d44c00; }

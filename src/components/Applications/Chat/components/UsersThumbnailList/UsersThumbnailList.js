@@ -5,7 +5,7 @@ import './index.css';
 
 const UsersThumbnailList = ({ users }) => {
   if (!users || !Array.isArray(users)) return <span />;
-  const maxUsersDisplayed = users.slice(0, 3);
+  const maxUsersDisplayed = users.slice(0, 5);
   const maxUsersLength = maxUsersDisplayed.length;
   const usersLength = users.length;
 

@@ -88,6 +88,7 @@ class UsersLoader extends React.Component {
             <Button
               type="submit"
               label="search"
+              category="normal"
               small
               style={{
                 margin: 0,

@@ -6,7 +6,6 @@ import TagList from '../../../Modules/Tag/tagList';
 import FriendRequestButtonsContainer from '../../../Modules/FriendRequestButtons';
 import Button from '../../Form/button';
 import SendMessageFormContainer from '../../../Modules/SendFormMessage';
-// import ChatBoxForm from '../../Dashboard/Chat/ChatBox/ChatBoxForm';
 
 const ROOT_URL = process.env.REACT_APP_API;
 class DetailUser extends React.Component {

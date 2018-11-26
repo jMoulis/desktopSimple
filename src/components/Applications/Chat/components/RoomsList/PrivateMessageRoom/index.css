@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.chat {
+  display: flex;
+  height: 100%; }
+  .chat-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: .5rem; }
+
+.room {
+  padding: .5rem;
+  border-right: 2px solid #0a1c28;
+  min-width: 250px; }
+  @media (max-width: 500px) {
+    .room {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1; } }
+  .room h2 {
+    padding: .5rem 0;
+    font-weight: bold;
+    cursor: pointer; }
+  .room-list {
+    overflow: auto;
+    height: calc(100% - 60px);
+    overflow-y: scroll; }
+
+.private-message-room {
+  padding: .5rem;
+  border-right: 2px solid #0a1c28; }
+  @media (max-width: 500px) {
+    .private-message-room {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1; } }
+  .private-message-room-list {
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.2); }
+  .private-message-room-search-form {
+    position: relative;
+    width: 100%;
+    display: flex; }
+    .private-message-room-search-form input {
+      border: none;
+      width: 100%;
+      padding: .5rem;
+      box-sizing: border-box;
+      outline: none; }
+    .private-message-room-search-form button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 300ms;
+      margin-left: .3rem;
+      outline: none;
+      padding: .5rem 0; }
+      .private-message-room-search-form button:hover {
+        color: #d44c00; }
+  .private-message-room-item {
+    display: flex;
+    justify-content: space-between;
+    transition: all 300ms;
+    cursor: pointer; }
+    .private-message-room-item:hover {
+      background-color: rgba(0, 0, 0, 0.2); }
+    .private-message-room-item-selected {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #d44c00; }
+    .private-message-room-item button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 300ms;
+      margin-left: .3rem;
+      outline: none;
+      padding: .5rem; }
+      .private-message-room-item button:hover {
+        color: #d44c00; }
