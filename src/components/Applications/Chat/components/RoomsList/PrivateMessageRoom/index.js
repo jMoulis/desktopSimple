@@ -119,7 +119,7 @@ class PrivateMessageRoom extends Component {
   hanldeSelectUser = async user => {
     const { callback, loggedUser, fetchRoomsAndUpdateStatus } = this.props;
     try {
-      const { room, error } = await this._fetchRoomAction(
+      const { room } = await this._fetchRoomAction(
         user,
         loggedUser,
         this._setError,
@@ -218,43 +218,41 @@ class PrivateMessageRoom extends Component {
         <ul className="private-message-room-list">
           {isCollapsed &&
             rooms.privateMessages &&
-            rooms.privateMessages.map(privateMessage => {
-              return (
-                <li
-                  key={privateMessage._id}
-                  className={`private-message-room-item ${
-                    privateMessage._id === selectedRoom._id
-                      ? 'private-message-room-item-selected'
-                      : ''
-                  }`}
+            rooms.privateMessages.map(privateMessage => (
+              <li
+                key={privateMessage._id}
+                className={`private-message-room-item ${
+                  privateMessage._id === selectedRoom._id
+                    ? 'private-message-room-item-selected'
+                    : ''
+                }`}
+              >
+                <UserIconContainer
+                  user={{
+                    user: privateMessage.users.find(
+                      user => user && user._id !== loggedUser._id,
+                    ),
+                  }}
+                  callback={user => callback(privateMessage, user)}
+                  name
+                  shouldUpdateNotification
+                />
+                <button
+                  onClick={() => {
+                    callback(defaultRoom);
+                    // Go back to global Room;
+                    setDefaultRoomAction();
+                    fetchRoomsAndUpdateStatus(
+                      privateMessage._id,
+                      loggedUser._id,
+                      false,
+                    );
+                  }}
                 >
-                  <UserIconContainer
-                    user={{
-                      user: privateMessage.users.find(
-                        user => user && user._id !== loggedUser._id,
-                      ),
-                    }}
-                    callback={user => callback(privateMessage, user)}
-                    name
-                    shouldUpdateNotification
-                  />
-                  <button
-                    onClick={() => {
-                      callback(defaultRoom);
-                      // Go back to global Room;
-                      setDefaultRoomAction();
-                      fetchRoomsAndUpdateStatus(
-                        privateMessage._id,
-                        loggedUser._id,
-                        false,
-                      );
-                    }}
-                  >
-                    X
-                  </button>
-                </li>
-              );
-            })}
+                  X
+                </button>
+              </li>
+            ))}
         </ul>
 
         {showNewPrivateMessageModal && (

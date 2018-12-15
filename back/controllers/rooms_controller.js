@@ -243,7 +243,6 @@ module.exports = {
     callback,
   ) => {
     try {
-      // 1- add request to user
       const usersRequestedIds = usersToAddRoomRequest.map(
         roomRequestUser => roomRequestUser._id,
       );
@@ -251,6 +250,16 @@ module.exports = {
         { _id: { $in: usersRequestedIds } },
         { $addToSet: { roomReceivedRequest: room._id } },
       );
+      const users = await User.find(
+        { _id: { $in: usersRequestedIds } },
+        { fullName: 1, picture: 1 },
+      );
+
+      await Room.updateOne(
+        { _id: room._id },
+        { $addToSet: { pendingRequest: users } },
+      );
+
       // 2- add notification
       usersToAddRoomRequest.forEach(async receiver => {
         await Notifications.create({

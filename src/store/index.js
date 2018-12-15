@@ -26,7 +26,7 @@ import teamAjax from '../components/Applications/Projects/store/middlewares/team
 
 let devTools = [];
 if (window.devToolsExtension) {
-  devTools = [window.devToolsExtension()];
+  devTools = [window.__REDUX_DEVTOOLS_EXTENSION__()];
 }
 const mainReducer = combineReducers({
   appReducer,

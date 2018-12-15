@@ -14,7 +14,7 @@ class GlobalRoom extends React.Component {
   };
 
   render() {
-    const { title, rooms, callback, selectedRoom } = this.props;
+    const { title, rooms, callback, selectedRoom, deleteRoom } = this.props;
     const { isCollapsed } = this.state;
     return (
       <Fragment>
@@ -51,6 +51,9 @@ class GlobalRoom extends React.Component {
                   onClick={() => callback(globalRoom)}
                 >
                   {globalRoom.name}
+                </button>
+                <button onClick={() => deleteRoom({ roomId: globalRoom.id })}>
+                  delete
                 </button>
               </li>
             ))}

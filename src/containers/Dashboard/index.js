@@ -1,11 +1,4 @@
-/*
- * Npm import
- */
 import { connect } from 'react-redux';
-
-/*
- * Local import
- */
 import Dashboard from '../../components/Dashboard';
 import {
   setActiveAppAction,
@@ -22,11 +15,8 @@ import {
   fetchNotificationsAction,
   fetchNotificationsSuccessAction,
 } from '../../store/reducers/notificationsReducer';
+import { withSocket } from '../../Modules/Socket/SocketProvider';
 
-/*
- * Code
- */
-// State
 const mapStateToProps = ({
   frameReducer,
   authReducer,
@@ -46,7 +36,6 @@ const mapStateToProps = ({
   showUserDetailModal: appReducer.showUserDetailModal,
 });
 
-// Actions
 const mapDispatchToProps = dispatch => ({
   setActiveAppAction: app => {
     dispatch(setActiveAppAction(app));
@@ -83,12 +72,9 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-/*
- * Export default
- */
 const createContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 );
 const DashboardContainer = createContainer(Dashboard);
-export default DashboardContainer;
+export default withSocket(DashboardContainer);

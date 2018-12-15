@@ -1,1 +1,2 @@
 export const ADD_ROOM_REQUEST_TO_USER = 'ADD_ROOM_REQUEST_TO_USER';
+export const DELETE_ROOM = 'DELETE_ROOM';

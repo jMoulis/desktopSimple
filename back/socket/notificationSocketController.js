@@ -12,6 +12,7 @@ module.exports = (io, socket, usersConnected) => {
           receiver,
           room,
         });
+
         const notifications = await Notifications.find({
           receiver,
           type,

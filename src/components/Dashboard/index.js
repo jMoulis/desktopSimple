@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
 
 import './dashboard.css';
 import Frame from '../../Modules/Frame/containers/frame';
@@ -10,20 +9,18 @@ import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
 
-const ROOT_URL = process.env.REACT_APP_API;
-
 class Dashboard extends React.Component {
   static propTypes = {
     applications: PropTypes.object.isRequired,
     loggedUser: PropTypes.object.isRequired,
     globalProps: PropTypes.object.isRequired,
     globalActions: PropTypes.object.isRequired,
+    socketProvider: PropTypes.object.isRequired,
     // showSelectTeamPanel: PropTypes.func,
     showUserDetailModalAction: PropTypes.func.isRequired,
     fetchNotificationsSuccessAction: PropTypes.func.isRequired,
     fetchNotificationsAction: PropTypes.func.isRequired,
     setConnectedUsersAction: PropTypes.func.isRequired,
-    emptyConnectedUserListAction: PropTypes.func.isRequired,
     showUserDetailModal: PropTypes.bool.isRequired,
     selectTeam: PropTypes.func.isRequired,
     activeApps: PropTypes.array,
@@ -35,13 +32,11 @@ class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = io(`${ROOT_URL}`, {
-      multiplex: false,
-      query: {
-        userId: props.loggedUser.user._id,
-      },
-      // reconnectionAttempts: 5,
-    });
+    const {
+      socketProvider: { socket, socketActions },
+    } = props;
+
+    this.socket = socket;
     this.state = {
       helper: true,
       showSettings: false,
@@ -56,62 +51,13 @@ class Dashboard extends React.Component {
         },
       },
     };
-    this.socket.on('connect', () => {
-      this.handleStatusSocket({
-        socketStatus: {
-          type: 'connect',
-          message: 'You are connected',
-          error: null,
-        },
-      });
-    });
-    this.socket.on('connect_error', () => {
-      const { emptyConnectedUserListAction } = this.props;
-      emptyConnectedUserListAction();
-      this.handleStatusSocket({
-        error: {
-          type: 'connect_error',
-          message: 'Chat connexion failed',
-          ...this.state.socketStatus.error,
-        },
-      });
-    });
-    this.socket.on('reconnecting', () => {
-      this.handleStatusSocket({
-        error: {
-          reconnecting: {
-            status: true,
-            message: 'We are trying to reconnect you',
-          },
-        },
-      });
-    });
-    this.socket.on('reconnect', () => {
-      this.handleStatusSocket({
-        socketStatus: {
-          type: 'reconnect',
-          message: 'Chat reconnexion successfull',
-        },
-      });
-    });
-    this.socket.on('reconnect_failed', () => {
-      this.handleStatusSocket({
-        error: {
-          type: 'reconnect_failed',
-          message: 'Reconnection failed. Check your internet connexion',
-          reconnecting: {
-            status: false,
-            message: 'Reconnection failed. Check your internet connexion',
-          },
-        },
-      });
-    });
-    this.socket.on('CONNECT_SUCCESS', ({ connectedUsers }) => {
-      props.setConnectedUsersAction(connectedUsers);
-    });
-    this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
-      props.fetchNotificationsSuccessAction({ notifications });
-    });
+    // this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
+    //   props.fetchNotificationsSuccessAction({ notifications });
+    // });
+    socketActions.onConnectSuccess(
+      this.props.setConnectedUsersAction,
+      this.props.fetchNotificationsSuccessAction,
+    );
   }
 
   componentDidMount() {
@@ -189,7 +135,7 @@ class Dashboard extends React.Component {
                         },
                         globalProps: {
                           ...globalProps,
-                          socketIo: this.socket,
+                          socketIo: this.props.socketProvider.socket,
                           loggedUser: user,
                           socketStatus,
                         },

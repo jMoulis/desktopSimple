@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import Chat from '../components';
+import Chat from '../components/Chat';
 import {
   fetchRoomsAction,
   fetchRoomAction,

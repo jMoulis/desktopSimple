@@ -12,6 +12,7 @@ import Signup from '../../containers/Home/SignUp';
 // import TeamSelector from '../../containers/Dashboard/TeamSelector';
 import Loader from '../../Modules/Loader';
 import ErrorBoundary from '../Hoc/ErrorBoundary';
+import SocketProvider from '../../Modules/Socket/SocketProvider';
 
 class App extends Component {
   static propTypes = {
@@ -110,11 +111,13 @@ class App extends Component {
                 return (
                   <div className="app-container">
                     <ErrorBoundary>
-                      <Dashboard
-                        key="dashboard"
-                        // showSelectTeamPanel={this.showSelectTeamPanel}
-                        selectTeam={this.handleSelectTeam}
-                      />
+                      <SocketProvider>
+                        <Dashboard
+                          key="dashboard"
+                          // showSelectTeamPanel={this.showSelectTeamPanel}
+                          selectTeam={this.handleSelectTeam}
+                        />
+                      </SocketProvider>
 
                       {/* {this.state.showSelectTeam &&
                         loginProcess.loggedUser.typeUser !== 'company' &&

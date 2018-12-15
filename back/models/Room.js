@@ -34,6 +34,7 @@ const RoomSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  pendingRequest: Array,
 });
 
 const Room = mongoose.model('room', RoomSchema);

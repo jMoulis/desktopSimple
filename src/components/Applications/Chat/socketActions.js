@@ -1,4 +1,7 @@
-import { ADD_ROOM_REQUEST_TO_USER } from './socketActionsConstants';
+import {
+  ADD_ROOM_REQUEST_TO_USER,
+  DELETE_ROOM,
+} from './socketActionsConstants';
 
 export default class SocketActions {
   constructor(socket) {
@@ -10,6 +13,12 @@ export default class SocketActions {
       usersToAddRoomRequest,
       room,
       sender,
+    });
+  };
+
+  deleteRoomSocketAction = roomId => {
+    this.socket.emit(DELETE_ROOM, { roomId }, aknowledgment => {
+      console.log(aknowledgment);
     });
   };
 }

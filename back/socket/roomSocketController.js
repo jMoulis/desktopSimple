@@ -77,6 +77,7 @@ module.exports = (io, socket, usersConnected) => {
           },
         );
 
+        /** Don't forget to remove the users from pendingrequest */
         await Room.updateOne(
           { _id: roomId },
           {
@@ -134,6 +135,13 @@ module.exports = (io, socket, usersConnected) => {
             $pull: { roomReceivedRequest: roomId },
           },
         );
+        /** Don't forget to remove the users from pendingrequest */
+        // await Room.updateOne(
+        //   { _id: roomId },
+        //   {
+        //     $addToSet: { users: senderId },
+        //   },
+        // );
 
         const notifications = await Notifications.find({
           receiver: senderId,

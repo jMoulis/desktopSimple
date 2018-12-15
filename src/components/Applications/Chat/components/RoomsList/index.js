@@ -51,7 +51,6 @@ class RoomsList extends React.Component {
 
   handleNewRoomSubmit = ({ form, roomReceivedRequest }, callback) => {
     const { socket, loggedUser } = this.props;
-    console.log(form);
     socket.emit(
       'NEW_ROOM',
       {
@@ -67,6 +66,10 @@ class RoomsList extends React.Component {
       },
     );
   };
+
+  // handleDeleteRoom = ({ roomId }) => {
+  //   deleteRoomSocketAction(roomId);
+  // };
 
   render() {
     const {
