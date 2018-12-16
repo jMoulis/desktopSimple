@@ -13,6 +13,7 @@ import {
   STOP_TYPING_MESSAGE_SUCCESS,
   NEW_ROOM_SUCCESS,
   REQUEST_ROOM_ACCEPT_SUCCESS,
+  NOTIFICATION_SUCCESS,
 } from './socketActionsConstants';
 
 class SocketActions {
@@ -40,17 +41,19 @@ class SocketActions {
         setConnectedUser(connectedUsers);
       }
     });
-
-    this.socket.on(NEW_NOTIFICATION_SUCCESS, notifications => {
-      if (fetchNotification) {
-        fetchNotification(notifications);
-      }
-    });
+    this.onNotificationSuccess(fetchNotification);
   };
 
+  createNewMessage = ({ room, sender, message }) =>
+    this.socket.emit('NEW_MESSAGE', {
+      room,
+      sender,
+      message,
+    });
+
   onNewMessageSuccess = newMessageSuccessAction =>
-    this.socket.on(NEW_MESSAGE_SUCCESS, ({ message }) => {
-      newMessageSuccessAction(message);
+    this.socket.on(NEW_MESSAGE_SUCCESS, ({ message, totalMessage }) => {
+      newMessageSuccessAction({ message, totalMessage });
     });
 
   onUpdateMessageSuccess = updateMessageSuccess =>
@@ -78,19 +81,34 @@ class SocketActions {
       deleteMessageSuccess(reply);
     });
 
-  onTypingAction = typingAction =>
+  onTypingSuccessAction = typingAction =>
     this.socket.on(
       IS_TYPING_MESSAGE_SUCCESS,
       ({ sender, typingUsers, room }) => {
-        typingAction(sender, typingUsers, room);
+        typingAction(sender, typingUsers, room, true);
       },
     );
 
-  onStopTyping = typingAction =>
+  emitTypingAction = ({ room, loggedUser }) => {
+    this.socket.emit('IS_TYPING_MESSAGE', {
+      room,
+      sender: {
+        _id: loggedUser._id,
+        fullName: loggedUser.fullName,
+        picture: loggedUser.picture,
+      },
+    });
+  };
+
+  onStopTypingSuccess = typingAction =>
     this.socket.on(STOP_TYPING_MESSAGE_SUCCESS, ({ typingUsers }) => {
-      typingAction(null, typingUsers);
+      typingAction(null, typingUsers, null, false);
     });
 
+  emitTypingStop = ({ room }) =>
+    this.socket.emit('STOP_TYPING_MESSAGE', {
+      room,
+    });
   onNewRoomSuccess = fetchRoomsSuccessAction =>
     this.socket.on(NEW_ROOM_SUCCESS, ({ rooms }) => {
       fetchRoomsSuccessAction({ rooms });
@@ -103,6 +121,22 @@ class SocketActions {
     this.socket.on(REQUEST_ROOM_ACCEPT_SUCCESS, ({ notifications, rooms }) => {
       fetchNotificationsSuccessAction({ notifications });
       fetchRoomsSuccessAction({ rooms });
+    });
+
+  sendNewNotification = ({ message, receiver, room, type, sender }) =>
+    this.socket.emit('NEW_NOTIFICATION', {
+      sender,
+      message,
+      receiver: receiver && receiver,
+      type,
+      room,
+    });
+
+  onNotificationSuccess = fetchNotification =>
+    this.socket.on(NEW_NOTIFICATION_SUCCESS, notifications => {
+      if (fetchNotification) {
+        fetchNotification(notifications);
+      }
     });
 }
 

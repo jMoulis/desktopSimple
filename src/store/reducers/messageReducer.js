@@ -1,9 +1,3 @@
-const initialState = {
-  messages: [],
-  totalMessage: 0,
-  limit: 10,
-};
-
 export const NEW_MESSAGE_SUCCESS = 'NEW_MESSAGE_SUCCESS';
 export const NEW_MESSAGE_FAILURE = 'NEW_MESSAGE_FAILURE';
 
@@ -20,6 +14,12 @@ export const UPDATE_MESSAGE_SUCCESS = 'UPDATE_MESSAGE_SUCCESS';
 
 export const DELETE_MESSAGE = 'DELETE_MESSAGE';
 export const DELETE_MESSAGE_SUCCESS = 'DELETE_MESSAGE_SUCCESS';
+
+const initialState = {
+  messages: [],
+  totalMessage: 0,
+  limit: 10,
+};
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
@@ -66,7 +66,8 @@ const reducer = (state = initialState, action = {}) => {
     case NEW_MESSAGE_SUCCESS: {
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        messages: [...state.messages, action.payload.message],
+        totalMessage: action.payload.totalMessage,
       };
     }
     case NEW_REPLY_SUCCESS: {

@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './index.css';
 import Button from '../../../../Form/button';
+import { withSocket } from '../../../../../Modules/Socket/SocketProvider';
 
 class SendRoomMessageForm extends React.Component {
   static propTypes = {
     loggedUser: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired,
+    socketProvider: PropTypes.object.isRequired,
     room: PropTypes.object,
     receiver: PropTypes.object,
   };
@@ -16,21 +18,32 @@ class SendRoomMessageForm extends React.Component {
     receiver: null,
   };
 
-  state = {
-    message: '',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: '',
+    };
+    this.inputRef = React.createRef();
+  }
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const { loggedUser, socket, room, receiver } = this.props;
+    const {
+      loggedUser,
+      room,
+      receiver,
+      socketProvider: {
+        socketActions: { createNewMessage, sendNewNotification },
+      },
+    } = this.props;
 
-    socket.emit('NEW_MESSAGE', {
+    createNewMessage({
       room,
       sender: loggedUser._id,
       message: this.state.message,
     });
 
-    socket.emit('NEW_NOTIFICATION', {
+    sendNewNotification({
       sender: loggedUser._id,
       message: this.state.message,
       receiver: receiver && receiver,
@@ -51,22 +64,13 @@ class SendRoomMessageForm extends React.Component {
   };
 
   handleFocus = () => {
-    const { loggedUser, socket, room } = this.props;
-    socket.emit('IS_TYPING_MESSAGE', {
-      room,
-      sender: {
-        _id: loggedUser._id,
-        fullName: loggedUser.fullName,
-        picture: loggedUser.picture,
-      },
-    });
+    const { loggedUser, room, socketProvider } = this.props;
+    socketProvider.socketActions.emitTypingAction({ room, loggedUser });
   };
 
   handleBlur = () => {
-    const { socket, room } = this.props;
-    socket.emit('STOP_TYPING_MESSAGE', {
-      room,
-    });
+    const { room, socketProvider } = this.props;
+    socketProvider.socketActions.emitTypingStop({ room });
   };
 
   render() {
@@ -76,16 +80,16 @@ class SendRoomMessageForm extends React.Component {
         onSubmit={evt => this.handleSubmit(evt)}
       >
         <input
+          ref={this.inputRef}
           onChange={this.handleTextAreaChange}
           value={this.state.message}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
         />
-
-        <Button type="submit" label="Send" />
+        <Button type="submit" label="Send" disabled={!this.state.message} />
       </form>
     );
   }
 }
 
-export default SendRoomMessageForm;
+export default withSocket(SendRoomMessageForm);

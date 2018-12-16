@@ -51,6 +51,7 @@ class Dashboard extends React.Component {
         },
       },
     };
+    socketActions.onNotificationSuccess(props.fetchNotificationsSuccessAction);
     // this.socket.on('NEW_NOTIFICATION_SUCCESS', ({ notifications }) => {
     //   props.fetchNotificationsSuccessAction({ notifications });
     // });

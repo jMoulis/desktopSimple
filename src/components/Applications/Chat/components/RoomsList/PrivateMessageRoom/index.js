@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import UserIconContainer from '../../../../../../Modules/UserIcon';
-import SelectUserPanel from '../SelectUserPanel';
 import Modal from '../../../../../../Modules/Modal/modal';
 import UsersLoaderContainer from '../../../../../../Modules/UserLoader';
 import './index.css';
+import InputSearch from '../../../containers/RoomsList/PrivateMessageRoom/InputSearch';
 
 const ROOT_URL = process.env.REACT_APP_API;
 
@@ -27,31 +27,9 @@ class PrivateMessageRoom extends Component {
   };
 
   state = {
-    search: '',
-    showSelectSearch: false,
     showNewPrivateMessageModal: false,
     isCollapsed: true,
   };
-
-  componentDidUpdate() {
-    document.addEventListener('mouseup', evt => {
-      const container = document.querySelector('.select-user-list');
-      if (this.state.showSelectSearch && !container.contains(evt.target))
-        return this.setState(() => ({
-          showSelectSearch: false,
-        }));
-    });
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mouseup', evt => {
-      const container = document.querySelector('.select-user-list');
-      if (this.state.showSelectSearch && !container.contains(evt.target))
-        return this.setState(() => ({
-          showSelectSearch: false,
-        }));
-    });
-  }
 
   handleToggleList = () => {
     this.setState(prevState => ({
@@ -65,55 +43,11 @@ class PrivateMessageRoom extends Component {
     }));
   };
 
-  handleSearch = evt => {
-    const { value } = evt.target;
-    if (!value)
-      return this.setState(() => ({
-        users: [],
-        search: '',
-      }));
-    this.setState(
-      () => ({
-        search: value,
-      }),
-      () => {
-        this.handleSearchSubmit();
-      },
-    );
-  };
-
   handleNewPrivateMessage = ({ user }) => {
     this.hanldeSelectUser(user);
     this.setState(prevState => ({
       showNewPrivateMessageModal: !prevState.showNewPrivateMessageModal,
     }));
-  };
-
-  handleSearchSubmit = async () => {
-    try {
-      const { data } = await axios({
-        method: 'get',
-        url: `${ROOT_URL}/api/rooms/room/users/?search=${this.state.search}`,
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
-      if (data.users.length === 0) {
-        return this.setState(() => ({
-          users: [],
-          showSelectSearch: true,
-        }));
-      }
-
-      return this.setState(() => ({
-        users: data.users,
-        showSelectSearch: true,
-      }));
-    } catch (error) {
-      this.setState(() => ({
-        users: [],
-      }));
-    }
   };
 
   hanldeSelectUser = async user => {
@@ -127,7 +61,6 @@ class PrivateMessageRoom extends Component {
       fetchRoomsAndUpdateStatus(room._id, loggedUser._id, true);
       callback(room, user);
       this.setState(() => ({
-        showSelectSearch: false,
         search: '',
         isCollapsed: true,
       }));
@@ -165,13 +98,7 @@ class PrivateMessageRoom extends Component {
   };
 
   render() {
-    const {
-      search,
-      users,
-      showSelectSearch,
-      showNewPrivateMessageModal,
-      isCollapsed,
-    } = this.state;
+    const { showNewPrivateMessageModal, isCollapsed } = this.state;
     const {
       rooms,
       callback,
@@ -201,19 +128,10 @@ class PrivateMessageRoom extends Component {
           <span>{rooms.privateMessages && rooms.privateMessages.length}</span>
         </li>
         <li>
-          <div className="private-message-room-search-form">
-            <input
-              value={search}
-              onChange={this.handleSearch}
-              placeholder="Search private message"
-            />
-            <button onClick={this.handleOpenModal}>
-              <i className="fas fa-edit" />
-            </button>
-            {showSelectSearch && (
-              <SelectUserPanel users={users} callback={this.hanldeSelectUser} />
-            )}
-          </div>
+          <InputSearch
+            selectUser={this.hanldeSelectUser}
+            openModalAction={this.handleOpenModal}
+          />
         </li>
         <ul className="private-message-room-list">
           {isCollapsed &&

@@ -1,36 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import UserIconContainer from '../../../../../../Modules/UserIcon';
 import './index.css';
 
-const TempMessage = ({ user }) => (
-  <div className="d-flex flex-align-items-center">
-    <UserIconContainer user={{ user }} hideNotificationBadge />
-    <div
-      className="d-flex flex-column"
-      style={{
-        fontSize: '.8rem',
-      }}
-    >
-      <div className="d-flex flex-align-items-baseline">
-        <span
-          style={{
-            marginRight: '.5rem',
-            fontWeight: 'bold',
-          }}
-        >
-          {user.fullName}
-        </span>
-        <span className="small">{moment().format('DD/MM/YYYY hh:mm')}</span>
+const TempMessage = ({ users }) => (
+  <li className="typing-message">
+    <div className="d-flex flex-align-items-center loading">
+      <div className="test">
+        {users.map(user => (
+          <span>{`${user.fullName}`}</span>
+        ))}
       </div>
-      <span className="loading">{user.fullName} is writing a message</span>
     </div>
-  </div>
+  </li>
 );
 
 TempMessage.propTypes = {
-  user: PropTypes.object.isRequired,
+  users: PropTypes.array.isRequired,
 };
 
 export default TempMessage;

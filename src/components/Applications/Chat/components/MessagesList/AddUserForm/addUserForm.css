@@ -9,6 +9,7 @@
     padding: .5rem; }
 
 .chat-message-list {
+  position: relative;
   margin-top: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
@@ -18,6 +19,8 @@
   .chat-message-list-item {
     padding: 1rem 0;
     border-bottom: 1px solid rgba(10, 28, 40, 0.2); }
+    .chat-message-list-item:last-child {
+      animation: comin .3s; }
     .chat-message-list-item-panel {
       position: relative; }
       .chat-message-list-item-panel-action {
@@ -37,6 +40,18 @@
     .chat-message-list-item--content {
       padding: .5rem 0;
       font-size: .8rem; }
+
+@keyframes comin {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem); }
+  50% {
+    transform: translateX(2rem) scale(1.1) rotate(-5deg); }
+  80% {
+    transform: rotate(5deg); }
+  100% {
+    opacity: 100%;
+    transform: translateX(0); } }
 
 .add-user {
   padding: 1rem; }

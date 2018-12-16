@@ -86,7 +86,9 @@ class MessageTemp extends Component {
             ) : (
               <Fragment>
                 <div className="d-flex flex-align-items-baseline">
-                  <span className="fullname">{message.sender.fullName}</span>
+                  <span className="fullname">
+                    {message.sender && message.sender.fullName}
+                  </span>
                   <span className="small">
                     {message.createdAt &&
                       moment(message.createdAt).format('DD/MM/YYYY hh:mm')}

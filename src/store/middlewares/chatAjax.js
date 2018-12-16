@@ -7,6 +7,9 @@ import {
   fetchRoomsSuccessAction,
   fetchRoomsFailureAction,
   FETCH_ROOMS_UPDATE_STATUS,
+  FETCH_USERS_FROM_PRIVATE_MESSAGE,
+  fetchUsersFromPMSuccess,
+  fetchUsersFromPMFailure,
 } from '../reducers/chatReducer';
 
 const ROOT_URL = process.env.REACT_APP_API;
@@ -60,6 +63,22 @@ export default store => next => action => {
         })
         .catch(error => {
           console.error(error.message);
+        });
+      break;
+    }
+    case FETCH_USERS_FROM_PRIVATE_MESSAGE: {
+      axios({
+        method: 'get',
+        url: `${ROOT_URL}/api/rooms/room/users/?search=${action.payload}`,
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+        .then(({ data }) => {
+          store.dispatch(fetchUsersFromPMSuccess(data));
+        })
+        .catch(error => {
+          store.dispatch(fetchUsersFromPMFailure(error.response));
         });
       break;
     }

@@ -27,8 +27,12 @@ class MessageList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.state.shouldScrollBottom) {
-      this.scrollToBottom(this.messagesList.current);
+    if (
+      this.state.shouldScrollBottom ||
+      this.props.totalMessage > prevProps.totalMessage ||
+      this.props.typingStatus.isTyping
+    ) {
+      this.scrollToBottom();
     }
     const prevRoomId = prevProps.roomFetchProcess.room._id;
     const {
@@ -39,7 +43,7 @@ class MessageList extends React.Component {
       return fetchMessagesAction(room._id);
     }
     if (room._id && room._id.toString() !== prevRoomId.toString()) {
-      this.shouldScrollBottomAction(true);
+      this.scrollToBottom();
       return fetchMessagesAction(room._id);
     }
     return true;
@@ -48,8 +52,8 @@ class MessageList extends React.Component {
   shouldScrollBottomAction = bool =>
     this.setState(() => ({ shouldScrollBottom: bool }));
 
-  scrollToBottom = element => {
-    element.scrollTop = element.scrollHeight;
+  scrollToBottom = () => {
+    this.messagesList.current.scrollTop = this.messagesList.current.scrollHeight;
   };
 
   handleScroll = evt => {
@@ -74,6 +78,7 @@ class MessageList extends React.Component {
   };
 
   reachedTop = element => element.scrollTop === 0;
+
   render() {
     const {
       roomFetchProcess: { room },
@@ -82,9 +87,11 @@ class MessageList extends React.Component {
       socket,
       typingStatus,
     } = this.props;
-    const typingUsersExceptLoogedUser = typingStatus.typingUsers.filter(
+
+    const typingUsersExceptLoggedUser = typingStatus.typingUsers.filter(
       typingUser => typingUser._id !== loggedUser._id,
     );
+
     if (this.utils.isObjectEmpty(room))
       return (
         <ul ref={this.messagesList} className="chat-message-list">
@@ -121,14 +128,10 @@ class MessageList extends React.Component {
                 />
               </li>
             ))}
-          {typingUsersExceptLoogedUser.length > 0 &&
+          {typingUsersExceptLoggedUser.length > 0 &&
             typingStatus.room &&
             typingStatus.room._id === room._id && (
-              <li className="chat-message-list-item">
-                {typingUsersExceptLoogedUser.map((typingUser, index) => (
-                  <TempMessage key={index} user={typingUser} />
-                ))}
-              </li>
+              <TempMessage users={typingUsersExceptLoggedUser} />
             )}
         </ul>
       );

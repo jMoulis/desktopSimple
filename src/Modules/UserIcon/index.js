@@ -47,6 +47,7 @@ class UserIcon extends React.Component {
     isSmall: PropTypes.bool,
     callback: PropTypes.func,
   };
+
   static defaultProps = {
     active: true,
     classCss: '',
@@ -57,6 +58,7 @@ class UserIcon extends React.Component {
     shouldUpdateNotification: false,
     isSmall: false,
   };
+
   hasNotifications = (notifications, { user }) => {
     const filteredNotif = notifications.filter(
       notification =>
@@ -82,12 +84,14 @@ class UserIcon extends React.Component {
       );
     }
   };
+
   isConnected = (user, connectedUsers) => {
     const userConnected = connectedUsers.some(
       connectedUser => connectedUser._id === user._id,
     );
     return userConnected;
   };
+
   render() {
     const {
       showUserDetailModal,

@@ -15,12 +15,29 @@ class Users {
   }
 
   addTypingUser(socketId, user) {
-    this.typingUsers.push({
-      fullName: user.fullName,
-      picture: user.picture,
-      _id: user._id.toString(),
-      socketId,
-    });
+    if (this.typingUsers.length === 0) {
+      this.typingUsers = [
+        ...this.typingUsers,
+        {
+          fullName: user.fullName.split(' ')[0],
+          picture: user.picture,
+          _id: user._id,
+          socketId,
+        },
+      ];
+    } else if (
+      !this.typingUsers.find(typingUser => typingUser.socketId === socketId)
+    ) {
+      this.typingUsers = [
+        ...this.typingUsers,
+        {
+          fullName: user.fullName.split(' ')[0],
+          picture: user.picture,
+          _id: user._id,
+          socketId,
+        },
+      ];
+    }
     return user;
   }
   getUsersList() {

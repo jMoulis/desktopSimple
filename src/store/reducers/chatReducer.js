@@ -16,6 +16,13 @@ export const ADD_ROOM_TO_STATE = 'ADD_ROOM_TO_STATE';
 
 export const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
 
+export const FETCH_USERS_FROM_PRIVATE_MESSAGE =
+  'FETCH_USERS_FROM_PRIVATE_MESSAGE';
+export const FETCH_USERS_FROM_PRIVATE_MESSAGE_SUCCESS =
+  'FETCH_USERS_FROM_PRIVATE_MESSAGE_SUCCESS';
+export const FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE =
+  'FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE';
+
 const initialState = {
   roomFetchProcess: {
     room: {},
@@ -27,6 +34,11 @@ const initialState = {
     rooms: {},
     success: null,
     loading: true,
+    error: null,
+  },
+  usersPMProcess: {
+    loading: false,
+    users: [],
     error: null,
   },
 };
@@ -125,6 +137,37 @@ const reducer = (state = initialState, action = {}) => {
       };
     }
 
+    case FETCH_USERS_FROM_PRIVATE_MESSAGE: {
+      return {
+        ...state,
+        usersPMProcess: {
+          loading: true,
+          users: [...state.usersPMProcess.users],
+          error: null,
+        },
+      };
+    }
+    case FETCH_USERS_FROM_PRIVATE_MESSAGE_SUCCESS: {
+      return {
+        ...state,
+        usersPMProcess: {
+          loading: false,
+          users: action.payload.users,
+          error: null,
+        },
+      };
+    }
+    case FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE: {
+      return {
+        ...state,
+        usersPMProcess: {
+          loading: false,
+          users: [],
+          error: action.payload,
+        },
+      };
+    }
+
     case ADD_ROOM_TO_STATE: {
       const rooms = [...state.roomsFetchProcess.rooms];
       if (rooms.some(room => room._id === action.payload._id) === false) {
@@ -167,6 +210,19 @@ export const fetchRoomsSuccessAction = data => ({
 });
 export const fetchRoomsFailureAction = error => ({
   type: FETCH_ROOMS_FAILURE,
+  payload: error,
+});
+
+export const fetchUsersFromPM = search => ({
+  type: FETCH_USERS_FROM_PRIVATE_MESSAGE,
+  payload: search,
+});
+export const fetchUsersFromPMSuccess = data => ({
+  type: FETCH_USERS_FROM_PRIVATE_MESSAGE_SUCCESS,
+  payload: data,
+});
+export const fetchUsersFromPMFailure = error => ({
+  type: FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE,
   payload: error,
 });
 

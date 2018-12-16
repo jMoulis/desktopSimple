@@ -9,10 +9,10 @@ module.exports = (io, socket, usersConnected) => {
   };
   socket.on('NEW_MESSAGE', async ({ message, room, sender }) => {
     try {
-      const newMessage = await MessageController.create({
+      const { newMessage, totalMessage } = await MessageController.create({
         message,
         sender,
-        room,
+        room: room._id,
       });
       const userRoomStatusUpdated = await UserController.setRoomDisplayStatus(
         true,
@@ -21,6 +21,7 @@ module.exports = (io, socket, usersConnected) => {
 
       io.to(`${room._id}`).emit('NEW_MESSAGE_SUCCESS', {
         message: newMessage,
+        totalMessage,
         user: userRoomStatusUpdated,
       });
     } catch (error) {

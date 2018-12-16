@@ -42,25 +42,32 @@ module.exports = {
       return apiResponse.failure(422, null, error.message);
     }
   },
-  async create(values) {
+  async create({ message, sender, room }) {
     try {
-      const newMessage = await Message.create(values);
+      const createdMessage = await Message.create({ message, sender, room });
       await Room.update(
         {
-          _id: newMessage.room,
+          _id: createdMessage.room,
         },
         {
           $push: {
-            messages: newMessage,
+            messages: createdMessage,
           },
         },
       );
-      const message = await Message.findOne({ _id: newMessage._id }).populate({
+      const newMessage = await Message.findOne({
+        _id: createdMessage._id,
+      }).populate({
         path: 'sender',
         ref: 'user',
         select: 'fullName picture',
       });
-      return message;
+
+      const totalMessage = await Message.find({
+        room,
+      }).count();
+
+      return { newMessage, totalMessage };
     } catch (error) {
       return error.message;
     }

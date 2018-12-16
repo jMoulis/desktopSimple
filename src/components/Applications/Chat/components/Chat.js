@@ -9,7 +9,6 @@ import Utils from '../../../../Utils/utils';
 import SocketStatus from '../../../../Modules/Socket/SoketStatus';
 import Button from '../../../Form/button';
 import Modal from '../../../../Modules/Modal/modal';
-import SocketActions from '../socketActions';
 import AddUserForm from './MessagesList/AddUserForm/AddUserForm';
 import UsersThumbnailList from './UsersThumbnailList/UsersThumbnailList';
 import { withSocket } from '../../../../Modules/Socket/SocketProvider';
@@ -46,11 +45,10 @@ class Chat extends React.Component {
         sender: null,
         typingUsers: [],
         room: null,
+        isTyping: false,
       },
-      // usersToAddRoomRequest: [],
     };
     this.utils = new Utils();
-    this.socketActions = new SocketActions(props.globalProps.socketIo);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -81,8 +79,8 @@ class Chat extends React.Component {
           onNewRoomSuccess,
           onReplySuccess,
           onReplyUpdateSuccess,
-          onStopTyping,
-          onTypingAction,
+          onStopTypingSuccess,
+          onTypingSuccessAction,
           onReplyDeleteSuccess,
           onRequestRoomAcceptSuccess,
         },
@@ -105,8 +103,8 @@ class Chat extends React.Component {
     onReplyUpdateSuccess(updateMessageSuccessAction);
     onReplyDeleteSuccess(updateMessageSuccessAction);
 
-    onTypingAction(this.typingStatus);
-    onStopTyping(this.typingStatus);
+    onTypingSuccessAction(this.typingStatus);
+    onStopTypingSuccess(this.typingStatus);
 
     onNewRoomSuccess(fetchRoomsSuccessAction);
 
@@ -134,12 +132,13 @@ class Chat extends React.Component {
     }
   };
 
-  typingStatus = (sender, typingUsers, room) =>
+  typingStatus = (sender, typingUsers, room, isTyping) =>
     this.setState(() => ({
       typingStatus: {
         sender,
         typingUsers,
         room,
+        isTyping,
       },
     }));
 

@@ -1,9 +1,22 @@
+.typing-message
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0,0,0, 0.2)
+  font-size: 0.7rem
+  padding: .5rem
+  animation: fadeIn .3s
+.test
+  & > span
+    &:not(:last-child)
+      padding-right: .2rem
+      &:after
+        content: ","
 .loading
   &:after
     overflow: hidden
     display: inline-block
-    vertical-align: bottom
-    -webkit-animation: ellipsis steps(4,end) 900ms infinite      
+    vertical-align: bottom    
     animation: ellipsis steps(4,end) 900ms infinite
     content: "\2026"
     width: 0px
@@ -12,6 +25,8 @@
   to
     width: 1.25em    
 
-@-webkit-keyframes ellipsis
-  to
-    width: 1.25em    
+@keyframes fadeIn
+  0%
+    opacity: 0
+  100%
+    opacity: 100%

@@ -1,13 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
-.chat {
-  display: flex;
-  height: 100%; }
-  .chat-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: .5rem; }
-
 .socket-status {
   position: absolute;
   top: 0;

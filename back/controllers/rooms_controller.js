@@ -193,10 +193,9 @@ module.exports = {
     try {
       const room = await Room.findOne(
         {
-          users: [req.query.sender, req.query.receiver],
-          // users: {
-          //   $all: [req.query.sender, req.query.receiver],
-          // },
+          users: {
+            $all: [req.query.sender, req.query.receiver],
+          },
           isPrivateMessage: true,
         },
         { messages: 0 },
@@ -207,6 +206,7 @@ module.exports = {
           ref: 'user',
           select: 'fullName picture',
         });
+
       if (!room) {
         const newRoom = await Room.create({
           users: [req.query.sender, req.query.receiver],

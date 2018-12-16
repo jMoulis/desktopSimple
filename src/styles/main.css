@@ -1,4 +1,19 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,400i,700");
+.comin {
+  animation: comin .3s; }
+
+@keyframes comin {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem); }
+  50% {
+    transform: translateX(2rem) scale(1.1) rotate(-5deg); }
+  80% {
+    transform: rotate(5deg); }
+  100% {
+    opacity: 100%;
+    transform: translateX(0); } }
+
 html, body, #root, #app {
   margin: 0;
   height: 100vh; }
