@@ -127,12 +127,14 @@ class RoomsList extends React.Component {
                 rooms={rooms.globalRooms}
                 callback={callback}
                 selectedRoom={selectedRoom}
+                loggedUser={loggedUser}
               />
               <GlobalRoom
                 title="TeamsRooms"
                 rooms={rooms.teamRooms}
                 callback={callback}
                 selectedRoom={selectedRoom}
+                loggedUser={loggedUser}
               />
               <GlobalRoom
                 title="PrivateRooms"
@@ -140,6 +142,7 @@ class RoomsList extends React.Component {
                 callback={callback}
                 selectedRoom={selectedRoom}
                 deleteRoom={this.handleDeleteRoom}
+                loggedUser={loggedUser}
               />
               <PrivateMessageRoom
                 rooms={rooms}
