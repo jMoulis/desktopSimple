@@ -23,6 +23,8 @@ export const FETCH_USERS_FROM_PRIVATE_MESSAGE_SUCCESS =
 export const FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE =
   'FETCH_USERS_FROM_PRIVATE_MESSAGE_FAILURE';
 
+export const DELETE_ROOM = 'DELETE_ROOM';
+
 const initialState = {
   roomFetchProcess: {
     room: {},
@@ -180,6 +182,17 @@ const reducer = (state = initialState, action = {}) => {
         },
       };
     }
+
+    case DELETE_ROOM: {
+      const { rooms } = action.payload;
+      return {
+        ...state,
+        roomsFetchProcess: {
+          ...state.roomsFetchProcess,
+          rooms,
+        },
+      };
+    }
     default:
       return {
         ...state,
@@ -242,6 +255,11 @@ export const fetchRoomsAndUpdateStatus = (roomId, loggedUserId, status) => ({
     loggedUserId,
     status,
   },
+});
+
+export const deleteRoomAction = rooms => ({
+  type: DELETE_ROOM,
+  payload: rooms,
 });
 
 export default reducer;

@@ -1,3 +1,4 @@
 module.exports = {
   ADD_ROOM_REQUEST_TO_USER: 'ADD_ROOM_REQUEST_TO_USER',
+  DELETE_ROOM: 'DELETE_ROOM',
 };

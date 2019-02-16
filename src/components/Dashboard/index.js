@@ -8,6 +8,7 @@ import Helper from '../../containers/Dashboard/Helper/helper';
 import Modal from '../../Modules/Modal/modal';
 import TeamSettings from '../../containers/Dashboard/TeamSettings';
 import DetailUser from '../../containers/User/Detail';
+import { withAuth } from '../../Modules/Auth/AuthProvider';
 
 class Dashboard extends React.Component {
   static propTypes = {

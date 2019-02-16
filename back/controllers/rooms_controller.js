@@ -2,6 +2,7 @@ const ApiResponse = require('../service/api/apiResponse_v2');
 const Room = require('../models/Room');
 const User = require('../models/User');
 const Notifications = require('../models/Notifications');
+const Message = require('../models/Message');
 
 module.exports = {
   index: async (req, res) => {
@@ -74,7 +75,7 @@ module.exports = {
   },
   create: async ({ values, sender, roomReceivedRequest }) => {
     try {
-      const newRoom = await Room.create(values);
+      const newRoom = await Room.create({ ...values, administrator: sender });
       const usersRequestedIds = roomReceivedRequest.map(
         roomRequestUser => roomRequestUser._id,
       );
@@ -290,12 +291,57 @@ module.exports = {
     }
   },
 
-  delete: async (req, res) => {
-    const apiResponse = new ApiResponse(res);
+  delete: async ({ roomId, senderId }) => {
     try {
-      return apiResponse.success(204, { message: 'delete' });
+      const deletedRoom = await Room.findOne({ _id: roomId });
+      // remove room from users
+      await User.updateMany(
+        {
+          $or: [
+            { 'rooms._id': { $in: roomId } },
+            { roomReceivedRequest: { $in: roomId } },
+          ],
+        },
+        {
+          $pull: {
+            rooms: { _id: roomId },
+            roomReceivedRequest: { $in: roomId },
+          },
+        },
+      );
+      // remove from notification
+      await Notifications.remove({ room: roomId });
+
+      // remove messages
+      await Message.deleteMany({ _id: { $in: deletedRoom.messages } });
+      // remove room
+      const query = {
+        $or: [{ isPrivate: false }, { users: { $in: [senderId] } }],
+      };
+      await Room.findByIdAndRemove({ _id: roomId });
+      const rooms = await Room.find(query, { messages: 0 }).populate({
+        path: 'users',
+        ref: 'user',
+        select: 'fullName picture',
+      });
+
+      const privateMessages = rooms.filter(room => room.isPrivateMessage);
+      const teamRooms = rooms.filter(room => room.isTeamRoom);
+      const globalRooms = rooms.filter(room => !room.isPrivate);
+      const privateRooms = rooms.filter(
+        room => room.isPrivate && !room.isPrivateMessage,
+      );
+
+      return {
+        rooms: {
+          privateRooms,
+          teamRooms,
+          globalRooms,
+          privateMessages,
+        },
+      };
     } catch (error) {
-      return apiResponse.failure(422, error, { message: error.message });
+      return error;
     }
   },
 };

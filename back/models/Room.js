@@ -34,6 +34,10 @@ const RoomSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  administrator: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
   pendingRequest: Array,
 });
 

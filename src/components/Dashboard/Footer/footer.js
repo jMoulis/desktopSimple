@@ -4,6 +4,7 @@ import AppLoader from '../../Applications/config/applicationsLoader';
 import './footer.css';
 import BadgeNotifications from './BadgeNotifications';
 import UserIconContainer from '../../../Modules/UserIcon';
+import { withAuth } from '../../../Modules/Auth/AuthProvider';
 
 class Footer extends React.Component {
   static propTypes = {
@@ -52,6 +53,7 @@ class Footer extends React.Component {
 
   render() {
     const { applications, loggedUser, notifications } = this.props;
+    console.log(this.props);
     const objectValues = Object.keys(applications).map(
       item => applications[item],
     );

@@ -29,9 +29,9 @@ class SocketActions {
     });
   };
 
-  deleteRoomSocketAction = roomId => {
-    this.socket.emit(DELETE_ROOM, { roomId }, aknowledgment => {
-      console.log(aknowledgment);
+  deleteRoomSocketAction = (roomId, deleteRoomAction, senderId) => {
+    this.socket.emit(DELETE_ROOM, { roomId, senderId }, aknowledgment => {
+      deleteRoomAction(aknowledgment);
     });
   };
 

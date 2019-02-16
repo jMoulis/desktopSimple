@@ -19,8 +19,6 @@
   .chat-message-list-item {
     padding: 1rem 0;
     border-bottom: 1px solid rgba(10, 28, 40, 0.2); }
-    .chat-message-list-item:last-child {
-      animation: comin .3s; }
     .chat-message-list-item-panel {
       position: relative; }
       .chat-message-list-item-panel-action {

@@ -3,7 +3,10 @@ const Notifications = require('../models/Notifications');
 const User = require('../models/User');
 const Room = require('../models/Room');
 const SocketResponse = require('../service/api/socketResponse');
-const { ADD_ROOM_REQUEST_TO_USER } = require('./socketActionsConstant');
+const {
+  ADD_ROOM_REQUEST_TO_USER,
+  DELETE_ROOM,
+} = require('./socketActionsConstant');
 
 module.exports = (io, socket, usersConnected) => {
   socket.on(
@@ -174,8 +177,6 @@ module.exports = (io, socket, usersConnected) => {
       } catch (error) {
         console.error(error.message);
       }
-
-      // callback('test');
     },
   );
   socket.on(
@@ -208,4 +209,12 @@ module.exports = (io, socket, usersConnected) => {
       }
     },
   );
+  socket.on(DELETE_ROOM, async ({ roomId, senderId }, aknowledgment) => {
+    try {
+      const response = await RoomController.delete({ roomId, senderId });
+      aknowledgment(response);
+    } catch (error) {
+      console.log('adduser to room', error.message);
+    }
+  });
 };

@@ -7,6 +7,7 @@ import PrivateMessageRoom from '../../containers/RoomsList/PrivateMessageRoom';
 import './index.css';
 import GlobalRoom from './GlobalRoom';
 import NotificationRoom from './NotificationRoom';
+import { withSocket } from '../../../../../Modules/Socket/SocketProvider';
 
 class RoomsList extends React.Component {
   static propTypes = {
@@ -16,6 +17,7 @@ class RoomsList extends React.Component {
     smallSize: PropTypes.bool,
     closeRoomAction: PropTypes.func.isRequired,
     socket: PropTypes.object.isRequired,
+    socketProvider: PropTypes.object.isRequired,
     selectedRoom: PropTypes.object,
     notifications: PropTypes.array,
   };
@@ -67,9 +69,17 @@ class RoomsList extends React.Component {
     );
   };
 
-  // handleDeleteRoom = ({ roomId }) => {
-  //   deleteRoomSocketAction(roomId);
-  // };
+  handleDeleteRoom = ({ roomId }) => {
+    const {
+      socketProvider: {
+        socketActions: { deleteRoomSocketAction },
+      },
+      deleteRoomAction,
+      loggedUser,
+    } = this.props;
+
+    deleteRoomSocketAction(roomId, deleteRoomAction, loggedUser._id);
+  };
 
   render() {
     const {
@@ -129,6 +139,7 @@ class RoomsList extends React.Component {
                 rooms={rooms.privateRooms}
                 callback={callback}
                 selectedRoom={selectedRoom}
+                deleteRoom={this.handleDeleteRoom}
               />
               <PrivateMessageRoom
                 rooms={rooms}
@@ -156,4 +167,4 @@ class RoomsList extends React.Component {
   }
 }
 
-export default RoomsList;
+export default withSocket(RoomsList);

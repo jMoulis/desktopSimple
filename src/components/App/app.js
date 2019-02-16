@@ -13,6 +13,7 @@ import Signup from '../../containers/Home/SignUp';
 import Loader from '../../Modules/Loader';
 import ErrorBoundary from '../Hoc/ErrorBoundary';
 import SocketProvider from '../../Modules/Socket/SocketProvider';
+import AuthProvider from '../../Modules/Auth/AuthProvider';
 
 class App extends Component {
   static propTypes = {
@@ -125,7 +126,9 @@ class App extends Component {
                           <TeamSelector selectTeam={this.handleSelectTeam} />
                         )} */}
                     </ErrorBoundary>
-                    <Footer key="footer" />
+                    <AuthProvider>
+                      <Footer key="footer" />
+                    </AuthProvider>
                   </div>
                 );
               } else if (loginProcess.loading) {
