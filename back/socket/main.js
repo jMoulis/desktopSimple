@@ -52,7 +52,7 @@ module.exports = io => {
     //       message: 'New Task',
     //     });
     //   } catch (error) {
-    //     console.log(error.message);
+    //     console.error(error.message);
     //   }
     // });
   });

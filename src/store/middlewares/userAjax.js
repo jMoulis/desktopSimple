@@ -54,7 +54,7 @@ export default store => next => action => {
         })
         .catch(error => {
           if (!error.response) {
-            return console.log(error);
+            return console.error(error);
           }
           if (error.response.status === 500) {
             return store.dispatch(logoutAction());

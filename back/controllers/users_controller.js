@@ -727,7 +727,7 @@ module.exports = {
           fs.writeFileSync(`${destination}/${fileName}`, imageBuffer.data);
         }
       } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
       }
 
       return `/users/${userId}/${fileName}`;

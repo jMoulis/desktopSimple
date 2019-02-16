@@ -21,7 +21,7 @@ export default store => next => action => {
           store.dispatch(fetchNotificationsSuccessAction(data));
         })
         .catch(error => {
-          console.log(error.message);
+          console.error(error.message);
         });
       break;
     }
@@ -41,7 +41,7 @@ export default store => next => action => {
           store.dispatch(fetchNotificationsSuccessAction(data));
         })
         .catch(error => {
-          console.log(error.message);
+          console.error(error.message);
         });
       break;
     }

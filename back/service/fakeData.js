@@ -99,7 +99,7 @@ const loadFakeUser = () => {
         ]);
       });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
 
     index += 1;

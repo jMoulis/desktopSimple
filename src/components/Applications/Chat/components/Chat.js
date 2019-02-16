@@ -215,7 +215,7 @@ class Chat extends React.Component {
         showUserSelector: false,
       }));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

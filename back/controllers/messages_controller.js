@@ -112,7 +112,7 @@ module.exports = {
         });
       return message;
     } catch (error) {
-      return console.log(error.message);
+      return console.error(error.message);
     }
   },
   async updateReply(messageId, data) {
@@ -138,7 +138,7 @@ module.exports = {
         });
       return message;
     } catch (error) {
-      return console.log(error.message);
+      return console.error(error.message);
     }
   },
   async delete(messageId) {
@@ -146,7 +146,7 @@ module.exports = {
       const message = await Message.findByIdAndRemove({ _id: messageId });
       return message;
     } catch (error) {
-      return console.log(error.message);
+      return console.error(error.message);
     }
   },
   async deleteReply(messageId) {
@@ -174,7 +174,7 @@ module.exports = {
         });
       return message;
     } catch (error) {
-      return console.log(error.message);
+      return console.error(error.message);
     }
   },
 };

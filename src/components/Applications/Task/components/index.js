@@ -29,9 +29,7 @@ class Task extends React.Component {
   }
 
   componentDidMount() {
-    this.props.globalProps.socketIo.on('NEW_TASK_SUCCESS', message => {
-      console.log(message);
-    });
+    this.props.globalProps.socketIo.on('NEW_TASK_SUCCESS', message => {});
     const { fetchTasksAction, activeTeam } = this.props;
     if (activeTeam._id) return fetchTasksAction({ team: activeTeam._id });
     return fetchTasksAction();

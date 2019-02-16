@@ -27,7 +27,7 @@ export default store => next => action => {
           store.dispatch(fetchMessagesSuccessAction(data));
         })
         .catch(error => {
-          console.log(error.message);
+          console.error(error.message);
         });
       break;
     }
@@ -42,11 +42,10 @@ export default store => next => action => {
         data: values,
       })
         .then(({ data }) => {
-          console.log(data);
           store.dispatch(updateMessageSuccessAction(data));
         })
         .catch(error => {
-          console.log(error.message);
+          console.error(error.message);
         });
       break;
     }
@@ -61,11 +60,10 @@ export default store => next => action => {
         data: values,
       })
         .then(({ data }) => {
-          console.log(data);
           store.dispatch(deleteMessageSuccessAction(data));
         })
         .catch(error => {
-          console.log(error.message);
+          console.error(error.message);
         });
       break;
     }

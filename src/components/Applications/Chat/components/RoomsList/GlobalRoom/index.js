@@ -22,7 +22,6 @@ class GlobalRoom extends React.Component {
       deleteRoom,
       loggedUser,
     } = this.props;
-    console.log(this.props);
     const { isCollapsed } = this.state;
     return (
       <Fragment>
@@ -46,29 +45,32 @@ class GlobalRoom extends React.Component {
           {isCollapsed &&
             rooms &&
             rooms.map((globalRoom, index) => {
-              return (
-                <li
-                  key={index}
-                  className={`global-room-item ${
-                    globalRoom._id === selectedRoom._id
-                      ? 'global-room-item-selected'
-                      : ''
-                  }`}
-                >
-                  <button
-                    className="global-room-item-btn"
-                    onClick={() => callback(globalRoom)}
+              if (globalRoom) {
+                return (
+                  <li
+                    key={index}
+                    className={`global-room-item ${
+                      globalRoom._id === selectedRoom._id
+                        ? 'global-room-item-selected'
+                        : ''
+                    }`}
                   >
-                    {globalRoom.name}
-                  </button>
-                  {globalRoom.administrator === loggedUser._id}
-                  <button
-                    onClick={() => deleteRoom({ roomId: globalRoom._id })}
-                  >
-                    delete
-                  </button>
-                </li>
-              );
+                    <button
+                      className="global-room-item-btn"
+                      onClick={() => callback(globalRoom)}
+                    >
+                      {globalRoom.name}
+                    </button>
+                    {globalRoom.administrator === loggedUser._id}
+                    <button
+                      onClick={() => deleteRoom({ roomId: globalRoom._id })}
+                    >
+                      delete
+                    </button>
+                  </li>
+                );
+              }
+              return null;
             })}
         </ul>
       </Fragment>

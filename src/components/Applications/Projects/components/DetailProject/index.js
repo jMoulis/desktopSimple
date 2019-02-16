@@ -114,7 +114,6 @@ class DetailProject extends React.Component {
     });
   };
   handleShare = () => {
-    console.log('shared');
     // Open a message to send to...
   };
   render() {

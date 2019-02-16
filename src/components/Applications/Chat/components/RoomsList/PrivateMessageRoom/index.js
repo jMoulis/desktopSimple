@@ -65,7 +65,7 @@ class PrivateMessageRoom extends Component {
         isCollapsed: true,
       }));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

@@ -53,7 +53,6 @@ class Footer extends React.Component {
 
   render() {
     const { applications, loggedUser, notifications } = this.props;
-    console.log(this.props);
     const objectValues = Object.keys(applications).map(
       item => applications[item],
     );
